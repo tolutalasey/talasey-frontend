@@ -45,18 +45,18 @@ export default defineConfig({
       },
     },
   ],
-  // The real stack: the backend on Postgres and Redis (`pnpm db` there), and the built site.
+  // The real stack: the backend on Postgres and Redis (`npm run db` there), and the built site.
   webServer: externalBaseUrl
     ? undefined
     : [
         {
-          command: 'pnpm start',
+          command: 'npm run start',
           cwd: BACKEND_DIR,
           url: `${API_URL}/health`,
           reuseExistingServer: !process.env.CI,
         },
         {
-          command: 'pnpm start',
+          command: 'npm run start',
           cwd: '..',
           url: localBaseUrl,
           reuseExistingServer: !process.env.CI,

@@ -16,5 +16,5 @@ track({ name: 'add_to_cart', params: { currency: 'GBP', value: 179.98, items: [p
 The test in `src/events.test.ts` lists the PRD event plan and fails if the schema drifts from it.
 
 ```sh
-pnpm test
+npm run test
 ```

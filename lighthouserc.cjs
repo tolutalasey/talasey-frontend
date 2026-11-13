@@ -1,5 +1,5 @@
 // Every public page template, on Lighthouse's default mobile settings, against the built site and
-// the real API (`pnpm db` and the API running). Reports stay on disk in .lighthouseci.
+// the real API (`npm run db` and the API running). Reports stay on disk in .lighthouseci.
 const indexable = [
   '/',
   '/products/silver-grey-porcelain-paving/',
@@ -37,7 +37,7 @@ const shared = {
 module.exports = {
   ci: {
     collect: {
-      startServerCommand: 'pnpm start',
+      startServerCommand: 'npm run start',
       startServerReadyPattern: 'Ready',
       url: [...indexable, ...noindex].map(site),
       numberOfRuns: 3,

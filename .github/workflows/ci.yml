@@ -21,32 +21,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm format:check
-      - run: pnpm lint
-      - run: pnpm typecheck
-      - run: pnpm test
-      - run: pnpm build
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test
+      - run: npm run build
 
   components:
     name: Components in a browser
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm storybook:build
-      - run: pnpm test:stories
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run storybook:build
+      - run: npm run test:stories
 
   e2e:
     name: End-to-end and Lighthouse against the backend
@@ -79,26 +77,25 @@ jobs:
           repository: ${{ vars.BACKEND_REPO || 'tolutalasey/talasey-backend' }}
           token: ${{ secrets.BACKEND_REPO_TOKEN || github.token }}
           path: backend
-      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm install --frozen-lockfile
+          cache: npm
+      - run: npm ci
+      - run: npm ci
         working-directory: backend
-      - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm build
-      - run: pnpm e2e
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run e2e
       - name: Lighthouse on every template (mobile)
         env:
           APP_ENV: production
           SITE_URL: http://localhost:3000
           API_URL: http://localhost:4000
         run: |
-          pnpm build
-          (cd backend && pnpm start &)
-          pnpm lighthouse
+          npm run build
+          (cd backend && npm run start &)
+          npm run lighthouse
       - if: always()
         uses: actions/upload-artifact@v4
         with:

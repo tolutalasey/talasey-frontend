@@ -14,7 +14,7 @@ const types = {
 };
 
 if (!existsSync(root)) {
-  console.error('Build Storybook first: pnpm storybook:build');
+  console.error('Build Storybook first: npm run storybook:build');
   process.exit(1);
 }
 

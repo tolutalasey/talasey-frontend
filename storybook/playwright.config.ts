@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 const port = 6007;
 
 // Runs every Storybook story in a real browser: axe (with colour contrast), keyboard focus rings
-// and touch target sizes. Build Storybook first with `pnpm storybook:build`.
+// and touch target sizes. Build Storybook first with `npm run storybook:build`.
 export default defineConfig({
   testDir: '.',
   fullyParallel: true,

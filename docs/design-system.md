@@ -5,8 +5,8 @@ Tokens live in `src/tokens`, components in `src/ui`. Both follow PRD section 18;
 ## See it
 
 ```sh
-pnpm tokens
-pnpm storybook
+npm run tokens
+npm run storybook
 ```
 
 Open http://localhost:6006. Each component has stories for its states, and the Accessibility panel runs axe on the one you are looking at.
@@ -14,8 +14,8 @@ Open http://localhost:6006. Each component has stories for its states, and the A
 ## Check it
 
 ```sh
-pnpm test                         # keyboard and axe, in jsdom
-pnpm storybook:build && pnpm test:stories   # every story in Chromium: axe with contrast, focus rings, touch targets
+npm run test                         # keyboard and axe, in jsdom
+npm run storybook:build && npm run test:stories   # every story in Chromium: axe with contrast, focus rings, touch targets
 ```
 
 ## Rules

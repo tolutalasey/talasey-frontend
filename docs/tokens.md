@@ -3,12 +3,12 @@
 Design tokens from PRD section 18: colour, type scale, spacing, radius, borders, focus ring, touch targets, the one shadow and the layout grid. Plus the two self-hosted fonts.
 
 - `import { color } from '@/tokens'` for TypeScript.
-- `import '@/tokens/tokens.css'` for CSS custom properties (`--color-brand600`, `--space-4`, `--target-min`, ...). It's generated from `tokens.ts` by `pnpm tokens`, which `dev`, `build` and `test` run first.
+- `import '@/tokens/tokens.css'` for CSS custom properties (`--color-brand600`, `--space-4`, `--target-min`, ...). It's generated from `tokens.ts` by `npm run tokens`, which `dev`, `build` and `test` run first.
 - `fonts/`: Jost (500–600) and Mulish (400–700) as variable WOFF2 files, cut down to Latin and the punctuation we use (£, ×, –, ’, “ ”). 33 KB for both. The storefront loads them with `next/font/local`; `fonts/fonts.css` is for Storybook and anything else without `next/font`.
 
 ```sh
-pnpm tokens
-pnpm test     # type scale and the WCAG contrast rules
+npm run tokens
+npm run test     # type scale and the WCAG contrast rules
 ```
 
 ## Type scale

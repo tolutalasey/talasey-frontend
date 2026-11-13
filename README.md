@@ -25,9 +25,9 @@ Lint enforces the boundaries: features are imported through `index.ts`, and noth
 The backend (`talasey-backend`, next to this folder) must be running first.
 
 ```sh
-pnpm install
-pnpm setup    # .env.local, with the backend's refresh secret
-pnpm dev      # http://localhost:3000
+npm install
+npm run setup    # .env.local, with the backend's refresh secret
+npm run dev      # http://localhost:3000
 ```
 
 Full steps for both projects are in the backend's `docs/runbooks/local-setup.md`.
@@ -35,11 +35,11 @@ Full steps for both projects are in the backend's `docs/runbooks/local-setup.md`
 ## Checks
 
 ```sh
-pnpm lint && pnpm typecheck && pnpm test   # lint, types, unit and component tests
-pnpm build && pnpm e2e                     # Playwright against the real backend (`pnpm db` there)
-pnpm lighthouse                            # speed, accessibility and SEO on every template
-pnpm storybook                             # components at http://localhost:6006
-pnpm api:types                             # after the backend's openapi.json changes
+npm run lint && npm run typecheck && npm run test   # lint, types, unit and component tests
+npm run build && npm run e2e                     # Playwright against the real backend (`npm run db` there)
+npm run lighthouse                            # speed, accessibility and SEO on every template
+npm run storybook                             # components at http://localhost:6006
+npm run api:types                             # after the backend's openapi.json changes
 ```
 
 More in `docs`: [components](docs/ui.md), [tokens](docs/tokens.md), [design system](docs/design-system.md), [analytics](docs/analytics.md), [API client](docs/api-client.md), [end-to-end tests](docs/e2e.md), and the staff guides for [the admin](docs/guides/admin.md), [the content editor](docs/guides/content.md) and [colour sets](docs/guides/colour-sets.md).

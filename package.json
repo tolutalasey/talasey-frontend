@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@12.18.0",
   "engines": {
     "node": ">=22.12"
   },
@@ -19,7 +18,7 @@
     "format:check": "prettier --check .",
     "test": "tsx src/tokens/build.ts && vitest run",
     "e2e": "playwright test --config e2e/playwright.config.ts",
-    "lighthouse": "pnpm dlx @lhci/cli@0.16.1 autorun",
+    "lighthouse": "npx --yes @lhci/cli@0.16.1 autorun",
     "storybook": "tsx src/tokens/build.ts && storybook dev --port 6006",
     "storybook:build": "tsx src/tokens/build.ts && storybook build --quiet --output-dir storybook-static",
     "test:stories": "playwright test --config storybook/playwright.config.ts",
@@ -65,5 +64,10 @@
     "typescript-eslint": "8.72.2",
     "vite": "8.3.8",
     "vitest": "5.1.0"
+  },
+  "overrides": {
+    "openapi-typescript": {
+      "typescript": "$typescript"
+    }
   }
 }

@@ -33,15 +33,13 @@ jobs:
       - if: env.VERCEL_TOKEN != ''
         uses: actions/checkout@v5
       - if: env.VERCEL_TOKEN != ''
-        uses: pnpm/action-setup@v4
+        run: npx --yes vercel@latest pull --yes --environment="$TARGET" --token="$VERCEL_TOKEN"
       - if: env.VERCEL_TOKEN != ''
-        run: pnpm dlx vercel@latest pull --yes --environment="$TARGET" --token="$VERCEL_TOKEN"
-      - if: env.VERCEL_TOKEN != ''
-        run: pnpm dlx vercel@latest build --target="$TARGET" --token="$VERCEL_TOKEN"
+        run: npx --yes vercel@latest build --target="$TARGET" --token="$VERCEL_TOKEN"
       - id: deploy
         if: env.VERCEL_TOKEN != ''
         run: |
-          url=$(pnpm dlx vercel@latest deploy --prebuilt --target="$TARGET" --token="$VERCEL_TOKEN")
+          url=$(npx --yes vercel@latest deploy --prebuilt --target="$TARGET" --token="$VERCEL_TOKEN")
           echo "url=$url" >> "$GITHUB_OUTPUT"
 
   smoke:
@@ -54,14 +52,13 @@ jobs:
       APP_ENV: ${{ github.event_name == 'release' && 'production' || 'staging' }}
     steps:
       - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm e2e e2e/tests/home.spec.ts e2e/tests/seo.spec.ts
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run e2e -- e2e/tests/home.spec.ts e2e/tests/seo.spec.ts
 
   rollback:
     name: Roll back production

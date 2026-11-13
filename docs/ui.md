@@ -35,7 +35,7 @@ Rules every component follows: a visible 3px focus ring, targets of at least 44 
 ## Storybook
 
 ```sh
-pnpm storybook                           # http://localhost:6006
+npm run storybook                           # http://localhost:6006
 ```
 
 Every component has stories for its states (empty, chosen, error, disabled, open). The Accessibility panel runs axe on the story you are looking at.
@@ -43,8 +43,8 @@ Every component has stories for its states (empty, chosen, error, disabled, open
 ## Tests
 
 ```sh
-pnpm test                                # Vitest + Testing Library: keyboard and axe in jsdom
-pnpm storybook:build && pnpm test:stories   # every story in Chromium
+npm run test                                # Vitest + Testing Library: keyboard and axe in jsdom
+npm run storybook:build && npm run test:stories   # every story in Chromium
 ```
 
-`test:stories` opens each story at 375px and 1280px and checks three things: no axe violations (including colour contrast, which jsdom can't measure), a focus ring of at least 3px on every tab stop, and touch targets of at least 44 × 44px. Install Chromium once with `pnpm exec playwright install chromium`.
+`test:stories` opens each story at 375px and 1280px and checks three things: no axe violations (including colour contrast, which jsdom can't measure), a focus ring of at least 3px on every tab stop, and touch targets of at least 44 × 44px. Install Chromium once with `npx playwright install chromium`.

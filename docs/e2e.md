@@ -3,10 +3,10 @@
 Playwright tests against the real stack: the built site and the API on Postgres and Redis. Journeys, the eight "what good looks like" checks, SEO checks on every template, JSON-LD and axe accessibility scans.
 
 ```sh
-pnpm exec playwright install chromium                 # once
-pnpm db                                               # in the backend, another terminal
-pnpm build && pnpm e2e                                # build the site, then test
-BASE_URL=https://preview.example.com pnpm e2e         # against a deployed site
+npx playwright install chromium                 # once
+npm run db                                               # in the backend, another terminal
+npm run build && npm run e2e                                # build the site, then test
+BASE_URL=https://preview.example.com npm run e2e         # against a deployed site
 ```
 
 Before the tests, `fixtures/global-setup.ts` migrates and seeds the API (demo staff and products) and imports the master sheet if it is in `.data/pim`. Playwright then starts the API and `next start` unless they are already running.

@@ -16,7 +16,7 @@ const secret = existsSync(backendEnv)
 
 if (!secret) {
   console.warn(
-    `No REVALIDATE_SECRET in ${backendEnv}. Run \`pnpm setup\` in the backend first, then here again.`,
+    `No REVALIDATE_SECRET in ${backendEnv}. Run \`npm run setup\` in the backend first, then here again.`,
   );
 } else {
   const env = readFileSync(target, 'utf8');
@@ -34,7 +34,7 @@ if (!secret) {
 console.log(
   [
     '',
-    'Done. With the backend running, start the site with `pnpm dev`:',
+    'Done. With the backend running, start the site with `npm run dev`:',
     '  site     http://localhost:3000',
     '  admin    http://localhost:3000/admin',
     '  content  http://localhost:3000/content',
