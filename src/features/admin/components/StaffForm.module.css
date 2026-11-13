@@ -1,4 +1,4 @@
-/* The staff page styles, for a client component that can't import the staff feature's index. */
+/* The staff page styles, for client components that can't import the staff feature's index. */
 .stack {
   composes: stack from '../../staff/components/Staff.module.css';
 }

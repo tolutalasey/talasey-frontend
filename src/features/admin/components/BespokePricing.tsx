@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react';
 import { Button, Checkbox, SelectField, TextAreaField, TextField } from '@/ui';
-import styles from './BespokePricing.module.css';
+import styles from './StaffForm.module.css';
 import { bespokePricing, type BespokeFormState } from '../bespoke-actions';
 import {
   configFromValues,

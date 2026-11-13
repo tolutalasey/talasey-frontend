@@ -4,6 +4,7 @@ import { requireStaff, StaffShell, type StaffLink } from '@/features/staff';
 const LINKS: StaffLink[] = [
   { href: '/admin/products/', label: 'Products', permission: 'catalogue' },
   { href: '/admin/colour-sets/', label: 'Colour sets', permission: 'catalogue' },
+  { href: '/admin/catalogue/', label: 'Import and export', permission: 'catalogue' },
   { href: '/admin/orders/', label: 'Orders', permission: 'orders' },
   { href: '/admin/delivery/', label: 'Delivery', permission: 'delivery' },
   { href: '/admin/sku-checks/', label: 'SKU checks', permission: 'catalogue' },
