@@ -29,9 +29,9 @@ export function StaffShell({ area, title, links, me, children }: Props) {
           {title}
         </NextLink>
         <div className={styles.who}>
-          <span>
+          <NextLink href={`/${area}/account/`}>
             {me.name} <span className={styles.muted}>({me.role})</span>
-          </span>
+          </NextLink>
           <NextLink href="/">View the site</NextLink>
           <form action={signOut}>
             <input type="hidden" name="area" value={area} />

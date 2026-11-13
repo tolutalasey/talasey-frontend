@@ -36,4 +36,11 @@ Every option needs its own SKU, colours from a colour set never make a SKU, and 
 
 ## Staff (owner only)
 
-Add people with a role and a starting password, change roles, reset passwords, or untick **Can sign in** when someone leaves. There is always at least one owner.
+Add people with a role and a starting password, change roles, reset passwords, or untick **Can sign in** when someone leaves. There is always at least one owner. If someone loses the phone with their authenticator app, tick **Turn off two-factor (lost phone)** on their row, then ask them to set it up again.
+
+## Your account (everyone)
+
+Click your name at the top of the admin or the content editor.
+
+- **Change your password:** enter the current one and the new one twice.
+- **Two-factor sign-in:** click **Set up two-factor**, add the key shown to an authenticator app on your phone (Google Authenticator, Microsoft Authenticator or 1Password), then enter the 6-digit code the app shows. From then on, signing in asks for a code after your password. Everyone with the owner role should turn it on.

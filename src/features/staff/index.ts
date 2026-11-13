@@ -1,3 +1,4 @@
+export { AccountPage } from './components/AccountPage';
 export { NotAllowed } from './components/NotAllowed';
 export { Notice } from './components/Notice';
 export { SignInPage } from './components/SignInPage';
@@ -7,6 +8,7 @@ export * from './form';
 export { done, failed } from './feedback';
 export {
   requireStaff,
+  savedTwoFactorSetup,
   sessionToken,
   signInPath,
   staffApi,

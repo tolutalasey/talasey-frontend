@@ -49,6 +49,7 @@ export {
   type StaffAccount,
   type StaffClient,
   type StaffMember,
+  type SignInResult,
   type StaffSession,
 } from './staff';
 export type { components, paths } from './schema';

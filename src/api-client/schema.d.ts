@@ -52,6 +52,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/sign-in/code": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_signInCode"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/me": {
         parameters: {
             query?: never;
@@ -62,6 +78,70 @@ export interface paths {
         get: operations["AuthController_me"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_changePassword"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/two-factor/setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_setUpTwoFactor"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/two-factor/on": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_turnOnTwoFactor"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/two-factor/off": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_turnOffTwoFactor"];
         delete?: never;
         options?: never;
         head?: never;
@@ -984,6 +1064,8 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
+                        /** @enum {string} */
+                        status: "signed-in";
                         token: string;
                         user: {
                             /** Format: uuid */
@@ -993,12 +1075,72 @@ export interface operations {
                             /** @enum {string} */
                             role: "owner" | "editor" | "contributor" | "catalogue";
                             active: boolean;
+                            twoFactor: boolean;
+                            permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users")[];
+                        };
+                    } | {
+                        /** @enum {string} */
+                        status: "code-needed";
+                        challenge: string;
+                    };
+                };
+            };
+            /** @description Wrong email or password */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Too many failed attempts */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_signInCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    challenge: string;
+                    code: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        status: "signed-in";
+                        token: string;
+                        user: {
+                            /** Format: uuid */
+                            id: string;
+                            email: string;
+                            name: string;
+                            /** @enum {string} */
+                            role: "owner" | "editor" | "contributor" | "catalogue";
+                            active: boolean;
+                            twoFactor: boolean;
                             permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users")[];
                         };
                     };
                 };
             };
-            /** @description Wrong email or password */
+            /** @description Wrong code, or the sign-in expired */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1036,6 +1178,7 @@ export interface operations {
                         /** @enum {string} */
                         role: "owner" | "editor" | "contributor" | "catalogue";
                         active: boolean;
+                        twoFactor: boolean;
                         permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users")[];
                     };
                 };
@@ -1049,6 +1192,200 @@ export interface operations {
             };
             /** @description The role does not allow this */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_changePassword: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    currentPassword: string;
+                    newPassword: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Current password is wrong */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_setUpTwoFactor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        secret: string;
+                        uri: string;
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_turnOnTwoFactor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    code: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        email: string;
+                        name: string;
+                        /** @enum {string} */
+                        role: "owner" | "editor" | "contributor" | "catalogue";
+                        active: boolean;
+                        twoFactor: boolean;
+                        permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users")[];
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The set-up expired */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Wrong code */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_turnOffTwoFactor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    code: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        email: string;
+                        name: string;
+                        /** @enum {string} */
+                        role: "owner" | "editor" | "contributor" | "catalogue";
+                        active: boolean;
+                        twoFactor: boolean;
+                        permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users")[];
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Wrong code */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1103,6 +1440,7 @@ export interface operations {
                         /** @enum {string} */
                         role: "owner" | "editor" | "contributor" | "catalogue";
                         active: boolean;
+                        twoFactor: boolean;
                     }[];
                 };
             };
@@ -1155,6 +1493,7 @@ export interface operations {
                         /** @enum {string} */
                         role: "owner" | "editor" | "contributor" | "catalogue";
                         active: boolean;
+                        twoFactor: boolean;
                     };
                 };
             };
@@ -1198,6 +1537,8 @@ export interface operations {
                     role?: "owner" | "editor" | "contributor" | "catalogue";
                     active?: boolean;
                     password?: string;
+                    /** @enum {boolean} */
+                    twoFactor?: false;
                 };
             };
         };
@@ -1215,6 +1556,7 @@ export interface operations {
                         /** @enum {string} */
                         role: "owner" | "editor" | "contributor" | "catalogue";
                         active: boolean;
+                        twoFactor: boolean;
                     };
                 };
             };

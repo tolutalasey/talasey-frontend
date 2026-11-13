@@ -181,6 +181,7 @@ export async function updateStaff(form: FormData) {
         'owner' | 'editor' | 'contributor' | 'catalogue' | undefined,
       active: form.get('active') === 'on',
       ...(password && { password }),
+      ...(form.get('resetTwoFactor') === 'on' && { twoFactor: false as const }),
     },
   });
   if (error) failed('/admin/users/', messageOf(error));

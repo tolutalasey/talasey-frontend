@@ -9,20 +9,56 @@ export type StaffArea = 'admin' | 'content';
 export type Permission = StaffMember['permissions'][number];
 
 const COOKIE = 'talasey_staff';
+const CHALLENGE_COOKIE = 'talasey_staff_challenge';
+const SETUP_COOKIE = 'talasey_staff_two_factor';
 const SEVEN_DAYS = 7 * 24 * 60 * 60;
+const FIVE_MINUTES = 5 * 60;
+const TEN_MINUTES = 10 * 60;
 
-export async function rememberSession(token: string) {
-  (await cookies()).set(COOKIE, token, {
+export interface TwoFactorSetup {
+  secret: string;
+  uri: string;
+}
+
+async function remember(name: string, value: string, maxAge: number) {
+  (await cookies()).set(name, value, {
     httpOnly: true,
     sameSite: 'lax',
     secure: env.APP_ENV !== 'development',
     path: '/',
-    maxAge: SEVEN_DAYS,
+    maxAge,
   });
 }
 
+export const rememberSession = (token: string) => remember(COOKIE, token, SEVEN_DAYS);
+
 export async function forgetSession() {
   (await cookies()).delete(COOKIE);
+}
+
+// Between the password and the code from the app: proof the password was right, kept only in
+// an httpOnly cookie, so the password itself never has to be sent twice.
+export const rememberChallenge = (challenge: string) =>
+  remember(CHALLENGE_COOKIE, challenge, FIVE_MINUTES);
+
+export async function savedChallenge(): Promise<string | undefined> {
+  return (await cookies()).get(CHALLENGE_COOKIE)?.value;
+}
+
+export async function forgetChallenge() {
+  (await cookies()).delete(CHALLENGE_COOKIE);
+}
+
+export const rememberTwoFactorSetup = (setup: TwoFactorSetup) =>
+  remember(SETUP_COOKIE, JSON.stringify(setup), TEN_MINUTES);
+
+export async function savedTwoFactorSetup(): Promise<TwoFactorSetup | null> {
+  const value = (await cookies()).get(SETUP_COOKIE)?.value;
+  return value ? (JSON.parse(value) as TwoFactorSetup) : null;
+}
+
+export async function forgetTwoFactorSetup() {
+  (await cookies()).delete(SETUP_COOKIE);
 }
 
 export async function sessionToken(): Promise<string | undefined> {

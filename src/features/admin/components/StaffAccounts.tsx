@@ -27,6 +27,8 @@ export function StaffAccounts({ accounts }: { accounts: StaffAccount[] }) {
                 {account.name}
                 <br />
                 <span>{account.email}</span>
+                <br />
+                <span>Two-factor {account.twoFactor ? 'on' : 'off'}</span>
               </th>
               <td>
                 <form action={updateStaff} className={styles.row}>
@@ -40,6 +42,9 @@ export function StaffAccounts({ accounts }: { accounts: StaffAccount[] }) {
                   <Checkbox name="active" defaultSelected={account.active}>
                     Can sign in
                   </Checkbox>
+                  {account.twoFactor && (
+                    <Checkbox name="resetTwoFactor">Turn off two-factor (lost phone)</Checkbox>
+                  )}
                   <TextField
                     label="New password"
                     name="password"
