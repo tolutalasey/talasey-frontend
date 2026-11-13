@@ -1,0 +1,22 @@
+/* The staff page styles, for a client component that can't import the staff feature's index. */
+.stack {
+  composes: stack from '../../staff/components/Staff.module.css';
+}
+.notice {
+  composes: notice from '../../staff/components/Staff.module.css';
+}
+.problem {
+  composes: problem from '../../staff/components/Staff.module.css';
+}
+.panel {
+  composes: panel from '../../staff/components/Staff.module.css';
+}
+.row {
+  composes: row from '../../staff/components/Staff.module.css';
+}
+.muted {
+  composes: muted from '../../staff/components/Staff.module.css';
+}
+.actions {
+  composes: actions from '../../staff/components/Staff.module.css';
+}

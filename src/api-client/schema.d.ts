@@ -452,6 +452,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/catalogue/bespoke/price": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ProductAdminController_tryBespoke"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/catalogue/sku-checks": {
         parameters: {
             query?: never;
@@ -3004,6 +3020,61 @@ export interface operations {
             };
             /** @description No such product */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ProductAdminController_tryBespoke: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description The made-to-measure set-up being tried, saved or not */
+                    config: unknown;
+                    dimensions: {
+                        [key: string]: number;
+                    };
+                    /** @description Choice short name → answer label */
+                    choices: {
+                        [key: string]: string;
+                    };
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {boolean} */
+                        ok: true;
+                        pricePence: number;
+                    } | {
+                        /** @enum {boolean} */
+                        ok: false;
+                        problems: string[];
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

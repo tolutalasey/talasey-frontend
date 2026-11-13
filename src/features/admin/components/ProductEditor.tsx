@@ -198,6 +198,13 @@ export function ProductEditor({ product, categories, colourSets }: Props) {
               emptyLabel="Not set up yet"
               options={PAGE_TYPES}
             />
+            {product.pageType === '2' && (
+              <p>
+                <NextLink href={`/admin/products/${product.id}/pricing/`}>
+                  Made-to-measure sizes, price formula and test calculator
+                </NextLink>
+              </p>
+            )}
             <SelectField
               label="Colour set (page type 1B)"
               name="colourSetId"

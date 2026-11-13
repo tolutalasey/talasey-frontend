@@ -16,6 +16,16 @@ Press **Save**. If something needs fixing first, it is listed at the top and not
 
 New products start hidden. Use **Add product** on the products page, fill it in, then tick **Show on the shop**.
 
+## Made-to-measure pricing (page type 2)
+
+On a made-to-measure product, click **Made-to-measure sizes, price formula and test calculator**.
+
+- **Sizes:** tick each size the customer types in (width, height, depth, length) and set the smallest, the largest and the steps (1 means any whole number).
+- **Choices:** one per line, like `Finish (FIN): Mild steel = 1, Corten = 2, Powder coated = 3`. The short name in brackets is what the formula uses; each answer gives it a number.
+- **Formula:** the price in pounds including VAT. Work in steps, one per line, ending each with `;`, for example `AREA = W * D / 1000000;`. The last line is the price. You can use `min`, `max` and `if(test, then, otherwise)`.
+- **Test calculator:** type a size, pick the choices and click **Work out a test price**. It uses what is on the page, saved or not, exactly as the shop and the basket will. Check it against the technical team's worked examples before saving.
+- **Save pricing** checks the formula first. If something is wrong, for example a name the formula doesn't know, it says what and saves nothing.
+
 ## Orders
 
 Newest first, with the delivery day and whether it is booked. Open one for the address, what they bought (with what ships now and what is made to order), the lorry access answers and the payment. **Refund** sends money back the way they paid. Test payments show as such.

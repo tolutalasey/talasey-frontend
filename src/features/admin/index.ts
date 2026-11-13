@@ -1,4 +1,6 @@
 export * from './actions';
+export { formFromConfig } from './bespoke-form';
+export { BespokePricing } from './components/BespokePricing';
 export { ChangeLog } from './components/ChangeLog';
 export { ColourSetEditor } from './components/ColourSetEditor';
 export { ColourSetList } from './components/ColourSetList';
