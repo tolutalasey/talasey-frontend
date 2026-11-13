@@ -1,4 +1,5 @@
-import { Button, SelectField } from '@/ui';
+import { Button } from '@/ui/Button/Button';
+import { SelectField } from '@/ui/SelectField/SelectField';
 import NextLink from 'next/link';
 import { staffStyles as styles } from '@/features/staff';
 import { saveContent } from '../actions';

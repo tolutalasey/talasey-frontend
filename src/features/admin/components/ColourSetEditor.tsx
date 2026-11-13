@@ -1,4 +1,6 @@
-import { Button, TextAreaField, TextField } from '@/ui';
+import { Button } from '@/ui/Button/Button';
+import { TextAreaField } from '@/ui/TextAreaField/TextAreaField';
+import { TextField } from '@/ui/TextField/TextField';
 import { staffStyles as styles } from '@/features/staff';
 import { deleteColourSet, saveColourSet } from '../actions';
 import type { ColourSet } from '../types';

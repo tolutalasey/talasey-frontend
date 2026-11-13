@@ -1,4 +1,8 @@
-import { Button, Checkbox, SelectField, Table, TextField } from '@/ui';
+import { Button } from '@/ui/Button/Button';
+import { Checkbox } from '@/ui/Checkbox/Checkbox';
+import { SelectField } from '@/ui/SelectField/SelectField';
+import { Table } from '@/ui/Table/Table';
+import { TextField } from '@/ui/TextField/TextField';
 import { staffStyles as styles } from '@/features/staff';
 import { createStaff, updateStaff } from '../actions';
 import type { StaffAccount } from '../types';

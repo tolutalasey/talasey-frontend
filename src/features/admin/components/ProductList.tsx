@@ -1,4 +1,6 @@
-import { Button, Table, TextField } from '@/ui';
+import { Button } from '@/ui/Button/Button';
+import { Table } from '@/ui/Table/Table';
+import { TextField } from '@/ui/TextField/TextField';
 import NextLink from 'next/link';
 import { money, staffStyles as styles } from '@/features/staff';
 import { createProduct } from '../actions';

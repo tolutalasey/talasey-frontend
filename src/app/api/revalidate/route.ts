@@ -38,7 +38,10 @@ export async function POST(request: Request) {
   if (!parsed.success)
     return Response.json({ error: 'Expected { tags: string[] }' }, { status: 400 });
 
-  for (const tag of parsed.data.tags) revalidateTag(tag, 'max');
+  // Expired at once rather than served stale for one more visit: staff are told a change is on
+  // the site when they publish it, and a page for a brand-new address must not be built from
+  // the list as it was before.
+  for (const tag of parsed.data.tags) revalidateTag(tag, { expire: 0 });
   // Published changes are announced to IndexNow after the response, so a slow or failed ping
   // never holds up revalidation.
   const urls = changedUrls(parsed.data.tags);

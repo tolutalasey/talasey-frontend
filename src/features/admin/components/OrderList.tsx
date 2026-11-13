@@ -1,4 +1,4 @@
-import { Table } from '@/ui';
+import { Table } from '@/ui/Table/Table';
 import NextLink from 'next/link';
 import { money } from '@/features/staff';
 import { DAY_STATUS, PAYMENT_STATUS, dateText } from '../labels';

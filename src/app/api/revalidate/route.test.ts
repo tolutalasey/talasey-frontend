@@ -39,8 +39,8 @@ describe('POST /api/revalidate', () => {
     const response = await POST(signedRequest('{"tags":["products","product:pavetuf"]}'));
 
     expect(response.status).toBe(200);
-    expect(revalidateTag).toHaveBeenCalledWith('products', 'max');
-    expect(revalidateTag).toHaveBeenCalledWith('product:pavetuf', 'max');
+    expect(revalidateTag).toHaveBeenCalledWith('products', { expire: 0 });
+    expect(revalidateTag).toHaveBeenCalledWith('product:pavetuf', { expire: 0 });
   });
 
   it('announces the changed product pages to IndexNow', async () => {

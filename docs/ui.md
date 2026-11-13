@@ -30,7 +30,9 @@ The component library from PRD section 18, built on React Aria Components and st
 
 The app must load `@/tokens/tokens.css` once so the CSS variables exist.
 
-Rules every component follows: a visible 3px focus ring, targets of at least 44 × 44px (24px for links outside sentences), meaning never carried by colour alone, and no timers (toasts stay until closed). Components take data and callbacks as props; lint stops this package importing `api-client`, `analytics` or any app.
+Import each component from its own file, for example `import { Button } from '@/ui/Button/Button'`. There is no index file on purpose: with one, a page using a single component downloaded all of them (about 70 KB of compressed JavaScript on every page). Lint refuses `@/ui`.
+
+Rules every component follows: a visible 3px focus ring, targets of at least 44 × 44px (24px for links outside sentences), meaning never carried by colour alone, and no timers (toasts stay until closed). Components take data and callbacks as props; lint stops `src/ui` importing the API client, analytics or the app.
 
 ## Storybook
 

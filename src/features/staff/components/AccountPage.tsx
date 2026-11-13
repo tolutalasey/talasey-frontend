@@ -1,4 +1,5 @@
-import { Button, TextField } from '@/ui';
+import { Button } from '@/ui/Button/Button';
+import { TextField } from '@/ui/TextField/TextField';
 import { changePassword, startTwoFactor, turnOffTwoFactor, turnOnTwoFactor } from '../actions';
 import type { StaffArea, TwoFactorSetup } from '../session.server';
 import { Notice } from './Notice';

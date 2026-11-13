@@ -3,7 +3,7 @@
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { loadStripe, type Appearance, type Stripe } from '@stripe/stripe-js';
 import { color, font, radius } from '@/tokens';
-import { Button } from '@/ui';
+import { Button } from '@/ui/Button/Button';
 import { startTransition, useActionState, useState, type FormEvent } from 'react';
 import { placeOrder } from '../actions';
 import type { FormState } from '../forms';

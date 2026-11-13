@@ -1,4 +1,5 @@
-import type { ProductCardProps, StockStatusProps } from '@/ui';
+import type { ProductCardProps } from '@/ui/ProductCard/ProductCard';
+import type { StockStatusProps } from '@/ui/StockStatus/StockStatus';
 import type { SearchRecord } from '@/features/search';
 import { formatPrice } from '@/lib/format';
 import { productPath } from '@/lib/urls/keyword-map';

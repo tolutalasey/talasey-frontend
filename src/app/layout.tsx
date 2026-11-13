@@ -34,7 +34,11 @@ export const viewport: Viewport = {
 // staff tools in (staff), so neither adds its code to the other's pages.
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang={site.locale} className={`${jost.variable} ${mulish.variable}`}>
+    <html
+      lang={site.locale}
+      className={`${jost.variable} ${mulish.variable}`}
+      suppressHydrationWarning
+    >
       <body>{children}</body>
     </html>
   );

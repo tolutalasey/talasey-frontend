@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/ui';
+import { Button } from '@/ui/Button/Button';
 import { useActionState } from 'react';
 import { placeOrder } from '../actions';
 import type { FormState } from '../forms';

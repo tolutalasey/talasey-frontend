@@ -1,4 +1,5 @@
-import { Button, TextField } from '@/ui';
+import { Button } from '@/ui/Button/Button';
+import { TextField } from '@/ui/TextField/TextField';
 import { signIn, signInWithCode } from '../actions';
 import type { StaffArea } from '../session.server';
 import { Notice } from './Notice';

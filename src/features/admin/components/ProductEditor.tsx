@@ -1,4 +1,9 @@
-import { Button, Checkbox, SelectField, Table, TextAreaField, TextField } from '@/ui';
+import { Button } from '@/ui/Button/Button';
+import { Checkbox } from '@/ui/Checkbox/Checkbox';
+import { SelectField } from '@/ui/SelectField/SelectField';
+import { Table } from '@/ui/Table/Table';
+import { TextAreaField } from '@/ui/TextAreaField/TextAreaField';
+import { TextField } from '@/ui/TextField/TextField';
 import NextLink from 'next/link';
 import { poundsText, staffStyles as styles } from '@/features/staff';
 import { deleteProduct, saveProduct } from '../actions';

@@ -43,6 +43,18 @@ export default tseslint.config(
         { argsIgnorePattern: '^_', ignoreRestSiblings: true },
       ],
       'no-console': ['error', { allow: ['warn', 'error'] }],
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@/ui',
+              message:
+                'Import each component from its own file, like @/ui/Button/Button: an index would pull every component into every page.',
+            },
+          ],
+        },
+      ],
     },
   },
   {

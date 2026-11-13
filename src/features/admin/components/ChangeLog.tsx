@@ -1,4 +1,5 @@
-import { Button, Table } from '@/ui';
+import { Button } from '@/ui/Button/Button';
+import { Table } from '@/ui/Table/Table';
 import { restoreChange } from '../actions';
 import { dateText } from '../labels';
 import type { AuditEntry } from '../types';

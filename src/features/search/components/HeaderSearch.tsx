@@ -1,6 +1,6 @@
 'use client';
 
-import { SearchField, type Suggestion as FieldSuggestion } from '@/ui';
+import { SearchField, type Suggestion as FieldSuggestion } from '@/ui/SearchField/SearchField';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import type { Suggestion } from '../product-search';

@@ -1,6 +1,6 @@
 import 'server-only';
 import { isInStock, type ColourOffer, type Product, type ProductVariant } from '@/api-client';
-import type { StockStatusProps } from '@/ui';
+import type { StockStatusProps } from '@/ui/StockStatus/StockStatus';
 import { getRanges, rangeForProduct, rangePath } from '@/features/catalogue';
 import { brandOf } from '@/lib/brands';
 import { formatPrice } from '@/lib/format';

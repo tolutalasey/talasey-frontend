@@ -1,4 +1,7 @@
-import { Checkbox, SelectField, TextAreaField, TextField } from '@/ui';
+import { Checkbox } from '@/ui/Checkbox/Checkbox';
+import { SelectField } from '@/ui/SelectField/SelectField';
+import { TextAreaField } from '@/ui/TextAreaField/TextAreaField';
+import { TextField } from '@/ui/TextField/TextField';
 import { staffStyles as styles } from '@/features/staff';
 import { EXTRA_ROWS, fieldPath, type Data, type Field } from '../fields';
 

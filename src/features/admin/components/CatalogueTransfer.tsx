@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
-import { Button } from '@/ui';
+import { Button } from '@/ui/Button/Button';
 import { importSheet, type SheetImportState } from '../catalogue-actions';
 import styles from './StaffForm.module.css';
 

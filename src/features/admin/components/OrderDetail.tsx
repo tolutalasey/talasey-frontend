@@ -1,4 +1,6 @@
-import { Button, Table, TextField } from '@/ui';
+import { Button } from '@/ui/Button/Button';
+import { Table } from '@/ui/Table/Table';
+import { TextField } from '@/ui/TextField/TextField';
 import { money, poundsText, staffStyles as styles } from '@/features/staff';
 import { refundOrder } from '../actions';
 import { DAY_STATUS, PAYMENT_STATUS, VEHICLE_ACCESS, dateText } from '../labels';

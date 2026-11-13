@@ -1,7 +1,11 @@
 'use client';
 
 import { useActionState } from 'react';
-import { Button, Checkbox, SelectField, TextAreaField, TextField } from '@/ui';
+import { Button } from '@/ui/Button/Button';
+import { Checkbox } from '@/ui/Checkbox/Checkbox';
+import { SelectField } from '@/ui/SelectField/SelectField';
+import { TextAreaField } from '@/ui/TextAreaField/TextAreaField';
+import { TextField } from '@/ui/TextField/TextField';
 import styles from './StaffForm.module.css';
 import { bespokePricing, type BespokeFormState } from '../bespoke-actions';
 import {

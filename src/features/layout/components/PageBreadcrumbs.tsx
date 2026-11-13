@@ -1,4 +1,4 @@
-import { Breadcrumbs } from '@/ui';
+import { Breadcrumbs } from '@/ui/Breadcrumbs/Breadcrumbs';
 import { JsonLd } from '@/lib/JsonLd';
 import { breadcrumbJsonLd, type BreadcrumbItem } from '@/lib/seo';
 

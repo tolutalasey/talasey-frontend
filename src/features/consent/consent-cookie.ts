@@ -4,7 +4,7 @@ import {
   parseConsent,
   serialiseConsent,
   type ConsentRecord,
-} from '@/analytics';
+} from '@/analytics/consent';
 
 // First-party and readable by the page, since the choice is made and used in the browser.
 export function readConsentCookie(cookies = document.cookie): ConsentRecord | null {

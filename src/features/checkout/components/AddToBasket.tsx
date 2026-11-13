@@ -1,6 +1,8 @@
 'use client';
 
-import { Button, Form, TextField } from '@/ui';
+import { Button } from '@/ui/Button/Button';
+import { Form } from '@/ui/Form/Form';
+import { TextField } from '@/ui/TextField/TextField';
 import { useActionState } from 'react';
 import { addToBasket } from '../actions';
 import type { FormState } from '../forms';

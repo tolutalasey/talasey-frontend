@@ -1,4 +1,4 @@
-import { StockStatus, type StockStatusProps } from '@/ui';
+import { StockStatus, type StockStatusProps } from '@/ui/StockStatus/StockStatus';
 import { formatPrice } from '@/lib/format';
 import type { PackPricing } from '../pricing';
 import styles from './ProductPage.module.css';

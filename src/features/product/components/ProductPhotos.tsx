@@ -1,4 +1,4 @@
-import { Gallery } from '@/ui';
+import { Gallery } from '@/ui/Gallery/Gallery';
 import Image from 'next/image';
 import type { ProductPhoto } from '../content';
 import styles from './ProductPage.module.css';

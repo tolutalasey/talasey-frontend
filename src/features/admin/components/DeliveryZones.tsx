@@ -1,4 +1,7 @@
-import { Button, Table, TextAreaField, TextField } from '@/ui';
+import { Button } from '@/ui/Button/Button';
+import { Table } from '@/ui/Table/Table';
+import { TextAreaField } from '@/ui/TextAreaField/TextAreaField';
+import { TextField } from '@/ui/TextField/TextField';
 import NextLink from 'next/link';
 import { money, poundsText, staffStyles as styles } from '@/features/staff';
 import { deleteZone, saveZone } from '../actions';

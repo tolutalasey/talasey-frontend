@@ -1,4 +1,4 @@
-import { ProductCard } from '@/ui';
+import { ProductCard } from '@/ui/ProductCard/ProductCard';
 import type { SearchRecord } from '@/features/search';
 import { productCard } from '../cards';
 import styles from './ProductGrid.module.css';

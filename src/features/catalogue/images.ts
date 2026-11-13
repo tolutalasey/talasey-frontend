@@ -1,4 +1,4 @@
-import type { ProductCardImage } from '@/ui';
+import type { ProductCardImage } from '@/ui/ProductCard/ProductCard';
 
 // Product photos are added in /admin. Until a product has one, cards show a neutral tile.
 export const PHOTO_COMING_SOON: ProductCardImage = {

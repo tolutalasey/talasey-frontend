@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   // Room for the contact form's photos (up to five of 5 MB each), through the proxy too.
   experimental: {
+    // The shop's CSS is small (about 7 KB compressed), so it goes in the page itself instead of
+    // a separate file the browser must fetch before it can paint anything.
+    inlineCss: true,
     serverActions: { bodySizeLimit: '26mb' },
     proxyClientMaxBodySize: '26mb',
   },

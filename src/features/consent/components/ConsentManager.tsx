@@ -1,7 +1,13 @@
 'use client';
 
-import { fullConsent, needsAsking, noConsent, recordConsent, type ConsentState } from '@/analytics';
-import { ConsentDialog } from '@/ui';
+import {
+  fullConsent,
+  needsAsking,
+  noConsent,
+  recordConsent,
+  type ConsentState,
+} from '@/analytics/consent';
+import { ConsentDialog } from '@/ui/ConsentDialog/ConsentDialog';
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { readConsentCookie, saveConsent, subscribeToConsent } from '../consent-cookie';
 import { updateConsentMode } from '../consent-mode';
@@ -23,8 +29,8 @@ const categories = [
 
 const noSubscription = () => () => undefined;
 
-// The server always renders the dialog closed: without JavaScript nothing is tracked, and a
-// dialog that can't be answered would block the page.
+// The dialog is in every page's HTML; a script before the first paint decides whether it shows
+// (consentPromptScript). Without JavaScript it never shows, and nothing is tracked.
 export function ConsentManager({ secureCookie }: { secureCookie: boolean }) {
   const inBrowser = useSyncExternalStore(
     noSubscription,
@@ -53,12 +59,13 @@ export function ConsentManager({ secureCookie }: { secureCookie: boolean }) {
     setReopened(false);
   }
 
-  const open = inBrowser && (reopened || needsAsking(record));
+  const open = inBrowser ? reopened || needsAsking(record) : undefined;
 
-  // Keyed on open, so each opening starts from the current choices on the first screen.
+  // Keyed on reopening from Cookie settings, so it starts from the current choices on the first
+  // screen. Not keyed on the first answer, so the server-rendered dialog is kept, not replaced.
   return (
     <ConsentDialog
-      key={String(open)}
+      key={String(reopened)}
       isOpen={open}
       categories={categories}
       choices={record?.choices ?? noConsent}

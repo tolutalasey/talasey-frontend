@@ -1,5 +1,5 @@
 import type { Product, ProductVariant } from '@/api-client';
-import type { StockStatusProps } from '@/ui';
+import type { StockStatusProps } from '@/ui/StockStatus/StockStatus';
 import type { ReactNode } from 'react';
 import { PageBreadcrumbs } from '@/features/layout';
 import type { BreadcrumbItem } from '@/lib/seo';
