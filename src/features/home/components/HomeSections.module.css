@@ -1,0 +1,52 @@
+.section {
+  padding-block: var(--space-12);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  position: relative;
+  padding: var(--space-6);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+}
+
+.tile:has(.tileLink:hover) {
+  border-color: var(--color-brand600);
+}
+
+.tile p {
+  margin: 0;
+  color: var(--color-ink-muted);
+}
+
+.tileTitle {
+  margin-bottom: var(--space-2);
+}
+
+.tileLink {
+  text-decoration: none;
+}
+
+.tileLink::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+}
+
+.seasonal {
+  padding-block: var(--space-12);
+  background: var(--color-brand50);
+}
+
+.seasonalText {
+  max-width: var(--layout-measure);
+}

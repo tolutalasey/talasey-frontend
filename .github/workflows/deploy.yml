@@ -1,0 +1,78 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+
+concurrency:
+  group: deploy-${{ github.event_name == 'release' && 'production' || 'staging' }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  TARGET: ${{ github.event_name == 'release' && 'production' || 'staging' }}
+
+jobs:
+  vercel:
+    name: Vercel (${{ github.event_name == 'release' && 'production' || 'staging' }})
+    runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'release' && 'production' || 'staging' }}
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - if: env.VERCEL_TOKEN == ''
+        run: echo "::notice::VERCEL_TOKEN is not set, so the deploy is skipped."
+      - if: env.VERCEL_TOKEN != ''
+        uses: actions/checkout@v5
+      - if: env.VERCEL_TOKEN != ''
+        uses: pnpm/action-setup@v4
+      - if: env.VERCEL_TOKEN != ''
+        run: pnpm dlx vercel@latest pull --yes --environment="$TARGET" --token="$VERCEL_TOKEN"
+      - if: env.VERCEL_TOKEN != ''
+        run: pnpm dlx vercel@latest build --target="$TARGET" --token="$VERCEL_TOKEN"
+      - id: deploy
+        if: env.VERCEL_TOKEN != ''
+        run: |
+          url=$(pnpm dlx vercel@latest deploy --prebuilt --target="$TARGET" --token="$VERCEL_TOKEN")
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+  smoke:
+    name: Smoke tests
+    needs: vercel
+    if: needs.vercel.outputs.url != ''
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: ${{ needs.vercel.outputs.url }}
+      APP_ENV: ${{ github.event_name == 'release' && 'production' || 'staging' }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm e2e e2e/tests/home.spec.ts e2e/tests/seo.spec.ts
+
+  rollback:
+    name: Roll back production
+    needs: [vercel, smoke]
+    if: failure() && github.event_name == 'release' && needs.vercel.result == 'success'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - run: npx --yes vercel@latest rollback --yes --token="$VERCEL_TOKEN"
+      - run: echo "::error::Smoke tests failed, so production was rolled back on Vercel."

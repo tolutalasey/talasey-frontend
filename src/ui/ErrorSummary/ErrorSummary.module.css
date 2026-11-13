@@ -1,0 +1,29 @@
+.summary {
+  max-width: 32rem;
+  padding: var(--space-4) var(--space-6);
+  border: 3px solid var(--color-error);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+}
+
+.summary:focus {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-h3);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: var(--space-6);
+}
+
+.list a {
+  color: var(--color-error);
+  font-weight: var(--font-weight-semibold);
+}

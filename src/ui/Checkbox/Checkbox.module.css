@@ -1,0 +1,71 @@
+.options {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: var(--target-min);
+  padding-block: var(--space-2);
+  cursor: pointer;
+}
+
+.box {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: var(--border-input) solid var(--color-ink-muted);
+  border-radius: 4px;
+  background: var(--color-white);
+}
+
+.tick {
+  visibility: hidden;
+  color: var(--color-white);
+}
+
+.checkbox[data-selected] .box {
+  border-color: var(--color-brand600);
+  background: var(--color-brand600);
+}
+
+.checkbox[data-selected] .tick {
+  visibility: visible;
+}
+
+.checkbox[data-focus-visible] .box {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.checkbox[data-invalid] .box {
+  border-color: var(--color-error);
+}
+
+.checkbox[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.text {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.description {
+  font-size: var(--font-size-small);
+  color: var(--color-ink-muted);
+}
+
+.hiddenLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

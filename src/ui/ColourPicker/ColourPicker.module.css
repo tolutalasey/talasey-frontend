@@ -1,0 +1,50 @@
+.options {
+  gap: var(--space-3);
+}
+
+.colour {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1);
+  width: 5.5rem;
+  min-height: var(--target-min);
+  padding: var(--space-1);
+  border-radius: var(--radius-control);
+  text-align: center;
+}
+
+.swatch {
+  display: grid;
+  place-items: center;
+  width: var(--target-min);
+  height: var(--target-min);
+  border: var(--border-input) solid var(--color-ink-muted);
+  border-radius: 50%;
+}
+
+.tick {
+  visibility: hidden;
+  padding: 2px;
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-brand600);
+}
+
+.colour[data-selected] .swatch {
+  box-shadow:
+    0 0 0 2px var(--color-white),
+    0 0 0 5px var(--color-brand600);
+}
+
+.colour[data-selected] .tick {
+  visibility: visible;
+}
+
+.colour[data-selected] .name {
+  font-weight: var(--font-weight-bold);
+}
+
+.name {
+  font-size: var(--font-size-small);
+  line-height: 1.3;
+}

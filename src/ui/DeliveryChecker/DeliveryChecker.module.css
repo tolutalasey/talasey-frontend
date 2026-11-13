@@ -1,0 +1,37 @@
+.checker {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 32rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-3);
+}
+
+.field {
+  flex: 1 1 12rem;
+}
+
+.result {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+}
+
+.result svg {
+  flex: none;
+  margin-top: 0.15rem;
+}
+
+.ok {
+  color: var(--color-success);
+}
+
+.problem {
+  color: var(--color-warning);
+}

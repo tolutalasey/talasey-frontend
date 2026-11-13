@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NEXT_TELEMETRY_DISABLED: 1
+
+jobs:
+  checks:
+    name: Lint, types, format, unit tests and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+
+  components:
+    name: Components in a browser
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm storybook:build
+      - run: pnpm test:stories
+
+  e2e:
+    name: End-to-end and Lighthouse against the backend
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: talasey
+          POSTGRES_PASSWORD: talasey
+          POSTGRES_DB: api
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U talasey" --health-interval 2s --health-timeout 5s --health-retries 30
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping" --health-interval 2s --health-timeout 5s --health-retries 30
+    env:
+      BACKEND_DIR: backend
+      DATABASE_URL: postgres://talasey:talasey@localhost:5432/api
+      REDIS_URL: redis://localhost:6379
+      REVALIDATE_SECRET: ci-only-revalidate-secret-that-is-long-enough
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check out the backend next to the site
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ vars.BACKEND_REPO || 'tolutalasey/talasey-backend' }}
+          token: ${{ secrets.BACKEND_REPO_TOKEN || github.token }}
+          path: backend
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile
+        working-directory: backend
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm build
+      - run: pnpm e2e
+      - name: Lighthouse on every template (mobile)
+        env:
+          APP_ENV: production
+          SITE_URL: http://localhost:3000
+          API_URL: http://localhost:4000
+        run: |
+          pnpm build
+          (cd backend && pnpm start &)
+          pnpm lighthouse
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            playwright-report
+            .lighthouseci
+          retention-days: 7

@@ -1,0 +1,93 @@
+.header {
+  position: relative;
+  border-bottom: 1px solid var(--color-line);
+  background: var(--color-white);
+}
+
+.topBar {
+  padding: var(--space-2) var(--layout-gutter-mobile);
+  background: var(--color-brand950);
+  color: var(--color-white);
+  font-size: var(--font-size-small);
+  text-align: center;
+}
+
+.topBar a {
+  color: var(--color-white);
+}
+
+.topBar :focus-visible {
+  outline-color: var(--focus-ring-color-on-dark);
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: 'logo search basket';
+  align-items: center;
+  gap: var(--space-4);
+  max-width: calc(var(--layout-max-width) + 2 * var(--layout-gutter-desktop));
+  margin-inline: auto;
+  padding: var(--space-3) var(--layout-gutter-mobile);
+}
+
+.logo {
+  grid-area: logo;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min);
+  color: var(--color-brand600);
+  font-family: var(--font-display);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+}
+
+.search {
+  grid-area: search;
+}
+
+.basket {
+  grid-area: basket;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target-min);
+  padding-inline: var(--space-2);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+}
+
+.count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding-inline: var(--space-1);
+  border-radius: 999px;
+  background: var(--color-brand600);
+  color: var(--color-white);
+  font-size: var(--font-size-small);
+}
+
+.navigation {
+  max-width: calc(var(--layout-max-width) + 2 * var(--layout-gutter-desktop));
+  margin-inline: auto;
+  padding-inline: var(--layout-gutter-mobile);
+}
+
+@media (max-width: 47.99rem) {
+  .bar {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'logo basket'
+      'search search';
+  }
+}
+
+@media (min-width: 64rem) {
+  .bar,
+  .navigation {
+    padding-inline: var(--layout-gutter-desktop);
+  }
+}

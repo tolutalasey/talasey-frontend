@@ -1,0 +1,46 @@
+/* The site's base styles, so stories look as they do on the site. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: 1.6;
+  color: var(--color-ink);
+  background: var(--color-white);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.15;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+}
+
+a {
+  color: var(--color-brand600);
+  text-underline-offset: 0.2em;
+}
+
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}

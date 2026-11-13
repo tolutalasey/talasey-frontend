@@ -1,0 +1,46 @@
+.review {
+  display: grid;
+  gap: var(--space-2);
+  max-width: var(--layout-measure);
+  padding: var(--space-6);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.stars {
+  display: inline-flex;
+  color: var(--color-brand600);
+}
+
+.ratingText {
+  font-size: var(--font-size-small);
+  color: var(--color-ink-muted);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-body);
+}
+
+.body {
+  margin: 0;
+}
+
+.meta {
+  margin: 0;
+  font-size: var(--font-size-small);
+  color: var(--color-ink-muted);
+}
+
+.verified {
+  color: var(--color-success);
+  font-weight: var(--font-weight-semibold);
+}

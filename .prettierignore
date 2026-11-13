@@ -1,0 +1,8 @@
+pnpm-lock.yaml
+.next
+storybook-static
+playwright-report
+test-results
+.lighthouseci
+src/api-client/schema.d.ts
+src/tokens/tokens.css

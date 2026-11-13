@@ -1,0 +1,9 @@
+.page {
+  padding-block: var(--space-8) var(--space-16);
+}
+
+.intro {
+  max-width: var(--layout-measure);
+  font-size: 1.125rem;
+  color: var(--color-ink-muted);
+}

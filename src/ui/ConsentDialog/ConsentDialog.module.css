@@ -1,0 +1,23 @@
+.content {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.content p {
+  margin: 0;
+}
+
+.essential {
+  color: var(--color-ink-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+.equal {
+  flex: 1 1 10rem;
+}

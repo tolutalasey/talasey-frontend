@@ -1,0 +1,131 @@
+.page {
+  padding-block: var(--space-8) var(--space-16);
+}
+
+.checkout {
+  display: grid;
+  gap: var(--space-8);
+}
+
+@media (min-width: 64rem) {
+  .checkout {
+    grid-template-columns: minmax(0, 2fr) minmax(18rem, 1fr);
+    align-items: start;
+  }
+
+  .checkout > h1 {
+    grid-column: 1 / -1;
+  }
+}
+
+.steps {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.step {
+  padding-bottom: var(--space-8);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.summary {
+  padding: var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--color-stone50);
+}
+
+.lines {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--space-6);
+}
+
+.caption {
+  text-align: left;
+  font-weight: var(--font-weight-semibold);
+  padding-bottom: var(--space-2);
+}
+
+.lines th,
+.lines td {
+  padding: var(--space-3) var(--space-2);
+  border-bottom: 1px solid var(--color-line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.lines td:last-child,
+.lines thead th:last-child {
+  text-align: right;
+}
+
+.lines tbody th {
+  font-weight: var(--font-weight-regular);
+}
+
+.muted {
+  color: var(--color-ink-muted);
+}
+
+.stock {
+  display: block;
+  font-size: var(--font-size-small);
+  color: var(--color-ink-muted);
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-2) var(--space-6);
+  max-width: 24rem;
+  margin: 0 0 var(--space-6) auto;
+}
+
+.totals dd {
+  margin: 0;
+  text-align: right;
+}
+
+.grand {
+  font-weight: var(--font-weight-bold);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-2) var(--space-6);
+}
+
+.facts dt {
+  font-weight: var(--font-weight-semibold);
+}
+
+.facts dd {
+  margin: 0;
+}
+
+.alert {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 4px solid var(--color-error);
+  background: var(--color-white);
+  color: var(--color-error);
+  font-weight: var(--font-weight-semibold);
+}
+
+.next {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-control);
+  background: var(--color-brand600);
+  color: var(--color-white);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+}
+
+.next:hover {
+  background: var(--color-brand800);
+  color: var(--color-white);
+}

@@ -1,0 +1,19 @@
+.job {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 32rem;
+  padding: var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--color-stone50);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.price {
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+}

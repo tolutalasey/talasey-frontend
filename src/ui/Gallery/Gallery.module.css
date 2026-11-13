@@ -1,0 +1,59 @@
+.gallery {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 40rem;
+}
+
+.stage {
+  margin: 0;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-card);
+  background: var(--color-stone50);
+}
+
+.caption {
+  padding-top: var(--space-2);
+  font-size: var(--font-size-small);
+  color: var(--color-ink-muted);
+}
+
+.thumbs {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  padding: var(--space-1);
+}
+
+.thumb {
+  flex: none;
+  padding: 0;
+  border: var(--border-input) solid transparent;
+  border-radius: var(--radius-control);
+  background: none;
+  cursor: pointer;
+}
+
+.thumb img {
+  display: block;
+  width: 5.5rem;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.thumb[data-selected] {
+  border-color: var(--color-brand600);
+}
+
+.thumb[data-focus-visible] {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}

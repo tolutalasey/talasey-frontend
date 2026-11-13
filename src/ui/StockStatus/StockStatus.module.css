@@ -1,0 +1,28 @@
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+}
+
+.icon {
+  flex: none;
+}
+
+.in-stock {
+  color: var(--color-success);
+}
+
+.low-stock {
+  color: var(--color-warning);
+}
+
+.out-of-stock {
+  color: var(--color-error);
+}
+
+.made-to-order {
+  color: var(--color-ink-muted);
+}

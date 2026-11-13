@@ -1,0 +1,12 @@
+allowBuilds:
+  '@scarf/scarf': false
+  esbuild: true
+  sharp: true
+
+minimumReleaseAgeExclude:
+  - '@boundaries/config@1.0.2'
+  - '@boundaries/elements@3.3.3'
+  - '@boundaries/policies@1.0.2'
+  - eslint-plugin-boundaries@7.4.3
+  - prettier@3.10.1
+  - '@testing-library/user-event@14.6.10'

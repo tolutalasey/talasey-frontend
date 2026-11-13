@@ -1,0 +1,16 @@
+.button {
+  min-height: var(--target-min);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.button:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color-on-dark);
+  outline-offset: var(--focus-ring-offset);
+}

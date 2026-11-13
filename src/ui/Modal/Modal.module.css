@@ -1,0 +1,97 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgb(30 26 34 / 0.6);
+}
+
+.drawerOverlay {
+  place-items: stretch end;
+  padding: 0;
+}
+
+.modal {
+  max-height: calc(100dvh - 2 * var(--space-4));
+  overflow: auto;
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+  outline: none;
+}
+
+.dialog {
+  width: min(100%, 36rem);
+  outline: none;
+}
+
+.drawer {
+  width: min(100vw, 26rem);
+  height: 100dvh;
+  max-height: none;
+  border-radius: 0;
+}
+
+.drawer .dialog {
+  width: 100%;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--color-line);
+  background: var(--color-white);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-h3);
+}
+
+.close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--target-min);
+  height: var(--target-min);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.close[data-hovered] {
+  background: var(--color-stone50);
+}
+
+.close[data-focus-visible] {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.body {
+  padding: var(--space-6);
+}
+
+.overlay[data-entering] .drawer {
+  animation: slide-in 200ms ease-out;
+}
+
+@keyframes slide-in {
+  from {
+    translate: 100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay[data-entering] .drawer {
+    animation: none;
+  }
+}

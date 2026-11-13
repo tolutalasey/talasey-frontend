@@ -1,0 +1,17 @@
+/* For pages without next/font, such as Storybook. The site loads the same files through
+   next/font/local so they are preloaded and get fallback metrics. */
+@font-face {
+  font-family: 'Jost';
+  src: url('./jost-wght-500-600.woff2') format('woff2');
+  font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('./mulish-wght-400-700.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
