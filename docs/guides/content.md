@@ -10,6 +10,16 @@ Open `/content` on the site and sign in. On the left is every kind of content: t
 - **Preview the draft** shows guides and pages as the site will, before anyone else sees them.
 - **Take off the site** unpublishes but keeps the draft. **History** shows every change and can put an earlier version back.
 
+## Releases: several changes at once, now or later
+
+Use a release when changes must go live together, for example a sale's landing page, banner and FAQs, or when something should go live at a set time, such as 9am on Monday. Editors and the owner can do this.
+
+1. Go to **Releases**, type a name such as "Spring sale" and click **Start a release**.
+2. Open each draft, make your changes, choose the release and click **Save and add to release**. The site doesn't change yet.
+3. Back in **Releases**, either pick a date and time (UK time) and click **Schedule**, or click **Publish everything now**.
+
+Everything in a release goes live at the same moment. If one draft still has something to fix, nothing in the release is published, and the release shows what to fix. Changing a scheduled release (adding or taking out a draft) unschedules it, so check it and schedule it again.
+
 ## Filling in fields
 
 - Paragraphs: leave a blank line between them.

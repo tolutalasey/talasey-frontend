@@ -9,3 +9,4 @@ export type ContentTypeInfo = Omit<
 > & { fields: Field[] };
 export type ContentSummary = Json<paths['/content/documents']['get']['responses'][200]>[number];
 export type ContentDocument = Json<paths['/content/documents/{id}']['get']['responses'][200]>;
+export type ContentRelease = Json<paths['/content/releases']['get']['responses'][200]>[number];

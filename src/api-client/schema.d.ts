@@ -884,6 +884,118 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/content/releases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReleaseController_list"];
+        put?: never;
+        post: operations["ReleaseController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/content/releases/{id}/items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ReleaseController_add"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/content/releases/{id}/items/{documentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["ReleaseController_removeItem"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/content/releases/{id}/schedule": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ReleaseController_schedule"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/content/releases/{id}/unschedule": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ReleaseController_unschedule"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/content/releases/{id}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ReleaseController_publish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/content/releases/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["ReleaseController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/store/content/{type}": {
         parameters: {
             query?: never;
@@ -5246,6 +5358,466 @@ export interface operations {
                 content?: never;
             };
             /** @description Contributors cannot unpublish */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReleaseController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        name: string;
+                        /** @enum {string} */
+                        status: "open" | "scheduled" | "published" | "failed";
+                        /** Format: date-time */
+                        publishAt: string | null;
+                        scheduledBy: string | null;
+                        createdBy: string;
+                        /** Format: date-time */
+                        publishedAt: string | null;
+                        /** @description Why the last attempt to publish it failed */
+                        problems: string[];
+                        items: {
+                            /** Format: uuid */
+                            documentId: string;
+                            type: string;
+                            key: string;
+                            title: string;
+                        }[];
+                    }[];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReleaseController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    name: string;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        name: string;
+                        /** @enum {string} */
+                        status: "open" | "scheduled" | "published" | "failed";
+                        /** Format: date-time */
+                        publishAt: string | null;
+                        scheduledBy: string | null;
+                        createdBy: string;
+                        /** Format: date-time */
+                        publishedAt: string | null;
+                        /** @description Why the last attempt to publish it failed */
+                        problems: string[];
+                        items: {
+                            /** Format: uuid */
+                            documentId: string;
+                            type: string;
+                            key: string;
+                            title: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReleaseController_add: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    documentId: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        name: string;
+                        /** @enum {string} */
+                        status: "open" | "scheduled" | "published" | "failed";
+                        /** Format: date-time */
+                        publishAt: string | null;
+                        scheduledBy: string | null;
+                        createdBy: string;
+                        /** Format: date-time */
+                        publishedAt: string | null;
+                        /** @description Why the last attempt to publish it failed */
+                        problems: string[];
+                        items: {
+                            /** Format: uuid */
+                            documentId: string;
+                            type: string;
+                            key: string;
+                            title: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Locked wording, or the release is live */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Already in another release */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReleaseController_removeItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                documentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        name: string;
+                        /** @enum {string} */
+                        status: "open" | "scheduled" | "published" | "failed";
+                        /** Format: date-time */
+                        publishAt: string | null;
+                        scheduledBy: string | null;
+                        createdBy: string;
+                        /** Format: date-time */
+                        publishedAt: string | null;
+                        /** @description Why the last attempt to publish it failed */
+                        problems: string[];
+                        items: {
+                            /** Format: uuid */
+                            documentId: string;
+                            type: string;
+                            key: string;
+                            title: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReleaseController_schedule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: date-time
+                     * @description When it goes live, with a time zone
+                     */
+                    publishAt: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        name: string;
+                        /** @enum {string} */
+                        status: "open" | "scheduled" | "published" | "failed";
+                        /** Format: date-time */
+                        publishAt: string | null;
+                        scheduledBy: string | null;
+                        createdBy: string;
+                        /** Format: date-time */
+                        publishedAt: string | null;
+                        /** @description Why the last attempt to publish it failed */
+                        problems: string[];
+                        items: {
+                            /** Format: uuid */
+                            documentId: string;
+                            type: string;
+                            key: string;
+                            title: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Empty, or the time has passed */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReleaseController_unschedule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        name: string;
+                        /** @enum {string} */
+                        status: "open" | "scheduled" | "published" | "failed";
+                        /** Format: date-time */
+                        publishAt: string | null;
+                        scheduledBy: string | null;
+                        createdBy: string;
+                        /** Format: date-time */
+                        publishedAt: string | null;
+                        /** @description Why the last attempt to publish it failed */
+                        problems: string[];
+                        items: {
+                            /** Format: uuid */
+                            documentId: string;
+                            type: string;
+                            key: string;
+                            title: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReleaseController_publish: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        name: string;
+                        /** @enum {string} */
+                        status: "open" | "scheduled" | "published" | "failed";
+                        /** Format: date-time */
+                        publishAt: string | null;
+                        scheduledBy: string | null;
+                        createdBy: string;
+                        /** Format: date-time */
+                        publishedAt: string | null;
+                        /** @description Why the last attempt to publish it failed */
+                        problems: string[];
+                        items: {
+                            /** Format: uuid */
+                            documentId: string;
+                            type: string;
+                            key: string;
+                            title: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Something in it needs fixing first; nothing was published */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReleaseController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Already live */
             403: {
                 headers: {
                     [name: string]: unknown;

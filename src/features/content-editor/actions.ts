@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { uploadPhoto } from '@/features/admin';
 import { done, failed, staffApi, text } from '@/features/staff';
 import { dataFromForm, imagePaths, type Field, type Photo } from './fields';
+import { fromLondonTime } from './london-time';
 import type { ContentTypeInfo } from './types';
 
 const problemText = (error: unknown) => {
@@ -75,6 +76,15 @@ export async function saveContent(form: FormData) {
     if (error) failed(page, problemText(error));
     done(page, 'Published. The site shows it now.');
   }
+  if (intent === 'release') {
+    const releaseId = text(form, 'releaseId') ?? '';
+    const { error } = await api.POST('/content/releases/{id}/items', {
+      params: { path: { id: releaseId } },
+      body: { documentId: id },
+    });
+    if (error) failed(page, problemText(error));
+    done(page, 'Draft saved and added to the release. It goes live with the release.');
+  }
   if (intent === 'unpublish') {
     const { error } = await api.POST('/content/documents/{id}/unpublish', {
       params: { path: { id } },
@@ -83,4 +93,60 @@ export async function saveContent(form: FormData) {
     done(page, 'Taken off the site. The draft is kept.');
   }
   done(page, 'Draft saved. The site still shows the published version.');
+}
+
+const RELEASES = '/content/releases/';
+
+const releaseId = (form: FormData) => text(form, 'releaseId') ?? '';
+
+export async function createRelease(form: FormData) {
+  const { error } = await (
+    await staffApi()
+  ).POST('/content/releases', { body: { name: text(form, 'name') ?? '' } });
+  if (error) failed(RELEASES, problemText(error));
+  done(RELEASES, 'Release started. Add drafts to it from their edit pages.');
+}
+
+// One form per release, several buttons: schedule, publish now, unschedule or delete.
+export async function changeRelease(form: FormData) {
+  const api = await staffApi();
+  const path = { params: { path: { id: releaseId(form) } } };
+  const intent = text(form, 'intent');
+
+  if (intent === 'schedule') {
+    const publishAt = fromLondonTime(text(form, 'publishAt') ?? '');
+    if (!publishAt) failed(RELEASES, 'Pick a date and time for the release');
+    const { error } = await api.POST('/content/releases/{id}/schedule', {
+      ...path,
+      body: { publishAt: publishAt.toISOString() },
+    });
+    if (error) failed(RELEASES, problemText(error));
+    done(RELEASES, 'Scheduled. Everything in it goes live together at that time.');
+  }
+  if (intent === 'unschedule') {
+    const { error } = await api.POST('/content/releases/{id}/unschedule', path);
+    if (error) failed(RELEASES, problemText(error));
+    done(RELEASES, 'No longer scheduled. Nothing has changed on the site.');
+  }
+  if (intent === 'publish') {
+    const { error } = await api.POST('/content/releases/{id}/publish', path);
+    if (error) failed(RELEASES, `Nothing was published.\n${problemText(error)}`);
+    done(RELEASES, 'Published. Everything in the release is on the site now.');
+  }
+  if (intent === 'delete') {
+    const { error } = await api.DELETE('/content/releases/{id}', path);
+    if (error) failed(RELEASES, problemText(error));
+    done(RELEASES, 'Release deleted. The drafts in it are kept.');
+  }
+  failed(RELEASES, 'Choose what to do with the release');
+}
+
+export async function removeFromRelease(form: FormData) {
+  const { error } = await (
+    await staffApi()
+  ).DELETE('/content/releases/{id}/items/{documentId}', {
+    params: { path: { id: releaseId(form), documentId: text(form, 'documentId') ?? '' } },
+  });
+  if (error) failed(RELEASES, problemText(error));
+  done(RELEASES, 'Taken out of the release. The draft is kept.');
 }

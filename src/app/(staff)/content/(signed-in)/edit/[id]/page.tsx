@@ -20,13 +20,20 @@ export default async function EditContent({ params, searchParams }: Props) {
   });
   const type = (await contentTypes()).find((entry) => entry.type === document?.type);
   if (!document || !type) notFound();
+  const { data: releases = [] } = type.canPublish
+    ? await (await staffApi()).GET('/content/releases')
+    : { data: [] };
   return (
     <>
       <h1>
         {type.label}: {document.title}
       </h1>
       <Notice message={message} error={error} />
-      <ContentEditor document={document} type={type} />
+      <ContentEditor
+        document={document}
+        type={type}
+        releases={releases.filter((release) => release.status !== 'published')}
+      />
     </>
   );
 }

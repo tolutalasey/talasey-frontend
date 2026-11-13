@@ -1,8 +1,9 @@
-import { Button } from '@/ui';
+import { Button, SelectField } from '@/ui';
 import NextLink from 'next/link';
 import { staffStyles as styles } from '@/features/staff';
 import { saveContent } from '../actions';
-import type { ContentDocument, ContentTypeInfo } from '../types';
+import { londonLabel } from '../london-time';
+import type { ContentDocument, ContentRelease, ContentTypeInfo } from '../types';
 import { ContentFields } from './ContentFields';
 
 const STATUS = {
@@ -14,10 +15,15 @@ const STATUS = {
 export function ContentEditor({
   document,
   type,
+  releases,
 }: {
   document: ContentDocument;
   type: ContentTypeInfo;
+  releases: ContentRelease[];
 }) {
+  const waitingIn = releases.find((release) =>
+    release.items.some((item) => item.documentId === document.id),
+  );
   return (
     <form action={saveContent} encType="multipart/form-data" className={styles.stack}>
       <input type="hidden" name="id" value={document.id} />
@@ -39,6 +45,15 @@ export function ContentEditor({
           </ul>
         </div>
       )}
+      {waitingIn && (
+        <p role="status" className={styles.notice}>
+          Waiting in the release <NextLink href="/content/releases/">{waitingIn.name}</NextLink>
+          {waitingIn.publishAt
+            ? `, going live ${londonLabel(waitingIn.publishAt)}.`
+            : ', not scheduled yet.'}{' '}
+          It publishes whatever the draft says at that moment.
+        </p>
+      )}
       <ContentFields fields={type.fields} data={document.draft} />
       <div className={styles.actions}>
         <Button type="submit" name="intent" value="save">
@@ -49,6 +64,18 @@ export function ContentEditor({
             <Button type="submit" name="intent" value="publish">
               Save and publish
             </Button>
+            {!waitingIn && releases.length > 0 && (
+              <>
+                <SelectField
+                  label="Release"
+                  name="releaseId"
+                  options={releases.map((release) => ({ value: release.id, label: release.name }))}
+                />
+                <Button type="submit" name="intent" value="release" variant="secondary">
+                  Save and add to release
+                </Button>
+              </>
+            )}
             {document.published && (
               <Button type="submit" name="intent" value="unpublish" variant="secondary">
                 Take off the site

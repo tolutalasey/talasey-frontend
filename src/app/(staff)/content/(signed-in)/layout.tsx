@@ -7,6 +7,7 @@ export default async function ContentLayout({ children }: { children: ReactNode 
   const types = allowed ? await contentTypes() : [];
   const links = [
     ...types.map((type) => ({ href: `/content/${type.type}/`, label: type.label })),
+    { href: '/content/releases/', label: 'Releases', permission: 'content.publish' as const },
     { href: '/admin/', label: 'Admin', permission: 'catalogue' as const },
   ];
   return (

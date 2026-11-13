@@ -1,4 +1,5 @@
 export * from './actions';
 export { ContentEditor } from './components/ContentEditor';
 export { ContentList } from './components/ContentList';
-export type { ContentDocument, ContentSummary, ContentTypeInfo } from './types';
+export { ReleaseList } from './components/ReleaseList';
+export type { ContentDocument, ContentRelease, ContentSummary, ContentTypeInfo } from './types';
