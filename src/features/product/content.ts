@@ -29,11 +29,18 @@ export const emptyProductContent: ProductContent = {
   features: [],
 };
 
-// The accessories we know go with a product, until product content moves into /content.
-export const fallbackProductContent: Record<string, Partial<ProductContent>> = {
-  'silver-grey-porcelain-paving': {
-    completeTheJob: [
-      { handle: 'pavetuf-jointing-compound', reason: 'Fills the joints between the slabs' },
-    ],
-  },
-};
+// What the content team publishes for a product in /content ("Product extras").
+export const productExtrasSchema = productContentSchema
+  .omit({ photos: true })
+  .extend({ product: z.string() });
+
+export type ProductExtras = z.infer<typeof productExtrasSchema>;
+
+export function extrasFor(handle: string, published: unknown[]): Omit<ProductContent, 'photos'> {
+  const extras = published
+    .map((entry) => productExtrasSchema.safeParse(entry))
+    .find((parsed) => parsed.success && parsed.data.product === handle)?.data;
+  if (!extras) return emptyProductContent;
+  const { product: _product, ...content } = extras;
+  return content;
+}

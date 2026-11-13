@@ -10,6 +10,15 @@ Open `/content` on the site and sign in. On the left is every kind of content: t
 - **Preview the draft** shows guides and pages as the site will, before anyone else sees them.
 - **Take off the site** unpublishes but keeps the draft. **History** shows every change and can put an earlier version back.
 
+## Product extras
+
+**Product extras** add to a product's page what isn't in the product data: the "complete the job" list, downloads, key features and the guarantee.
+
+1. Start a draft and name it with the end of the product's web address, for example `silver-grey-porcelain-paving` for `/products/silver-grey-porcelain-paving/`.
+2. Under **Complete the job**, add each product that goes with it (again by the end of its web address) and why it's needed, such as "Fills the joints between the slabs". Customers see each one with its own tick box, never ticked for them, and only when it can be bought online.
+3. Under **Documents**, add spec sheets and fitting guides with a link starting `https://` or `/`.
+4. **Save and publish.** The product page shows it within seconds.
+
 ## Releases: several changes at once, now or later
 
 Use a release when changes must go live together, for example a sale's landing page, banner and FAQs, or when something should go live at a set time, such as 9am on Monday. Editors and the owner can do this.
