@@ -1,55 +1,75 @@
 .page {
   display: grid;
-  gap: var(--space-8);
-  padding-block: var(--space-6) var(--space-12);
+  gap: var(--space-6);
+  padding: var(--space-2) var(--layout-gutter-mobile) var(--space-8);
 }
 
 .intro {
-  max-width: 40rem;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.introText {
+  display: grid;
+  align-content: end;
+  gap: var(--space-4);
+  padding: var(--space-8) var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--color-brand950);
+  color: var(--color-stone-muted);
+}
+
+.introText > * {
   margin: 0;
 }
 
-.chosen,
-.request {
+.introText :global(.eyebrow) {
+  color: var(--color-stone-muted);
+}
+
+.introText h1 {
+  color: var(--color-stone);
+  font-weight: 350;
+}
+
+.introPhoto {
+  overflow: hidden;
+  min-height: 14rem;
+  border-radius: var(--radius-card);
+}
+
+.introPhoto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.layout {
   display: grid;
   gap: var(--space-4);
-  padding: var(--space-6);
-  border-radius: var(--radius-card);
-  background: var(--color-brand50);
-}
-
-.chosen h2,
-.request h2,
-.offers h2 {
-  margin: 0;
-  font-size: var(--font-size-h3);
-}
-
-.chosenList {
-  display: grid;
-  gap: var(--space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.chosenList li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
 }
 
 .offers {
   display: grid;
+  align-content: start;
   gap: var(--space-4);
+}
+
+.offers h2,
+.tray h2 {
+  margin: 0;
+}
+
+.empty {
+  margin: 0;
+  padding: var(--space-6);
 }
 
 .grid {
   display: grid;
   gap: var(--space-4);
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
   margin: 0;
   padding: 0;
   list-style: none;
@@ -59,23 +79,195 @@
   display: grid;
   gap: var(--space-2);
   align-content: start;
-  padding: var(--space-4);
-  border: 1px solid var(--color-line);
+  padding: var(--space-3) var(--space-3) var(--space-4);
   border-radius: var(--radius-card);
+  background: var(--color-white);
+  transition:
+    translate var(--motion-medium) var(--motion-ease),
+    box-shadow var(--motion-medium) var(--motion-ease);
 }
 
-.card img {
+.card:hover {
+  translate: 0 -4px;
+  box-shadow: var(--shadow-card);
+}
+
+.card[data-added] {
+  box-shadow: inset 0 0 0 2px var(--color-brand950);
+}
+
+.card > :not(.cardPhoto) {
+  margin-inline: var(--space-1);
+}
+
+.cardPhoto {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 4px;
+  aspect-ratio: 1;
+  background: var(--color-stone50);
+}
+
+.cardPhoto img {
+  display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   object-fit: cover;
-  border-radius: var(--radius-control);
-  background: var(--color-brand50);
+}
+
+.noPhoto {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 49.5%,
+    var(--color-line) 49.5% 50.5%,
+    transparent 50.5%
+  );
+}
+
+.tick {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--color-brand950);
+  color: var(--color-stone);
+  font-weight: var(--font-weight-bold);
 }
 
 .card h3 {
-  margin: 0;
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-body);
   font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+}
+
+.card form button {
+  width: 100%;
+}
+
+.card[data-added] .secondary:disabled {
+  border-color: var(--color-brand950);
+  background: var(--color-brand950);
+  color: var(--color-stone);
+  opacity: 1;
+}
+
+/* The tray: five slots, then the address once something is chosen. */
+.tray {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+}
+
+.tray h2 {
+  font-size: 1.5rem;
+}
+
+.slots {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.slot,
+.slotEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 3rem;
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-4);
+  border-radius: var(--radius-card);
+}
+
+.slot {
+  background: var(--color-stone50);
+  animation: drop var(--motion-medium) var(--motion-ease) both;
+}
+
+@keyframes drop {
+  from {
+    opacity: 0.001;
+    translate: 0 -6px;
+  }
+}
+
+.slotName {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+}
+
+.slotEmpty {
+  border: 1px dashed var(--color-ink-muted);
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-small);
+}
+
+.remove {
+  min-height: var(--target-min);
+  padding: 0 var(--space-2);
+  border: 0;
+  background: none;
+  color: var(--color-ink-muted);
+  font: inherit;
+  font-size: var(--font-size-small);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.remove:hover {
+  color: var(--color-error);
+}
+
+.request {
+  display: grid;
+  gap: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-line);
+}
+
+.request h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+@media (min-width: 64rem) {
+  .page {
+    padding: var(--space-2) var(--layout-gutter-desktop) var(--space-8);
+  }
+
+  .intro {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    min-height: 22rem;
+  }
+
+  .introText {
+    padding: var(--space-12);
+  }
+
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 24rem;
+    align-items: start;
+  }
+
+  .tray {
+    position: sticky;
+    top: var(--space-4);
+    padding: var(--space-8);
+  }
 }
 
 .muted {
@@ -86,7 +278,6 @@
 .fields {
   display: grid;
   gap: var(--space-4);
-  max-width: 32rem;
 }
 
 .field {
@@ -99,11 +290,16 @@
 }
 
 .field input {
-  min-height: 44px;
-  padding: var(--space-2) var(--space-3);
-  border: var(--border-input) solid var(--color-ink-muted);
-  border-radius: var(--radius-control);
+  min-height: 3rem;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-ink-muted);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
   font: inherit;
+}
+
+.field input:hover {
+  border-color: var(--color-ink);
 }
 
 .field input[aria-invalid='true'] {
@@ -127,7 +323,7 @@
   height: 1.5rem;
   margin: 0;
   flex: none;
-  accent-color: var(--color-brand600);
+  accent-color: var(--color-brand950);
 }
 
 .primary,
@@ -142,7 +338,8 @@
 }
 
 .primary {
-  justify-self: start;
+  justify-self: stretch;
+  min-height: 3.25rem;
   background: var(--color-brand950);
   color: var(--color-stone);
 }
@@ -192,4 +389,10 @@
   border-color: var(--color-brand950);
   background: var(--color-brand950);
   color: var(--color-stone);
+}
+
+.primary:hover {
+  border-color: var(--color-brand600);
+  background: var(--color-brand600);
+  color: var(--color-white);
 }

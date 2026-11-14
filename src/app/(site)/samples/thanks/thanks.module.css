@@ -1,3 +1,48 @@
 .page {
-  padding-block: var(--space-8) var(--space-12);
+  padding: var(--space-6) var(--layout-gutter-mobile) var(--space-8);
+}
+
+.card {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+  max-width: 48rem;
+  margin-inline: auto;
+  padding: var(--space-12) var(--space-6);
+}
+
+.card > * {
+  margin: 0;
+}
+
+.card h1 {
+  font-weight: 350;
+}
+
+.tick {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: var(--color-success);
+  color: var(--color-white);
+  font-size: 1.75rem;
+  font-weight: var(--font-weight-bold);
+}
+
+.muted {
+  color: var(--color-ink-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+@media (min-width: 64rem) {
+  .card {
+    padding: var(--space-16);
+  }
 }

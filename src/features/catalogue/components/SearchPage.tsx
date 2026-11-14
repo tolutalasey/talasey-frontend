@@ -22,13 +22,15 @@ const productCount = (count: number) => `${count} ${count === 1 ? 'product' : 'p
 
 function NoResults({ query, ranges }: { query: string; ranges: Range[] }) {
   return (
-    <section aria-labelledby="none-title" className={styles.empty}>
+    <section aria-labelledby="none-title" className={`frame ${styles.empty}`}>
       <h2 id="none-title">No products match &ldquo;{query}&rdquo;</h2>
       <p>Check the spelling, try fewer or more general words, or browse a range:</p>
-      <ul>
+      <ul className={styles.rangeChips}>
         {ranges.map((range) => (
           <li key={range.slug}>
-            <NextLink href={rangePath(range)}>{range.name}</NextLink>
+            <NextLink href={rangePath(range)} className="chip">
+              {range.name}
+            </NextLink>
           </li>
         ))}
       </ul>
@@ -48,22 +50,38 @@ export function SearchPage({ query, result, params, suggestedRanges }: SearchPag
   const heading = query ? `Search results for “${query}”` : 'Search';
 
   return (
-    <article className={`container ${styles.page}`}>
+    <article className={styles.rangePage}>
       <PageBreadcrumbs
         items={[
           { name: 'Home', path: '/' },
           { name: 'Search', path: '/search/' },
         ]}
       />
-      <header className={styles.header}>
+      <header className={styles.searchHeader}>
         <h1>{heading}</h1>
+        <form role="search" action={PATH} method="get" className={styles.bigSearch}>
+          <label htmlFor="search-again" className={styles.visuallyHidden}>
+            Search products
+          </label>
+          <input
+            id="search-again"
+            type="search"
+            name="q"
+            defaultValue={query}
+            placeholder="Paving, decking, planters…"
+            autoComplete="off"
+          />
+          <button type="submit" className="button">
+            Search
+          </button>
+        </form>
         {result?.partialMatch && result.total > 0 && (
           <p className={styles.intro}>
             Nothing matched every word, so these products match some of them.
           </p>
         )}
       </header>
-      {!query && <p>Type what you are looking for in the search box above.</p>}
+      {!query && <p className={styles.intro}>Type what you are looking for above.</p>}
       {query && result && result.total === 0 && (
         <NoResults query={query} ranges={suggestedRanges} />
       )}

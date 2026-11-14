@@ -299,3 +299,151 @@
   overflow: hidden;
   clip-path: inset(50%);
 }
+
+/* Order placed. */
+.confirm {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--layout-gutter-mobile) var(--space-8);
+}
+
+.confirmTop {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.confirmMain {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+  padding: var(--space-8) var(--space-6);
+}
+
+.confirmMain > * {
+  margin: 0;
+}
+
+.confirmMain h1 {
+  font-weight: 350;
+}
+
+.tick {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: var(--color-success);
+  color: var(--color-white);
+  animation: pop 0.5s var(--motion-ease) both;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0.001;
+    scale: 0.4;
+  }
+}
+
+.confirmText {
+  max-width: 36em;
+  color: var(--color-ink-muted);
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: var(--space-2);
+  width: 100%;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline li {
+  display: grid;
+  gap: var(--space-1);
+  padding-top: var(--space-3);
+  border-top: 3px solid var(--color-line);
+  font-size: var(--font-size-small);
+}
+
+.timeline li[data-done] {
+  border-top-color: var(--color-brand950);
+}
+
+.timeline strong {
+  font-size: 0.9375rem;
+}
+
+.timeline span {
+  color: var(--color-ink-muted);
+}
+
+.confirmActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.confirmAside {
+  padding: var(--space-8) var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--color-brand950);
+  color: var(--color-stone);
+}
+
+.confirmAside h2 {
+  margin: 0 0 var(--space-4);
+  color: var(--color-stone);
+  font-size: 1.5rem;
+}
+
+.confirmAside .facts {
+  grid-template-columns: max-content 1fr;
+}
+
+.confirmAside dt {
+  font-weight: var(--font-weight-regular);
+  color: var(--color-stone-muted);
+}
+
+.confirmItems {
+  padding: var(--space-6);
+}
+
+.confirmItems h2 {
+  margin: 0 0 var(--space-4);
+  font-size: 1.5rem;
+}
+
+.confirmItems .totals {
+  max-width: 24rem;
+}
+
+@media (min-width: 64rem) {
+  .confirm {
+    padding: var(--space-4) var(--layout-gutter-desktop) var(--space-8);
+  }
+
+  .confirmTop {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: stretch;
+  }
+
+  .confirmMain,
+  .confirmAside {
+    padding: var(--space-12);
+  }
+
+  .confirmItems {
+    padding: var(--space-8) var(--space-12);
+  }
+}
+
+.confirmItems .caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}

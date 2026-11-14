@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type { SampleOffer } from '@/api-client';
 import type { FormState } from '@/lib/form-feedback';
 import { VisuallyHidden } from '@/ui/VisuallyHidden/VisuallyHidden';
@@ -63,139 +64,169 @@ export function SamplesPage({ offers, chosenIds, feedback }: Props) {
   const chosen = chosenIds.flatMap((id) => offers.filter((offer) => offer.id === id));
   const full = chosen.length >= MAX_SAMPLES;
 
+  const slots = Array.from({ length: MAX_SAMPLES }, (_, index) => chosen[index]);
+
   return (
-    <div className={`container ${styles.page}`}>
-      <div>
-        <h1>Free samples</h1>
-        <p className={styles.intro}>
-          See the colour and finish in your own garden before you buy. Choose up to {MAX_SAMPLES}:
-          they are free, with free postage, and we send them the next working day.
-        </p>
-      </div>
-
-      <section className={styles.chosen} aria-labelledby="chosen-title">
-        <h2 id="chosen-title">
-          Your samples ({chosen.length} of {MAX_SAMPLES})
-        </h2>
-        {chosen.length === 0 ? (
-          <p className={styles.muted}>None yet. Add them from the list below.</p>
-        ) : (
-          <ul className={styles.chosenList}>
-            {chosen.map((offer) => (
-              <li key={offer.id}>
-                <span>{nameOf(offer)}</span>
-                <form action={removeSample}>
-                  <input type="hidden" name="offerId" value={offer.id} />
-                  <button type="submit" className={styles.secondary}>
-                    Remove <VisuallyHidden>{nameOf(offer)}</VisuallyHidden>
-                  </button>
-                </form>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      {chosen.length > 0 && (
-        <section id="request" className={styles.request} aria-labelledby="request-title">
-          <h2 id="request-title">Where should we send them?</h2>
-          {feedback?.message && (
-            <p role="alert" className={styles.error}>
-              {feedback.message}
-            </p>
-          )}
-          <form action={requestSamples} className={styles.fields} noValidate>
-            <Field
-              name="email"
-              label="Email"
-              type="email"
-              autoComplete="email"
-              feedback={feedback}
-            />
-            <Field
-              name="firstName"
-              label="First name"
-              autoComplete="given-name"
-              feedback={feedback}
-            />
-            <Field
-              name="lastName"
-              label="Last name"
-              autoComplete="family-name"
-              feedback={feedback}
-            />
-            <Field
-              name="address1"
-              label="Address"
-              autoComplete="address-line1"
-              feedback={feedback}
-            />
-            <Field
-              name="city"
-              label="Town or city"
-              autoComplete="address-level2"
-              feedback={feedback}
-            />
-            <Field
-              name="postcode"
-              label="Postcode"
-              autoComplete="postal-code"
-              feedback={feedback}
-            />
-            <Field
-              name="phone"
-              label="Phone"
-              type="tel"
-              autoComplete="tel"
-              required={false}
-              feedback={feedback}
-            />
-            <label className={styles.consent}>
-              <input type="checkbox" name="marketingConsent" />
-              <span>Email me ideas and offers. You can stop them at any time.</span>
-            </label>
-            <button type="submit" className={styles.primary}>
-              Send my free samples
-            </button>
-          </form>
-        </section>
-      )}
-
-      <section className={styles.offers} aria-labelledby="offers-title">
-        <h2 id="offers-title">Choose your samples</h2>
-        {offers.length === 0 ? (
-          <p className={styles.muted}>
-            Samples are being set up. Call us and we will post the ones you need.
+    <div className={styles.page}>
+      <header className={styles.intro}>
+        <div className={styles.introText}>
+          <p className="eyebrow">Free samples</p>
+          <h1>See it in your own garden light</h1>
+          <p>
+            Stone looks different in the morning, at midday and in the rain. Choose up to{' '}
+            {MAX_SAMPLES}: they are free, with free postage, and we send them the next working day.
           </p>
-        ) : (
-          <ul className={styles.grid}>
-            {offers.map((offer) => {
-              const added = chosenIds.includes(offer.id);
-              return (
-                <li key={offer.id} className={styles.card}>
-                  {offer.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={offer.image.url} alt="" width={400} height={300} loading="lazy" />
-                  ) : null}
-                  <h3>{offer.productTitle}</h3>
-                  <p className={styles.muted}>{offer.label}</p>
-                  <form action={addSample}>
+        </div>
+        <div className={styles.introPhoto}>
+          <Image
+            src="/images/brand/samples-mixed.jpg"
+            alt="Porcelain paving in mixed light and warm tones beside a planted border"
+            width={1600}
+            height={1200}
+            sizes="(min-width: 64rem) 45vw, 100vw"
+            priority
+          />
+        </div>
+      </header>
+
+      <div className={styles.layout}>
+        <section className={styles.offers} aria-labelledby="offers-title">
+          <h2 id="offers-title">Choose your samples</h2>
+          {offers.length === 0 ? (
+            <p className={`frame ${styles.empty}`}>
+              Samples are being set up. Call us and we will post the ones you need.
+            </p>
+          ) : (
+            <ul className={styles.grid}>
+              {offers.map((offer) => {
+                const added = chosenIds.includes(offer.id);
+                return (
+                  <li key={offer.id} className={styles.card} data-added={added || undefined}>
+                    <span className={styles.cardPhoto}>
+                      {offer.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={offer.image.url} alt="" width={400} height={400} loading="lazy" />
+                      ) : (
+                        <span className={styles.noPhoto} aria-hidden="true" />
+                      )}
+                      {added && (
+                        <span className={styles.tick} aria-hidden="true">
+                          ✓
+                        </span>
+                      )}
+                    </span>
+                    <h3>{offer.productTitle}</h3>
+                    <p className={styles.muted}>{offer.label}</p>
+                    <form action={addSample}>
+                      <input type="hidden" name="offerId" value={offer.id} />
+                      <button
+                        type="submit"
+                        className={styles.secondary}
+                        disabled={added || full}
+                        aria-label={`${added ? 'Added' : 'Add'} sample: ${nameOf(offer)}`}
+                      >
+                        {added ? 'Added' : full ? `${MAX_SAMPLES} chosen` : 'Add sample'}
+                      </button>
+                    </form>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
+
+        <aside className={styles.tray} aria-labelledby="chosen-title">
+          <h2 id="chosen-title">
+            Your samples · {chosen.length} of {MAX_SAMPLES}
+          </h2>
+          <ol className={styles.slots} aria-label="Chosen samples">
+            {slots.map((offer, index) =>
+              offer ? (
+                <li key={offer.id} className={styles.slot}>
+                  <span className={styles.slotName}>{nameOf(offer)}</span>
+                  <form action={removeSample}>
                     <input type="hidden" name="offerId" value={offer.id} />
-                    <button
-                      type="submit"
-                      className={styles.secondary}
-                      disabled={added || full}
-                      aria-label={`${added ? 'Added' : 'Add'} sample: ${nameOf(offer)}`}
-                    >
-                      {added ? 'Added' : full ? `${MAX_SAMPLES} chosen` : 'Add sample'}
+                    <button type="submit" className={styles.remove}>
+                      Remove <VisuallyHidden>{nameOf(offer)}</VisuallyHidden>
                     </button>
                   </form>
                 </li>
-              );
-            })}
-          </ul>
-        )}
-      </section>
+              ) : (
+                <li key={`empty-${index}`} className={styles.slotEmpty}>
+                  <span aria-hidden="true">{index + 1}</span>
+                  <VisuallyHidden>Empty</VisuallyHidden>
+                </li>
+              ),
+            )}
+          </ol>
+          {chosen.length === 0 ? (
+            <p className={styles.muted}>Add samples from the list and they appear here.</p>
+          ) : (
+            <section id="request" className={styles.request} aria-labelledby="request-title">
+              <h3 id="request-title">Where should we send them?</h3>
+              {feedback?.message && (
+                <p role="alert" className={styles.error}>
+                  {feedback.message}
+                </p>
+              )}
+              <form action={requestSamples} className={styles.fields} noValidate>
+                <Field
+                  name="email"
+                  label="Email"
+                  type="email"
+                  autoComplete="email"
+                  feedback={feedback}
+                />
+                <Field
+                  name="firstName"
+                  label="First name"
+                  autoComplete="given-name"
+                  feedback={feedback}
+                />
+                <Field
+                  name="lastName"
+                  label="Last name"
+                  autoComplete="family-name"
+                  feedback={feedback}
+                />
+                <Field
+                  name="address1"
+                  label="Address"
+                  autoComplete="address-line1"
+                  feedback={feedback}
+                />
+                <Field
+                  name="city"
+                  label="Town or city"
+                  autoComplete="address-level2"
+                  feedback={feedback}
+                />
+                <Field
+                  name="postcode"
+                  label="Postcode"
+                  autoComplete="postal-code"
+                  feedback={feedback}
+                />
+                <Field
+                  name="phone"
+                  label="Phone"
+                  type="tel"
+                  autoComplete="tel"
+                  required={false}
+                  feedback={feedback}
+                />
+                <label className={styles.consent}>
+                  <input type="checkbox" name="marketingConsent" />
+                  <span>Email me ideas and offers. You can stop them at any time.</span>
+                </label>
+                <button type="submit" className={styles.primary}>
+                  Send my free samples
+                </button>
+              </form>
+            </section>
+          )}
+        </aside>
+      </div>
     </div>
   );
 }
