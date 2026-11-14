@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { ChangeLog } from '@/features/admin';
-import { NotAllowed, Notice, requireStaff, staffApi } from '@/features/staff';
+import { NotAllowed, Notice, PageHeader, requireStaff, staffApi } from '@/features/staff';
 
 export const metadata: Metadata = { title: 'Change log' };
 
@@ -19,11 +19,15 @@ export default async function Log({ searchParams }: Props) {
   const back = `/admin/log/${subject ? `?subject=${subject}&subjectId=${subjectId ?? ''}` : ''}`;
   return (
     <>
-      <h1>Change log</h1>
-      <p>
-        Every change staff make, newest first. &ldquo;Put back as before&rdquo; undoes one change
-        and is logged too.
-      </p>
+      <PageHeader
+        title="Change log"
+        description={
+          <>
+            Every change staff make, newest first. &ldquo;Put back as before&rdquo; undoes one
+            change and is logged too.
+          </>
+        }
+      />
       <Notice message={message} error={error} />
       <ChangeLog entries={entries} back={back} />
     </>

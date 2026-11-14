@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { OrderDetail } from '@/features/admin';
-import { NotAllowed, Notice, requireStaff, staffApi } from '@/features/staff';
+import { OrderDetail, OrderSummaryBadges } from '@/features/admin';
+import { NotAllowed, Notice, PageHeader, requireStaff, staffApi } from '@/features/staff';
 
 export const metadata: Metadata = { title: 'Order' };
 
@@ -21,7 +21,11 @@ export default async function OrderPage({ params, searchParams }: Props) {
   if (!order) notFound();
   return (
     <>
-      <h1>Order #{order.number}</h1>
+      <PageHeader
+        back={{ href: '/admin/orders/', label: 'Orders' }}
+        title={`Order #${order.number}`}
+        meta={<OrderSummaryBadges order={order} />}
+      />
       <Notice message={message} error={error} />
       <OrderDetail order={order} />
     </>

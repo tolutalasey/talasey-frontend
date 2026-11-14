@@ -1,7 +1,14 @@
 import type { Metadata } from 'next';
 import { connection } from 'next/server';
-import { ReleaseList } from '@/features/content-editor';
-import { NotAllowed, Notice, requireStaff, staffApi } from '@/features/staff';
+import { NewReleaseForm, ReleaseList } from '@/features/content-editor';
+import {
+  CreateMenu,
+  NotAllowed,
+  Notice,
+  PageHeader,
+  requireStaff,
+  staffApi,
+} from '@/features/staff';
 
 export const metadata: Metadata = { title: 'Releases' };
 
@@ -16,7 +23,16 @@ export default async function Releases({ searchParams }: Props) {
   const { data: releases = [] } = await (await staffApi()).GET('/content/releases');
   return (
     <>
-      <h1>Releases</h1>
+      <PageHeader
+        back={{ href: '/content/', label: 'Content' }}
+        title="Releases"
+        description="A release puts several changes live at the same moment, like a sale’s pages and questions. Everything in it publishes together, or nothing does."
+        actions={
+          <CreateMenu label="New release">
+            <NewReleaseForm />
+          </CreateMenu>
+        }
+      />
       <Notice message={message} error={error} />
       <ReleaseList releases={releases} now={new Date()} />
     </>

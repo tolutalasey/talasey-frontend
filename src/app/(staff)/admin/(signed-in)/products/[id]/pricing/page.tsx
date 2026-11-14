@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
-import NextLink from 'next/link';
 import { notFound } from 'next/navigation';
 import { BespokePricing, formFromConfig } from '@/features/admin';
-import { NotAllowed, requireStaff, staffApi } from '@/features/staff';
+import { NotAllowed, PageHeader, requireStaff, staffApi } from '@/features/staff';
 
 export const metadata: Metadata = { title: 'Made-to-measure pricing' };
 
@@ -19,10 +18,12 @@ export default async function BespokePricingPage({ params }: Props) {
   if (!product) notFound();
   return (
     <>
-      <p>
-        <NextLink href={`/admin/products/${id}/`}>Back to {product.title}</NextLink>
-      </p>
-      <h1>Made-to-measure pricing: {product.title}</h1>
+      <PageHeader
+        back={{ href: `/admin/products/${id}/`, label: product.title }}
+        eyebrow="Made-to-measure pricing"
+        title={product.title}
+        description="The sizes shoppers can order, the price formula, and a calculator to test it."
+      />
       <BespokePricing productId={id} values={formFromConfig(product.bespoke)} />
     </>
   );

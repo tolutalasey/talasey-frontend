@@ -1,9 +1,16 @@
 import { Button } from '@/ui/Button/Button';
 import { Checkbox } from '@/ui/Checkbox/Checkbox';
 import { SelectField } from '@/ui/SelectField/SelectField';
-import { Table } from '@/ui/Table/Table';
 import { TextField } from '@/ui/TextField/TextField';
-import { staffStyles as styles } from '@/features/staff';
+import {
+  Badge,
+  EmptyState,
+  PencilIcon,
+  staffStyles as styles,
+  TagIcon,
+  TrashIcon,
+  type BadgeTone,
+} from '@/features/staff';
 import { londonLabel, toLondonTime } from '@/lib/london-time';
 import { deletePromotion, savePromotion } from '../actions';
 import {
@@ -13,6 +20,14 @@ import {
   type PromotionFormValues,
 } from '../promotion-form';
 import type { Promotion } from '../types';
+
+function toneOf(promotion: Promotion, now: Date): BadgeTone {
+  if (!promotion.active) return 'neutral';
+  if (new Date(promotion.startsAt) > now) return 'info';
+  if (promotion.endsAt && new Date(promotion.endsAt) <= now) return 'neutral';
+  if (promotion.maxUses !== null && promotion.uses >= promotion.maxUses) return 'warn';
+  return 'good';
+}
 
 function statusOf(promotion: Promotion, now: Date): string {
   if (!promotion.active) return 'Switched off';
@@ -25,7 +40,7 @@ function statusOf(promotion: Promotion, now: Date): string {
 function PromotionFields({ values }: { values: PromotionFormValues }) {
   return (
     <>
-      <div className={styles.grid}>
+      <div className={styles.fields3}>
         <TextField label="Name" name="name" defaultValue={values.name} isRequired />
         <TextField
           label="Code"
@@ -94,40 +109,73 @@ export function PromotionsAdmin({ promotions, now }: { promotions: Promotion[]; 
   };
 
   return (
-    <>
-      <p className={styles.muted}>
-        Shoppers get the best money-off promotion they qualify for, never two at once. Free delivery
-        adds on top.
-      </p>
-      {promotions.length === 0 ? (
-        <p className={styles.muted}>No promotions yet.</p>
-      ) : (
-        <Table caption="Promotions">
-          <thead>
-            <tr>
-              <th scope="col">Promotion</th>
-              <th scope="col">Code</th>
-              <th scope="col">Offer</th>
-              <th scope="col">Used</th>
-              <th scope="col">Status</th>
-            </tr>
-          </thead>
-          <tbody>
+    <div className={styles.stack}>
+      <section className={`${styles.panel} ${styles.flush}`} aria-labelledby="promotions">
+        <div className={styles.toolbar}>
+          <div className={styles.listMain}>
+            <h2 id="promotions" className={styles.panelTitle}>
+              Promotions
+            </h2>
+            <span className={styles.listSub}>
+              Shoppers get the best money-off promotion they qualify for, never two at once. Free
+              delivery adds on top.
+            </span>
+          </div>
+          <span className={styles.count}>
+            {promotions.filter((promotion) => toneOf(promotion, now) === 'good').length} running
+          </span>
+        </div>
+        {promotions.length === 0 ? (
+          <EmptyState icon={<TagIcon />} title="No promotions yet">
+            Add one below. It can start now or at a time you choose.
+          </EmptyState>
+        ) : (
+          <ul className={styles.list}>
             {promotions.map((promotion) => (
-              <tr key={promotion.id}>
-                <th scope="row">{promotion.name}</th>
-                <td>{promotion.code ?? <span className={styles.muted}>Automatic</span>}</td>
-                <td>{describePromotion(promotion)}</td>
-                <td>
-                  {promotion.uses}
-                  {promotion.maxUses !== null && ` of ${promotion.maxUses}`}
-                </td>
-                <td>{statusOf(promotion, now)}</td>
-              </tr>
+              <li key={promotion.id}>
+                <details className={styles.person}>
+                  <summary className={styles.personRow}>
+                    <span className={styles.docIcon} aria-hidden="true">
+                      <TagIcon />
+                    </span>
+                    <span className={styles.listMain}>
+                      <strong>{promotion.name}</strong>
+                      <span className={styles.listSub}>
+                        {describePromotion(promotion)} · Used {promotion.uses}
+                        {promotion.maxUses !== null && ` of ${promotion.maxUses}`}
+                      </span>
+                    </span>
+                    <span className={styles.listEnd}>
+                      <code className={styles.code}>{promotion.code ?? 'Automatic'}</code>
+                      <Badge tone={toneOf(promotion, now)}>{statusOf(promotion, now)}</Badge>
+                      <span className={styles.editHint}>
+                        <PencilIcon />
+                        Edit
+                      </span>
+                    </span>
+                  </summary>
+                  <div className={styles.personForm}>
+                    <form action={savePromotion} className={styles.stack}>
+                      <input type="hidden" name="id" value={promotion.id} />
+                      <PromotionFields values={formFromPromotion(promotion)} />
+                      <div className={styles.actions}>
+                        <Button type="submit">Save changes</Button>
+                      </div>
+                    </form>
+                    <form action={deletePromotion} className={styles.actions}>
+                      <input type="hidden" name="id" value={promotion.id} />
+                      <button type="submit" className={styles.dangerButton}>
+                        <TrashIcon />
+                        Remove {promotion.name}
+                      </button>
+                    </form>
+                  </div>
+                </details>
+              </li>
             ))}
-          </tbody>
-        </Table>
-      )}
+          </ul>
+        )}
+      </section>
 
       <form action={savePromotion} className={`${styles.panel} ${styles.stack}`}>
         <h2>Add a promotion</h2>
@@ -136,25 +184,6 @@ export function PromotionsAdmin({ promotions, now }: { promotions: Promotion[]; 
           <Button type="submit">Add promotion</Button>
         </div>
       </form>
-
-      {promotions.map((promotion) => (
-        <details key={promotion.id} className={styles.panel}>
-          <summary>Change {promotion.name}</summary>
-          <form action={savePromotion} className={styles.stack}>
-            <input type="hidden" name="id" value={promotion.id} />
-            <PromotionFields values={formFromPromotion(promotion)} />
-            <div className={styles.actions}>
-              <Button type="submit">Save</Button>
-            </div>
-          </form>
-          <form action={deletePromotion}>
-            <input type="hidden" name="id" value={promotion.id} />
-            <Button type="submit" variant="secondary">
-              Remove {promotion.name}
-            </Button>
-          </form>
-        </details>
-      ))}
-    </>
+    </div>
   );
 }

@@ -63,3 +63,30 @@
     transition: none;
   }
 }
+
+/* Inside the staff screens: squarer, quieter buttons that match the fields. */
+:global([data-staff]) .button {
+  min-height: 2.75rem;
+  padding: 0 var(--space-4);
+  border-width: 1px;
+  border-radius: 8px;
+  font-size: var(--font-size-small);
+}
+
+:global([data-staff]) .primary {
+  box-shadow:
+    0 1px 2px rgb(43 3 55 / 0.25),
+    inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+
+:global([data-staff]) .secondary {
+  border-color: #d9cfc8;
+  box-shadow: 0 1px 2px rgb(42 40 44 / 0.05);
+}
+
+:global([data-staff]) .secondary:hover,
+:global([data-staff]) .secondary[data-hovered] {
+  border-color: var(--color-ink-muted);
+  background: var(--color-stone50);
+  color: var(--color-ink);
+}

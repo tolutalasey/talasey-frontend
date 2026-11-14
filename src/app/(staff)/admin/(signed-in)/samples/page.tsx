@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { SamplesAdmin } from '@/features/admin';
-import { NotAllowed, Notice, requireStaff, staffApi } from '@/features/staff';
+import { NotAllowed, Notice, PageHeader, requireStaff, staffApi } from '@/features/staff';
 
 export const metadata: Metadata = { title: 'Samples' };
 
@@ -19,7 +19,10 @@ export default async function Samples({ searchParams }: Props) {
   ]);
   return (
     <>
-      <h1>Samples</h1>
+      <PageHeader
+        title="Samples"
+        description="Free sample requests to post, and the samples shoppers can ask for."
+      />
       <Notice message={message} error={error} />
       <SamplesAdmin waiting={waiting} sent={sent} offers={offers} />
     </>

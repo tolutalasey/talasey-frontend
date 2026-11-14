@@ -1,24 +1,84 @@
 import type { ReactNode } from 'react';
-import { requireStaff, StaffShell, type StaffLink } from '@/features/staff';
+import {
+  DeliveryIcon,
+  HistoryIcon,
+  HomeIcon,
+  OrdersIcon,
+  ProductsIcon,
+  requireStaff,
+  SampleIcon,
+  ShieldIcon,
+  StaffShell,
+  SwatchIcon,
+  TagIcon,
+  TeamIcon,
+  TransferIcon,
+  type StaffNavGroup,
+} from '@/features/staff';
 
-const LINKS: StaffLink[] = [
-  { href: '/admin/products/', label: 'Products', permission: 'catalogue' },
-  { href: '/admin/colour-sets/', label: 'Colour sets', permission: 'catalogue' },
-  { href: '/admin/catalogue/', label: 'Import and export', permission: 'catalogue' },
-  { href: '/admin/orders/', label: 'Orders', permission: 'orders' },
-  { href: '/admin/samples/', label: 'Samples', permission: 'orders' },
-  { href: '/admin/promotions/', label: 'Promotions', permission: 'catalogue' },
-  { href: '/admin/delivery/', label: 'Delivery', permission: 'delivery' },
-  { href: '/admin/sku-checks/', label: 'SKU checks', permission: 'catalogue' },
-  { href: '/admin/log/', label: 'Change log', permission: 'audit' },
-  { href: '/admin/users/', label: 'Staff', permission: 'users' },
-  { href: '/content/', label: 'Content', permission: 'content.edit' },
+const GROUPS: StaffNavGroup[] = [
+  { links: [{ href: '/admin/', label: 'Overview', icon: <HomeIcon /> }] },
+  {
+    label: 'Sell',
+    links: [
+      { href: '/admin/orders/', label: 'Orders', icon: <OrdersIcon />, permission: 'orders' },
+      { href: '/admin/samples/', label: 'Samples', icon: <SampleIcon />, permission: 'orders' },
+      {
+        href: '/admin/promotions/',
+        label: 'Promotions',
+        icon: <TagIcon />,
+        permission: 'catalogue',
+      },
+    ],
+  },
+  {
+    label: 'Catalogue',
+    links: [
+      {
+        href: '/admin/products/',
+        label: 'Products',
+        icon: <ProductsIcon />,
+        permission: 'catalogue',
+      },
+      {
+        href: '/admin/colour-sets/',
+        label: 'Colour sets',
+        icon: <SwatchIcon />,
+        permission: 'catalogue',
+      },
+      {
+        href: '/admin/sku-checks/',
+        label: 'SKU checks',
+        icon: <ShieldIcon />,
+        permission: 'catalogue',
+      },
+      {
+        href: '/admin/catalogue/',
+        label: 'Import and export',
+        icon: <TransferIcon />,
+        permission: 'catalogue',
+      },
+    ],
+  },
+  {
+    label: 'Run the shop',
+    links: [
+      {
+        href: '/admin/delivery/',
+        label: 'Delivery',
+        icon: <DeliveryIcon />,
+        permission: 'delivery',
+      },
+      { href: '/admin/users/', label: 'Staff', icon: <TeamIcon />, permission: 'users' },
+      { href: '/admin/log/', label: 'Change log', icon: <HistoryIcon />, permission: 'audit' },
+    ],
+  },
 ];
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const { me } = await requireStaff('admin');
   return (
-    <StaffShell area="admin" title="Talasey admin" links={LINKS} me={me}>
+    <StaffShell area="admin" groups={GROUPS} me={me}>
       {children}
     </StaffShell>
   );

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { ColourSetEditor, ColourSetList } from '@/features/admin';
-import { NotAllowed, Notice, requireStaff, staffApi } from '@/features/staff';
+import { NotAllowed, Notice, PageHeader, requireStaff, staffApi } from '@/features/staff';
 
 export const metadata: Metadata = { title: 'Colour sets' };
 
@@ -14,7 +14,10 @@ export default async function ColourSets({ searchParams }: Props) {
   const { data: sets = [] } = await (await staffApi()).GET('/admin/colour-sets');
   return (
     <>
-      <h1>Colour sets</h1>
+      <PageHeader
+        title="Colour sets"
+        description="The colours shoppers choose from on 1B products. One set can serve many products."
+      />
       <Notice message={message} error={error} />
       <ColourSetList sets={sets} />
       <h2>Add a colour set</h2>

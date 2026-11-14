@@ -1,28 +1,27 @@
 import { Button } from '@/ui/Button/Button';
-import { Table } from '@/ui/Table/Table';
 import { TextField } from '@/ui/TextField/TextField';
 import NextLink from 'next/link';
-import { staffStyles as styles } from '@/features/staff';
+import {
+  Badge,
+  CheckCircleIcon,
+  EmptyState,
+  SampleIcon,
+  staffStyles as styles,
+} from '@/features/staff';
 import { addSampleOffer, changeSampleOffer, markSamplesSent } from '../actions';
 import type { SampleOfferAdmin, SampleRequest } from '../types';
 
 const when = (iso: string) =>
   new Intl.DateTimeFormat('en-GB', {
     timeZone: 'Europe/London',
-    dateStyle: 'medium',
-    timeStyle: 'short',
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
   }).format(new Date(iso));
 
 const addressOf = ({ address }: SampleRequest) =>
-  [
-    `${address.firstName} ${address.lastName}`,
-    address.address1,
-    address.city,
-    address.postcode,
-    address.phone,
-  ]
-    .filter(Boolean)
-    .join(', ');
+  [address.address1, address.city, address.postcode].filter(Boolean).join(', ');
 
 interface Props {
   waiting: SampleRequest[];
@@ -30,133 +29,155 @@ interface Props {
   offers: SampleOfferAdmin[];
 }
 
+function ToSend({ waiting }: { waiting: SampleRequest[] }) {
+  return (
+    <section className={`${styles.panel} ${styles.flush}`} aria-labelledby="to-send">
+      <div className={styles.toolbar}>
+        <h2 id="to-send" className={styles.panelTitle}>
+          To send
+        </h2>
+        <Badge tone={waiting.length > 0 ? 'warn' : 'good'}>{waiting.length} waiting</Badge>
+      </div>
+      {waiting.length === 0 ? (
+        <EmptyState icon={<CheckCircleIcon />} title="All caught up">
+          New sample requests appear here as soon as a shopper asks for them.
+        </EmptyState>
+      ) : (
+        <ul className={styles.list}>
+          {waiting.map((request) => (
+            <li key={request.id} className={styles.lineRow}>
+              <span className={styles.qty}>S{request.number}</span>
+              <span className={styles.listMain}>
+                <strong>
+                  {request.address.firstName} {request.address.lastName}
+                </strong>
+                <span className={styles.listSub}>
+                  {request.items.map((item) => `${item.productTitle}: ${item.label}`).join(' · ')}
+                </span>
+                <span className={styles.listSub}>
+                  {addressOf(request)} · {request.address.phone} · {request.email}
+                </span>
+              </span>
+              <span className={styles.listEnd}>
+                <span className={styles.small}>{when(request.createdAt)}</span>
+                {request.marketingConsent && <Badge tone="info">Marketing OK</Badge>}
+                <form action={markSamplesSent}>
+                  <input type="hidden" name="id" value={request.id} />
+                  <Button type="submit">Mark as sent</Button>
+                </form>
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+function Offered({ offers }: { offers: SampleOfferAdmin[] }) {
+  return (
+    <section className={`${styles.panel} ${styles.flush}`} aria-labelledby="offered">
+      <div className={styles.toolbar}>
+        <h2 id="offered" className={styles.panelTitle}>
+          Samples we offer
+        </h2>
+        <span className={styles.count}>
+          {offers.filter((offer) => offer.active).length} offered
+        </span>
+      </div>
+      {offers.length === 0 ? (
+        <EmptyState icon={<SampleIcon />} title="No samples yet">
+          Add the first one below.
+        </EmptyState>
+      ) : (
+        <ul className={styles.list}>
+          {offers.map((offer) => (
+            <li key={offer.id} className={styles.lineRow}>
+              <span className={styles.docIcon} aria-hidden="true">
+                <SampleIcon />
+              </span>
+              <span className={styles.listMain}>
+                <NextLink href={`/products/${offer.productHandle}/`} className={styles.textLink}>
+                  {offer.productTitle}
+                </NextLink>
+                <span className={styles.listSub}>{offer.label}</span>
+              </span>
+              <span className={styles.listEnd}>
+                <Badge tone={offer.active ? 'good' : 'neutral'}>
+                  {offer.active ? 'Offered' : 'Paused'}
+                </Badge>
+                <form action={changeSampleOffer} className={styles.saveActions}>
+                  <input type="hidden" name="id" value={offer.id} />
+                  <Button
+                    type="submit"
+                    name="intent"
+                    value={offer.active ? 'stop' : 'start'}
+                    variant="secondary"
+                  >
+                    {offer.active ? 'Pause' : 'Offer again'}
+                  </Button>
+                  <Button type="submit" name="intent" value="delete" variant="secondary">
+                    Remove
+                  </Button>
+                </form>
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <form action={addSampleOffer} className={`${styles.inlineCreate} ${styles.panelFoot}`}>
+        <TextField
+          label="Product"
+          name="productHandle"
+          description="The end of its web address, like silver-grey-porcelain-paving"
+          isRequired
+        />
+        <TextField label="Sample" name="label" description="Like the colour: Buff" isRequired />
+        <Button type="submit">Add sample</Button>
+      </form>
+    </section>
+  );
+}
+
+function Sent({ sent }: { sent: SampleRequest[] }) {
+  return (
+    <section className={`${styles.panel} ${styles.flush}`} aria-labelledby="sent">
+      <div className={styles.toolbar}>
+        <h2 id="sent" className={styles.panelTitle}>
+          Recently sent
+        </h2>
+        <span className={styles.count}>Last {Math.min(sent.length, 20)}</span>
+      </div>
+      <ul className={styles.list}>
+        {sent.slice(0, 20).map((request) => (
+          <li key={request.id} className={styles.lineRow}>
+            <span className={styles.qty}>S{request.number}</span>
+            <span className={styles.listMain}>
+              <strong>
+                {request.address.firstName} {request.address.lastName}
+              </strong>
+              <span className={styles.listSub}>
+                {request.items.length} {request.items.length === 1 ? 'sample' : 'samples'}
+                {request.dispatchedBy && `, sent by ${request.dispatchedBy}`}
+              </span>
+            </span>
+            <span className={styles.listEnd}>
+              {request.dispatchedAt && <span>{when(request.dispatchedAt)}</span>}
+              <Badge tone="good">Sent</Badge>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 export function SamplesAdmin({ waiting, sent, offers }: Props) {
   return (
-    <>
-      <section className={styles.stack} aria-labelledby="to-send">
-        <h2 id="to-send">To send ({waiting.length})</h2>
-        {waiting.length === 0 ? (
-          <p className={styles.muted}>Nothing waiting.</p>
-        ) : (
-          <Table caption="Sample requests to send">
-            <thead>
-              <tr>
-                <th scope="col">Request</th>
-                <th scope="col">Samples</th>
-                <th scope="col">Send to</th>
-                <th scope="col">Done</th>
-              </tr>
-            </thead>
-            <tbody>
-              {waiting.map((request) => (
-                <tr key={request.id}>
-                  <th scope="row">
-                    S{request.number}
-                    <br />
-                    <span className={styles.muted}>{when(request.createdAt)}</span>
-                  </th>
-                  <td>
-                    <ul>
-                      {request.items.map((item) => (
-                        <li key={item.offerId}>
-                          {item.productTitle}: {item.label}
-                        </li>
-                      ))}
-                    </ul>
-                  </td>
-                  <td>
-                    {addressOf(request)}
-                    <br />
-                    {request.email}
-                    {request.marketingConsent && (
-                      <>
-                        <br />
-                        <span className={styles.muted}>Happy to get marketing emails</span>
-                      </>
-                    )}
-                  </td>
-                  <td>
-                    <form action={markSamplesSent}>
-                      <input type="hidden" name="id" value={request.id} />
-                      <Button type="submit">Mark as sent</Button>
-                    </form>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </section>
-
-      <section className={styles.stack} aria-labelledby="offered">
-        <h2 id="offered">Samples we offer</h2>
-        <Table caption="Samples we offer">
-          <thead>
-            <tr>
-              <th scope="col">Product</th>
-              <th scope="col">Sample</th>
-              <th scope="col">Change</th>
-            </tr>
-          </thead>
-          <tbody>
-            {offers.map((offer) => (
-              <tr key={offer.id}>
-                <th scope="row">
-                  <NextLink href={`/products/${offer.productHandle}/`}>
-                    {offer.productTitle}
-                  </NextLink>
-                </th>
-                <td>
-                  {offer.label}
-                  {!offer.active && <span className={styles.muted}> (not offered)</span>}
-                </td>
-                <td>
-                  <form action={changeSampleOffer} className={styles.row}>
-                    <input type="hidden" name="id" value={offer.id} />
-                    <Button
-                      type="submit"
-                      name="intent"
-                      value={offer.active ? 'stop' : 'start'}
-                      variant="secondary"
-                    >
-                      {offer.active ? 'Stop offering' : 'Offer again'}
-                    </Button>
-                    <Button type="submit" name="intent" value="delete" variant="secondary">
-                      Remove
-                    </Button>
-                  </form>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        <form action={addSampleOffer} className={`${styles.panel} ${styles.row}`}>
-          <TextField
-            label="Product"
-            name="productHandle"
-            description="The end of its web address, like silver-grey-porcelain-paving"
-            isRequired
-          />
-          <TextField label="Sample" name="label" description="Like the colour: Buff" isRequired />
-          <Button type="submit">Add sample</Button>
-        </form>
-      </section>
-
-      {sent.length > 0 && (
-        <section className={styles.stack} aria-labelledby="sent">
-          <h2 id="sent">Recently sent</h2>
-          <ul>
-            {sent.slice(0, 20).map((request) => (
-              <li key={request.id}>
-                S{request.number}, {request.items.length} sample
-                {request.items.length === 1 ? '' : 's'} to {request.address.firstName}{' '}
-                {request.address.lastName}, sent{' '}
-                {request.dispatchedAt && when(request.dispatchedAt)} by {request.dispatchedBy}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-    </>
+    <div className={styles.stack}>
+      <ToSend waiting={waiting} />
+      <Offered offers={offers} />
+      {sent.length > 0 && <Sent sent={sent} />}
+    </div>
   );
 }

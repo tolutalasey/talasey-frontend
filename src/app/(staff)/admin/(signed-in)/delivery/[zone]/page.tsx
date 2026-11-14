@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ZoneEditor } from '@/features/admin';
-import { NotAllowed, Notice, requireStaff, staffApi } from '@/features/staff';
+import { NotAllowed, Notice, PageHeader, requireStaff, staffApi } from '@/features/staff';
 
 export const metadata: Metadata = { title: 'Delivery zone' };
 
@@ -22,7 +22,11 @@ export default async function DeliveryZone({ params, searchParams }: Props) {
   if (!zone) notFound();
   return (
     <>
-      <h1>{zone.zone}</h1>
+      <PageHeader
+        back={{ href: '/admin/delivery/', label: 'Delivery' }}
+        eyebrow="Delivery zone"
+        title={zone.zone}
+      />
       <Notice message={message} error={error} />
       <ZoneEditor zone={zone} days={days} />
     </>

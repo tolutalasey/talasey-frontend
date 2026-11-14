@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ProductEditor } from '@/features/admin';
-import { NotAllowed, Notice, requireStaff, staffApi } from '@/features/staff';
+import { Badge, NotAllowed, Notice, PageHeader, requireStaff, staffApi } from '@/features/staff';
 
 export const metadata: Metadata = { title: 'Edit product' };
 
@@ -23,7 +23,23 @@ export default async function EditProduct({ params, searchParams }: Props) {
   if (!product) notFound();
   return (
     <>
-      <h1>{product.title}</h1>
+      <PageHeader
+        back={{ href: '/admin/products/', label: 'Products' }}
+        title={product.title}
+        meta={
+          <>
+            <Badge tone={product.published ? 'good' : 'neutral'}>
+              {product.published ? 'On the shop' : 'Hidden'}
+            </Badge>
+            {product.problems.length > 0 && (
+              <Badge tone="warn">
+                {product.problems.length} SKU {product.problems.length === 1 ? 'check' : 'checks'}
+              </Badge>
+            )}
+            <span>/products/{product.handle}/</span>
+          </>
+        }
+      />
       <Notice message={message} error={error} />
       <ProductEditor product={product} categories={categories} colourSets={colourSets} />
     </>

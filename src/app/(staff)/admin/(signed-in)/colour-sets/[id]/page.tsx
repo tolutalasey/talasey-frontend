@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ColourSetEditor } from '@/features/admin';
-import { NotAllowed, Notice, requireStaff, staffApi } from '@/features/staff';
+import { NotAllowed, Notice, PageHeader, requireStaff, staffApi } from '@/features/staff';
 
 export const metadata: Metadata = { title: 'Edit colour set' };
 
@@ -21,7 +21,7 @@ export default async function EditColourSet({ params, searchParams }: Props) {
   if (!set) notFound();
   return (
     <>
-      <h1>{set.name}</h1>
+      <PageHeader back={{ href: '/admin/colour-sets/', label: 'Colour sets' }} title={set.name} />
       <Notice message={message} error={error} />
       <ColourSetEditor set={set} />
     </>

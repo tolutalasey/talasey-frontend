@@ -1,3 +1,4 @@
+import { AlertCircleIcon, CheckCircleIcon } from './icons';
 import styles from './Staff.module.css';
 
 interface Props {
@@ -14,18 +15,22 @@ export function Notice({ message, error }: Props) {
   return (
     <>
       {list(message).map((text) => (
-        <p key={text} role="status" className={styles.notice}>
-          {text}
-        </p>
+        <div key={text} role="status" className={styles.notice}>
+          <CheckCircleIcon />
+          <p>{text}</p>
+        </div>
       ))}
       {problems.length > 0 && (
         <div role="alert" className={styles.problem}>
-          <strong>{problems.length === 1 ? 'Fix this first:' : 'Fix these first:'}</strong>
-          <ul>
-            {problems.map((problem) => (
-              <li key={problem}>{problem}</li>
-            ))}
-          </ul>
+          <AlertCircleIcon />
+          <div>
+            <strong>{problems.length === 1 ? 'Fix this first' : 'Fix these first'}</strong>
+            <ul>
+              {problems.map((problem) => (
+                <li key={problem}>{problem}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       )}
     </>

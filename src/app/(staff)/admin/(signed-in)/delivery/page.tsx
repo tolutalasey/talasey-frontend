@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { ZoneEditor, ZoneList } from '@/features/admin';
-import { NotAllowed, Notice, requireStaff, staffApi } from '@/features/staff';
+import { NotAllowed, Notice, PageHeader, requireStaff, staffApi } from '@/features/staff';
 
 export const metadata: Metadata = { title: 'Delivery' };
 
@@ -14,7 +14,10 @@ export default async function Delivery({ searchParams }: Props) {
   const { data: zones = [] } = await (await staffApi()).GET('/admin/delivery/zones');
   return (
     <>
-      <h1>Delivery</h1>
+      <PageHeader
+        title="Delivery"
+        description="Postcode areas, what delivery costs in each, and the days pallets go out."
+      />
       <Notice message={message} error={error} />
       <ZoneList zones={zones} />
       <h2>Add a zone</h2>

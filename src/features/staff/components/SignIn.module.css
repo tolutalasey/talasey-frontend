@@ -1,0 +1,382 @@
+.page {
+  display: grid;
+  min-height: 100vh;
+  background: var(--color-stone50);
+}
+
+@media (min-width: 64rem) {
+  .page {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  }
+}
+
+/* The photo side: a real Talasey garden under an aubergine wash. */
+.brand {
+  position: relative;
+  display: none;
+  overflow: hidden;
+  margin: var(--space-4);
+  border-radius: 20px;
+  background: var(--color-brand950);
+  isolation: isolate;
+}
+
+@media (min-width: 64rem) {
+  .brand {
+    display: block;
+  }
+}
+
+.photo {
+  object-fit: cover;
+  z-index: -2;
+  animation: drift 24s var(--motion-ease) infinite alternate;
+}
+
+.brand::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      180deg,
+      rgb(43 3 55 / 0.55) 0%,
+      rgb(43 3 55 / 0.15) 35%,
+      rgb(43 3 55 / 0.9) 100%
+    ),
+    linear-gradient(90deg, rgb(43 3 55 / 0.35), transparent 60%);
+}
+
+@keyframes drift {
+  from {
+    scale: 1.02;
+  }
+  to {
+    scale: 1.1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo {
+    animation: none;
+  }
+}
+
+.brandInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: var(--space-12);
+  color: var(--color-white);
+}
+
+.brandLogo {
+  align-self: flex-start;
+  width: auto;
+  height: 2.25rem;
+}
+
+.pitch {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 30rem;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--color-stone-muted);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 1.4rem + 1.4vw, 2.75rem);
+  font-weight: 350;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.points li {
+  padding: 0.375rem 0.875rem;
+  border: 1px solid rgb(255 255 255 / 0.28);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.08);
+  backdrop-filter: blur(8px);
+  font-size: var(--font-size-small);
+}
+
+/* The form side. */
+.formSide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  padding: var(--space-12) var(--space-4) var(--space-6);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-6);
+  width: 100%;
+  max-width: 25rem;
+  animation: rise var(--motion-slow) var(--motion-ease) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form {
+    animation: none;
+  }
+}
+
+.formLogo {
+  width: auto;
+  height: 2rem;
+}
+
+@media (min-width: 64rem) {
+  .formLogo {
+    display: none;
+  }
+}
+
+.intro {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.step {
+  justify-self: start;
+  margin: 0 0 var(--space-1);
+  padding: 0.125rem 0.625rem;
+  border-radius: 999px;
+  background: var(--color-brand50);
+  color: var(--color-brand600);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-semibold);
+}
+
+.title {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 350;
+  line-height: 1.1;
+}
+
+.lead {
+  margin: 0;
+  color: var(--color-ink-muted);
+}
+
+.error {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid #f1c9c6;
+  border-radius: 10px;
+  background: #fdf1f0;
+  color: var(--color-error);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+}
+
+.error svg {
+  flex: none;
+  margin-top: 0.125rem;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.error p {
+  margin: 0;
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.label {
+  color: var(--color-ink);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+}
+
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  position: absolute;
+  left: 0.875rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--color-ink-muted);
+  pointer-events: none;
+  transition: color var(--motion-fast);
+}
+
+.input {
+  width: 100%;
+  height: 3rem;
+  padding: 0 3.25rem 0 2.75rem;
+  border: 1px solid #d9cfc8;
+  border-radius: 10px;
+  background: var(--color-white);
+  color: var(--color-ink);
+  font: inherit;
+  transition:
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+
+.input::placeholder {
+  color: #9a8f96;
+}
+
+.input:hover {
+  border-color: var(--color-ink-muted);
+}
+
+.input:focus {
+  border-color: var(--color-brand600);
+  outline: none;
+  box-shadow: 0 0 0 4px rgb(108 27 120 / 0.14);
+}
+
+.control:focus-within .icon {
+  color: var(--color-brand600);
+}
+
+.code {
+  font-size: 1.375rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.4em;
+}
+
+.hint {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: 0.8125rem;
+}
+
+.reveal {
+  position: absolute;
+  right: 0.375rem;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 2.25rem;
+  padding: 0 0.625rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-ink-muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.reveal:hover {
+  background: var(--color-stone50);
+  color: var(--color-ink);
+}
+
+.reveal svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.revealLabel {
+  min-width: 2rem;
+  text-align: left;
+}
+
+.submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  border: 0;
+  border-radius: 10px;
+  background: var(--color-brand950);
+  color: var(--color-white);
+  font: inherit;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  box-shadow:
+    0 1px 2px rgb(43 3 55 / 0.3),
+    inset 0 1px 0 rgb(255 255 255 / 0.08);
+  transition:
+    background-color var(--motion-fast),
+    translate var(--motion-fast);
+}
+
+.submit:hover {
+  background: var(--color-brand800);
+}
+
+.submit:active {
+  translate: 0 1px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  justify-self: center;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+}
+
+.back:hover {
+  color: var(--color-brand600);
+}
+
+.back svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.help {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.footnote {
+  margin: 0;
+  color: #8a7f86;
+  font-size: 0.75rem;
+}

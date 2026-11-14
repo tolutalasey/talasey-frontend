@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ContentEditor } from '@/features/content-editor';
-import { Notice, staffApi } from '@/features/staff';
+import { CONTENT_STATUS, ContentEditor } from '@/features/content-editor';
+import { Badge, Notice, PageHeader, staffApi } from '@/features/staff';
 import { contentTypes } from '../../types.server';
 
 export const metadata: Metadata = { title: 'Edit content' };
@@ -23,11 +23,14 @@ export default async function EditContent({ params, searchParams }: Props) {
   const { data: releases = [] } = type.canPublish
     ? await (await staffApi()).GET('/content/releases')
     : { data: [] };
+  const status = CONTENT_STATUS[document.status];
   return (
     <>
-      <h1>
-        {type.label}: {document.title}
-      </h1>
+      <PageHeader
+        back={{ href: `/content/${type.type}/`, label: type.label }}
+        title={document.title}
+        meta={<Badge tone={status.tone}>{status.label}</Badge>}
+      />
       <Notice message={message} error={error} />
       <ContentEditor
         document={document}

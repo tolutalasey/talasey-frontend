@@ -92,7 +92,7 @@ function FieldInput({ field, value, path }: { field: Field; value: unknown; path
       );
     case 'group':
       return (
-        <fieldset className={styles.panel}>
+        <fieldset className={styles.fieldSet}>
           <legend>{field.label}</legend>
           {field.help && <p className={styles.muted}>{field.help}</p>}
           <ContentFields fields={field.fields} data={asData(value)} prefix={path} />
@@ -101,11 +101,11 @@ function FieldInput({ field, value, path }: { field: Field; value: unknown; path
     case 'items': {
       const rows = Array.isArray(value) ? (value as Data[]) : [];
       return (
-        <fieldset className={styles.panel}>
+        <fieldset className={styles.fieldSet}>
           <legend>{field.label}</legend>
           {field.help && <p className={styles.muted}>{field.help}</p>}
           {[...rows, ...Array.from({ length: EXTRA_ROWS }, () => ({}))].map((row, index) => (
-            <fieldset key={index} className={styles.panel}>
+            <fieldset key={index} className={styles.itemSet}>
               <legend>
                 {index < rows.length ? `${index + 1}` : 'Add another (leave empty to skip)'}
               </legend>
@@ -120,12 +120,12 @@ function FieldInput({ field, value, path }: { field: Field; value: unknown; path
     case 'image': {
       const photo = asData(value);
       return (
-        <fieldset className={styles.panel}>
+        <fieldset className={styles.fieldSet}>
           <legend>{field.label}</legend>
           {typeof photo.src === 'string' && (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element -- staff preview, never on the shop */}
-              <img src={photo.src} alt="" className={styles.thumb} />
+              <img src={photo.src} alt="" className={styles.photoPreview} />
               <input type="hidden" name={`${path}.src`} value={photo.src} />
               <input type="hidden" name={`${path}.width`} value={asText(photo.width)} />
               <input type="hidden" name={`${path}.height`} value={asText(photo.height)} />

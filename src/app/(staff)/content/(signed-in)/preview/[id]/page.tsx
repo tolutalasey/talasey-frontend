@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { GuidePage, previewContent, StoryPage } from '@/features/content';
-import { staffApi, staffStyles as styles } from '@/features/staff';
+import { PageHeader, staffApi, staffStyles as styles } from '@/features/staff';
 
 export const metadata: Metadata = { title: 'Preview' };
 
@@ -20,9 +20,12 @@ export default async function Preview({ params }: Props) {
   const preview = previewContent(document.type, document.draft);
   return (
     <>
-      <p role="status" className={styles.notice}>
-        Preview of the draft. Shoppers don&rsquo;t see it until it is published.
-      </p>
+      <PageHeader
+        back={{ href: `/content/edit/${document.id}/`, label: 'Back to editing' }}
+        eyebrow="Preview"
+        title={document.title}
+        description="This is the draft. Shoppers don’t see it until it is published."
+      />
       {preview.kind === 'guide' && <GuidePage guide={preview.guide} products={[]} />}
       {preview.kind === 'page' && (
         <StoryPage
