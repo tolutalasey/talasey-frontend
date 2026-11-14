@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
 const OPEN_DELAY = 90;
@@ -8,8 +9,18 @@ const CLOSE_DELAY = 240;
 // The header menus are plain <details>, so they work before this loads and without JavaScript.
 // With a mouse, a menu opens on hover and stays open while the pointer is over it or its panel;
 // clicking its button keeps it open until the visitor clicks elsewhere. Escape or a click
-// anywhere else closes it, and Escape returns focus to the button.
+// anywhere else closes it, and Escape returns focus to the button. Choosing a link in a menu
+// closes it, so the new page is not left hidden under a long list on a phone.
 export function MenuBehaviour({ navId }: { navId: string }) {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    document
+      .getElementById(navId)
+      ?.querySelectorAll<HTMLDetailsElement>('details[open]')
+      .forEach((menu) => (menu.open = false));
+  }, [navId, pathname]);
+
   useEffect(() => {
     const nav = document.getElementById(navId);
     if (!nav) return;
@@ -60,12 +71,17 @@ export function MenuBehaviour({ navId }: { navId: string }) {
           pinned.add(menu);
         }
       };
+      const choose = (event: MouseEvent) => {
+        if ((event.target as Element).closest('a')) close(menu);
+      };
       menu.addEventListener('pointerenter', enter);
       menu.addEventListener('pointerleave', leave);
+      menu.addEventListener('click', choose);
       summary?.addEventListener('click', click);
       return () => {
         menu.removeEventListener('pointerenter', enter);
         menu.removeEventListener('pointerleave', leave);
+        menu.removeEventListener('click', choose);
         summary?.removeEventListener('click', click);
       };
     });
