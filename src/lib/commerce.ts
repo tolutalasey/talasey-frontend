@@ -3,9 +3,11 @@ import {
   createBasketClient,
   createCatalog,
   createContentClient,
+  createSamplesClient,
   type BasketClient,
   type Catalog,
   type ContentClient,
+  type SamplesClient,
 } from '@/api-client';
 import { env } from './env';
 
@@ -15,6 +17,7 @@ export const apiUrl = () => env.API_URL ?? LOCAL_API;
 let catalog: Catalog | undefined;
 let basketClient: BasketClient | undefined;
 let contentClient: ContentClient | undefined;
+let samplesClient: SamplesClient | undefined;
 
 export function getCatalog(): Catalog {
   catalog ??= createCatalog({ baseUrl: apiUrl() });
@@ -29,6 +32,11 @@ export function getBasketClient(): BasketClient {
 export function getContentClient(): ContentClient {
   contentClient ??= createContentClient({ baseUrl: apiUrl() });
   return contentClient;
+}
+
+export function getSamplesClient(): SamplesClient {
+  samplesClient ??= createSamplesClient({ baseUrl: apiUrl() });
+  return samplesClient;
 }
 
 // For lists that can be empty, like the sitemap and the search index: an API that is down (or not

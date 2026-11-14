@@ -1,0 +1,26 @@
+import type { SampleOffer } from '@/api-client';
+import { addSample } from '../actions';
+import styles from './Samples.module.css';
+
+// "Order a free sample" on a product page, one button per colour or finish we sample.
+export function ProductSamples({ offers }: { offers: SampleOffer[] }) {
+  if (offers.length === 0) return null;
+  return (
+    <section className={styles.productSamples} aria-labelledby="product-samples-title">
+      <h2 id="product-samples-title">Free samples</h2>
+      <p className={styles.muted}>Free, with free postage, sent the next working day.</p>
+      <ul>
+        {offers.map((offer) => (
+          <li key={offer.id}>
+            <form action={addSample}>
+              <input type="hidden" name="offerId" value={offer.id} />
+              <button type="submit" className={styles.secondary}>
+                Order a free sample: {offer.label}
+              </button>
+            </form>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}

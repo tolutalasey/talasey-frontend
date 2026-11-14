@@ -18,4 +18,5 @@ export const indexablePages = [
   { name: 'help centre', path: '/help/' },
   { name: 'help topic', path: '/help/returns/' },
   { name: 'contact', path: '/contact/' },
+  { name: 'samples', path: '/samples/' },
 ] as const;

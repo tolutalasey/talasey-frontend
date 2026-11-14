@@ -1,7 +1,8 @@
-import type { Product, ProductVariant } from '@/api-client';
+import type { Product, ProductVariant, SampleOffer } from '@/api-client';
 import type { StockStatusProps } from '@/ui/StockStatus/StockStatus';
 import type { ReactNode } from 'react';
 import { PageBreadcrumbs } from '@/features/layout';
+import { ProductSamples } from '@/features/samples';
 import type { BreadcrumbItem } from '@/lib/seo';
 import type { ProductContent, ProductPhoto } from '../content';
 import type { PackPricing } from '../pricing';
@@ -22,6 +23,7 @@ export interface ProductPageProps {
   stock: StockStatusProps;
   options: OptionGroup[];
   content: ProductContent;
+  samples: SampleOffer[];
   path: string;
   // The purchase area: the basket form, or what to do instead for made-to-measure products.
   children: ReactNode;
@@ -37,6 +39,7 @@ export function ProductPage({
   stock,
   options,
   content,
+  samples,
   path,
   children,
 }: ProductPageProps) {
@@ -51,6 +54,7 @@ export function ProductPage({
           <PriceSummary pricing={pricing} stock={stock} />
           {options.length > 0 && <OptionPicker groups={options} path={path} />}
           {children}
+          <ProductSamples offers={samples} />
         </div>
       </div>
       <ProductFacts product={product} variant={variant} brand={brand} content={content} />

@@ -39,7 +39,7 @@ export const fallbackHomeContent: HomeContent = {
   intro:
     'Porcelain and natural stone paving, composite decking, pergolas and everything needed to finish the job, delivered to your door.',
   heroActions: [
-    { label: 'Order free samples', href: '/contact/?topic=samples' },
+    { label: 'Order free samples', href: '/samples/' },
     { label: 'Shop porcelain paving', href: '/porcelain-paving/' },
   ],
   projectTiles: [

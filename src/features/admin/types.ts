@@ -34,3 +34,7 @@ export const STOCK_MODES = [
   { value: 'stocked_then_made_to_order', label: 'Stocked, then made to order' },
   { value: 'made_to_order', label: 'Made to order: always available' },
 ];
+export type SampleOfferAdmin = Json<
+  paths['/admin/samples/offers']['get']['responses'][200]
+>[number];
+export type SampleRequest = Json<paths['/admin/samples/requests']['get']['responses'][200]>[number];

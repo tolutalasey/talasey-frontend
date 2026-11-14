@@ -10,6 +10,7 @@ export const cacheTags = {
   navigation: 'content:navigation',
   redirects: 'content:redirect',
   productExtras: 'content:product-extras',
+  samples: 'samples',
   products: 'products',
   product: (handle: string) => `product:${handle}`,
   productContent: (handle: string) => `productContent:${handle}`,

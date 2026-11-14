@@ -16,6 +16,7 @@ export const FEEDBACK_FORMS = [
   'access',
   'order',
   'contact',
+  'samples',
 ] as const;
 export type FeedbackForm = (typeof FEEDBACK_FORMS)[number];
 export type FormFeedback = Partial<Record<FeedbackForm, FormState>>;

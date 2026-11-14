@@ -6,6 +6,7 @@ const LINKS: StaffLink[] = [
   { href: '/admin/colour-sets/', label: 'Colour sets', permission: 'catalogue' },
   { href: '/admin/catalogue/', label: 'Import and export', permission: 'catalogue' },
   { href: '/admin/orders/', label: 'Orders', permission: 'orders' },
+  { href: '/admin/samples/', label: 'Samples', permission: 'orders' },
   { href: '/admin/delivery/', label: 'Delivery', permission: 'delivery' },
   { href: '/admin/sku-checks/', label: 'SKU checks', permission: 'catalogue' },
   { href: '/admin/log/', label: 'Change log', permission: 'audit' },

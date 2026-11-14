@@ -29,6 +29,12 @@ export {
 export { createCatalog, type Catalog } from './catalog';
 export { createContentClient, type ContentClient } from './content';
 export {
+  createSamplesClient,
+  type SampleOffer,
+  type SampleRequestInput,
+  type SamplesClient,
+} from './samples';
+export {
   isAvailable,
   isInStock,
   lowestPrice,

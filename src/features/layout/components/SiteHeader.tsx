@@ -38,7 +38,7 @@ export async function SiteHeader() {
             ))}
           </ul>
         </details>
-        <NextLink href="/contact/?topic=samples" className={styles.navLink}>
+        <NextLink href="/samples/" className={styles.navLink}>
           Free samples
         </NextLink>
         <NextLink href="/help/" className={styles.navLink}>

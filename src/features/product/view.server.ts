@@ -1,7 +1,14 @@
 import 'server-only';
-import { isInStock, type ColourOffer, type Product, type ProductVariant } from '@/api-client';
+import {
+  isInStock,
+  type ColourOffer,
+  type Product,
+  type ProductVariant,
+  type SampleOffer,
+} from '@/api-client';
 import type { StockStatusProps } from '@/ui/StockStatus/StockStatus';
 import { getRanges, rangeForProduct, rangePath } from '@/features/catalogue';
+import { getProductSampleOffers } from '@/features/samples';
 import { brandOf } from '@/lib/brands';
 import { formatPrice } from '@/lib/format';
 import type { BreadcrumbItem } from '@/lib/seo';
@@ -33,6 +40,7 @@ export interface ProductView {
   options: OptionGroup[];
   colours: ColourView | null;
   extras: { variantId: string; name: string; reason: string; price: string | null }[];
+  samples: SampleOffer[];
   content: ProductContent;
   path: string;
 }
@@ -69,9 +77,10 @@ export async function getProductView(handle: string, params: Params): Promise<Pr
   const [content, ranges] = await Promise.all([getProductContent(handle), getRanges()]);
   const selection = resolveSelection(product, params);
   const { variant } = selection;
-  const [offer, companions] = await Promise.all([
+  const [offer, companions, samples] = await Promise.all([
     product.colourChoice && variant ? getColours(product, variant.options) : null,
     getCompanions(content),
+    getProductSampleOffers(handle),
   ]);
   const colours = colourView(offer, product, selection.colourParam);
   const colourName = colours?.options.find((colour) => colour.id === colours.selected)?.name;
@@ -105,6 +114,7 @@ export async function getProductView(handle: string, params: Params): Promise<Pr
       const price = extra.variants.find((v) => v.id === variantId)?.priceIncVat;
       return { variantId, name: extra.title, reason, price: price ? formatPrice(price) : null };
     }),
+    samples,
     content,
     path,
   };

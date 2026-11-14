@@ -187,3 +187,39 @@ export async function updateStaff(form: FormData) {
   if (error) failed('/admin/users/', messageOf(error));
   done('/admin/users/', 'Account updated.');
 }
+
+const SAMPLES = '/admin/samples/';
+
+export async function markSamplesSent(form: FormData) {
+  const { error } = await (
+    await staffApi()
+  ).POST('/admin/samples/requests/{id}/dispatch', { params: { path: { id: id(form) } } });
+  if (error) failed(SAMPLES, messageOf(error));
+  done(SAMPLES, 'Marked as sent. The customer has an email to say they are on their way.');
+}
+
+export async function addSampleOffer(form: FormData) {
+  const { error } = await (
+    await staffApi()
+  ).POST('/admin/samples/offers', {
+    body: { productHandle: text(form, 'productHandle') ?? '', label: text(form, 'label') ?? '' },
+  });
+  if (error) failed(SAMPLES, messageOf(error));
+  done(SAMPLES, 'Sample added. The shop offers it now.');
+}
+
+export async function changeSampleOffer(form: FormData) {
+  const api = await staffApi();
+  const path = { params: { path: { id: id(form) } } };
+  if (form.get('intent') === 'delete') {
+    const { error } = await api.DELETE('/admin/samples/offers/{id}', path);
+    if (error) failed(SAMPLES, messageOf(error));
+    done(SAMPLES, 'Sample removed.');
+  }
+  const { error } = await api.PATCH('/admin/samples/offers/{id}', {
+    ...path,
+    body: { active: form.get('intent') === 'start' },
+  });
+  if (error) failed(SAMPLES, messageOf(error));
+  done(SAMPLES, form.get('intent') === 'start' ? 'Offered again.' : 'No longer offered.');
+}

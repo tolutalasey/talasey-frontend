@@ -89,6 +89,7 @@ async function pageEntries(): Promise<SitemapEntry[]> {
     entry('/guides/'),
     entry('/help/'),
     ...HELP_TOPICS.map((topic) => entry(helpPath(topic))),
+    entry('/samples/'),
     entry('/contact/'),
   ];
 }

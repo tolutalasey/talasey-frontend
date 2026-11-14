@@ -31,6 +31,12 @@ On a made-to-measure product, click **Made-to-measure sizes, price formula and t
 - **Download as Excel** gives every product option with its SKU, price, stock, stock mode, lead time, weight, coverage and barcode, one row each.
 - **Update from the product master sheet:** choose the sheet and click **Check what would change**. The report lists what would be added and updated, and every row that can't be imported yet with the reason (no SKU, a duplicate, no price). Nothing changes until you click **Import**. Products are matched by their web address or any of their SKUs; new ones arrive unpublished, and a price left blank in the sheet never clears one set here. Every change goes into the change log, so it can be undone.
 
+## Samples
+
+**Samples** in the admin lists the requests waiting to be posted, newest first, with what to send and where. Post them, then click **Mark as sent**: the customer gets an email to say they are on their way. Requests are numbered S1, S2 and so on, and the customer sees that number.
+
+Under **Samples we offer**, add a sample by the product's web address and a name for the sample, usually the colour ("Buff"). It shows straight away on that product's page and on the **Free samples** page. **Stop offering** hides one without losing it; **Remove** deletes it. Customers choose up to five, and the wording of both emails is under **Email wording** in the content editor.
+
 ## Orders
 
 Newest first, with the delivery day and whether it is booked. Open one for the address, what they bought (with what ships now and what is made to order), the lorry access answers and the payment. **Refund** sends money back the way they paid. Test payments show as such.
