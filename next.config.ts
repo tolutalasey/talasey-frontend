@@ -9,15 +9,13 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   // Room for the contact form's photos (up to five of 5 MB each), through the proxy too.
   experimental: {
-    // The shop's CSS is small (about 7 KB compressed), so it goes in the page itself instead of
-    // a separate file the browser must fetch before it can paint anything.
-    inlineCss: true,
     serverActions: { bodySizeLimit: '26mb' },
     proxyClientMaxBodySize: '26mb',
   },
-  // Resolve metadata before the shell is sent: every client gets title, description and canonical
-  // in <head>, and an unknown product returns a real 404 instead of a streamed one.
-  htmlLimitedBots: /.*/,
+  // Search engines and link previews get the whole page at once, with title, description and
+  // canonical in <head> and a real 404 for an unknown product. Shoppers get the fast shell first.
+  htmlLimitedBots:
+    /Googlebot|[\w-]+-Google|Google-[\w-]+|Chrome-Lighthouse|Slurp|DuckDuckBot|baiduspider|yandex|sogou|bitlybot|tumblr|vkShare|quora link preview|redditbot|ia_archiver|Bingbot|BingPreview|applebot|facebookexternalhit|facebookcatalog|Twitterbot|LinkedInBot|Slackbot|Discordbot|WhatsApp|SkypeUriPreview|Yeti|googleweblight|GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-SearchBot|PerplexityBot/i,
   images: {
     formats: ['image/avif', 'image/webp'],
     localPatterns: [{ pathname: '/uploads/**' }, { pathname: '/images/**' }],

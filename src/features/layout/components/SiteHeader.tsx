@@ -25,6 +25,7 @@ export async function SiteHeader({ bag }: { bag: ReactNode }) {
             alt="Talasey"
             width={900}
             height={212}
+            sizes="10rem"
             priority
           />
         </NextLink>
