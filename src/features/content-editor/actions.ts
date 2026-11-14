@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { uploadPhoto } from '@/features/admin';
 import { done, failed, staffApi, text } from '@/features/staff';
 import { dataFromForm, imagePaths, type Field, type Photo } from './fields';
-import { fromLondonTime } from './london-time';
+import { fromLondonTime } from '@/lib/london-time';
 import type { ContentTypeInfo } from './types';
 
 const problemText = (error: unknown) => {

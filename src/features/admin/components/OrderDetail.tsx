@@ -87,6 +87,14 @@ export function OrderDetail({ order }: { order: Order }) {
             </th>
             <td>{money(order.deliveryPence)}</td>
           </tr>
+          {order.discountPence > 0 && (
+            <tr>
+              <th scope="row" colSpan={4}>
+                Discount ({order.promotions.join(', ')})
+              </th>
+              <td>−{money(order.discountPence)}</td>
+            </tr>
+          )}
           <tr>
             <th scope="row" colSpan={4}>
               Total

@@ -3,7 +3,7 @@ import { TextField } from '@/ui/TextField/TextField';
 import NextLink from 'next/link';
 import { staffStyles as styles } from '@/features/staff';
 import { changeRelease, createRelease, removeFromRelease } from '../actions';
-import { londonLabel, toLondonTime } from '../london-time';
+import { londonLabel, toLondonTime } from '@/lib/london-time';
 import type { ContentRelease } from '../types';
 
 const STATUS = {

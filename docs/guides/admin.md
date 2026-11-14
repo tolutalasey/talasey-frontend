@@ -37,6 +37,16 @@ On a made-to-measure product, click **Made-to-measure sizes, price formula and t
 
 Under **Samples we offer**, add a sample by the product's web address and a name for the sample, usually the colour ("Buff"). It shows straight away on that product's page and on the **Free samples** page. **Stop offering** hides one without losing it; **Remove** deletes it. Customers choose up to five, and the wording of both emails is under **Email wording** in the content editor.
 
+## Promotions
+
+**Promotions** lists every promotion with its code, what it gives, how often it has been used and whether it is running now. To add one, fill in **Add a promotion**:
+
+- **Code**: what shoppers type on the basket. Leave it blank and the promotion applies by itself to every basket that qualifies, so use that for site-wide sales.
+- **What they get**: a percentage off products, pounds off products, or free delivery. Discounts never apply to delivery charges.
+- **Minimum spend**, **Times it can be used**, **Starts** and **Ends** are all optional. Times are UK time.
+
+Shoppers get the single best money-off promotion they qualify for; free delivery can come on top. Untick **Switched on** to pause one without losing it. Open **Change** under the list to edit or remove a promotion. Orders show the discount and which promotion gave it.
+
 ## Orders
 
 Newest first, with the delivery day and whether it is booked. Open one for the address, what they bought (with what ships now and what is made to order), the lorry access answers and the payment. **Refund** sends money back the way they paid. Test payments show as such.

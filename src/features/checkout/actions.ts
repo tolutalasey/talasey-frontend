@@ -105,3 +105,29 @@ export async function placeOrder(_state: FormState): Promise<FormState> {
   await settle('order', {});
   redirect(`/order/${placed.value}/`);
 }
+
+// A discount code on the basket page. Problems come back through the feedback cookie and the
+// page is drawn again, so it works with or without JavaScript (ADR 0020).
+export async function applyPromotionCode(form: FormData) {
+  const code = String(form.get('code') ?? '').trim();
+  const basketId = await currentBasketId();
+  if (!code || !basketId) {
+    await settle('promotion', { fieldErrors: { code: 'Enter a code' }, values: { code } });
+  } else {
+    const applied = await getBasketClient().applyCode(basketId, code);
+    await settle(
+      'promotion',
+      applied.ok
+        ? { notice: 'Code added.' }
+        : { fieldErrors: { code: applied.message }, values: { code } },
+    );
+  }
+  refresh();
+}
+
+export async function removePromotionCode() {
+  const basketId = await currentBasketId();
+  if (basketId) await getBasketClient().removeCode(basketId);
+  await settle('promotion', {});
+  refresh();
+}

@@ -54,6 +54,8 @@ function OrderSummary({ basket }: { basket: Basket }) {
       <Totals
         itemTotal={basket.itemTotal}
         deliveryTotal={basket.deliveryTotal}
+        discount={basket.discount}
+        promotions={basket.promotions}
         total={basket.total}
       />
     </aside>

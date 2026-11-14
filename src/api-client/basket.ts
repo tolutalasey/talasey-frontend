@@ -62,6 +62,9 @@ export interface Basket {
   lines: BasketLine[];
   itemTotal: Price;
   deliveryTotal: Price | null;
+  discount: Price | null;
+  promotions: string[];
+  promotionCode: string | null;
   total: Price;
   delivery: BasketDelivery;
   payment: PaymentKind;
@@ -91,6 +94,10 @@ export interface PlacedOrder {
   displayId: number | null;
   email: string | null;
   lines: BasketLine[];
+  itemTotal: Price;
+  deliveryTotal: Price;
+  discount: Price | null;
+  promotions: string[];
   total: Price;
   delivery: BasketDelivery;
   payment: PaymentKind;
@@ -122,6 +129,9 @@ export function toBasket(basket: BasketDto): Basket {
     lines: basket.lines.map(toLine),
     itemTotal: pounds(basket.itemTotalPence),
     deliveryTotal: basket.deliveryPence === null ? null : pounds(basket.deliveryPence),
+    discount: basket.discountPence > 0 ? pounds(basket.discountPence) : null,
+    promotions: basket.promotions.map((promotion) => promotion.name),
+    promotionCode: basket.promotionCode,
     total: pounds(basket.totalPence),
     delivery: basket.delivery,
     payment: basket.payment,
@@ -135,6 +145,10 @@ export function toPlacedOrder(order: OrderDto): PlacedOrder {
     displayId: order.number,
     email: order.email,
     lines: order.lines.map(toLine),
+    itemTotal: pounds(order.itemTotalPence),
+    deliveryTotal: pounds(order.deliveryPence),
+    discount: order.discountPence > 0 ? pounds(order.discountPence) : null,
+    promotions: order.promotions,
     total: pounds(order.totalPence),
     delivery: order.delivery,
     payment: order.payment.provider,
@@ -188,6 +202,18 @@ export function createBasketClient(options: ApiClientOptions) {
             body: { variantId, quantity: 1, dimensions, choices },
           }),
         );
+      }),
+
+    applyCode: (basketId: string, code: string) =>
+      attempt(async () => {
+        await unwrap(
+          api.PUT('/store/baskets/{id}/promotion', { ...path(basketId), body: { code } }),
+        );
+      }),
+
+    removeCode: (basketId: string) =>
+      attempt(async () => {
+        await unwrap(api.DELETE('/store/baskets/{id}/promotion', path(basketId)));
       }),
 
     setQuantity: (basketId: string, lineId: string, quantity: number) =>

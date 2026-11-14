@@ -38,3 +38,4 @@ export type SampleOfferAdmin = Json<
   paths['/admin/samples/offers']['get']['responses'][200]
 >[number];
 export type SampleRequest = Json<paths['/admin/samples/requests']['get']['responses'][200]>[number];
+export type Promotion = Json<paths['/admin/promotions']['get']['responses'][200]>[number];

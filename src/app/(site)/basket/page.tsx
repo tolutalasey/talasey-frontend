@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { BasketSummary, getBasketView } from '@/features/checkout';
+import { readFeedback } from '@/lib/form-feedback.server';
 
 export const metadata: Metadata = { title: 'Basket', robots: { index: false } };
 
@@ -8,5 +9,6 @@ export const metadata: Metadata = { title: 'Basket', robots: { index: false } };
 export const instant = false;
 
 export default async function BasketPage() {
-  return <BasketSummary view={await getBasketView()} />;
+  const [view, feedback] = await Promise.all([getBasketView(), readFeedback()]);
+  return <BasketSummary view={view} promotionFeedback={feedback.promotion} />;
 }

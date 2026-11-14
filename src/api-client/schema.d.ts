@@ -676,6 +676,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/store/baskets/{id}/promotion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["StoreBasketController_applyCode"];
+        post?: never;
+        delete: operations["StoreBasketController_removeCode"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/store/baskets/{id}/delivery-options": {
         parameters: {
             query?: never;
@@ -847,6 +863,38 @@ export interface paths {
         put?: never;
         post: operations["AdminOrdersController_refund"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/promotions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PromotionsController_list"];
+        put?: never;
+        post: operations["PromotionsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/promotions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["PromotionsController_update"];
+        post?: never;
+        delete: operations["PromotionsController_remove"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3740,6 +3788,14 @@ export interface operations {
                         itemTotalPence: number;
                         deliveryPence: number | null;
                         deliveryProblem: string | null;
+                        discountPence: number;
+                        promotionCode: string | null;
+                        /** @description Why the code typed in does not apply */
+                        promotionProblem: string | null;
+                        promotions: {
+                            name: string;
+                            code: string | null;
+                        }[];
                         totalPence: number;
                         delivery: {
                             /** @enum {string|null} */
@@ -3826,6 +3882,14 @@ export interface operations {
                         itemTotalPence: number;
                         deliveryPence: number | null;
                         deliveryProblem: string | null;
+                        discountPence: number;
+                        promotionCode: string | null;
+                        /** @description Why the code typed in does not apply */
+                        promotionProblem: string | null;
+                        promotions: {
+                            name: string;
+                            code: string | null;
+                        }[];
                         totalPence: number;
                         delivery: {
                             /** @enum {string|null} */
@@ -3929,6 +3993,14 @@ export interface operations {
                         itemTotalPence: number;
                         deliveryPence: number | null;
                         deliveryProblem: string | null;
+                        discountPence: number;
+                        promotionCode: string | null;
+                        /** @description Why the code typed in does not apply */
+                        promotionProblem: string | null;
+                        promotions: {
+                            name: string;
+                            code: string | null;
+                        }[];
                         totalPence: number;
                         delivery: {
                             /** @enum {string|null} */
@@ -4047,6 +4119,14 @@ export interface operations {
                         itemTotalPence: number;
                         deliveryPence: number | null;
                         deliveryProblem: string | null;
+                        discountPence: number;
+                        promotionCode: string | null;
+                        /** @description Why the code typed in does not apply */
+                        promotionProblem: string | null;
+                        promotions: {
+                            name: string;
+                            code: string | null;
+                        }[];
                         totalPence: number;
                         delivery: {
                             /** @enum {string|null} */
@@ -4151,6 +4231,14 @@ export interface operations {
                         itemTotalPence: number;
                         deliveryPence: number | null;
                         deliveryProblem: string | null;
+                        discountPence: number;
+                        promotionCode: string | null;
+                        /** @description Why the code typed in does not apply */
+                        promotionProblem: string | null;
+                        promotions: {
+                            name: string;
+                            code: string | null;
+                        }[];
                         totalPence: number;
                         delivery: {
                             /** @enum {string|null} */
@@ -4245,6 +4333,14 @@ export interface operations {
                         itemTotalPence: number;
                         deliveryPence: number | null;
                         deliveryProblem: string | null;
+                        discountPence: number;
+                        promotionCode: string | null;
+                        /** @description Why the code typed in does not apply */
+                        promotionProblem: string | null;
+                        promotions: {
+                            name: string;
+                            code: string | null;
+                        }[];
                         totalPence: number;
                         delivery: {
                             /** @enum {string|null} */
@@ -4353,6 +4449,222 @@ export interface operations {
                         itemTotalPence: number;
                         deliveryPence: number | null;
                         deliveryProblem: string | null;
+                        discountPence: number;
+                        promotionCode: string | null;
+                        /** @description Why the code typed in does not apply */
+                        promotionProblem: string | null;
+                        promotions: {
+                            name: string;
+                            code: string | null;
+                        }[];
+                        totalPence: number;
+                        delivery: {
+                            /** @enum {string|null} */
+                            shipment: "pallet" | "parcel" | null;
+                            name: string | null;
+                            day: {
+                                /** Format: date */
+                                date: string;
+                                /** @enum {string} */
+                                status: "held" | "booked" | "needs-rebooking";
+                            } | null;
+                            access: {
+                                /** @enum {string} */
+                                vehicleAccess: "articulated" | "rigid" | "small";
+                                hardStanding: boolean;
+                                kerbsideOk: boolean;
+                            } | null;
+                        };
+                        /** Format: uuid */
+                        orderId: string | null;
+                        /** @enum {string} */
+                        payment: "stripe" | "test";
+                    };
+                };
+            };
+        };
+    };
+    StoreBasketController_applyCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    code: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        email: string | null;
+                        address: {
+                            firstName: string;
+                            lastName: string;
+                            address1: string;
+                            city: string;
+                            postcode: string;
+                            phone: string;
+                        } | null;
+                        lines: {
+                            /** Format: uuid */
+                            id: string;
+                            /** Format: uuid */
+                            productId: string;
+                            handle: string;
+                            title: string;
+                            /** Format: uuid */
+                            variantId: string;
+                            variantTitle: string;
+                            sku: string | null;
+                            colour: string | null;
+                            quantity: number;
+                            unitPricePence: number | null;
+                            totalPence: number;
+                            buildId: string | null;
+                            bespoke: {
+                                unit: string;
+                                dimensions: {
+                                    [key: string]: number;
+                                };
+                                choices: {
+                                    [key: string]: string;
+                                };
+                            } | null;
+                            /** @description For example "3 now, 2 made to order" */
+                            stock: string;
+                        }[];
+                        itemTotalPence: number;
+                        deliveryPence: number | null;
+                        deliveryProblem: string | null;
+                        discountPence: number;
+                        promotionCode: string | null;
+                        /** @description Why the code typed in does not apply */
+                        promotionProblem: string | null;
+                        promotions: {
+                            name: string;
+                            code: string | null;
+                        }[];
+                        totalPence: number;
+                        delivery: {
+                            /** @enum {string|null} */
+                            shipment: "pallet" | "parcel" | null;
+                            name: string | null;
+                            day: {
+                                /** Format: date */
+                                date: string;
+                                /** @enum {string} */
+                                status: "held" | "booked" | "needs-rebooking";
+                            } | null;
+                            access: {
+                                /** @enum {string} */
+                                vehicleAccess: "articulated" | "rigid" | "small";
+                                hardStanding: boolean;
+                                kerbsideOk: boolean;
+                            } | null;
+                        };
+                        /** Format: uuid */
+                        orderId: string | null;
+                        /** @enum {string} */
+                        payment: "stripe" | "test";
+                    };
+                };
+            };
+            /** @description No such basket */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unknown, ended or used-up code, or not enough spent */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    StoreBasketController_removeCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        email: string | null;
+                        address: {
+                            firstName: string;
+                            lastName: string;
+                            address1: string;
+                            city: string;
+                            postcode: string;
+                            phone: string;
+                        } | null;
+                        lines: {
+                            /** Format: uuid */
+                            id: string;
+                            /** Format: uuid */
+                            productId: string;
+                            handle: string;
+                            title: string;
+                            /** Format: uuid */
+                            variantId: string;
+                            variantTitle: string;
+                            sku: string | null;
+                            colour: string | null;
+                            quantity: number;
+                            unitPricePence: number | null;
+                            totalPence: number;
+                            buildId: string | null;
+                            bespoke: {
+                                unit: string;
+                                dimensions: {
+                                    [key: string]: number;
+                                };
+                                choices: {
+                                    [key: string]: string;
+                                };
+                            } | null;
+                            /** @description For example "3 now, 2 made to order" */
+                            stock: string;
+                        }[];
+                        itemTotalPence: number;
+                        deliveryPence: number | null;
+                        deliveryProblem: string | null;
+                        discountPence: number;
+                        promotionCode: string | null;
+                        /** @description Why the code typed in does not apply */
+                        promotionProblem: string | null;
+                        promotions: {
+                            name: string;
+                            code: string | null;
+                        }[];
                         totalPence: number;
                         delivery: {
                             /** @enum {string|null} */
@@ -4473,6 +4785,14 @@ export interface operations {
                         itemTotalPence: number;
                         deliveryPence: number | null;
                         deliveryProblem: string | null;
+                        discountPence: number;
+                        promotionCode: string | null;
+                        /** @description Why the code typed in does not apply */
+                        promotionProblem: string | null;
+                        promotions: {
+                            name: string;
+                            code: string | null;
+                        }[];
                         totalPence: number;
                         delivery: {
                             /** @enum {string|null} */
@@ -4612,6 +4932,14 @@ export interface operations {
                         itemTotalPence: number;
                         deliveryPence: number | null;
                         deliveryProblem: string | null;
+                        discountPence: number;
+                        promotionCode: string | null;
+                        /** @description Why the code typed in does not apply */
+                        promotionProblem: string | null;
+                        promotions: {
+                            name: string;
+                            code: string | null;
+                        }[];
                         totalPence: number;
                         delivery: {
                             /** @enum {string|null} */
@@ -4721,6 +5049,14 @@ export interface operations {
                         itemTotalPence: number;
                         deliveryPence: number | null;
                         deliveryProblem: string | null;
+                        discountPence: number;
+                        promotionCode: string | null;
+                        /** @description Why the code typed in does not apply */
+                        promotionProblem: string | null;
+                        promotions: {
+                            name: string;
+                            code: string | null;
+                        }[];
                         totalPence: number;
                         delivery: {
                             /** @enum {string|null} */
@@ -4881,6 +5217,8 @@ export interface operations {
                         }[];
                         itemTotalPence: number;
                         deliveryPence: number;
+                        discountPence: number;
+                        promotions: string[];
                         totalPence: number;
                         delivery: {
                             /** @enum {string|null} */
@@ -5029,6 +5367,8 @@ export interface operations {
                         }[];
                         itemTotalPence: number;
                         deliveryPence: number;
+                        discountPence: number;
+                        promotions: string[];
                         totalPence: number;
                         delivery: {
                             /** @enum {string|null} */
@@ -5146,6 +5486,8 @@ export interface operations {
                         }[];
                         itemTotalPence: number;
                         deliveryPence: number;
+                        discountPence: number;
+                        promotions: string[];
                         totalPence: number;
                         delivery: {
                             /** @enum {string|null} */
@@ -5201,6 +5543,263 @@ export interface operations {
             };
             /** @description More than is left to refund */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PromotionsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        name: string;
+                        code: string | null;
+                        /** @enum {string} */
+                        kind: "percent" | "amount" | "free_delivery";
+                        /** @description A percentage, or pence off */
+                        value: number;
+                        /** @default 0 */
+                        minSpendPence: number;
+                        /** Format: date-time */
+                        startsAt: string;
+                        /** Format: date-time */
+                        endsAt: string | null;
+                        maxUses: number | null;
+                        /** @default true */
+                        active: boolean;
+                        /** Format: uuid */
+                        id: string;
+                        uses: number;
+                        createdBy: string;
+                    }[];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PromotionsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    name: string;
+                    /** @description Empty for a promotion that applies by itself */
+                    code: string | null;
+                    /** @enum {string} */
+                    kind: "percent" | "amount" | "free_delivery";
+                    /** @description A percentage, or pence off */
+                    value: number;
+                    /** @default 0 */
+                    minSpendPence?: number;
+                    /** Format: date-time */
+                    startsAt: string;
+                    /** Format: date-time */
+                    endsAt: string | null;
+                    maxUses: number | null;
+                    /** @default true */
+                    active?: boolean;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        name: string;
+                        code: string | null;
+                        /** @enum {string} */
+                        kind: "percent" | "amount" | "free_delivery";
+                        /** @description A percentage, or pence off */
+                        value: number;
+                        /** @default 0 */
+                        minSpendPence: number;
+                        /** Format: date-time */
+                        startsAt: string;
+                        /** Format: date-time */
+                        endsAt: string | null;
+                        maxUses: number | null;
+                        /** @default true */
+                        active: boolean;
+                        /** Format: uuid */
+                        id: string;
+                        uses: number;
+                        createdBy: string;
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Something needs fixing, or the code is taken */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PromotionsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    name: string;
+                    /** @description Empty for a promotion that applies by itself */
+                    code: string | null;
+                    /** @enum {string} */
+                    kind: "percent" | "amount" | "free_delivery";
+                    /** @description A percentage, or pence off */
+                    value: number;
+                    /** @default 0 */
+                    minSpendPence?: number;
+                    /** Format: date-time */
+                    startsAt: string;
+                    /** Format: date-time */
+                    endsAt: string | null;
+                    maxUses: number | null;
+                    /** @default true */
+                    active?: boolean;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        name: string;
+                        code: string | null;
+                        /** @enum {string} */
+                        kind: "percent" | "amount" | "free_delivery";
+                        /** @description A percentage, or pence off */
+                        value: number;
+                        /** @default 0 */
+                        minSpendPence: number;
+                        /** Format: date-time */
+                        startsAt: string;
+                        /** Format: date-time */
+                        endsAt: string | null;
+                        maxUses: number | null;
+                        /** @default true */
+                        active: boolean;
+                        /** Format: uuid */
+                        id: string;
+                        uses: number;
+                        createdBy: string;
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No such promotion */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Something needs fixing, or the code is taken */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PromotionsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -3,6 +3,7 @@ import type { PlacedOrder } from '@/api-client';
 import { formatDay } from '@/lib/format';
 import { BasketLines } from './BasketLines';
 import styles from './Checkout.module.css';
+import { Totals } from './Totals';
 
 const vehicleLabels = {
   articulated: 'Articulated lorry',
@@ -61,6 +62,13 @@ export function OrderConfirmation({ order }: { order: PlacedOrder }) {
       </section>
 
       <BasketLines lines={order.lines} />
+      <Totals
+        itemTotal={order.itemTotal}
+        deliveryTotal={order.deliveryTotal}
+        discount={order.discount}
+        promotions={order.promotions}
+        total={order.total}
+      />
     </div>
   );
 }

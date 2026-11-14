@@ -3,7 +3,7 @@ import { SelectField } from '@/ui/SelectField/SelectField';
 import NextLink from 'next/link';
 import { staffStyles as styles } from '@/features/staff';
 import { saveContent } from '../actions';
-import { londonLabel } from '../london-time';
+import { londonLabel } from '@/lib/london-time';
 import type { ContentDocument, ContentRelease, ContentTypeInfo } from '../types';
 import { ContentFields } from './ContentFields';
 

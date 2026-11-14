@@ -20,6 +20,7 @@ export const FEEDBACK_FORMS = [
   'contact',
   'samples',
   'alert',
+  'promotion',
 ] as const;
 export type FeedbackForm = (typeof FEEDBACK_FORMS)[number];
 export type FormFeedback = Partial<Record<FeedbackForm, FormState>>;

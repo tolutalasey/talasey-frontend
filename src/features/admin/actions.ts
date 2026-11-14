@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { done, failed, lines, pence, staffApi, text, whole } from '@/features/staff';
 import { productFromForm } from './product-form';
+import { promotionFromForm } from './promotion-form';
 import { uploadPhoto } from './upload.server';
 
 const messageOf = (error: unknown) =>
@@ -222,4 +223,29 @@ export async function changeSampleOffer(form: FormData) {
   });
   if (error) failed(SAMPLES, messageOf(error));
   done(SAMPLES, form.get('intent') === 'start' ? 'Offered again.' : 'No longer offered.');
+}
+
+const PROMOTIONS = '/admin/promotions/';
+
+export async function savePromotion(form: FormData) {
+  const { promotion, problems } = promotionFromForm(form);
+  if (problems.length > 0) failed(PROMOTIONS, problems.join('\n'));
+  const api = await staffApi();
+  const promotionId = id(form);
+  const { error } = promotionId
+    ? await api.PUT('/admin/promotions/{id}', {
+        params: { path: { id: promotionId } },
+        body: promotion,
+      })
+    : await api.POST('/admin/promotions', { body: promotion });
+  if (error) failed(PROMOTIONS, messageOf(error));
+  done(PROMOTIONS, promotionId ? 'Promotion saved.' : `${promotion.name} added.`);
+}
+
+export async function deletePromotion(form: FormData) {
+  const { error } = await (
+    await staffApi()
+  ).DELETE('/admin/promotions/{id}', { params: { path: { id: id(form) } } });
+  if (error) failed(PROMOTIONS, messageOf(error));
+  done(PROMOTIONS, 'Promotion removed.');
 }

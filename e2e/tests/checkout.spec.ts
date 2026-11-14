@@ -78,6 +78,7 @@ test('a pallet order from basket to confirmation', async ({ page }) => {
   const booked = page.getByRole('region', { name: 'Delivery' });
   await expect(booked.getByRole('term').filter({ hasText: /^Day$/ })).toBeVisible();
   await expect(booked.getByRole('definition').filter({ hasText: 'Rigid lorry' })).toBeVisible();
+  await expect(page.getByRole('term').filter({ hasText: 'Total inc. VAT' })).toBeVisible();
   await expectNoAxeViolations(page);
 });
 

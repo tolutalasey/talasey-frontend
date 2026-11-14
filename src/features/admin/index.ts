@@ -10,6 +10,7 @@ export { OrderDetail } from './components/OrderDetail';
 export { OrderList } from './components/OrderList';
 export { ProductEditor } from './components/ProductEditor';
 export { ProductList } from './components/ProductList';
+export { PromotionsAdmin } from './components/PromotionsAdmin';
 export { SamplesAdmin } from './components/SamplesAdmin';
 export { SkuChecks } from './components/SkuChecks';
 export { StaffAccounts } from './components/StaffAccounts';
