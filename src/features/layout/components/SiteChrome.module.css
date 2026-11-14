@@ -51,6 +51,19 @@
   color: var(--color-brand600);
 }
 
+.iconLink {
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--target-min);
+  min-height: var(--target-min);
+  border-radius: 999px;
+  color: var(--color-ink);
+}
+
+.iconLink:hover {
+  background: var(--color-white);
+}
+
 .bag {
   position: relative;
   display: inline-flex;
@@ -144,6 +157,11 @@
 .navLink:hover,
 .menu > summary:hover {
   color: var(--color-ink);
+}
+
+.samplesLink,
+.samplesLink:hover {
+  color: var(--color-brand600);
 }
 
 .menu > summary {
@@ -375,6 +393,11 @@
   .action,
   .bagWord {
     display: inline;
+  }
+
+  .iconLink,
+  .samplesLink {
+    display: none;
   }
 
   .actions {

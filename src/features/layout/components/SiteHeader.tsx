@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { getRanges, rangePath } from '@/features/catalogue';
 import { getProjectPages, projectPath } from '@/features/content';
 import { SearchLauncher } from '@/features/search';
-import { ChevronIcon } from '@/ui/icons';
+import { AccountIcon, ChevronIcon } from '@/ui/icons';
 import { MenuBehaviour } from './MenuBehaviour';
 import { MenuPanel } from './MenuPanel';
 import styles from './SiteChrome.module.css';
@@ -39,11 +39,17 @@ export async function SiteHeader({ bag }: { bag: ReactNode }) {
           <NextLink href="/account/" className={styles.action}>
             Account
           </NextLink>
+          <NextLink href="/account/" className={styles.iconLink} aria-label="Your account">
+            <AccountIcon width={22} height={22} strokeWidth={1.6} />
+          </NextLink>
           {bag}
         </div>
       </div>
       <nav id="main-nav" aria-label="Main" className={styles.nav}>
         <MenuBehaviour navId="main-nav" />
+        <NextLink href="/samples/" className={`${styles.navLink} ${styles.samplesLink}`}>
+          Free samples
+        </NextLink>
         <details className={styles.menu} name="main-menu">
           <summary>
             Shop by product <ChevronIcon className={styles.chevron} width={12} height={12} />

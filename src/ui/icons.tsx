@@ -142,6 +142,13 @@ export const ArrowIcon = (props: IconProps) => (
   </Icon>
 );
 
+export const AccountIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4 21a8 8 0 0 1 16 0" />
+  </Icon>
+);
+
 export const BagIcon = (props: IconProps) => (
   <Icon {...props}>
     <path d="M5 8h14l-1.2 12H6.2zM9 8a3 3 0 0 1 6 0" />
