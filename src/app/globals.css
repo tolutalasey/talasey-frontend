@@ -282,3 +282,10 @@ main:focus {
     background-color var(--motion-fast) var(--motion-ease),
     color var(--motion-fast) var(--motion-ease);
 }
+
+/* Room at the bottom of the page for the phone Add to bag bar, so it never covers the footer. */
+@media (max-width: 47.99rem) {
+  body:has([data-buy-bar]) {
+    padding-bottom: 5.5rem;
+  }
+}

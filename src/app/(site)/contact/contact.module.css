@@ -1,9 +1,57 @@
 .page {
-  padding-block: var(--space-8) var(--space-16);
+  padding-block: var(--space-6) var(--space-12);
+}
+
+.layout {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
 }
 
 .intro {
-  max-width: var(--layout-measure);
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  padding: var(--space-8) var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--color-brand950);
+  color: var(--color-stone-muted);
+}
+
+.intro > * {
+  margin: 0;
+}
+
+.intro :global(.eyebrow) {
+  color: var(--color-stone-muted);
+}
+
+.intro h1 {
+  color: var(--color-stone);
+  font-weight: 350;
+}
+
+.intro p:not(:global(.eyebrow)) {
   font-size: 1.125rem;
-  color: var(--color-ink-muted);
+}
+
+.formFrame {
+  padding: var(--space-8) var(--space-6);
+}
+
+@media (min-width: 64rem) {
+  .layout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+  }
+
+  .intro {
+    position: sticky;
+    top: var(--space-4);
+    padding: var(--space-12);
+  }
+
+  .formFrame {
+    padding: var(--space-12);
+  }
 }

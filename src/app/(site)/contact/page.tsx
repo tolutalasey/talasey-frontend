@@ -29,11 +29,16 @@ export default async function Contact({ searchParams }: Props) {
           { name: 'Contact us', path: '/contact/' },
         ]}
       />
-      <h1>Contact us</h1>
-      <p className={styles.intro}>
-        Ask a question, request free samples or a quote, or send photos of your project.
-      </p>
-      <ContactForm topic={topic} initialState={feedback.contact} />
+      <div className={styles.layout}>
+        <header className={styles.intro}>
+          <p className="eyebrow">Help from our team</p>
+          <h1>Contact us</h1>
+          <p>Ask a question, request free samples or a quote, or send photos of your project.</p>
+        </header>
+        <div className={`frame ${styles.formFrame}`}>
+          <ContactForm topic={topic} initialState={feedback.contact} />
+        </div>
+      </div>
     </article>
   );
 }

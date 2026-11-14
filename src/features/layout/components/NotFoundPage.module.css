@@ -1,5 +1,9 @@
 .notFound {
-  padding-block: var(--space-16);
+  max-width: 48rem;
+  margin-block: var(--space-8);
+  padding: var(--space-12) var(--space-8);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
 }
 
 .links {

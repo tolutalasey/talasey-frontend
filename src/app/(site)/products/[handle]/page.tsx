@@ -11,6 +11,7 @@ import {
   productPath,
   productStructuredData,
 } from '@/features/product';
+import { formatPrice } from '@/lib/format';
 import { readFeedback } from '@/lib/form-feedback.server';
 import { JsonLd } from '@/lib/JsonLd';
 import { pageMetadata } from '@/lib/seo';
@@ -83,6 +84,14 @@ export default async function Product({ params, searchParams }: Props) {
             extras={extras}
             coverageM2={pricing?.coverageM2}
             initialState={feedback.basket}
+            bar={
+              pricing
+                ? {
+                    title: product.title,
+                    price: `${formatPrice(pricing.perPack)}${pricing.coverageM2 ? ' per pack' : ''}`,
+                  }
+                : undefined
+            }
           />
         )}
         {outOfStock && variant && (

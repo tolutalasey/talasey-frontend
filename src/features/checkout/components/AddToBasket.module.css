@@ -129,3 +129,71 @@
 .extra:hover {
   border-color: var(--color-ink);
 }
+
+/* Phones only: the product and an Add to bag button kept at the bottom of the screen. */
+.bar {
+  position: fixed;
+  inset: auto var(--space-2) var(--space-2);
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+  box-shadow: 0 -2px 24px rgb(42 40 44 / 0.16);
+  transition:
+    translate var(--motion-medium) var(--motion-ease),
+    opacity var(--motion-medium) var(--motion-ease);
+}
+
+.bar[data-hidden] {
+  translate: 0 calc(100% + var(--space-4));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.barText {
+  display: grid;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--font-size-small);
+}
+
+.barTitle {
+  overflow: hidden;
+  color: var(--color-ink-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barButton {
+  flex: none;
+  min-height: 3rem;
+  padding: 0 var(--space-6);
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-brand950);
+  color: var(--color-stone);
+  font: inherit;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.barButton:hover {
+  background: var(--color-brand600);
+  color: var(--color-white);
+}
+
+.barButton:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+@media (min-width: 48rem) {
+  .bar {
+    display: none;
+  }
+}

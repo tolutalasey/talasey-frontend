@@ -10,11 +10,16 @@ export const metadata: Metadata = {
 export default function ContactThanks() {
   return (
     <section className={`container ${styles.page}`}>
-      <h1>Thank you, we&rsquo;ve got your message</h1>
-      <p className={styles.intro}>We&rsquo;ll reply by email.</p>
-      <p>
-        <NextLink href="/">Back to the homepage</NextLink>
-      </p>
+      <div className={styles.intro}>
+        <p className="eyebrow">Contact us</p>
+        <h1>Thank you, we&rsquo;ve got your message</h1>
+        <p>We&rsquo;ll reply by email within one working day.</p>
+        <p>
+          <NextLink href="/" className="button-on-dark">
+            Back to the homepage
+          </NextLink>
+        </p>
+      </div>
     </section>
   );
 }

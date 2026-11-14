@@ -3,7 +3,7 @@
 import { Button } from '@/ui/Button/Button';
 import { Form } from '@/ui/Form/Form';
 import { TextField } from '@/ui/TextField/TextField';
-import { useActionState } from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import { addToBasket } from '../actions';
 import type { FormState } from '../forms';
 import styles from './AddToBasket.module.css';
@@ -36,6 +36,22 @@ export interface AddToBasketProps {
   coverageM2?: number | null;
   wastagePercent?: number;
   initialState?: FormState;
+  // On phones, a bar at the bottom of the screen with this name and price and its own button.
+  bar?: { title: string; price: string };
+}
+
+// Hidden while the form's own button is on screen, so the two never show at once.
+function useOutOfView() {
+  const target = useRef<HTMLDivElement>(null);
+  const [out, setOut] = useState(true);
+  useEffect(() => {
+    const element = target.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(([entry]) => setOut(!entry?.isIntersecting));
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+  return [target, out] as const;
 }
 
 // Swatches are plain radio buttons, so the colour can be chosen without JavaScript.
@@ -105,45 +121,65 @@ export function AddToBasket({
   coverageM2,
   wastagePercent = 0,
   initialState = {},
+  bar,
 }: AddToBasketProps) {
   const [state, action, pending] = useActionState<FormState, FormData>(addToBasket, initialState);
+  const [buttonArea, buttonOutOfView] = useOutOfView();
 
   return (
-    <Form action={action} validationErrors={state.fieldErrors} className={styles.form}>
-      <input type="hidden" name="variantId" value={variantId ?? ''} />
-      {colours && colours.options.length > 0 && (
-        <ColourSwatches {...colours} error={state.fieldErrors?.colourId} />
-      )}
-      <div className={styles.amount}>
-        <TextField
-          label={coverageM2 ? 'Packs' : 'Quantity'}
-          name="quantity"
-          type="number"
-          inputMode="numeric"
-          defaultValue={state.values?.quantity ?? '1'}
-          isRequired
-        />
-        {coverageM2 && (
-          <>
-            <TextField
-              label="Or the area to cover (m²)"
-              name="area"
-              inputMode="decimal"
-              defaultValue={state.values?.area ?? ''}
-              description={`We round up to whole packs of ${coverageM2} m²${wastagePercent ? `, with ${wastagePercent}% extra for cuts` : ''}.`}
-            />
-            <input type="hidden" name="coverage" value={coverageM2} />
-            <input type="hidden" name="wastage" value={wastagePercent} />
-          </>
+    <>
+      <Form
+        id="add-to-bag"
+        action={action}
+        validationErrors={state.fieldErrors}
+        className={styles.form}
+      >
+        <input type="hidden" name="variantId" value={variantId ?? ''} />
+        {colours && colours.options.length > 0 && (
+          <ColourSwatches {...colours} error={state.fieldErrors?.colourId} />
         )}
-      </div>
-      {extras.length > 0 && <Extras extras={extras} />}
-      <FormMessage message={state.message} />
-      <div>
-        <Button type="submit" isPending={pending} isDisabled={!variantId} className={styles.add}>
-          Add to bag
-        </Button>
-      </div>
-    </Form>
+        <div className={styles.amount}>
+          <TextField
+            label={coverageM2 ? 'Packs' : 'Quantity'}
+            name="quantity"
+            type="number"
+            inputMode="numeric"
+            defaultValue={state.values?.quantity ?? '1'}
+            isRequired
+          />
+          {coverageM2 && (
+            <>
+              <TextField
+                label="Or the area to cover (m²)"
+                name="area"
+                inputMode="decimal"
+                defaultValue={state.values?.area ?? ''}
+                description={`We round up to whole packs of ${coverageM2} m²${wastagePercent ? `, with ${wastagePercent}% extra for cuts` : ''}.`}
+              />
+              <input type="hidden" name="coverage" value={coverageM2} />
+              <input type="hidden" name="wastage" value={wastagePercent} />
+            </>
+          )}
+        </div>
+        {extras.length > 0 && <Extras extras={extras} />}
+        <FormMessage message={state.message} />
+        <div ref={buttonArea}>
+          <Button type="submit" isPending={pending} isDisabled={!variantId} className={styles.add}>
+            Add to bag
+          </Button>
+        </div>
+      </Form>
+      {bar && variantId && (
+        <div className={styles.bar} data-buy-bar="" data-hidden={!buttonOutOfView || undefined}>
+          <p className={styles.barText}>
+            <span className={styles.barTitle}>{bar.title}</span>
+            <strong>{bar.price}</strong>
+          </p>
+          <button type="submit" form="add-to-bag" className={styles.barButton} disabled={pending}>
+            Add to bag
+          </button>
+        </div>
+      )}
+    </>
   );
 }
