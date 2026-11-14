@@ -35,6 +35,9 @@ export async function SiteHeader({ bag }: { bag: ReactNode }) {
           <NextLink href="/help/" className={styles.action}>
             Help
           </NextLink>
+          <NextLink href="/account/" className={styles.action}>
+            Account
+          </NextLink>
           {bag}
         </div>
       </div>

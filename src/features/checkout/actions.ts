@@ -181,3 +181,25 @@ export async function undoRemove(form: FormData) {
   }
   refresh();
 }
+
+// "Buy again" from the account page: each line arrives as variantId:quantity. Lines that can no
+// longer be bought are skipped. How many were added goes in the address, because the bag page
+// rendered after this redirect cannot see a cookie set here.
+export async function buyAgain(form: FormData) {
+  const items = form.getAll('item').flatMap((value) => {
+    const [variantId, count] = String(value).split(':');
+    const quantity = Number(count);
+    return variantId && Number.isInteger(quantity) && quantity > 0 ? [{ variantId, quantity }] : [];
+  });
+  const client = getBasketClient();
+  let basketId = await currentBasketId();
+  if (!basketId) {
+    basketId = (await client.create()).id;
+    await rememberBasket(basketId);
+  }
+  let added = 0;
+  for (const item of items) {
+    if ((await client.addItem(basketId, item.variantId, item.quantity)).ok) added += 1;
+  }
+  redirect(`/basket/?again=${added}-${items.length}`);
+}

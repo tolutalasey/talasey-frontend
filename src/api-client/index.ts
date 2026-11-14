@@ -26,6 +26,12 @@ export {
   type Shipment,
   type VehicleAccess,
 } from './basket';
+export {
+  createAccountClient,
+  type Account,
+  type AccountClient,
+  type AccountOrder,
+} from './account';
 export { createCatalog, type Catalog } from './catalog';
 export { createContentClient, type ContentClient } from './content';
 export {

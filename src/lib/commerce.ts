@@ -1,9 +1,11 @@
 import 'server-only';
 import {
+  createAccountClient,
   createBasketClient,
   createCatalog,
   createContentClient,
   createSamplesClient,
+  type AccountClient,
   type BasketClient,
   type Catalog,
   type ContentClient,
@@ -18,6 +20,7 @@ let catalog: Catalog | undefined;
 let basketClient: BasketClient | undefined;
 let contentClient: ContentClient | undefined;
 let samplesClient: SamplesClient | undefined;
+let accountClient: AccountClient | undefined;
 
 export function getCatalog(): Catalog {
   catalog ??= createCatalog({ baseUrl: apiUrl() });
@@ -32,6 +35,11 @@ export function getBasketClient(): BasketClient {
 export function getContentClient(): ContentClient {
   contentClient ??= createContentClient({ baseUrl: apiUrl() });
   return contentClient;
+}
+
+export function getAccountClient(): AccountClient {
+  accountClient ??= createAccountClient({ baseUrl: apiUrl() });
+  return accountClient;
 }
 
 export function getSamplesClient(): SamplesClient {
