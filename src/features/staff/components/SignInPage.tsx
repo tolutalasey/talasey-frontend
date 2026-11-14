@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Button } from '@/ui/Button/Button';
 import { TextField } from '@/ui/TextField/TextField';
 import { signIn, signInWithCode } from '../actions';
@@ -16,9 +17,17 @@ interface Props {
 export function SignInPage({ area, title, next, error, step }: Props) {
   const askForCode = step === 'code';
   return (
-    <main id="main" className={styles.shell}>
+    <main id="main" className={styles.signInPage}>
       <form action={askForCode ? signInWithCode : signIn} className={styles.signIn}>
-        <h1>{title}</h1>
+        <Image
+          className={styles.signInLogo}
+          src="/images/brand/talasey-logo.png"
+          alt=""
+          width={900}
+          height={212}
+          priority
+        />
+        <h1 className={styles.signInTitle}>{title}</h1>
         <Notice error={error} />
         <input type="hidden" name="area" value={area} />
         {next && <input type="hidden" name="next" value={next} />}
