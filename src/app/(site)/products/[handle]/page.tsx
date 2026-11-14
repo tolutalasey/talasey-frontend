@@ -6,6 +6,7 @@ import {
   getProductView,
   ProductPage,
   productDescription,
+  StockAlertForm,
   productPath,
   productStructuredData,
 } from '@/features/product';
@@ -40,7 +41,8 @@ export default async function Product({ params, searchParams }: Props) {
     readFeedback(),
   ]);
   if (!view) notFound();
-  const { product, variant, colours, extras, pricing } = view;
+  const { product, variant, colours, extras, pricing, stock } = view;
+  const outOfStock = Boolean(variant?.priceIncVat) && stock.level === 'out-of-stock';
 
   return (
     <>
@@ -56,6 +58,9 @@ export default async function Product({ params, searchParams }: Props) {
             coverageM2={pricing?.coverageM2}
             initialState={feedback.basket}
           />
+        )}
+        {outOfStock && variant && (
+          <StockAlertForm key={variant.id} variantId={variant.id} feedback={feedback.alert} />
         )}
       </ProductPage>
       {productStructuredData(product, variant).map((data) => (

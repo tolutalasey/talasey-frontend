@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 export interface FormState {
   message?: string;
+  // A confirmation to show instead of the form, such as "We'll email you".
+  notice?: string;
   fieldErrors?: Record<string, string>;
   // What was typed, so a page rendered without JavaScript can put it back in the fields.
   values?: Record<string, string>;
@@ -17,6 +19,7 @@ export const FEEDBACK_FORMS = [
   'order',
   'contact',
   'samples',
+  'alert',
 ] as const;
 export type FeedbackForm = (typeof FEEDBACK_FORMS)[number];
 export type FormFeedback = Partial<Record<FeedbackForm, FormState>>;
@@ -27,12 +30,14 @@ const feedbackSchema = z.object({
   form: z.enum(FEEDBACK_FORMS),
   state: z.object({
     message: z.string().optional(),
+    notice: z.string().optional(),
     fieldErrors: text.optional(),
     values: text.optional(),
   }),
 });
 
-export const hasProblem = (state: FormState) => Boolean(state.message || state.fieldErrors);
+export const hasFeedback = (state: FormState) =>
+  Boolean(state.message || state.fieldErrors || state.notice);
 
 export const serialiseFeedback = (form: FeedbackForm, state: FormState) =>
   JSON.stringify({ form, state });

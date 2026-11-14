@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { env } from './env';
 import { FEEDBACK_COOKIE } from './feedback-cookie';
 import {
-  hasProblem,
+  hasFeedback,
   parseFeedback,
   serialiseFeedback,
   type FeedbackForm,
@@ -14,7 +14,7 @@ import {
 // Hands a form's result back to the page as well as to the form, so it shows without JavaScript.
 export async function settle(form: FeedbackForm, state: FormState): Promise<FormState> {
   const store = await cookies();
-  if (!hasProblem(state)) {
+  if (!hasFeedback(state)) {
     store.delete(FEEDBACK_COOKIE);
     return state;
   }

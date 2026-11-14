@@ -1172,6 +1172,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/store/stock-alerts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["StockAlertsController_ask"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -6576,6 +6592,47 @@ export interface operations {
                 content?: never;
             };
             /** @description No such request, or it was already sent */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    StockAlertsController_ask: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    variantId: string;
+                    /** Format: email */
+                    email: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description waiting: we will email; available: it can be bought now
+                         * @enum {string}
+                         */
+                        status: "waiting" | "available";
+                    };
+                };
+            };
+            /** @description No such option on sale */
             404: {
                 headers: {
                     [name: string]: unknown;
