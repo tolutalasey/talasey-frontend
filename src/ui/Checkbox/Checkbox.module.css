@@ -69,3 +69,7 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+.checkbox:hover {
+  color: var(--color-brand800);
+}

@@ -14,3 +14,7 @@
   outline: var(--focus-ring-width) solid var(--focus-ring-color-on-dark);
   outline-offset: var(--focus-ring-offset);
 }
+
+.button:hover {
+  text-decoration-thickness: 2px;
+}

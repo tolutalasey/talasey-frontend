@@ -20,6 +20,8 @@ export interface RadioGroupProps extends Omit<
   label: string;
   description?: string;
   errorMessage?: string;
+  // Cards lay short options out in a grid, such as delivery days.
+  layout?: 'list' | 'cards';
   children: ReactNode;
 }
 
@@ -27,6 +29,7 @@ export function RadioGroup({
   label,
   description,
   errorMessage,
+  layout = 'list',
   children,
   ...props
 }: RadioGroupProps) {
@@ -38,7 +41,7 @@ export function RadioGroup({
           {description}
         </Text>
       )}
-      <div className={styles.options}>{children}</div>
+      <div className={layout === 'cards' ? styles.cards : styles.options}>{children}</div>
       <FieldError className={fieldStyles.error}>{errorMessage}</FieldError>
     </AriaRadioGroup>
   );

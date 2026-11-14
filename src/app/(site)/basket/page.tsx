@@ -10,5 +10,11 @@ export const instant = false;
 
 export default async function BasketPage() {
   const [view, feedback] = await Promise.all([getBasketView(), readFeedback()]);
-  return <BasketSummary view={view} promotionFeedback={feedback.promotion} />;
+  return (
+    <BasketSummary
+      view={view}
+      promotionFeedback={feedback.promotion}
+      linesFeedback={feedback.lines}
+    />
+  );
 }

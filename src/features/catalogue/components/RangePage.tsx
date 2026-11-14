@@ -27,8 +27,8 @@ const gbp = (amount: number) => formatPrice({ amount, currencyCode: 'GBP' });
 
 function priceLine({ priceRange }: RangeListing): string | null {
   if (!priceRange) return null;
-  if (priceRange.min === priceRange.max) return `${gbp(priceRange.min)} inc. VAT`;
-  return `From ${gbp(priceRange.min)} to ${gbp(priceRange.max)} inc. VAT`;
+  if (priceRange.min === priceRange.max) return `Prices: ${gbp(priceRange.min)} inc. VAT`;
+  return `Prices from ${gbp(priceRange.min)} to ${gbp(priceRange.max)} inc. VAT`;
 }
 
 const productCount = (count: number) => `${count} ${count === 1 ? 'product' : 'products'}`;

@@ -6,9 +6,11 @@ import type {
   DeliveryOption,
   PlacedOrder,
 } from '@/api-client';
-import { getBasketClient } from '@/lib/commerce';
+import { getBasketClient, getCatalog } from '@/lib/commerce';
 import { env } from '@/lib/env';
 import { paymentMode } from '@/lib/payment';
+import { cacheLife, cacheTag } from 'next/cache';
+import { cacheTags } from '@/lib/cache-tags';
 import { readBasketId } from './basket-cookie.server';
 import type { FormFeedback } from '@/lib/form-feedback';
 import { readFeedback } from '@/lib/form-feedback.server';
@@ -17,6 +19,7 @@ import { loadPaymentView, type PaymentView } from './payment-view';
 export interface BasketView {
   basket: Basket;
   stock: Record<string, string>;
+  pictures: Record<string, { src: string; alt: string }>;
 }
 
 export interface CheckoutView {
@@ -32,14 +35,32 @@ export async function getBasket(): Promise<Basket | null> {
   return id ? getBasketClient().find(id) : null;
 }
 
+async function firstPicture(handle: string) {
+  'use cache';
+  cacheTag(cacheTags.products, cacheTags.product(handle));
+  cacheLife('hours');
+
+  const product = await getCatalog().getProductByHandle(handle);
+  const image = product?.images?.[0];
+  return image ? { src: image.url, alt: '' } : null;
+}
+
 export async function getBasketView(): Promise<BasketView | null> {
   const basket = await getBasket();
   if (!basket || basket.lines.length === 0) return null;
 
-  const stock = await getBasketClient().stock(basket.id);
+  const handles = [...new Set(basket.lines.flatMap((line) => (line.handle ? [line.handle] : [])))];
+  const [stock, products] = await Promise.all([
+    getBasketClient().stock(basket.id),
+    Promise.all(handles.map((handle) => firstPicture(handle).catch(() => null))),
+  ]);
+  const pictures = Object.fromEntries(
+    products.flatMap((picture, index) => (picture ? [[handles[index], picture]] : [])),
+  );
   return {
     basket,
     stock: Object.fromEntries(stock.map((line) => [line.lineId, line.label])),
+    pictures,
   };
 }
 

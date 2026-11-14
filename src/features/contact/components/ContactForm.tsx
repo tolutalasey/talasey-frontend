@@ -3,6 +3,7 @@
 import { Button } from '@/ui/Button/Button';
 import { Form } from '@/ui/Form/Form';
 import { TextField } from '@/ui/TextField/TextField';
+import { useFocusFirstError } from '@/ui/Form/useFocusFirstError';
 import { useActionState } from 'react';
 import type { FormState } from '@/lib/form-feedback';
 import { sendEnquiry } from '../actions';
@@ -26,9 +27,18 @@ export function ContactForm({ topic, initialState = {} }: ContactFormProps) {
   const [state, action, pending] = useActionState<FormState, FormData>(sendEnquiry, initialState);
   const errors = state.fieldErrors ?? {};
   const values = state.values ?? {};
+  useFocusFirstError('contact-form', state.fieldErrors);
 
   return (
-    <Form action={action} validationErrors={errors} className={styles.form}>
+    // The server checks every field and says exactly what to fix; the browser's own "Please fill
+    // in this field" bubbles would hide those messages.
+    <Form
+      id="contact-form"
+      action={action}
+      validationErrors={errors}
+      validationBehavior="aria"
+      className={styles.form}
+    >
       <TextField
         label="Your name"
         name="name"
@@ -83,8 +93,7 @@ export function ContactForm({ topic, initialState = {} }: ContactFormProps) {
           id="message"
           name="message"
           rows={6}
-          required
-          minLength={10}
+          aria-required="true"
           maxLength={3000}
           defaultValue={values.message}
           className={styles.input}

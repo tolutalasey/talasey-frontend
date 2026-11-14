@@ -26,8 +26,10 @@ test('paving shows the price per pack and per m², and works out packs from an a
   await page.getByRole('button', { name: 'Add to basket' }).click();
 
   await expect(page).toHaveURL(/\/basket\/$/);
-  const items = page.getByRole('table', { name: 'Items' });
-  await expect(items.getByRole('row', { name: /Silver grey porcelain paving/ })).toContainText('3');
+  const items = page.getByRole('list', { name: 'Items in your basket' });
+  await expect(
+    items.getByRole('listitem').filter({ hasText: 'Silver grey porcelain paving' }),
+  ).toContainText('3');
   await expect(items).toContainText('Pavetuf jointing compound');
 });
 
@@ -46,7 +48,9 @@ test('a 1B screen asks for a powder coat colour only for the powder-coated finis
   await colours.getByText('Jet black (RAL 9005)').click();
   await page.getByRole('button', { name: 'Add to basket' }).click();
   await expect(page).toHaveURL(/\/basket\/$/);
-  await expect(page.getByRole('table', { name: 'Items' })).toContainText('Jet black (RAL 9005)');
+  await expect(page.getByRole('list', { name: 'Items in your basket' })).toContainText(
+    'Jet black (RAL 9005)',
+  );
 });
 
 test('?colour= opens a colour set on that colour', async ({ page }) => {
@@ -78,6 +82,8 @@ test.describe('without JavaScript', () => {
     await expect(page.getByTestId('product-price')).not.toHaveText('Price on request');
     await page.getByRole('button', { name: 'Add to basket' }).click();
     await expect(page).toHaveURL(/\/basket\/$/);
-    await expect(page.getByRole('table', { name: 'Items' })).toContainText('Galvanised Steel');
+    await expect(page.getByRole('list', { name: 'Items in your basket' })).toContainText(
+      'Galvanised Steel',
+    );
   });
 });

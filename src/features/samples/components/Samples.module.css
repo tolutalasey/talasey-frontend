@@ -184,3 +184,7 @@
   padding: 0;
   list-style: none;
 }
+
+.secondary:hover {
+  background: var(--color-brand50);
+}

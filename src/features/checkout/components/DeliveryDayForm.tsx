@@ -25,6 +25,7 @@ export function DeliveryDayForm({ days, chosen, initialState = {} }: Props) {
       <RadioGroup
         label="Delivery day"
         name="date"
+        layout="cards"
         description="We hold the day for you while you finish your order."
         defaultValue={chosen ?? undefined}
         isRequired

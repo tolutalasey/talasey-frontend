@@ -94,7 +94,9 @@ test('3 to 6. postcode to delivery day, lorry access, test payment, and the orde
       .first();
     await choose(day);
     await page.getByRole('button', { name: 'Hold this day' }).click();
-    await expect(page.getByRole('status').filter({ hasText: 'Held for you' })).toBeVisible();
+    await expect(
+      page.getByRole('region', { name: /Delivery day/ }).getByText(/^Held for you: [^.]+$/),
+    ).toBeVisible();
   });
 
   await test.step('4. the lorry access questions must be answered', async () => {

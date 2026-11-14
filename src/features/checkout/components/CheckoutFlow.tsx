@@ -1,32 +1,74 @@
-import { PageBreadcrumbs } from '@/features/layout';
-import type { Basket } from '@/api-client';
 import NextLink from 'next/link';
 import type { ReactNode } from 'react';
+import type { Basket } from '@/api-client';
+import { PageBreadcrumbs } from '@/features/layout';
 import { formatDay, formatPrice } from '@/lib/format';
+import { hasFeedback } from '@/lib/form-feedback';
+import { CheckIcon } from '@/ui/icons';
 import type { CheckoutView } from '../loaders.server';
 import { AccessForm } from './AccessForm';
 import { BasketLines } from './BasketLines';
-import styles from './Checkout.module.css';
 import { DeliveryDayForm } from './DeliveryDayForm';
 import { DeliveryDetailsForm } from './DeliveryDetailsForm';
 import { DeliveryOptionForm } from './DeliveryOptionForm';
 import { PaymentStep } from './PaymentStep';
+import { Totals } from './Totals';
+import styles from './Checkout.module.css';
 
 const CHECKOUT_TRAIL = [
   { name: 'Home', path: '/' },
   { name: 'Basket', path: '/basket/' },
   { name: 'Checkout', path: '/checkout/' },
 ];
-import { Totals } from './Totals';
 
-function Step({ id, title, children }: { id: string; title: string; children: ReactNode }) {
+interface StepProps {
+  id: string;
+  number: number;
+  title: string;
+  // What was chosen, once the step is done. A done step folds away behind it.
+  done?: string | null;
+  // A done step opens again when its form came back with something to fix.
+  open?: boolean;
+  children: ReactNode;
+}
+
+function Step({ id, number, title, done, open, children }: StepProps) {
+  const heading = (
+    <span className={styles.stepHead}>
+      <span className={styles.number} aria-hidden="true">
+        {done ? <CheckIcon /> : number}
+      </span>
+      <span className={styles.stepTitle}>
+        <VisuallyNumbered number={number} />
+        {title}
+      </span>
+    </span>
+  );
+  if (!done) {
+    return (
+      <section aria-labelledby={id} className={`${styles.step} ${styles.current}`}>
+        <h2 id={id}>{heading}</h2>
+        <div className={styles.stepBody}>{children}</div>
+      </section>
+    );
+  }
   return (
     <section aria-labelledby={id} className={styles.step}>
-      <h2 id={id}>{title}</h2>
-      {children}
+      <details className={styles.done} open={open}>
+        <summary>
+          <h2 id={id}>{heading}</h2>
+          <span className={styles.chosen}>{done}</span>
+          <span className={styles.change}>Change</span>
+        </summary>
+        <div className={styles.stepBody}>{children}</div>
+      </details>
     </section>
   );
 }
+
+const VisuallyNumbered = ({ number }: { number: number }) => (
+  <span className={styles.hiddenNumber}>Step {number}: </span>
+);
 
 function DeliveryDays({ view }: { view: CheckoutView }) {
   const { days, basket } = view;
@@ -49,7 +91,10 @@ function DeliveryDays({ view }: { view: CheckoutView }) {
 function OrderSummary({ basket }: { basket: Basket }) {
   return (
     <aside aria-labelledby="summary" className={styles.summary}>
-      <h2 id="summary">Your order</h2>
+      <div className={styles.summaryHead}>
+        <h2 id="summary">Your order</h2>
+        <NextLink href="/basket/">Edit basket</NextLink>
+      </div>
       <BasketLines lines={basket.lines} />
       <Totals
         itemTotal={basket.itemTotal}
@@ -62,6 +107,15 @@ function OrderSummary({ basket }: { basket: Basket }) {
   );
 }
 
+const addressLine = (basket: Basket) =>
+  basket.address &&
+  [
+    `${basket.address.firstName} ${basket.address.lastName}`,
+    basket.address.address1,
+    basket.address.city,
+    basket.address.postcode,
+  ].join(', ');
+
 export function CheckoutFlow({ view }: { view: CheckoutView | null }) {
   if (!view) {
     return (
@@ -69,62 +123,104 @@ export function CheckoutFlow({ view }: { view: CheckoutView | null }) {
         <PageBreadcrumbs items={CHECKOUT_TRAIL} />
         <h1>Checkout</h1>
         <p>Your basket is empty.</p>
-        <NextLink href="/">Carry on shopping</NextLink>
+        <NextLink href="/" className="button">
+          Carry on shopping
+        </NextLink>
       </div>
     );
   }
 
   const { basket, options, payment, feedback } = view;
-  const pallet = basket.delivery.shipment === 'pallet';
+  const { delivery } = basket;
+  const pallet = delivery.shipment === 'pallet';
+  const option = options?.find((choice) => choice.shipment === delivery.shipment);
+  const deliveryDone =
+    option && (option.price ? `${option.name}, ${formatPrice(option.price)}` : option.name);
+  const dayDone = pallet && delivery.day ? `Held for you: ${formatDay(delivery.day.date)}` : null;
+  const accessDone = pallet && delivery.access ? 'Answered' : null;
 
   return (
     <div className={`container ${styles.page} ${styles.checkout}`}>
       <PageBreadcrumbs items={CHECKOUT_TRAIL} />
       <h1>Checkout</h1>
-      <div className={styles.steps}>
-        <Step id="details" title="1. Delivery address">
-          <DeliveryDetailsForm
-            email={basket.email}
-            address={basket.address}
-            initialState={feedback.details}
-          />
-        </Step>
-
-        {options && (
-          <Step id="delivery" title="2. Delivery">
-            <DeliveryOptionForm
-              chosen={basket.delivery.shipment}
-              initialState={feedback.delivery}
-              options={options.map((option) => ({
-                ...option,
-                price: option.price && formatPrice(option.price),
-              }))}
+      <ol className={styles.steps}>
+        <li>
+          <Step
+            id="details"
+            number={1}
+            title="Delivery address"
+            done={addressLine(basket)}
+            open={hasFeedback(feedback.details ?? {})}
+          >
+            <DeliveryDetailsForm
+              email={basket.email}
+              address={basket.address}
+              initialState={feedback.details}
             />
           </Step>
+        </li>
+
+        {options && (
+          <li>
+            <Step
+              id="delivery"
+              number={2}
+              title="Delivery"
+              done={deliveryDone}
+              open={hasFeedback(feedback.delivery ?? {})}
+            >
+              <DeliveryOptionForm
+                chosen={delivery.shipment}
+                initialState={feedback.delivery}
+                options={options.map((choice) => ({
+                  ...choice,
+                  price: choice.price && formatPrice(choice.price),
+                }))}
+              />
+            </Step>
+          </li>
         )}
 
         {pallet && (
-          <Step id="day" title="3. Delivery day">
-            <DeliveryDays view={view} />
-          </Step>
+          <li>
+            <Step
+              id="day"
+              number={3}
+              title="Delivery day"
+              done={dayDone}
+              open={hasFeedback(feedback.day ?? {})}
+            >
+              <DeliveryDays view={view} />
+            </Step>
+          </li>
         )}
 
-        {pallet && basket.delivery.day && (
-          <Step id="access" title="4. Access for the lorry">
-            <AccessForm answers={basket.delivery.access} initialState={feedback.access} />
-          </Step>
+        {pallet && delivery.day && (
+          <li>
+            <Step
+              id="access"
+              number={4}
+              title="Access for the lorry"
+              done={accessDone}
+              open={hasFeedback(feedback.access ?? {})}
+            >
+              <AccessForm answers={delivery.access} initialState={feedback.access} />
+            </Step>
+          </li>
         )}
 
         {payment && (
-          <Step id="payment" title={pallet ? '5. Payment' : '3. Payment'}>
-            <PaymentStep
-              payment={payment}
-              total={formatPrice(basket.total)}
-              initialState={feedback.order}
-            />
-          </Step>
+          <li>
+            <Step id="payment" number={pallet ? 5 : 3} title="Payment">
+              <PaymentStep
+                payment={payment}
+                total={formatPrice(basket.total)}
+                initialState={feedback.order}
+              />
+            </Step>
+          </li>
         )}
-      </div>
+      </ol>
       <OrderSummary basket={basket} />
     </div>
   );

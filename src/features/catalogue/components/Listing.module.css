@@ -218,3 +218,15 @@ form[data-apply-on-change] .apply {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+.summary:hover {
+  background: var(--color-brand50);
+}
+
+.option:hover {
+  color: var(--color-brand600);
+}
+
+.apply:hover {
+  background: var(--color-brand800);
+}

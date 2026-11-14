@@ -16,16 +16,20 @@ export function SearchLauncher() {
   );
 
   const [typed, setTyped] = useState('');
+  const [hadFocus, setHadFocus] = useState(false);
 
+  // Hovering only fetches the code early. Focus moves to the new box only if the visitor was
+  // already in the field, so a passing mouse never takes the keyboard away from them.
   const load = () => {
     if (Search) return;
     void import('./HeaderSearch').then((module) => {
       setTyped(input.current?.value ?? '');
+      setHadFocus(document.activeElement === input.current);
       setSearch(() => module.HeaderSearch);
     });
   };
 
-  if (Search) return <Search defaultQuery={typed} autoFocus />;
+  if (Search) return <Search defaultQuery={typed} autoFocus={hadFocus} />;
 
   return (
     <form role="search" action="/search/" method="get" className={styles.search}>

@@ -56,3 +56,7 @@
 .optionCount {
   color: var(--color-ink-muted);
 }
+
+.trigger:hover {
+  color: var(--color-brand600);
+}

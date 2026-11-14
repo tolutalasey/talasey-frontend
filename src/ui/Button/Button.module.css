@@ -13,7 +13,12 @@
   cursor: pointer;
   transition:
     background-color 120ms ease-out,
-    border-color 120ms ease-out;
+    border-color 120ms ease-out,
+    translate 120ms ease-out;
+}
+
+.button[data-pressed] {
+  translate: 0 1px;
 }
 
 .button[data-focus-visible] {
@@ -31,6 +36,7 @@
   color: var(--color-white);
 }
 
+.primary:hover,
 .primary[data-hovered],
 .primary[data-pressed] {
   background: var(--color-brand800);
@@ -42,6 +48,7 @@
   color: var(--color-brand600);
 }
 
+.secondary:hover,
 .secondary[data-hovered],
 .secondary[data-pressed] {
   background: var(--color-brand50);

@@ -24,6 +24,8 @@ export interface LineColour {
 
 export interface BasketLine {
   id: string;
+  handle: string | null;
+  variantId: string | null;
   title: string;
   variantTitle: string | null;
   colour: string | null;
@@ -31,6 +33,7 @@ export interface BasketLine {
   unitPrice: Price;
   total: Price;
   buildId: string | null;
+  bespoke: boolean;
   stock: string;
 }
 
@@ -110,6 +113,8 @@ const pounds = (pence: number): Price => ({ amount: pence / 100, currencyCode: '
 function toLine(line: BasketDto['lines'][number] | OrderDto['lines'][number]): BasketLine {
   return {
     id: line.id,
+    handle: 'handle' in line ? line.handle : null,
+    variantId: line.variantId ?? null,
     title: line.title,
     variantTitle: line.variantTitle || null,
     colour: line.colour,
@@ -117,6 +122,7 @@ function toLine(line: BasketDto['lines'][number] | OrderDto['lines'][number]): B
     unitPrice: pounds(line.unitPricePence ?? 0),
     total: pounds(line.totalPence),
     buildId: line.buildId,
+    bespoke: Boolean(line.bespoke),
     stock: line.stock,
   };
 }

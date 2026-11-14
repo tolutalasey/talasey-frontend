@@ -117,3 +117,27 @@ export const PlayIcon = (props: IconProps) => (
     <path d="m8 5 11 7-11 7z" />
   </Icon>
 );
+
+export const BoxIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5zM3 7.5l9 4.5 9-4.5M12 12v9" />
+  </Icon>
+);
+
+export const ReceiptIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h4" />
+  </Icon>
+);
+
+export const PageIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M6 3h8l4 4v14H6zM14 3v4h4M9 12h6M9 16h6" />
+  </Icon>
+);
+
+export const ArrowIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </Icon>
+);

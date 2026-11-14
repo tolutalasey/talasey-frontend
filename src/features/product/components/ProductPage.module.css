@@ -8,10 +8,31 @@
   margin-top: var(--space-6);
 }
 
+.media {
+  position: relative;
+}
+
+.sticker {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 1;
+  width: 5rem;
+  height: 5rem;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
 @media (min-width: 64rem) {
   .top {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--space-12);
     align-items: start;
+  }
+
+  .media {
+    position: sticky;
+    top: var(--space-6);
   }
 }
 
@@ -23,6 +44,7 @@
   display: block;
   width: 100%;
   height: auto;
+  border-radius: var(--radius-card);
   background: var(--color-stone50);
 }
 
@@ -59,6 +81,8 @@
 .priceSummary {
   display: grid;
   gap: var(--space-2);
+  padding-block: var(--space-4);
+  border-block: 1px solid var(--color-line);
 }
 
 .price {

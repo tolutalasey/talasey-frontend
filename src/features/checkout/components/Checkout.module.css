@@ -13,25 +13,182 @@
     align-items: start;
   }
 
-  .checkout > h1 {
+  .checkout > h1,
+  .checkout > nav {
     grid-column: 1 / -1;
   }
 }
 
 .steps {
   display: grid;
-  gap: var(--space-8);
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
 }
 
 .step {
-  padding-bottom: var(--space-8);
-  border-bottom: 1px solid var(--color-line);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+  animation: rise var(--motion-medium) var(--motion-ease) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0.001;
+    translate: 0 8px;
+  }
+}
+
+.current {
+  padding: var(--space-6);
+  border-color: var(--color-brand600);
+  box-shadow: var(--shadow-card);
+}
+
+.step h2 {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1.1875rem;
+  font-weight: var(--font-weight-semibold);
+}
+
+.stepHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.number {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--color-brand600);
+  color: var(--color-white);
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.number svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.hiddenNumber {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.stepBody {
+  margin-top: var(--space-6);
+}
+
+.done > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-1) var(--space-4);
+  align-items: center;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-card);
+  cursor: pointer;
+  list-style: none;
+  transition: background-color var(--motion-fast) var(--motion-ease);
+}
+
+.done > summary::-webkit-details-marker {
+  display: none;
+}
+
+.done > summary:hover {
+  background: var(--color-stone50);
+}
+
+.done > summary:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.done .number {
+  background: var(--color-success);
+}
+
+.chosen {
+  grid-column: 1;
+  padding-left: calc(2rem + var(--space-3));
+  overflow: hidden;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-small);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.change {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  color: var(--color-brand600);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.done[open] .change {
+  visibility: hidden;
+}
+
+.done[open] .stepBody {
+  margin: 0;
+  padding: 0 var(--space-6) var(--space-6);
 }
 
 .summary {
   padding: var(--space-6);
   border-radius: var(--radius-card);
   background: var(--color-stone50);
+  box-shadow: inset 0 0 0 1px var(--color-line);
+}
+
+.summary h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.summaryHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.summaryHead a {
+  color: var(--color-brand600);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+}
+
+.summaryHead a:hover {
+  color: var(--color-brand800);
+}
+
+.summary .totals {
+  max-width: none;
+  margin: 0;
+}
+
+@media (min-width: 64rem) {
+  .summary {
+    position: sticky;
+    top: var(--space-6);
+  }
 }
 
 .lines {
@@ -128,4 +285,16 @@
 .next:hover {
   background: var(--color-brand800);
   color: var(--color-white);
+}
+
+.summary .lines {
+  font-size: var(--font-size-small);
+}
+
+.summary .caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }

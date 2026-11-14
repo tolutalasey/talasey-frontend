@@ -1,12 +1,23 @@
 import { Table } from '@/ui/Table/Table';
 import NextLink from 'next/link';
-import { money } from '@/features/staff';
+import { money, staffStyles } from '@/features/staff';
 import { DAY_STATUS, PAYMENT_STATUS, dateText } from '../labels';
 import type { OrderSummary } from '../types';
 
-export function OrderList({ orders }: { orders: OrderSummary[] }) {
+const PAYMENT_TONE = {
+  paid: staffStyles.good,
+  partly_refunded: staffStyles.warn,
+  refunded: staffStyles.bad,
+} as const;
+
+interface Props {
+  orders: OrderSummary[];
+  caption?: string;
+}
+
+export function OrderList({ orders, caption }: Props) {
   return (
-    <Table caption={`${orders.length} most recent orders`}>
+    <Table caption={caption ?? `${orders.length} most recent orders`}>
       <thead>
         <tr>
           <th scope="col">Order</th>
@@ -29,13 +40,32 @@ export function OrderList({ orders }: { orders: OrderSummary[] }) {
             </td>
             <td>{money(order.totalPence)}</td>
             <td>
-              {order.shipment === 'pallet' && order.day
-                ? `Pallet on ${dateText(order.day)} (${DAY_STATUS[order.dayStatus ?? 'held']})`
-                : order.shipment === 'pallet'
-                  ? 'Pallet'
-                  : 'Parcel'}
+              {order.shipment === 'pallet' && order.day ? (
+                <>
+                  Pallet on {dateText(order.day)}{' '}
+                  <span
+                    className={`${staffStyles.status} ${
+                      order.dayStatus === 'needs-rebooking'
+                        ? staffStyles.bad
+                        : order.dayStatus === 'booked'
+                          ? staffStyles.good
+                          : staffStyles.warn
+                    }`}
+                  >
+                    {DAY_STATUS[order.dayStatus ?? 'held']}
+                  </span>
+                </>
+              ) : order.shipment === 'pallet' ? (
+                'Pallet'
+              ) : (
+                'Parcel'
+              )}
             </td>
-            <td>{PAYMENT_STATUS[order.paymentStatus]}</td>
+            <td>
+              <span className={`${staffStyles.status} ${PAYMENT_TONE[order.paymentStatus]}`}>
+                {PAYMENT_STATUS[order.paymentStatus]}
+              </span>
+            </td>
           </tr>
         ))}
       </tbody>

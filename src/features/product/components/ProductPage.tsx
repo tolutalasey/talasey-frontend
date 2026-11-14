@@ -51,7 +51,14 @@ export function ProductPage({
       <article className={`container ${styles.product}`}>
         <PageBreadcrumbs items={breadcrumbs} />
         <div className={styles.top}>
-          <ProductPhotos photos={photos} name={product.title} />
+          <div className={styles.media}>
+            <ProductPhotos photos={photos} name={product.title} />
+            {photos.length > 0 && samples.length > 0 && (
+              <span className={`sticker ${styles.sticker}`} aria-hidden="true">
+                Free samples
+              </span>
+            )}
+          </div>
           <div className={styles.buy}>
             {(range ?? brand) && <p className="eyebrow">{range ?? brand}</p>}
             <h1>{product.title}</h1>

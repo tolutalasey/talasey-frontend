@@ -131,3 +131,53 @@ export async function removePromotionCode() {
   await settle('promotion', {});
   refresh();
 }
+
+const wholeNumber = (value: FormDataEntryValue | null) => {
+  const number = Number(value);
+  return Number.isInteger(number) && number >= 0 ? number : null;
+};
+
+// The basket's −, + and Remove buttons. A removed line can be put back with Undo, unless it was
+// made to measure, part of a build or a chosen colour, which the basket can't add back as it was.
+export async function changeLine(form: FormData) {
+  const basketId = await currentBasketId();
+  const lineId = String(form.get('lineId') ?? '');
+  const quantity = wholeNumber(form.get('quantity'));
+  if (!basketId) {
+    await settle('lines', EXPIRED);
+  } else if (quantity === null || quantity > 999) {
+    await settle('lines', { message: 'Enter a number of packs from 0 to 999.' });
+  } else {
+    const changed = await getBasketClient().setQuantity(basketId, lineId, quantity);
+    const title = String(form.get('title') ?? 'the item');
+    const undo = String(form.get('undo') ?? '');
+    await settle(
+      'lines',
+      !changed.ok
+        ? { message: changed.message }
+        : quantity === 0
+          ? {
+              notice: `Removed ${title}.`,
+              values: undo
+                ? { variantId: undo, quantity: String(form.get('was') ?? '1'), title }
+                : {},
+            }
+          : {},
+    );
+  }
+  refresh();
+}
+
+export async function undoRemove(form: FormData) {
+  const basketId = await currentBasketId();
+  const variantId = String(form.get('variantId') ?? '');
+  const quantity = wholeNumber(form.get('quantity')) ?? 1;
+  if (basketId && variantId) {
+    const added = await getBasketClient().addItem(basketId, variantId, Math.max(quantity, 1));
+    await settle(
+      'lines',
+      added.ok ? { notice: `Put back ${String(form.get('title'))}.` } : { message: added.message },
+    );
+  }
+  refresh();
+}

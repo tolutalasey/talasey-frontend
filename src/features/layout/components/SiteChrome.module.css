@@ -1,4 +1,6 @@
 .header {
+  position: relative;
+  z-index: 20;
   background: var(--color-white);
   border-bottom: 1px solid var(--color-line);
 }
@@ -137,10 +139,6 @@
   gap: var(--space-2) var(--space-8);
 }
 
-.menu {
-  position: relative;
-}
-
 .menu > summary,
 .navLink {
   display: inline-flex;
@@ -166,24 +164,168 @@
   color: var(--color-brand600);
 }
 
-.menuList {
+.menu > summary {
+  gap: var(--space-2);
+  list-style: none;
+}
+
+.menu > summary::-webkit-details-marker {
+  display: none;
+}
+
+.chevron {
+  transition: rotate var(--motion-medium) var(--motion-ease);
+}
+
+.menu[open] .chevron {
+  rotate: 180deg;
+}
+
+/* The open menu: a full-width panel under the header, links in columns and one photo feature. */
+.panel {
   position: absolute;
-  z-index: 10;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-  gap: var(--space-1) var(--space-6);
-  width: min(40rem, calc(100vw - 2 * var(--layout-gutter-mobile)));
-  margin: 0;
-  padding: var(--space-4);
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius-card);
+  top: 100%;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--color-line);
   background: var(--color-white);
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 24px 48px rgb(42 40 44 / 0.12);
+}
+
+.menu[open] .panel {
+  animation: drop var(--motion-medium) var(--motion-ease);
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    translate: 0 -0.5rem;
+  }
+}
+
+.panelInner {
+  display: grid;
+  gap: var(--space-8);
+  padding-block: var(--space-8) var(--space-12);
+}
+
+@media (min-width: 48rem) {
+  .panelInner {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+  }
+}
+
+.menuList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 0 var(--space-8);
+  margin: 0;
+  padding: 0;
   list-style: none;
 }
 
 .menuList a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--target-min);
+  border-bottom: 1px solid var(--color-line);
+  color: var(--color-ink);
+  text-decoration: none;
+  transition:
+    color var(--motion-fast),
+    padding var(--motion-fast) var(--motion-ease),
+    border-color var(--motion-fast);
+}
+
+.menuList a::after {
+  content: '→';
+  color: var(--color-brand600);
+  opacity: 0;
+  translate: -0.5rem 0;
+  transition:
+    opacity var(--motion-fast),
+    translate var(--motion-medium) var(--motion-ease);
+}
+
+.menuList a:hover {
+  padding-left: var(--space-2);
+  border-bottom-color: var(--color-brand600);
+  color: var(--color-brand600);
+}
+
+.menuList a:hover::after {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.feature {
+  display: block;
+  overflow: hidden;
+  align-self: start;
+  color: var(--color-stone);
+  text-decoration: none;
+}
+
+.feature img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  transition: scale var(--motion-slow) var(--motion-ease);
+}
+
+.feature:hover img {
+  scale: 1.05;
+}
+
+.featureText {
+  position: relative;
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background: var(--color-brand950);
+  font-size: var(--font-size-small);
+  color: var(--color-stone-muted);
+}
+
+.featureText strong {
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 100;
+  font-size: 1.15rem;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-stone);
+}
+
+.featureAction {
+  margin-top: var(--space-1);
+  color: var(--color-stone);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.feature:hover {
+  color: var(--color-stone);
+}
+
+.feature:focus-visible {
+  outline-offset: 3px;
+}
+
+.basket {
   display: inline-flex;
   align-items: center;
   min-height: var(--target-min);
+  padding: 0 var(--space-4);
+  border: var(--border-input) solid var(--color-brand600);
+  border-radius: var(--radius-control);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  transition: background-color var(--motion-fast);
+}
+
+.basket:hover {
+  background: var(--color-brand50);
 }

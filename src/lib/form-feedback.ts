@@ -12,6 +12,7 @@ export interface FormState {
 // Every form whose result is handed back to the page for browsers without JavaScript (ADR 0020).
 export const FEEDBACK_FORMS = [
   'basket',
+  'lines',
   'details',
   'delivery',
   'day',

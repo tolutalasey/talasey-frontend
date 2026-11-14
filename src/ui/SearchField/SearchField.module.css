@@ -91,3 +91,7 @@
 .popover:has(.list[data-empty]) {
   display: none;
 }
+
+.submit:hover {
+  background: var(--color-brand50);
+}

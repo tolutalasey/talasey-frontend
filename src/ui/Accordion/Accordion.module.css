@@ -52,3 +52,7 @@
     transition: none;
   }
 }
+
+.trigger:hover {
+  color: var(--color-brand600);
+}
