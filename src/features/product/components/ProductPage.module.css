@@ -1,39 +1,28 @@
+/* Look 4: the photos and the buy box sit in white frames side by side; details below. */
 .product {
-  padding-block: var(--space-8) var(--space-16);
+  padding: var(--space-4) var(--layout-gutter-mobile) var(--space-8);
 }
 
 .top {
   display: grid;
-  gap: var(--space-8);
-  margin-top: var(--space-6);
+  gap: var(--space-4);
+  margin-top: var(--space-4);
 }
 
 .media {
   position: relative;
+  padding: var(--space-3);
 }
 
 .sticker {
   position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
+  top: var(--space-6);
+  right: var(--space-6);
   z-index: 1;
   width: 5rem;
   height: 5rem;
   font-size: 0.85rem;
   pointer-events: none;
-}
-
-@media (min-width: 64rem) {
-  .top {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    gap: var(--space-12);
-    align-items: start;
-  }
-
-  .media {
-    position: sticky;
-    top: var(--space-6);
-  }
 }
 
 .photo {
@@ -44,7 +33,7 @@
   display: block;
   width: 100%;
   height: auto;
-  border-radius: var(--radius-card);
+  border-radius: 4px;
   background: var(--color-stone50);
 }
 
@@ -52,20 +41,24 @@
   margin-top: var(--space-2);
   color: var(--color-ink-muted);
   font-size: var(--font-size-small);
+  text-align: center;
 }
 
 .buy {
   display: grid;
-  gap: var(--space-6);
   align-content: start;
+  gap: 1.25rem;
+  padding: var(--space-6);
 }
 
 .buy h1 {
   margin: 0;
+  font-size: clamp(2rem, 1.6rem + 1.4vw, 2.75rem);
+  font-weight: 350;
 }
 
 .buy :global(.eyebrow) {
-  margin-bottom: calc(-1 * var(--space-3));
+  margin-bottom: calc(-1 * var(--space-2));
 }
 
 .subtitle,
@@ -75,12 +68,12 @@
 }
 
 .subtitle {
-  margin: 0;
+  margin: calc(-1 * var(--space-2)) 0 0;
 }
 
 .priceSummary {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-1);
   padding-block: var(--space-4);
   border-block: 1px solid var(--color-line);
 }
@@ -88,8 +81,10 @@
 .price {
   margin: 0;
   font-family: var(--font-body);
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-semibold);
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
 }
 
 .unit,
@@ -102,7 +97,7 @@
 
 .perM2 {
   margin: 0;
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
 }
 
 .pickers {
@@ -112,11 +107,13 @@
 
 .pickerLabel {
   margin: 0 0 var(--space-2);
+  font-size: var(--font-size-small);
   font-weight: var(--font-weight-bold);
 }
 
 .chosen {
   font-weight: var(--font-weight-regular);
+  color: var(--color-ink-muted);
 }
 
 .choices {
@@ -133,21 +130,27 @@
   align-items: center;
   min-height: var(--target-min);
   padding: var(--space-2) var(--space-4);
-  border: var(--border-input) solid var(--color-line);
-  border-radius: var(--radius-control);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
   color: var(--color-ink);
   text-decoration: none;
+  transition:
+    border-color var(--motion-fast) var(--motion-ease),
+    translate var(--motion-fast) var(--motion-ease);
 }
 
 .choice:hover {
-  border-color: var(--color-brand600);
+  border-color: var(--color-ink);
   color: var(--color-ink);
+  translate: 0 -1px;
 }
 
 .choice[aria-current='true'] {
-  border-color: var(--color-brand600);
+  border-color: var(--color-brand950);
   background: var(--color-brand50);
-  box-shadow: inset 0 0 0 1px var(--color-brand600);
+  box-shadow: inset 0 0 0 1px var(--color-brand950);
+  font-weight: var(--font-weight-semibold);
 }
 
 .unavailable {
@@ -159,88 +162,103 @@
   font-size: var(--font-size-small);
 }
 
+.delivery {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-card);
+  box-shadow: inset 0 0 0 1px var(--color-line);
+  font-size: var(--font-size-small);
+}
+
+.delivery svg {
+  flex: none;
+  color: var(--color-brand600);
+}
+
+/* The details: one white frame with the description, the facts as tiles, then the options. */
 .facts {
   display: grid;
-  gap: var(--space-12);
-  margin-top: var(--space-16);
+  gap: var(--space-8);
+  margin-top: var(--space-4);
+  padding: var(--space-8) var(--space-6);
 }
 
-/* About and specifications sit side by side like a brochure spread: an aubergine panel and a
-   stone one. Everything after them runs full width. */
-.facts > section:first-child:has(#about-title) {
-  padding: var(--space-12) var(--space-8);
-  background: var(--color-brand950);
-  color: var(--color-stone-muted);
+.facts h2 {
+  margin: 0 0 var(--space-4);
 }
 
-.facts > section:first-child:has(#about-title) h2 {
-  color: var(--color-stone);
+.facts ul {
+  margin: var(--space-4) 0 0;
+  padding-left: 1.25rem;
 }
 
-.facts > section:first-child:has(#about-title) .description {
-  color: var(--color-stone-muted);
-  font-weight: 300;
+.facts li + li {
+  margin-top: var(--space-2);
 }
 
-.facts > section:has(#specs-title) {
-  padding: var(--space-12) var(--space-8);
-  background: var(--color-stone50);
-}
-
-@media (min-width: 64rem) {
-  .facts {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 0;
-  }
-
-  .facts > section:not(:first-child, :has(#specs-title)) {
-    grid-column: 1 / -1;
-  }
-
-  .facts > section:first-child:has(#about-title) {
-    padding: var(--space-16);
-  }
-
-  .facts > section:has(#specs-title) {
-    padding: var(--space-16);
-  }
+.description {
+  margin: 0;
 }
 
 .specs {
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr));
   margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
 }
 
 .specs > div {
   display: grid;
-  grid-template-columns: minmax(8rem, 1fr) 2fr;
-  gap: var(--space-4);
-  padding-block: var(--space-3);
-  border-bottom: 1px solid var(--color-line);
+  align-content: start;
+  gap: var(--space-1);
+  padding: var(--space-4) 1.25rem;
+  box-shadow: 1px 1px 0 var(--color-line);
 }
 
 .specs dt {
-  font-weight: var(--font-weight-bold);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
 }
 
 .specs dd {
   margin: 0;
+  font-weight: var(--font-weight-semibold);
 }
 
 .options {
   width: 100%;
   border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.options thead th {
+  background: var(--color-stone);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
 }
 
 .options th,
 .options td {
-  padding: var(--space-3) var(--space-2);
+  padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--color-line);
   text-align: left;
 }
 
 .options td {
   text-align: right;
+}
+
+.options tbody tr:hover {
+  background: var(--color-stone50);
 }
 
 .visuallyHidden {
@@ -250,4 +268,28 @@
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+@media (min-width: 64rem) {
+  .product {
+    padding: var(--space-4) var(--layout-gutter-desktop) var(--space-8);
+  }
+
+  .top {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: start;
+  }
+
+  .media {
+    position: sticky;
+    top: var(--space-4);
+  }
+
+  .buy {
+    padding: var(--space-8);
+  }
+
+  .facts {
+    padding: var(--space-12);
+  }
 }

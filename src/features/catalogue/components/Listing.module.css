@@ -511,3 +511,20 @@ form[data-apply-on-change] .apply {
     padding: var(--space-12);
   }
 }
+
+.related {
+  margin-top: var(--space-12);
+}
+
+.relatedHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.relatedHead h2 {
+  margin: 0;
+}

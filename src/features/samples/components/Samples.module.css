@@ -134,8 +134,8 @@
 .secondary {
   min-height: 44px;
   padding: var(--space-3) var(--space-6);
-  border: var(--border-input) solid var(--color-brand600);
-  border-radius: var(--radius-control);
+  border: var(--border-input) solid var(--color-brand950);
+  border-radius: 999px;
   font: inherit;
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
@@ -143,13 +143,14 @@
 
 .primary {
   justify-self: start;
-  background: var(--color-brand600);
-  color: var(--color-white);
+  background: var(--color-brand950);
+  color: var(--color-stone);
 }
 
 .secondary {
+  border-color: var(--color-line);
   background: var(--color-white);
-  color: var(--color-brand600);
+  color: var(--color-ink);
 }
 
 .primary:disabled,
@@ -173,7 +174,9 @@
 
 .productSamples h2 {
   margin: 0;
-  font-size: var(--font-size-h3);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: var(--font-weight-bold);
 }
 
 .productSamples ul {
@@ -186,5 +189,7 @@
 }
 
 .secondary:hover {
-  background: var(--color-brand50);
+  border-color: var(--color-brand950);
+  background: var(--color-brand950);
+  color: var(--color-stone);
 }

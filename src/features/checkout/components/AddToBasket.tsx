@@ -114,32 +114,34 @@ export function AddToBasket({
       {colours && colours.options.length > 0 && (
         <ColourSwatches {...colours} error={state.fieldErrors?.colourId} />
       )}
-      <TextField
-        label={coverageM2 ? 'Packs' : 'Quantity'}
-        name="quantity"
-        type="number"
-        inputMode="numeric"
-        defaultValue={state.values?.quantity ?? '1'}
-        isRequired
-      />
-      {coverageM2 && (
-        <>
-          <TextField
-            label="Or the area to cover (m²)"
-            name="area"
-            inputMode="decimal"
-            defaultValue={state.values?.area ?? ''}
-            description={`We round up to whole packs of ${coverageM2} m²${wastagePercent ? `, with ${wastagePercent}% extra for cuts` : ''}.`}
-          />
-          <input type="hidden" name="coverage" value={coverageM2} />
-          <input type="hidden" name="wastage" value={wastagePercent} />
-        </>
-      )}
+      <div className={styles.amount}>
+        <TextField
+          label={coverageM2 ? 'Packs' : 'Quantity'}
+          name="quantity"
+          type="number"
+          inputMode="numeric"
+          defaultValue={state.values?.quantity ?? '1'}
+          isRequired
+        />
+        {coverageM2 && (
+          <>
+            <TextField
+              label="Or the area to cover (m²)"
+              name="area"
+              inputMode="decimal"
+              defaultValue={state.values?.area ?? ''}
+              description={`We round up to whole packs of ${coverageM2} m²${wastagePercent ? `, with ${wastagePercent}% extra for cuts` : ''}.`}
+            />
+            <input type="hidden" name="coverage" value={coverageM2} />
+            <input type="hidden" name="wastage" value={wastagePercent} />
+          </>
+        )}
+      </div>
       {extras.length > 0 && <Extras extras={extras} />}
       <FormMessage message={state.message} />
       <div>
-        <Button type="submit" isPending={pending} isDisabled={!variantId}>
-          Add to basket
+        <Button type="submit" isPending={pending} isDisabled={!variantId} className={styles.add}>
+          Add to bag
         </Button>
       </div>
     </Form>

@@ -25,7 +25,7 @@ export function ProductFacts({ product, variant, brand, content }: ProductFactsP
   ];
 
   return (
-    <div className={styles.facts}>
+    <div className={`frame ${styles.facts}`}>
       {product.description && (
         <section aria-labelledby="about-title">
           <h2 id="about-title">About this product</h2>

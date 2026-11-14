@@ -113,7 +113,7 @@ main:focus {
   min-height: 3rem;
   padding: 0 var(--space-6);
   border: var(--border-input) solid transparent;
-  border-radius: var(--radius-control);
+  border-radius: 999px;
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.01em;
   text-decoration: none;
@@ -129,23 +129,25 @@ main:focus {
 }
 
 .button {
+  background: var(--color-brand950);
+  color: var(--color-stone);
+}
+
+.button:hover {
   background: var(--color-brand600);
   color: var(--color-white);
 }
 
-.button:hover {
-  background: var(--color-brand800);
-  color: var(--color-white);
-}
-
 .button-secondary {
-  border-color: var(--color-brand600);
-  background: transparent;
-  color: var(--color-brand600);
+  border-color: transparent;
+  background: var(--color-white);
+  box-shadow: inset 0 0 0 1px var(--color-line);
+  color: var(--color-ink);
 }
 
 .button-secondary:hover {
-  background: var(--color-brand50);
+  background: var(--color-brand950);
+  color: var(--color-stone);
 }
 
 .button-on-dark {

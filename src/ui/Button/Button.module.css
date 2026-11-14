@@ -5,8 +5,8 @@
   gap: var(--space-2);
   min-height: 44px;
   padding: var(--space-3) var(--space-6);
-  border: var(--border-input) solid var(--color-brand600);
-  border-radius: var(--radius-control);
+  border: var(--border-input) solid var(--color-brand950);
+  border-radius: 999px;
   font: inherit;
   font-weight: var(--font-weight-semibold);
   line-height: 1.2;
@@ -32,26 +32,30 @@
 }
 
 .primary {
-  background: var(--color-brand600);
-  color: var(--color-white);
+  background: var(--color-brand950);
+  color: var(--color-stone);
 }
 
 .primary:hover,
 .primary[data-hovered],
 .primary[data-pressed] {
-  background: var(--color-brand800);
-  border-color: var(--color-brand800);
+  background: var(--color-brand600);
+  border-color: var(--color-brand600);
+  color: var(--color-white);
 }
 
 .secondary {
+  border-color: var(--color-line);
   background: var(--color-white);
-  color: var(--color-brand600);
+  color: var(--color-ink);
 }
 
 .secondary:hover,
 .secondary[data-hovered],
 .secondary[data-pressed] {
-  background: var(--color-brand50);
+  border-color: var(--color-brand950);
+  background: var(--color-brand950);
+  color: var(--color-stone);
 }
 
 @media (prefers-reduced-motion: reduce) {

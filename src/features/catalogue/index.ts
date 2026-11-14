@@ -1,6 +1,7 @@
 export { RangePage } from './components/RangePage';
 export { SearchPage } from './components/SearchPage';
 export { ProductGrid } from './components/ProductGrid';
+export { RelatedProducts } from './components/RelatedProducts';
 export { FilterForm } from './components/FilterForm';
 export { ActiveFilters } from './components/ActiveFilters';
 export { Pagination } from './components/Pagination';

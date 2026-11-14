@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { getProductRow, getRanges, rangePath, RelatedProducts } from '@/features/catalogue';
 import { AddToBasket } from '@/features/checkout';
 import {
   getProduct,
@@ -34,6 +35,21 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   });
 }
 
+// Up to four other products from the product's own category, and the range page they belong to.
+async function relatedTo(product: { handle: string; categories: { handle: string }[] }) {
+  const category = product.categories.at(-1)?.handle;
+  if (!category) return { products: [] };
+  const [hits, ranges] = await Promise.all([
+    getProductRow({ scope: { categories: [category] }, pageSize: 5 }),
+    getRanges(),
+  ]);
+  const range = ranges.find((candidate) => candidate.scope.categories?.includes(category));
+  return {
+    products: hits.filter((hit) => hit.handle !== product.handle).slice(0, 4),
+    range: range && { href: rangePath(range), label: `Shop all ${range.name.toLowerCase()}` },
+  };
+}
+
 export default async function Product({ params, searchParams }: Props) {
   const { handle } = await params;
   const [view, feedback] = await Promise.all([
@@ -42,11 +58,21 @@ export default async function Product({ params, searchParams }: Props) {
   ]);
   if (!view) notFound();
   const { product, variant, colours, extras, pricing, stock } = view;
+  const related = await relatedTo(product);
   const outOfStock = Boolean(variant?.priceIncVat) && stock.level === 'out-of-stock';
 
   return (
     <>
-      <ProductPage {...view}>
+      <ProductPage
+        {...view}
+        related={
+          <RelatedProducts
+            heading="More from this range"
+            products={related.products}
+            more={related.range}
+          />
+        }
+      >
         {product.madeToMeasure ? (
           <p>Made to your measurements. Call us for a quote while online ordering is set up.</p>
         ) : (
