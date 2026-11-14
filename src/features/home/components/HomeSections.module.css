@@ -1,100 +1,58 @@
 .section {
-  padding-block: var(--space-16);
+  padding: var(--space-12) var(--layout-gutter-mobile) 0;
 }
 
-.heading {
-  margin-bottom: var(--space-8);
+.head {
+  display: grid;
+  gap: var(--space-2);
 }
 
-.heading h2 {
+.head h2 {
   margin: 0;
 }
 
-.headingRow {
+.head :global(.eyebrow) {
+  margin: 0;
+}
+
+.headRow {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
   gap: var(--space-4);
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-6);
 }
 
-.headingRow .heading {
-  margin: 0;
+.section > .head {
+  margin-bottom: var(--space-6);
 }
 
-.headingRow > a {
-  font-weight: var(--font-weight-semibold);
-}
-
-/* Project tiles: a photo, a serif title, one line. The whole tile is the link. */
-.tiles {
+.grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-6) var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+/* Project tiles: white frames with the photo set inside, the whole tile a link. */
 .tile {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
   gap: var(--space-2);
+  padding: var(--space-3) var(--space-3) var(--space-6);
+  transition:
+    translate var(--motion-medium) var(--motion-ease),
+    box-shadow var(--motion-medium) var(--motion-ease);
 }
 
-@media (min-width: 64rem) {
-  .tiles {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--space-6);
-  }
-}
-
-.tile p {
-  margin: 0;
-  font-size: var(--font-size-small);
-  font-weight: 300;
-  color: var(--color-ink-muted);
-}
-
-.tilePhoto {
-  aspect-ratio: 4 / 5;
-  margin-bottom: var(--space-2);
-  overflow: hidden;
-  background: var(--color-stone50);
-}
-
-.tilePhoto img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform var(--motion-slow) var(--motion-ease);
-}
-
-.tile:hover .tilePhoto img {
-  transform: scale(1.04);
-}
-
-.tileTitle {
-  margin: 0;
-  font-size: var(--font-size-h3);
-}
-
-.tileLink {
-  color: var(--color-ink);
-  text-decoration: none;
-}
-
-.tile:hover .tileLink {
-  color: var(--color-brand600);
-}
-
-.tileLink::after {
-  position: absolute;
-  inset: 0;
-  content: '';
+.tile:has(.tileLink:hover),
+.tile:has(.tileLink:focus-visible) {
+  translate: 0 -4px;
+  box-shadow: var(--shadow-card);
 }
 
 .tile:has(.tileLink:focus-visible) {
@@ -102,112 +60,408 @@
   outline-offset: var(--focus-ring-offset);
 }
 
-.tileLink:focus-visible {
-  outline: none;
-}
-
-/* Free samples: photo with the stamp, text beside it. */
-.samples {
-  padding-block: var(--space-16);
-  background: var(--color-stone50);
-}
-
-.samplesInner {
-  display: grid;
-  gap: var(--space-8);
-  align-items: center;
-}
-
-@media (min-width: 64rem) {
-  .samplesInner {
-    grid-template-columns: 6fr 5fr;
-    gap: var(--space-16);
-  }
-}
-
-.samplesPhoto {
-  position: relative;
-  margin: 0;
-}
-
-.samplesPhoto img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.samplesSticker {
-  position: absolute;
-  top: calc(-1 * var(--space-6));
-  right: var(--space-4);
-}
-
-.samplesText h2 {
-  margin-bottom: var(--space-4);
-}
-
-.samplesText p {
-  max-width: 32em;
-  font-size: 1.125rem;
-  font-weight: 300;
-  color: var(--color-ink-muted);
-}
-
-/* Brochure covers: photo with an aubergine title band, like the printed covers. */
-.brochures {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-6);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-@media (min-width: 64rem) {
-  .brochures {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.brochure {
-  position: relative;
-  display: block;
-  aspect-ratio: 3 / 4;
+.tilePhoto {
   overflow: hidden;
-  text-decoration: none;
+  margin-bottom: var(--space-2);
+  border-radius: 4px;
+  aspect-ratio: 4 / 5;
 }
 
-.brochure img {
+.tilePhoto img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--motion-slow) var(--motion-ease);
+  transition: scale 0.8s var(--motion-ease);
 }
 
-.brochure:hover img {
-  transform: scale(1.04);
+.tile:has(.tileLink:hover) .tilePhoto img {
+  scale: 1.05;
 }
 
-.brochureTitle {
+.tileTitle {
+  margin: 0;
+  padding-inline: var(--space-2);
+  padding-right: var(--space-12);
+  font-size: 1.5rem;
+  font-weight: 350;
+}
+
+.tileLink {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.tileLink::after {
+  content: '';
   position: absolute;
-  inset: auto 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  padding: var(--space-4) var(--space-4) var(--space-6);
+  inset: 0;
+  border-radius: inherit;
+}
+
+.tileLink:focus-visible {
+  outline: none;
+}
+
+.tileText {
+  margin: 0;
+  padding-inline: var(--space-2);
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-small);
+}
+
+.tileGo {
+  position: absolute;
+  right: var(--space-4);
+  bottom: var(--space-6);
+}
+
+.tile:has(.tileLink:hover) .tileGo {
   background: var(--color-brand950);
   color: var(--color-stone);
+}
+
+/* The sliding row of gardens. */
+.reel {
+  padding-top: var(--space-12);
+}
+
+.reel > .headRow {
+  padding-inline: var(--layout-gutter-mobile);
+}
+
+.strip {
+  overflow: hidden;
+  padding-block: var(--space-2) var(--space-4);
+}
+
+.track {
+  display: flex;
+  gap: var(--space-4);
+  width: max-content;
+  margin: 0;
+  padding: 0 0 0 var(--layout-gutter-mobile);
+  list-style: none;
+  animation: slide 70s linear infinite;
+}
+
+.strip:hover .track,
+.strip:focus-within .track {
+  animation-play-state: paused;
+}
+
+@keyframes slide {
+  to {
+    translate: -50% 0;
+  }
+}
+
+.reelCard {
+  display: grid;
+  gap: var(--space-3);
+  width: 16rem;
+  padding: var(--space-3) var(--space-3) var(--space-4);
+}
+
+.reelPhoto {
+  overflow: hidden;
+  border-radius: 4px;
+  aspect-ratio: 4 / 5;
+}
+
+.reelPhoto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reelCaption {
+  margin: 0;
+  padding-inline: var(--space-2);
   font-family: var(--font-display);
   font-variation-settings: 'SOFT' 100;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
+  font-weight: 350;
   line-height: 1.2;
 }
 
-.brochureEdition {
-  font-family: var(--font-body);
-  font-size: 0.6875rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
+/* The pergola card: an aubergine frame, photos taking turns on a five second beat. */
+.feature {
+  --beat: 5s;
+  --loop: calc(var(--beat) * var(--count));
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-card);
+  background: var(--color-brand950);
+  color: var(--color-stone);
+}
+
+.cycle {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  aspect-ratio: 4 / 3;
+}
+
+.cyclePhoto {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  animation: turn var(--loop) infinite;
+  animation-delay: calc(var(--beat) * var(--index));
+}
+
+.cyclePhoto:first-child {
+  opacity: 1;
+  animation-name: turn-first;
+}
+
+.cyclePhoto img {
+  object-fit: cover;
+}
+
+/* Six photos: each is in view for a sixth of the loop. */
+@keyframes turn {
+  0% {
+    opacity: 0;
+  }
+
+  3%,
+  17% {
+    opacity: 1;
+  }
+
+  20%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes turn-first {
+  0%,
+  17% {
+    opacity: 1;
+  }
+
+  20%,
+  97% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.cycleCaption {
+  position: absolute;
+  left: var(--space-4);
+  bottom: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  border-radius: 999px;
+  background: var(--color-white);
+  color: var(--color-ink);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+}
+
+.dashes {
+  position: absolute;
+  right: var(--space-4);
+  bottom: var(--space-6);
+  display: flex;
+  gap: 6px;
+}
+
+.dashes i {
+  position: relative;
+  width: 1.5rem;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: rgb(255 255 255 / 0.4);
+}
+
+.dashes i::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-white);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: dash var(--loop) linear infinite;
+  animation-delay: calc(var(--beat) * var(--index));
+}
+
+@keyframes dash {
+  0% {
+    transform: scaleX(0);
+  }
+
+  16.6% {
+    transform: scaleX(1);
+  }
+
+  16.7%,
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+.cycleToggle {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 1;
+}
+
+.featureText {
+  display: grid;
+  align-content: center;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-4) var(--space-8);
+}
+
+.featureText > * {
+  margin: 0;
+}
+
+.featureText :global(.eyebrow) {
   color: var(--color-stone-muted);
+}
+
+.featureText h2 {
+  color: var(--color-stone);
+}
+
+.featureText p:not(:global(.eyebrow)) {
+  color: var(--color-stone-muted);
+  font-weight: 300;
+}
+
+/* This season: one white frame. */
+.season {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+  padding: var(--space-8) var(--space-6);
+}
+
+.seasonText {
+  max-width: 40em;
+  margin: 0;
+  color: var(--color-ink-muted);
+}
+
+/* Made to measure and free samples, side by side. */
+.pair {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.story {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-3) var(--space-8);
+}
+
+.storyPhoto {
+  overflow: hidden;
+  border-radius: 4px;
+  aspect-ratio: 16 / 10;
+}
+
+.storyPhoto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale 0.8s var(--motion-ease);
+}
+
+.story:hover .storyPhoto img {
+  scale: 1.04;
+}
+
+.storyText {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+  padding-inline: var(--space-4);
+}
+
+.storyText > * {
+  margin: 0;
+}
+
+.storyText h2 {
+  font-size: 1.75rem;
+  font-weight: 350;
+}
+
+.storyText p:not(:global(.eyebrow)) {
+  color: var(--color-ink-muted);
+}
+
+@media (min-width: 64rem) {
+  .section {
+    padding: var(--space-16) var(--layout-gutter-desktop) 0;
+  }
+
+  .reel {
+    padding-top: var(--space-16);
+  }
+
+  .reel > .headRow {
+    padding-inline: var(--layout-gutter-desktop);
+  }
+
+  .track {
+    padding-left: var(--layout-gutter-desktop);
+  }
+
+  .reelCard {
+    width: 19rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .feature {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+
+  .cycle {
+    aspect-ratio: auto;
+    min-height: 34rem;
+  }
+
+  .featureText {
+    padding: var(--space-12);
+  }
+
+  .season {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr) auto;
+    align-items: center;
+    padding: var(--space-8) var(--space-12);
+  }
+
+  .pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cyclePhoto:first-child {
+    animation: none;
+  }
+
+  .cyclePhoto:not(:first-child) {
+    display: none;
+  }
 }

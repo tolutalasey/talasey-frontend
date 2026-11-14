@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import { SiteChrome } from '@/features/layout';
+import { ShopChrome } from '../ShopChrome';
 
 export default function SiteLayout({ children }: { children: ReactNode }) {
-  return <SiteChrome>{children}</SiteChrome>;
+  return <ShopChrome>{children}</ShopChrome>;
 }

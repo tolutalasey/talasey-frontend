@@ -6,12 +6,13 @@ import { env } from '@/lib/env';
 import { JsonLd } from '@/lib/JsonLd';
 import { organizationJsonLd, websiteJsonLd } from '@/lib/seo';
 
-export function SiteChrome({ children }: { children: ReactNode }) {
+// `bag` is the header's bag link; the app passes it in because it reads the basket.
+export function SiteChrome({ children, bag }: { children: ReactNode; bag: ReactNode }) {
   return (
     <>
       <script dangerouslySetInnerHTML={{ __html: consentDefaultsScript + consentPromptScript }} />
       <SkipLink />
-      <SiteHeader />
+      <SiteHeader bag={bag} />
       <main id="main" tabIndex={-1}>
         {children}
       </main>

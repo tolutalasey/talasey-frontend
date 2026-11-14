@@ -34,17 +34,19 @@ export function ProductCard({
 }: ProductCardProps) {
   return (
     <article className={styles.card}>
-      <img
-        className={styles.image}
-        src={image.src}
-        alt={image.alt}
-        width={image.width}
-        height={image.height}
-        loading={loading}
-        decoding="async"
-      />
-      <div className={styles.body}>
+      <div className={styles.media}>
+        <img
+          className={styles.image}
+          src={image.src}
+          alt={image.alt}
+          width={image.width}
+          height={image.height}
+          loading={loading}
+          decoding="async"
+        />
         {badge && <p className={styles.badge}>{badge}</p>}
+      </div>
+      <div className={styles.body}>
         <h3 className={styles.name}>
           <a className={styles.link} href={href}>
             {name}
@@ -56,6 +58,18 @@ export function ProductCard({
         </p>
         {stock && <StockStatus {...stock} />}
       </div>
+      <span className={styles.go} aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </span>
     </article>
   );
 }

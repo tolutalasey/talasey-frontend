@@ -1,3 +1,4 @@
+import NextLink from 'next/link';
 import { ProductGrid } from '@/features/catalogue';
 import type { SearchRecord } from '@/features/search';
 import styles from './HomeSections.module.css';
@@ -11,10 +12,15 @@ export function FeaturedProducts({
 }) {
   if (products.length === 0) return null;
   return (
-    <section className={`container ${styles.section}`} aria-labelledby="featured-title">
-      <div className={styles.heading}>
-        <p className="eyebrow">From the shop</p>
-        <h2 id="featured-title">{heading}</h2>
+    <section className={styles.section} aria-labelledby="featured-title">
+      <div className={styles.headRow}>
+        <div className={styles.head}>
+          <p className="eyebrow">From the shop</p>
+          <h2 id="featured-title">{heading}</h2>
+        </div>
+        <NextLink href="/porcelain-paving/" className="chip">
+          Shop all paving
+        </NextLink>
       </div>
       <ProductGrid products={products} label={heading} />
     </section>

@@ -1,28 +1,37 @@
 import Image from 'next/image';
 import NextLink from 'next/link';
-import { heroPhoto } from '../brand';
+import { MotionToggle } from '@/ui/MotionToggle/MotionToggle';
+import { heroScenes } from '../brand';
 import type { HomeContent } from '../content';
 import styles from './HomeHero.module.css';
 
-export function HomeHero({ content }: { content: HomeContent }) {
+interface Props {
+  content: HomeContent;
+  rangeNames: string[];
+}
+
+export function HomeHero({ content, rangeNames }: Props) {
   const [primary, secondary] = content.heroActions;
   return (
-    <section className={styles.hero} aria-labelledby="home-title">
-      <figure className={styles.photo}>
-        <Image
-          src={heroPhoto.src}
-          alt={heroPhoto.alt}
-          width={heroPhoto.width}
-          height={heroPhoto.height}
-          sizes="100vw"
-          priority
-        />
-        <figcaption className="caption">{heroPhoto.caption}</figcaption>
-      </figure>
-      <span className={`sticker ${styles.sticker}`} aria-hidden="true">
-        Free samples
-      </span>
-      <div className={`container ${styles.inner}`}>
+    <section className={styles.hero} aria-labelledby="home-title" data-motion="">
+      <div className={styles.frame}>
+        <div className={styles.scenes}>
+          {heroScenes.map((scene, index) => (
+            <div key={scene.href} className={styles.scene}>
+              <Image
+                src={scene.photo.src}
+                alt={scene.photo.alt}
+                fill
+                sizes="100vw"
+                priority={index === 0}
+              />
+            </div>
+          ))}
+        </div>
+        <span className={`sticker ${styles.sticker}`} aria-hidden="true">
+          Free samples
+        </span>
+        <MotionToggle label="Pause the photos" tone="dark" className={styles.toggle} />
         <div className={styles.panel}>
           <p className="eyebrow">Paving, decking and outdoor living</p>
           <h1 id="home-title" className={styles.title}>
@@ -37,6 +46,26 @@ export function HomeHero({ content }: { content: HomeContent }) {
               {secondary.label}
             </NextLink>
           </p>
+        </div>
+        <ul className={styles.tabs} aria-label="In the photos">
+          {heroScenes.map((scene, index) => (
+            <li key={scene.href}>
+              <NextLink href={scene.href} className={styles.tab}>
+                <span className={styles.line} aria-hidden="true" />
+                <span className={styles.topic}>
+                  {String(index + 1).padStart(2, '0')} · {scene.topic}
+                </span>
+                <span className={styles.tabTitle}>{scene.title}</span>
+              </NextLink>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className={styles.ribbon} aria-hidden="true">
+        <div className={styles.track}>
+          {[...rangeNames, ...rangeNames].map((name, index) => (
+            <span key={index}>{name}</span>
+          ))}
         </div>
       </div>
     </section>

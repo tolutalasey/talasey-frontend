@@ -1,38 +1,100 @@
+/* Three photos fade into each other on an 18 second loop, each held for six. */
 .hero {
+  --scene: 18s;
+  padding-top: var(--space-2);
+}
+
+.frame {
   position: relative;
-  display: grid;
+  margin-inline: var(--layout-gutter-mobile);
+}
+
+.scenes {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius-card);
   background: var(--color-brand950);
 }
 
-.photo {
-  position: relative;
-  margin: 0;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
+.scene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation: show var(--scene) infinite;
 }
 
-.photo img {
-  display: block;
-  width: 100%;
-  height: 100%;
+.scene img {
   object-fit: cover;
-  animation: settle 1.6s var(--motion-ease) both;
+  animation: drift var(--scene) infinite;
+  animation-delay: inherit;
 }
 
-@keyframes settle {
-  from {
-    scale: 1.06;
+/* The first photo starts in view, so the page paints with it straight away. */
+.scene:first-child {
+  opacity: 1;
+  animation-name: show-first;
+}
+
+.scene:nth-child(2) {
+  animation-delay: calc(var(--scene) / 3);
+}
+
+.scene:nth-child(3) {
+  animation-delay: calc(var(--scene) * 2 / 3);
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+  }
+
+  4%,
+  33% {
+    opacity: 1;
+  }
+
+  37%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes show-first {
+  0%,
+  33% {
+    opacity: 1;
+  }
+
+  37%,
+  96% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes drift {
+  0% {
+    scale: 1.08;
+  }
+
+  37%,
+  100% {
+    scale: 1;
   }
 }
 
 .sticker {
   position: absolute;
-  top: var(--space-6);
+  top: var(--space-4);
   right: var(--space-4);
-  z-index: 1;
-  width: 5.5rem;
-  height: 5.5rem;
-  font-size: 0.9rem;
+  z-index: 2;
+  width: 5rem;
+  height: 5rem;
+  font-size: 0.85rem;
   animation: stamp var(--motion-slow) var(--motion-ease) 400ms both;
 }
 
@@ -44,12 +106,31 @@
   }
 }
 
+.toggle {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: 2;
+}
+
 .panel {
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  z-index: 2;
+  display: grid;
   gap: var(--space-4);
-  padding-block: var(--space-8) var(--space-12);
+  margin: calc(-1 * var(--space-16)) var(--space-4) 0;
+  padding: var(--space-8) var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--color-brand950);
   color: var(--color-stone);
+  animation: rise 0.9s var(--motion-ease) 0.2s both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0.001;
+    translate: 0 24px;
+  }
 }
 
 .panel :global(.eyebrow) {
@@ -59,19 +140,17 @@
 
 .title {
   margin: 0;
-  max-width: 16ch;
   color: var(--color-stone);
-  font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.75rem);
-  font-weight: 380;
-  line-height: 1.05;
+  font-size: clamp(2.25rem, 1.7rem + 1.8vw, 3.25rem);
+  font-weight: 350;
+  line-height: 1.07;
 }
 
 .intro {
-  max-width: 34em;
   margin: 0;
-  font-size: 1.125rem;
-  font-weight: 300;
+  max-width: 34em;
   color: var(--color-stone-muted);
+  font-weight: 300;
 }
 
 .actions {
@@ -81,36 +160,173 @@
   margin: var(--space-2) 0 0;
 }
 
-/* On wide screens the photo fills the hero and the panel sits over its lower left corner. */
-@media (min-width: 64rem) {
-  .hero {
-    min-height: 44rem;
+.tabs {
+  display: none;
+}
+
+.tab {
+  display: grid;
+  gap: 6px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-card);
+  background: rgb(43 3 55 / 0.55);
+  backdrop-filter: blur(10px);
+  color: var(--color-stone);
+  text-decoration: none;
+  transition: background-color var(--motion-fast) var(--motion-ease);
+}
+
+.tab:hover {
+  background: rgb(43 3 55 / 0.85);
+  color: var(--color-stone);
+}
+
+.line {
+  position: relative;
+  height: 2px;
+  overflow: hidden;
+  background: rgb(239 228 220 / 0.3);
+}
+
+.line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-stone);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: fill var(--scene) linear infinite;
+}
+
+.tabs li:nth-child(2) .line::after {
+  animation-delay: calc(var(--scene) / 3);
+}
+
+.tabs li:nth-child(3) .line::after {
+  animation-delay: calc(var(--scene) * 2 / 3);
+}
+
+@keyframes fill {
+  0% {
+    transform: scaleX(0);
   }
 
-  .photo {
-    position: absolute;
-    inset: 0;
+  33.3% {
+    transform: scaleX(1);
+  }
+
+  33.4%,
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+.topic {
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-stone-muted);
+}
+
+.tabTitle {
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 100;
+  font-size: 1.125rem;
+  font-weight: 350;
+  line-height: 1.25;
+}
+
+.ribbon {
+  margin-top: var(--space-12);
+  overflow: hidden;
+  border-block: 1px solid rgb(42 40 44 / 0.2);
+  white-space: nowrap;
+}
+
+.track {
+  display: inline-flex;
+  gap: var(--space-12);
+  padding-block: var(--space-4);
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 100;
+  font-size: 1.75rem;
+  font-weight: 300;
+  animation: slide 60s linear infinite;
+}
+
+.track span::after {
+  content: '✦';
+  margin-left: var(--space-12);
+  color: var(--color-brand600);
+  font-size: 0.875rem;
+  vertical-align: middle;
+}
+
+@keyframes slide {
+  to {
+    translate: -50% 0;
+  }
+}
+
+@media (min-width: 64rem) {
+  .frame {
+    margin-inline: var(--layout-gutter-desktop);
+  }
+
+  .scenes {
     aspect-ratio: auto;
+    height: min(44rem, 78vh);
+    min-height: 36rem;
   }
 
   .sticker {
-    top: var(--space-12);
-    right: var(--layout-gutter-desktop);
+    top: calc(-1 * var(--space-6));
+    right: calc(-1 * var(--space-4));
     width: 7rem;
     height: 7rem;
     font-size: 1.05rem;
   }
 
-  .inner {
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    padding-bottom: var(--space-16);
+  .toggle {
+    top: var(--space-6);
+    left: var(--space-6);
   }
 
   .panel {
+    position: absolute;
+    left: -1px;
+    bottom: calc(-1 * var(--space-8));
     max-width: 36rem;
+    margin: 0;
     padding: var(--space-12);
-    background: var(--color-brand950);
+    border-radius: 0 var(--radius-card) 0 var(--radius-card);
+  }
+
+  .tabs {
+    position: absolute;
+    left: 40rem;
+    right: var(--space-6);
+    bottom: var(--space-6);
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ribbon {
+    margin-top: var(--space-20);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene:first-child {
+    animation: none;
+  }
+
+  .scene:not(:first-child) {
+    display: none;
   }
 }

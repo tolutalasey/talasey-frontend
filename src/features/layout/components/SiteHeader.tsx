@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import NextLink from 'next/link';
+import type { ReactNode } from 'react';
 import { getRanges, rangePath } from '@/features/catalogue';
 import { getProjectPages, projectPath } from '@/features/content';
 import { SearchLauncher } from '@/features/search';
@@ -8,15 +9,16 @@ import { MenuBehaviour } from './MenuBehaviour';
 import { MenuPanel } from './MenuPanel';
 import styles from './SiteChrome.module.css';
 
-export async function SiteHeader() {
+// `bag` is the header's bag link with its count, passed in by the app so the header stays
+// cached while the count, which reads the visitor's cookie, streams in.
+export async function SiteHeader({ bag }: { bag: ReactNode }) {
   const [ranges, projects] = await Promise.all([getRanges(), getProjectPages()]);
   return (
     <header className={styles.header}>
-      <p className={styles.promo}>
-        Free samples of any paving, sent to your door.{' '}
-        <NextLink href="/samples/">Order samples</NextLink>
-      </p>
-      <div className={`container ${styles.bar}`}>
+      <div className={styles.bar}>
+        <div className={styles.search}>
+          <SearchLauncher />
+        </div>
         <NextLink href="/" className={styles.logo}>
           <Image
             src="/images/brand/talasey-logo.png"
@@ -26,34 +28,36 @@ export async function SiteHeader() {
             priority
           />
         </NextLink>
-        <div className={styles.search}>
-          <SearchLauncher />
+        <div className={styles.actions}>
+          <NextLink href="/samples/" className={styles.action}>
+            Free samples
+          </NextLink>
+          <NextLink href="/help/" className={styles.action}>
+            Help
+          </NextLink>
+          {bag}
         </div>
-        <NextLink href="/basket/" className={styles.basket}>
-          Basket
-        </NextLink>
       </div>
-      <nav id="main-nav" aria-label="Main" className={`container ${styles.nav}`}>
+      <nav id="main-nav" aria-label="Main" className={styles.nav}>
         <MenuBehaviour navId="main-nav" />
         <details className={styles.menu} name="main-menu">
           <summary>
-            Shop by product <ChevronIcon className={styles.chevron} width={14} height={14} />
+            Shop by product <ChevronIcon className={styles.chevron} width={12} height={12} />
           </summary>
           <MenuPanel
             title="Our ranges"
             links={ranges.map((range) => ({ label: range.name, href: rangePath(range) }))}
             feature={{
-              image: '/images/brand/paving-light-grey.jpg',
-              heading: 'Free samples of any paving',
-              text: 'See the colour in your own garden light. Up to five, sent to your door.',
+              image: '/images/brand/samples-mixed.jpg',
+              heading: 'See it in your own garden light',
               href: '/samples/',
-              action: 'Choose your samples',
+              action: 'Order free samples',
             }}
           />
         </details>
         <details className={styles.menu} name="main-menu">
           <summary>
-            Shop by project <ChevronIcon className={styles.chevron} width={14} height={14} />
+            Shop by project <ChevronIcon className={styles.chevron} width={12} height={12} />
           </summary>
           <MenuPanel
             title="Garden projects"
@@ -64,17 +68,16 @@ export async function SiteHeader() {
             feature={{
               image: '/images/brand/project-pergola.jpg',
               heading: 'Plan the whole garden',
-              text: 'Everything a project needs, from the base to the finishing touches.',
               href: '/projects/',
               action: 'See every project',
             }}
           />
         </details>
-        <NextLink href="/samples/" className={styles.navLink}>
-          Free samples
+        <NextLink href="/inspiration/" className={styles.navLink}>
+          Inspiration
         </NextLink>
-        <NextLink href="/help/" className={styles.navLink}>
-          Help
+        <NextLink href="/guides/" className={styles.navLink}>
+          Guides
         </NextLink>
       </nav>
     </header>

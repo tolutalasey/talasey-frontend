@@ -1,3 +1,4 @@
+/* An underline field, as in the header of look 4. */
 .search {
   width: 100%;
   max-width: 36rem;
@@ -5,9 +6,13 @@
 
 .box {
   display: flex;
-  border: var(--border-input) solid var(--color-ink-muted);
-  border-radius: var(--radius-control);
-  background: var(--color-white);
+  align-items: center;
+  border-bottom: 1px solid var(--color-ink);
+  transition: border-color var(--motion-fast) var(--motion-ease);
+}
+
+.box:hover {
+  border-bottom-color: var(--color-brand600);
 }
 
 .box:focus-within {
@@ -19,11 +24,12 @@
   flex: 1;
   min-width: 0;
   min-height: var(--target-min);
-  padding-inline: var(--space-3);
+  padding-inline: 0 var(--space-2);
   border: 0;
   background: none;
   color: var(--color-ink);
   font: inherit;
+  font-size: 0.9375rem;
   outline: none;
 }
 
@@ -33,15 +39,16 @@
 
 .submit {
   display: grid;
+  order: -1;
   place-items: center;
-  width: var(--target-min);
+  width: 2rem;
+  min-height: var(--target-min);
   border: 0;
-  border-left: 1px solid var(--color-line);
   background: none;
-  color: var(--color-brand600);
+  color: var(--color-ink);
   cursor: pointer;
 }
 
 .submit:hover {
-  background: var(--color-brand50);
+  color: var(--color-brand600);
 }

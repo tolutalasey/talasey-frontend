@@ -13,18 +13,19 @@ async function CurrentYear() {
 export function SiteFooter() {
   return (
     <footer className={styles.footer}>
-      <div className={`container ${styles.footerTop}`}>
-        <div className={styles.footerBrand}>
-          <Image
-            src="/images/brand/talasey-logo-on-dark.png"
-            alt="Talasey"
-            width={900}
-            height={212}
-          />
-          <p>Paving, decking and outdoor living, sold direct to UK gardens.</p>
-        </div>
+      <div className={styles.footerInner}>
+        <Image
+          className={styles.footerLogo}
+          src="/images/brand/talasey-logo-on-dark.png"
+          alt="Talasey"
+          width={900}
+          height={212}
+        />
+        <p className={styles.footerLine}>
+          Paving, decking and outdoor living, sold direct to UK gardens.
+        </p>
         <nav aria-label="Footer" className={styles.footerLinks}>
-          <NextLink href="/">Home</NextLink>
+          <NextLink href="/samples/">Free samples</NextLink>
           <NextLink href="/brands/">Our brands</NextLink>
           <NextLink href="/guides/">Guides</NextLink>
           <NextLink href="/inspiration/">Inspiration</NextLink>
@@ -33,10 +34,10 @@ export function SiteFooter() {
           <a href="https://talasey.co.uk/brochures/">Brochures</a>
           <CookieSettingsButton />
         </nav>
+        <p className={styles.footerSmall}>
+          &copy; <CurrentYear /> Talasey Ltd. Prices include VAT.
+        </p>
       </div>
-      <p className={`container ${styles.footerSmall}`}>
-        &copy; <CurrentYear /> Talasey Ltd. Prices include VAT.
-      </p>
     </footer>
   );
 }

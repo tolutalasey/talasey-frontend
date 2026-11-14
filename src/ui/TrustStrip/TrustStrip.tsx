@@ -13,13 +13,13 @@ export interface TrustPoint {
 export function TrustStrip({ points, label }: { points: readonly TrustPoint[]; label: string }) {
   return (
     <section className={styles.strip} aria-label={label}>
-      <ul className={`container ${styles.list}`}>
+      <ul className={styles.list}>
         {points.map(({ icon, title, text }) => {
           const Icon = ICONS[icon];
           return (
             <li key={title} className={styles.item}>
               <span className={styles.ring}>
-                <Icon width={28} height={28} strokeWidth={1.25} />
+                <Icon width={22} height={22} strokeWidth={1.5} />
               </span>
               <strong className={styles.title}>{title}</strong>
               <span className={styles.text}>{text}</span>

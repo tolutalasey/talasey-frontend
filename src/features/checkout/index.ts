@@ -10,3 +10,4 @@ export { CheckoutFlow } from './components/CheckoutFlow';
 export { OrderConfirmation } from './components/OrderConfirmation';
 export { getBasketView, getCheckoutView, getOrder } from './loaders.server';
 export { completeBasket } from './basket.server';
+export { CurrentBag } from './components/CurrentBag';
