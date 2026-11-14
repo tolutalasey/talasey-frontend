@@ -17,7 +17,7 @@ import styles from './Checkout.module.css';
 
 const CHECKOUT_TRAIL = [
   { name: 'Home', path: '/' },
-  { name: 'Basket', path: '/basket/' },
+  { name: 'Your bag', path: '/basket/' },
   { name: 'Checkout', path: '/checkout/' },
 ];
 
@@ -93,7 +93,7 @@ function OrderSummary({ basket }: { basket: Basket }) {
     <aside aria-labelledby="summary" className={styles.summary}>
       <div className={styles.summaryHead}>
         <h2 id="summary">Your order</h2>
-        <NextLink href="/basket/">Edit basket</NextLink>
+        <NextLink href="/basket/">Edit bag</NextLink>
       </div>
       <BasketLines lines={basket.lines} />
       <Totals
@@ -122,7 +122,7 @@ export function CheckoutFlow({ view }: { view: CheckoutView | null }) {
       <div className={`container ${styles.page}`}>
         <PageBreadcrumbs items={CHECKOUT_TRAIL} />
         <h1>Checkout</h1>
-        <p>Your basket is empty.</p>
+        <p>Your bag is empty.</p>
         <NextLink href="/" className="button">
           Carry on shopping
         </NextLink>

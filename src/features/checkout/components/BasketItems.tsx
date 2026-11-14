@@ -48,7 +48,7 @@ function QuantityButton({
 
 export function BasketItems({ lines, stock, pictures }: Props) {
   return (
-    <ul className={styles.items} aria-label="Items in your basket">
+    <ul className={styles.items} aria-label="Items in your bag">
       {lines.map((line) => {
         const picture = line.handle ? pictures[line.handle] : undefined;
         const fixed = !!line.buildId || line.bespoke;

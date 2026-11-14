@@ -13,7 +13,7 @@ import styles from './Basket.module.css';
 
 const BASKET_TRAIL = [
   { name: 'Home', path: '/' },
-  { name: 'Basket', path: '/basket/' },
+  { name: 'Your bag', path: '/basket/' },
 ];
 
 interface Props {
@@ -50,7 +50,7 @@ export function BasketSummary({ view, promotionFeedback, linesFeedback }: Props)
         <Removed feedback={linesFeedback} />
         <div className={styles.empty}>
           <p className="eyebrow">Basket</p>
-          <h1>Your basket is empty</h1>
+          <h1>Your bag is empty</h1>
           <p>Have a look at our paving, or order free samples to see the colours at home first.</p>
           <p className={styles.emptyActions}>
             <NextLink href="/" className="button">
@@ -66,13 +66,13 @@ export function BasketSummary({ view, promotionFeedback, linesFeedback }: Props)
   }
 
   const { basket, stock, pictures } = view;
-  const count = basket.lines.reduce((sum, line) => sum + line.quantity, 0);
+  const count = basket.lines.length;
   return (
     <>
       <div className={`container ${styles.page}`}>
         <PageBreadcrumbs items={BASKET_TRAIL} />
         <header className={styles.head}>
-          <h1>Your basket</h1>
+          <h1>Your bag</h1>
           <p className={styles.count}>
             {count} {count === 1 ? 'item' : 'items'}
           </p>

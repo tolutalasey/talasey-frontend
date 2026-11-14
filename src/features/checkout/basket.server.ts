@@ -3,7 +3,7 @@ import type { CheckoutResult } from '@/api-client';
 import { getBasketClient } from '@/lib/commerce';
 import { forgetBasket, readBasketId } from './basket-cookie.server';
 
-export const EXPIRED_MESSAGE = 'Your basket has expired. Add the items again.';
+export const EXPIRED_MESSAGE = 'Your bag has expired. Add the items again.';
 
 export async function currentBasketId(): Promise<string | undefined> {
   const id = await readBasketId();

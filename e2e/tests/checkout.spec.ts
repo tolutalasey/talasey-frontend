@@ -37,7 +37,7 @@ test('a pallet order from basket to confirmation', async ({ page }) => {
   await page.getByRole('button', { name: 'Add to basket' }).click();
 
   await expect(page).toHaveURL(/\/basket\/$/);
-  await expect(page.getByRole('list', { name: 'Items in your basket' })).toContainText(
+  await expect(page.getByRole('list', { name: 'Items in your bag' })).toContainText(
     'Silver grey porcelain paving',
   );
   await page.getByRole('link', { name: 'Go to checkout' }).click();

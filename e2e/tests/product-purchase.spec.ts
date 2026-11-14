@@ -26,7 +26,7 @@ test('paving shows the price per pack and per m², and works out packs from an a
   await page.getByRole('button', { name: 'Add to basket' }).click();
 
   await expect(page).toHaveURL(/\/basket\/$/);
-  const items = page.getByRole('list', { name: 'Items in your basket' });
+  const items = page.getByRole('list', { name: 'Items in your bag' });
   await expect(
     items.getByRole('listitem').filter({ hasText: 'Silver grey porcelain paving' }),
   ).toContainText('3');
@@ -48,7 +48,7 @@ test('a 1B screen asks for a powder coat colour only for the powder-coated finis
   await colours.getByText('Jet black (RAL 9005)').click();
   await page.getByRole('button', { name: 'Add to basket' }).click();
   await expect(page).toHaveURL(/\/basket\/$/);
-  await expect(page.getByRole('list', { name: 'Items in your basket' })).toContainText(
+  await expect(page.getByRole('list', { name: 'Items in your bag' })).toContainText(
     'Jet black (RAL 9005)',
   );
 });
@@ -82,7 +82,7 @@ test.describe('without JavaScript', () => {
     await expect(page.getByTestId('product-price')).not.toHaveText('Price on request');
     await page.getByRole('button', { name: 'Add to basket' }).click();
     await expect(page).toHaveURL(/\/basket\/$/);
-    await expect(page.getByRole('list', { name: 'Items in your basket' })).toContainText(
+    await expect(page.getByRole('list', { name: 'Items in your bag' })).toContainText(
       'Galvanised Steel',
     );
   });
