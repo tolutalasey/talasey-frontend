@@ -10,3 +10,9 @@
 .grid > li {
   display: grid;
 }
+
+@media (min-width: 40rem) {
+  .wide {
+    grid-column: span 2;
+  }
+}

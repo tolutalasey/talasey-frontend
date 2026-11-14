@@ -5,9 +5,10 @@ import styles from './Listing.module.css';
 export function RangeAfterword({ range }: { range: Range }) {
   if (range.buyingGuide.length === 0 && range.faqs.length === 0) return null;
   return (
-    <div className={styles.afterword}>
+    <div className={`frame ${styles.afterword}`}>
       {range.buyingGuide.length > 0 && (
-        <section aria-labelledby="guide-title">
+        <section aria-labelledby="guide-title" className={styles.guide}>
+          <p className="eyebrow">Good to know</p>
           <h2 id="guide-title">Buying {range.name.toLowerCase()}</h2>
           {range.buyingGuide.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
@@ -17,14 +18,14 @@ export function RangeAfterword({ range }: { range: Range }) {
       {range.faqs.length > 0 && (
         <section aria-labelledby="faq-title">
           <h2 id="faq-title">Questions</h2>
-          <dl className={styles.faqs}>
-            {range.faqs.map((faq) => (
-              <div key={faq.question}>
-                <dt>{faq.question}</dt>
-                <dd>{faq.answer}</dd>
-              </div>
+          <div className={styles.faqs}>
+            {range.faqs.map((faq, index) => (
+              <details key={faq.question} className={styles.faq} open={index === 0}>
+                <summary>{faq.question}</summary>
+                <p>{faq.answer}</p>
+              </details>
             ))}
-          </dl>
+          </div>
         </section>
       )}
     </div>
