@@ -18,6 +18,15 @@ describe('pageMetadata', () => {
     expect(metadata.alternates?.canonical).toBe('/products/x');
     expect(metadata.openGraph).toMatchObject({ locale: 'en_GB', url: '/products/x' });
   });
+
+  it('shares the site photo unless the page has its own', () => {
+    const plain = pageMetadata({ title: 'T', description: 'D', path: '/' });
+    const own = pageMetadata({ title: 'T', description: 'D', path: '/', image: '/uploads/a.jpg' });
+    expect(plain.openGraph?.images).toEqual([
+      { url: '/images/brand/share.jpg', width: 1200, height: 630 },
+    ]);
+    expect(own.openGraph?.images).toEqual([{ url: '/uploads/a.jpg' }]);
+  });
 });
 
 describe('breadcrumbJsonLd', () => {

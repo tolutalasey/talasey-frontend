@@ -7,9 +7,14 @@ export interface PageSeo {
   path: string;
   // Filter and search states: followed for their links but kept out of the index.
   noindex?: boolean;
+  // The photo shown when the page is shared; pages without one use the site's own.
+  image?: string | null;
 }
 
-export function pageMetadata({ title, description, path, noindex }: PageSeo): Metadata {
+const SHARE_IMAGE = { url: '/images/brand/share.jpg', width: 1200, height: 630 };
+
+export function pageMetadata({ title, description, path, noindex, image }: PageSeo): Metadata {
+  const shareImage = image ? { url: image } : SHARE_IMAGE;
   return {
     title: { absolute: title },
     description,
@@ -22,7 +27,9 @@ export function pageMetadata({ title, description, path, noindex }: PageSeo): Me
       siteName: site.name,
       locale: 'en_GB',
       type: 'website',
+      images: [shareImage],
     },
+    twitter: { card: 'summary_large_image', images: [shareImage.url] },
   };
 }
 
@@ -94,7 +101,7 @@ export function productJsonLd(product: ProductSchemaInput) {
     ...(product.mpn && { mpn: product.mpn }),
     ...(product.color && { color: product.color }),
     ...(product.size && { size: product.size }),
-    ...(product.image && { image: [product.image] }),
+    ...(product.image && { image: [absoluteUrl(product.image)] }),
     ...(product.price && {
       offers: {
         '@type': 'Offer',

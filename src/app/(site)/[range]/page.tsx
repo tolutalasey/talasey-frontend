@@ -7,6 +7,7 @@ import {
   listingCanonical,
   listingRedirect,
   RangePage,
+  rangePhoto,
 } from '@/features/catalogue';
 import { parseListingParams } from '@/features/search';
 import { pageMetadata } from '@/lib/seo';
@@ -31,6 +32,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     ...range.seo,
     path: listingCanonical(range),
     noindex: hasListingParams(query) || listing.inRange === 0,
+    image: rangePhoto(range.slug).src,
   });
 }
 

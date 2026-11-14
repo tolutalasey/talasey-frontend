@@ -33,6 +33,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     description: productDescription(product),
     path: productPath(product.handle),
     noindex: Object.keys(await searchParams).length > 0,
+    image: product.thumbnail,
   });
 }
 
