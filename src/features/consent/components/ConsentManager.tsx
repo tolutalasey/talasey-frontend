@@ -59,7 +59,8 @@ export function ConsentManager({ secureCookie }: { secureCookie: boolean }) {
     setReopened(false);
   }
 
-  const open = inBrowser ? reopened || needsAsking(record) : undefined;
+  const framed = inBrowser && window.self !== window.top;
+  const open = inBrowser ? !framed && (reopened || needsAsking(record)) : undefined;
 
   // Keyed on reopening from Cookie settings, so it starts from the current choices on the first
   // screen. Not keyed on the first answer, so the server-rendered dialog is kept, not replaced.

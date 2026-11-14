@@ -1780,3 +1780,99 @@ ul.grid {
 th > .cellInput {
   min-width: 8rem;
 }
+
+/* The form beside its live preview */
+.workspace {
+  display: grid;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+@media (min-width: 80rem) {
+  .workspace {
+    grid-template-columns: minmax(24rem, 34rem) minmax(0, 1fr);
+  }
+}
+
+.workspaceForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.workspaceForm > .panel {
+  margin: 0;
+}
+
+.workspacePreview {
+  min-width: 0;
+}
+
+@media (min-width: 80rem) {
+  .workspacePreview {
+    position: sticky;
+    top: calc(4rem + var(--space-4));
+  }
+}
+
+@media (max-width: 79.99rem) {
+  .workspacePreview {
+    order: -1;
+  }
+}
+
+.publishing {
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  background: var(--color-white);
+}
+
+.publishing > summary {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+  list-style: none;
+  cursor: pointer;
+}
+
+.publishing > summary::-webkit-details-marker {
+  display: none;
+}
+
+.publishing > summary::after {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-left: var(--space-1);
+  border-right: 2px solid var(--color-ink-muted);
+  border-bottom: 2px solid var(--color-ink-muted);
+  rotate: 45deg;
+  translate: 0 -2px;
+  transition: rotate var(--motion-fast);
+}
+
+.publishing[open] > summary::after {
+  rotate: 225deg;
+  translate: 0 2px;
+}
+
+.publishing > summary > span:first-child {
+  flex: 1;
+}
+
+.publishingPanels {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0 var(--space-3) var(--space-3);
+}
+
+.publishingPanels > .panel {
+  margin: 0;
+  padding: var(--space-4);
+  box-shadow: none;
+}

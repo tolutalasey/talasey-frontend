@@ -150,3 +150,18 @@ export async function removeFromRelease(form: FormData) {
   if (error) failed(RELEASES, problemText(error));
   done(RELEASES, 'Taken out of the release. The draft is kept.');
 }
+
+// What is in the editor right now, for the live preview. Nothing is saved or logged, and photos
+// chosen but not yet uploaded appear once the draft is saved.
+export async function stagePreview(form: FormData): Promise<boolean> {
+  const id = text(form, 'id') ?? '';
+  const info = await typeInfo(text(form, 'type') ?? '');
+  if (!info) return false;
+  const { error } = await (
+    await staffApi()
+  ).PUT('/content/documents/{id}/preview', {
+    params: { path: { id } },
+    body: { data: dataFromForm(info.fields, form, {}) },
+  });
+  return !error;
+}

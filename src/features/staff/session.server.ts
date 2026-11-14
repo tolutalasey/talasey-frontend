@@ -11,6 +11,8 @@ export type Permission = StaffMember['permissions'][number];
 const COOKIE = 'talasey_staff';
 const CHALLENGE_COOKIE = 'talasey_staff_challenge';
 const SETUP_COOKIE = 'talasey_staff_two_factor';
+// Readable by the page, holding no secret: it only tells the shop to look for an edit link.
+export const STAFF_HINT_COOKIE = 'talasey_staff_here';
 const SEVEN_DAYS = 7 * 24 * 60 * 60;
 const FIVE_MINUTES = 5 * 60;
 const TEN_MINUTES = 10 * 60;
@@ -20,9 +22,9 @@ export interface TwoFactorSetup {
   uri: string;
 }
 
-async function remember(name: string, value: string, maxAge: number) {
+async function remember(name: string, value: string, maxAge: number, httpOnly = true) {
   (await cookies()).set(name, value, {
-    httpOnly: true,
+    httpOnly,
     sameSite: 'lax',
     secure: env.APP_ENV !== 'development',
     path: '/',
@@ -30,10 +32,15 @@ async function remember(name: string, value: string, maxAge: number) {
   });
 }
 
-export const rememberSession = (token: string) => remember(COOKIE, token, SEVEN_DAYS);
+export async function rememberSession(token: string) {
+  await remember(COOKIE, token, SEVEN_DAYS);
+  await remember(STAFF_HINT_COOKIE, '1', SEVEN_DAYS, false);
+}
 
 export async function forgetSession() {
-  (await cookies()).delete(COOKIE);
+  const jar = await cookies();
+  jar.delete(COOKIE);
+  jar.delete(STAFF_HINT_COOKIE);
 }
 
 // Between the password and the code from the app: proof the password was right, kept only in

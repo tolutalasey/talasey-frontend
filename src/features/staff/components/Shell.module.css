@@ -475,3 +475,8 @@
   font-size: 1.0625rem;
   font-weight: var(--font-weight-semibold);
 }
+
+/* Editors with a live preview use the full width of the screen. */
+.main:has([data-wide]) {
+  max-width: none;
+}

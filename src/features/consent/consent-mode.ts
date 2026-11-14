@@ -32,4 +32,5 @@ export const consentDefaultsScript = `window.dataLayer=window.dataLayer||[];wind
 // ago, or before the cookie list changed), and CSS shows the consent dialog that is already in
 // the HTML. Showing it at first paint, instead of after the JavaScript loads, keeps it from
 // holding up the page's largest paint. Without JavaScript nothing is tracked and nothing is asked.
-export const consentPromptScript = `(function(){var m=/(?:^|; )${CONSENT_COOKIE}=([^;]*)/.exec(document.cookie);var v=m?decodeURIComponent(m[1]).split('.'):[];var d=Date.parse(v.slice(3).join('.'));if(v[0]!=='${CONSENT_VERSION}'||!(Date.now()-d<${CONSENT_MAX_AGE_DAYS}*864e5))document.documentElement.dataset.consent='ask';})();`;
+// Never inside a staff preview frame, where the dialog would cover the page being edited.
+export const consentPromptScript = `(function(){if(window.self!==window.top)return;var m=/(?:^|; )${CONSENT_COOKIE}=([^;]*)/.exec(document.cookie);var v=m?decodeURIComponent(m[1]).split('.'):[];var d=Date.parse(v.slice(3).join('.'));if(v[0]!=='${CONSENT_VERSION}'||!(Date.now()-d<${CONSENT_MAX_AGE_DAYS}*864e5))document.documentElement.dataset.consent='ask';})();`;

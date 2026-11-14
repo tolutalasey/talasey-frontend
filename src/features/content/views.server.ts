@@ -4,7 +4,7 @@ import type { SearchRecord } from '@/features/search';
 import { slugify } from '@/lib/slug';
 import { filterInspiration, type InspirationFilters } from './inspiration';
 import { getBrandPages, getGuides, getInspiration, getProjectPages } from './loaders.server';
-import type { Guide, HelpTopic } from './schemas';
+import type { BrandPage, Guide, HelpTopic, ProjectPage } from './schemas';
 
 const ROW = 12;
 
@@ -15,7 +15,10 @@ async function rangesFor(slugs: string[]): Promise<Range[]> {
 
 export async function getBrandView(slug: string) {
   const page = (await getBrandPages()).find((brand) => brand.slug === slug);
-  if (!page) return null;
+  return page ? brandViewFor(page) : null;
+}
+
+export async function brandViewFor(page: BrandPage) {
   const [ranges, products] = await Promise.all([
     rangesFor(page.ranges),
     getProductRow({ filters: { brand: [slugify(page.name)] }, pageSize: ROW }),
@@ -25,7 +28,10 @@ export async function getBrandView(slug: string) {
 
 export async function getProjectView(slug: string) {
   const page = (await getProjectPages()).find((project) => project.slug === slug);
-  if (!page) return null;
+  return page ? projectViewFor(page) : null;
+}
+
+export async function projectViewFor(page: ProjectPage) {
   const ranges = await rangesFor(page.ranges);
   const products = await getProductRow({
     scope: {
@@ -42,7 +48,10 @@ export async function getGuideView(
   slug: string,
 ): Promise<{ guide: Guide; products: SearchRecord[] } | null> {
   const guide = (await getGuides()).find((candidate) => candidate.slug === slug);
-  if (!guide) return null;
+  return guide ? guideViewFor(guide) : null;
+}
+
+export async function guideViewFor(guide: Guide) {
   return { guide, products: await getProductsByHandle(guide.products) };
 }
 

@@ -13,6 +13,7 @@ export {
   getRange,
   getRangeListing,
   getRanges,
+  rangeFromContent,
   type RangeListing,
 } from './loaders.server';
 export {

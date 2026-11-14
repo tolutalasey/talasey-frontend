@@ -6,7 +6,7 @@ describe('securityHeaders', () => {
     const headers = securityHeaders('production');
     expect(headers['Strict-Transport-Security']).toContain('preload');
     expect(headers['X-Content-Type-Options']).toBe('nosniff');
-    expect(headers['Content-Security-Policy']).toContain("frame-ancestors 'none'");
+    expect(headers['Content-Security-Policy']).toContain("frame-ancestors 'self'");
     expect(headers['Content-Security-Policy']).not.toContain('unsafe-eval');
   });
 

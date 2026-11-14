@@ -51,6 +51,11 @@ const storedRange = rangeSchema.extend({
   curated: z.array(curatedPageSchema.extend({ filters: storedFilters })),
 });
 
+// A range page as the content team wrote it, read the same way the shop reads published ones.
+export function rangeFromContent(data: unknown) {
+  return storedRange.safeParse(data);
+}
+
 export async function getRanges(): Promise<Range[]> {
   'use cache';
   cacheTag(cacheTags.ranges);

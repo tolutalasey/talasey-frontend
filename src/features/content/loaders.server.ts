@@ -75,16 +75,16 @@ export async function getBrandPages(): Promise<BrandPage[]> {
   return contentOr('brand-page', storedPageSchema, fallbackBrands, bySlug);
 }
 
+export const storedProjectSchema = projectPageSchema.extend({
+  ...storedPageSchema.shape,
+  steps: list(z.string()),
+});
+
 export async function getProjectPages(): Promise<ProjectPage[]> {
   'use cache';
   cacheTag(cacheTags.projectPages);
   cacheLife('days');
-  return contentOr(
-    'project-page',
-    projectPageSchema.extend({ ...storedPageSchema.shape, steps: list(z.string()) }),
-    fallbackProjects,
-    bySlug,
-  );
+  return contentOr('project-page', storedProjectSchema, fallbackProjects, bySlug);
 }
 
 export async function getGuides(): Promise<Guide[]> {

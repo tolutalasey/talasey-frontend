@@ -1,6 +1,7 @@
 import { Suspense, type ReactNode } from 'react';
 import { CurrentBag } from '@/features/checkout';
 import { BagLink, SiteChrome } from '@/features/layout';
+import { EditThisPage } from '@/features/live-preview';
 
 // The shop's header and footer, with the bag count streamed in from the visitor's basket.
 export function ShopChrome({ children }: { children: ReactNode }) {
@@ -13,6 +14,7 @@ export function ShopChrome({ children }: { children: ReactNode }) {
       }
     >
       {children}
+      <EditThisPage />
     </SiteChrome>
   );
 }

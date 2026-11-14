@@ -5,6 +5,7 @@ export { IndexPage } from './components/IndexPage';
 export { InspirationGallery } from './components/InspirationGallery';
 export { SearchBox } from './components/SearchBox';
 export { StoryPage } from './components/StoryPage';
+export { BrandStory, ProjectStory } from './components/StoryViews';
 export { parseInspirationFilters } from './inspiration';
 export {
   getBrandPages,
@@ -12,6 +13,9 @@ export {
   getGuides,
   getInspiration,
   getProjectPages,
+  storedGuideSchema,
+  storedPageSchema,
+  storedProjectSchema,
 } from './loaders.server';
 export { brandPagePath, guidePath, helpPath, projectPath } from './paths';
 export {
@@ -22,10 +26,12 @@ export {
   type ProjectPage,
 } from './schemas';
 export {
+  brandViewFor,
   getBrandView,
   getGuideView,
+  guideViewFor,
   getHelpGuides,
   getInspirationView,
   getProjectView,
+  projectViewFor,
 } from './views.server';
-export { previewContent, type ContentPreview } from './preview.server';

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { CONTENT_STATUS, ContentEditor } from '@/features/content-editor';
+import { hasPagePreview, sitePathFor } from '@/features/live-preview';
 import { Badge, Notice, PageHeader, staffApi } from '@/features/staff';
 import { contentTypes } from '../../types.server';
 
@@ -36,6 +37,11 @@ export default async function EditContent({ params, searchParams }: Props) {
         document={document}
         type={type}
         releases={releases.filter((release) => release.status !== 'published')}
+        preview={
+          hasPagePreview(type.type)
+            ? { livePath: document.published ? sitePathFor(type.type, document.key) : null }
+            : undefined
+        }
       />
     </>
   );

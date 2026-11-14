@@ -20,7 +20,8 @@ function contentSecurityPolicy({ isDev = false, cardPayments = false }: HeaderOp
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "frame-ancestors 'none'",
+    // Only the site's own pages may frame it: the content editor shows its live preview this way.
+    "frame-ancestors 'self'",
     ...(isDev ? [] : ['upgrade-insecure-requests']),
   ].join('; ');
 }
@@ -33,7 +34,7 @@ export function securityHeaders(
     'Content-Security-Policy': contentSecurityPolicy(options),
     'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
     'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
+    'X-Frame-Options': 'SAMEORIGIN',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(self)',
     ...(appEnv !== 'production' && { 'X-Robots-Tag': 'noindex, nofollow' }),
