@@ -27,7 +27,7 @@
 .answer::before {
   position: absolute;
   left: 0;
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-weight: var(--font-weight-semibold);
   color: var(--color-brand600);
 }

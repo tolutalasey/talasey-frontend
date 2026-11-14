@@ -1,21 +1,27 @@
+// From the Talasey logo and the 2026 brochures (docs/design-system.md).
 export const color = {
-  brand50: '#F3ECF7',
-  brand600: '#5E2378',
-  brand800: '#3F1752',
-  brand950: '#2A1036',
-  ink: '#1E1A22',
-  inkMuted: '#4A4250',
-  stone50: '#F6F2F0',
-  line: '#E7E1EA',
+  brand50: '#F4ECF5',
+  brand600: '#6C1B78',
+  brand800: '#4A0F55',
+  brand950: '#2B0337',
+  stone: '#EFE4DC',
+  stoneMuted: '#C4B2BF',
+  silver: '#D1D2D4',
+  ink: '#2A282C',
+  inkMuted: '#504A56',
+  stone50: '#F6F2EF',
+  line: '#E8E1DC',
   white: '#FFFFFF',
   success: '#1F6B45',
   warning: '#8A4B00',
   error: '#B3261E',
 } as const;
 
+// Headings in Fraunces, the free stand-in for The Seasons in the brochures; text in Hanken
+// Grotesk, the open version of HK Grotesk used by the brochures and talasey.co.uk.
 export const font = {
-  display: "'Jost', system-ui, sans-serif",
-  body: "'Mulish', system-ui, sans-serif",
+  display: "'Fraunces', Georgia, serif",
+  body: "'Hanken Grotesk', system-ui, sans-serif",
 } as const;
 
 export const fontWeight = {
@@ -29,7 +35,7 @@ export const fontWeight = {
 // desktop size, and sizes in between scale smoothly.
 export const typeScale = {
   h1: { mobile: 36, desktop: 56 },
-  h2: { mobile: 28, desktop: 38 },
+  h2: { mobile: 28, desktop: 40 },
   h3: { mobile: 22, desktop: 26 },
   body: { mobile: 16, desktop: 17 },
   small: { mobile: 14, desktop: 14 },
@@ -66,9 +72,11 @@ export const space = {
   20: '5rem',
 } as const;
 
+// Small radii, like the squares in the logo. Photos have none.
 export const radius = {
-  control: '8px',
-  card: '12px',
+  tag: '2px',
+  control: '4px',
+  card: '6px',
 } as const;
 
 export const border = {
@@ -88,9 +96,18 @@ export const target = {
   spacing: '24px',
 } as const;
 
-// No drop shadows except the sticky mobile basket bar.
+// Cards lift on hover; the sticky basket bar sits above the page.
 export const shadow = {
-  stickyBar: '0 -4px 16px rgb(30 26 34 / 0.12)',
+  card: '0 1px 2px rgb(42 40 44 / 0.06), 0 8px 24px rgb(42 40 44 / 0.08)',
+  stickyBar: '0 -4px 16px rgb(42 40 44 / 0.12)',
+} as const;
+
+// Short and calm; turned off when the visitor asks for reduced motion.
+export const motion = {
+  fast: '120ms',
+  medium: '240ms',
+  slow: '480ms',
+  ease: 'cubic-bezier(0.2, 0.7, 0.2, 1)',
 } as const;
 
 export const layout = {
@@ -114,6 +131,7 @@ export const tokens = {
   focus,
   target,
   shadow,
+  motion,
   layout,
 } as const;
 

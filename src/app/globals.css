@@ -1,6 +1,6 @@
 :root {
-  --font-display: var(--font-jost), system-ui, sans-serif;
-  --font-body: var(--font-mulish), system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-hanken), system-ui, sans-serif;
 }
 
 *,
@@ -26,8 +26,11 @@ h2,
 h3 {
   margin: 0 0 var(--space-4);
   font-family: var(--font-display);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-regular);
+  font-variation-settings: 'SOFT' 100;
   line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 h1 {
@@ -51,6 +54,10 @@ a:hover {
   color: var(--color-brand800);
 }
 
+img {
+  max-width: 100%;
+}
+
 :focus-visible {
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
   outline-offset: var(--focus-ring-offset);
@@ -70,5 +77,153 @@ main:focus {
 @media (min-width: 64rem) {
   .container {
     padding-inline: var(--layout-gutter-desktop);
+  }
+}
+
+/* Small capitals with wide tracking, like the strapline under the logo. */
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.4;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Links that look like buttons. Real actions use the Button component. */
+.button,
+.button-secondary,
+.button-on-dark,
+.button-outline-on-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0 var(--space-6);
+  border: var(--border-input) solid transparent;
+  border-radius: var(--radius-control);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition:
+    background-color var(--motion-fast),
+    border-color var(--motion-fast),
+    color var(--motion-fast),
+    transform var(--motion-fast);
+}
+
+:is(.button, .button-secondary, .button-on-dark, .button-outline-on-dark):active {
+  transform: translateY(1px);
+}
+
+.button {
+  background: var(--color-brand600);
+  color: var(--color-white);
+}
+
+.button:hover {
+  background: var(--color-brand800);
+  color: var(--color-white);
+}
+
+.button-secondary {
+  border-color: var(--color-brand600);
+  background: transparent;
+  color: var(--color-brand600);
+}
+
+.button-secondary:hover {
+  background: var(--color-brand50);
+}
+
+.button-on-dark {
+  background: var(--color-stone);
+  color: var(--color-brand950);
+}
+
+.button-on-dark:hover {
+  background: var(--color-white);
+  color: var(--color-brand950);
+}
+
+.button-outline-on-dark {
+  border-color: var(--color-stone);
+  color: var(--color-stone);
+}
+
+.button-outline-on-dark:hover {
+  background: rgb(255 255 255 / 0.08);
+  color: var(--color-white);
+}
+
+:is(.button-on-dark, .button-outline-on-dark):focus-visible {
+  outline-color: var(--color-white);
+}
+
+/* The product name on a photo, as in the brochures. */
+.caption {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  max-width: calc(100% - 1.5rem);
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-tag);
+  background: var(--color-brand600);
+  color: var(--color-stone);
+  font-size: 0.8125rem;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+/* The round brochure stamp: one standout fact or offer per page. */
+.sticker {
+  display: inline-grid;
+  place-items: center;
+  width: 7rem;
+  height: 7rem;
+  padding: var(--space-4);
+  border-radius: 50%;
+  background: var(--color-stone);
+  box-shadow:
+    inset 0 0 0 4px var(--color-stone),
+    inset 0 0 0 5.5px var(--color-brand800);
+  color: var(--color-brand800);
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 100;
+  font-size: 1.05rem;
+  line-height: 1.15;
+  text-align: center;
+  rotate: -8deg;
+}
+
+/* Sections ease in as they scroll into view, where the browser supports scroll-linked
+   animation. Elsewhere, and for anyone who asks for less motion, they are simply there. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    [data-reveal] {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0.001;
+    translate: 0 2rem;
   }
 }

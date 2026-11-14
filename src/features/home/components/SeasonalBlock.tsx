@@ -1,15 +1,17 @@
+import { SplitPanel } from '@/ui/SplitPanel/SplitPanel';
 import NextLink from 'next/link';
+import { seasonPhoto } from '../brand';
 import type { SeasonalBlock as Block } from '../content';
-import styles from './HomeSections.module.css';
 
 export function SeasonalBlock({ block }: { block: Block }) {
   return (
-    <section className={styles.seasonal} aria-labelledby="season-title">
-      <div className="container">
-        <h2 id="season-title">{block.heading}</h2>
-        <p className={styles.seasonalText}>{block.text}</p>
-        <NextLink href={block.action.href}>{block.action.label}</NextLink>
-      </div>
-    </section>
+    <SplitPanel id="season-title" eyebrow="This season" heading={block.heading} photo={seasonPhoto}>
+      <p>{block.text}</p>
+      <p>
+        <NextLink href={block.action.href} className="button-on-dark">
+          {block.action.label}
+        </NextLink>
+      </p>
+    </SplitPanel>
   );
 }

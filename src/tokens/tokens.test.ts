@@ -24,16 +24,17 @@ describe('type scale', () => {
 });
 
 describe('colour tokens', () => {
-  it('match PRD section 18 exactly', () => {
+  it('match the logo and the 2026 brochures', () => {
     expect(color).toMatchObject({
-      brand600: '#5E2378',
-      brand800: '#3F1752',
-      brand950: '#2A1036',
-      brand50: '#F3ECF7',
-      ink: '#1E1A22',
-      inkMuted: '#4A4250',
-      stone50: '#F6F2F0',
-      line: '#E7E1EA',
+      brand600: '#6C1B78',
+      brand800: '#4A0F55',
+      brand950: '#2B0337',
+      brand50: '#F4ECF5',
+      stone: '#EFE4DC',
+      ink: '#2A282C',
+      inkMuted: '#504A56',
+      stone50: '#F6F2EF',
+      line: '#E8E1DC',
       success: '#1F6B45',
     });
   });

@@ -12,7 +12,10 @@ export function FeaturedProducts({
   if (products.length === 0) return null;
   return (
     <section className={`container ${styles.section}`} aria-labelledby="featured-title">
-      <h2 id="featured-title">{heading}</h2>
+      <div className={styles.heading}>
+        <p className="eyebrow">From the shop</p>
+        <h2 id="featured-title">{heading}</h2>
+      </div>
       <ProductGrid products={products} label={heading} />
     </section>
   );

@@ -1,7 +1,9 @@
 import type { Product, ProductVariant, SampleOffer } from '@/api-client';
 import type { StockStatusProps } from '@/ui/StockStatus/StockStatus';
 import type { ReactNode } from 'react';
+import { TrustStrip } from '@/ui/TrustStrip/TrustStrip';
 import { PageBreadcrumbs } from '@/features/layout';
+import { trustPoints } from '@/lib/trust-points';
 import { ProductSamples } from '@/features/samples';
 import type { BreadcrumbItem } from '@/lib/seo';
 import type { ProductContent, ProductPhoto } from '../content';
@@ -43,21 +45,26 @@ export function ProductPage({
   path,
   children,
 }: ProductPageProps) {
+  const range = breadcrumbs.length > 2 ? breadcrumbs[1]?.name : null;
   return (
-    <article className={`container ${styles.product}`}>
-      <PageBreadcrumbs items={breadcrumbs} />
-      <div className={styles.top}>
-        <ProductPhotos photos={photos} name={product.title} />
-        <div className={styles.buy}>
-          <h1>{product.title}</h1>
-          {product.subtitle && <p className={styles.subtitle}>{product.subtitle}</p>}
-          <PriceSummary pricing={pricing} stock={stock} />
-          {options.length > 0 && <OptionPicker groups={options} path={path} />}
-          {children}
-          <ProductSamples offers={samples} />
+    <>
+      <article className={`container ${styles.product}`}>
+        <PageBreadcrumbs items={breadcrumbs} />
+        <div className={styles.top}>
+          <ProductPhotos photos={photos} name={product.title} />
+          <div className={styles.buy}>
+            {(range ?? brand) && <p className="eyebrow">{range ?? brand}</p>}
+            <h1>{product.title}</h1>
+            {product.subtitle && <p className={styles.subtitle}>{product.subtitle}</p>}
+            <PriceSummary pricing={pricing} stock={stock} />
+            {options.length > 0 && <OptionPicker groups={options} path={path} />}
+            {children}
+            <ProductSamples offers={samples} />
+          </div>
         </div>
-      </div>
-      <ProductFacts product={product} variant={variant} brand={brand} content={content} />
-    </article>
+        <ProductFacts product={product} variant={variant} brand={brand} content={content} />
+      </article>
+      <TrustStrip points={trustPoints} label="Why buy from Talasey" />
+    </>
   );
 }

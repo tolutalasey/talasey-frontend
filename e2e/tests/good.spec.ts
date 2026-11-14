@@ -43,8 +43,10 @@ async function palletBasketAtDeliveryDay(page: Page) {
 
 test('1. finds a product in three clicks or one search', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('searchbox', { name: 'Search products' }).fill('pavetuf jointing');
-  await page.getByRole('searchbox', { name: 'Search products' }).press('Enter');
+  // Focusing the plain search box swaps in the suggestions box; type once it has.
+  await page.getByRole('searchbox', { name: 'Search products' }).click();
+  await page.getByRole('combobox', { name: 'Search products' }).fill('pavetuf jointing');
+  await page.keyboard.press('Enter');
   await page
     .getByRole('list', { name: 'Search results' })
     .getByRole('link', { name: /Pavetuf jointing compound/ })

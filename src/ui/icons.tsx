@@ -78,3 +78,42 @@ export const StarIcon = ({ filled, ...props }: IconProps & { filled: boolean }) 
     <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9L12 3Z" />
   </Icon>
 );
+
+export const TruckIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M3 6h11v10H3zM14 9h4l3 3v4h-7" />
+    <circle cx="7" cy="17.5" r="1.5" />
+    <circle cx="17" cy="17.5" r="1.5" />
+  </Icon>
+);
+
+export const SamplesIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" />
+  </Icon>
+);
+
+export const RulerIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M3 17 17 3l4 4L7 21z" />
+    <path d="m7 13 2 2M10 10l2 2M13 7l2 2" />
+  </Icon>
+);
+
+export const ChatIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M4 5h16v11H9l-5 4z" />
+  </Icon>
+);
+
+export const PauseIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M9 5v14M15 5v14" />
+  </Icon>
+);
+
+export const PlayIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="m8 5 11 7-11 7z" />
+  </Icon>
+);

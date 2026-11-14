@@ -1,4 +1,5 @@
 import { cacheLife } from 'next/cache';
+import Image from 'next/image';
 import NextLink from 'next/link';
 import { CookieSettingsButton } from '@/features/consent';
 import styles from './SiteChrome.module.css';
@@ -12,10 +13,16 @@ async function CurrentYear() {
 export function SiteFooter() {
   return (
     <footer className={styles.footer}>
-      <div className={`container ${styles.bar}`}>
-        <p>
-          &copy; <CurrentYear /> Talasey Ltd
-        </p>
+      <div className={`container ${styles.footerTop}`}>
+        <div className={styles.footerBrand}>
+          <Image
+            src="/images/brand/talasey-logo-on-dark.png"
+            alt="Talasey"
+            width={900}
+            height={212}
+          />
+          <p>Paving, decking and outdoor living, sold direct to UK gardens.</p>
+        </div>
         <nav aria-label="Footer" className={styles.footerLinks}>
           <NextLink href="/">Home</NextLink>
           <NextLink href="/brands/">Our brands</NextLink>
@@ -23,9 +30,13 @@ export function SiteFooter() {
           <NextLink href="/inspiration/">Inspiration</NextLink>
           <NextLink href="/help/">Help centre</NextLink>
           <NextLink href="/contact/">Contact us</NextLink>
+          <a href="https://talasey.co.uk/brochures/">Brochures</a>
           <CookieSettingsButton />
         </nav>
       </div>
+      <p className={`container ${styles.footerSmall}`}>
+        &copy; <CurrentYear /> Talasey Ltd. Prices include VAT.
+      </p>
     </footer>
   );
 }

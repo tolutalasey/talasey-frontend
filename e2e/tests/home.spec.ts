@@ -33,8 +33,9 @@ for (const width of [375, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
     const logo = await page.getByRole('link', { name: 'Talasey' }).first().boundingBox();
-    const heading = await page.getByRole('heading', { level: 1 }).boundingBox();
-    expect(heading?.x).toBeGreaterThanOrEqual(16);
-    expect(heading?.x).toBe(logo?.x);
+    // On wide screens the text sits in a panel over the photo; the panel lines up with the logo.
+    const panel = await page.getByRole('heading', { level: 1 }).locator('..').boundingBox();
+    expect(panel?.x).toBeGreaterThanOrEqual(16);
+    expect(panel?.x).toBe(logo?.x);
   });
 }

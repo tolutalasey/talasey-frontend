@@ -5,18 +5,19 @@ import localFont from 'next/font/local';
 import type { ReactNode } from 'react';
 import { site } from '@/lib/site';
 
-// Self-hosted from src/tokens: Latin subset, Jost 500-600 and Mulish 400-700, 33 KB together.
-const jost = localFont({
-  src: '../tokens/fonts/jost-wght-500-600.woff2',
-  weight: '500 600',
-  variable: '--font-jost',
+// Self-hosted from src/tokens, Latin subset: Fraunces with its weight and soft axes for headings,
+// Hanken Grotesk for text, 97 KB together.
+const fraunces = localFont({
+  src: '../tokens/fonts/fraunces-soft-wght.woff2',
+  weight: '100 900',
+  variable: '--font-fraunces',
   display: 'swap',
 });
 
-const mulish = localFont({
-  src: '../tokens/fonts/mulish-wght-400-700.woff2',
-  weight: '400 700',
-  variable: '--font-mulish',
+const hanken = localFont({
+  src: '../tokens/fonts/hanken-grotesk-wght.woff2',
+  weight: '100 900',
+  variable: '--font-hanken',
   display: 'swap',
 });
 
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#5E2378',
+  themeColor: '#2B0337',
 };
 
 // Only what every page shares. The shop's header, footer and consent live in (site), and the
@@ -36,7 +37,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang={site.locale}
-      className={`${jost.variable} ${mulish.variable}`}
+      className={`${fraunces.variable} ${hanken.variable}`}
       suppressHydrationWarning
     >
       <body>{children}</body>

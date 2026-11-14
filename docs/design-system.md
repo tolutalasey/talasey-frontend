@@ -28,10 +28,25 @@ npm run storybook:build && npm run test:stories   # every story in Chromium: axe
 - No timers: toasts stay until closed.
 - Server components by default; client components only for state and keyboard handling.
 
+## The look
+
+The design follows the 2026 brochures (Pergolas, Finishing Touches, Porcelain & Stone):
+
+- Real project photos, square-cornered, with a plum caption tag naming the product (`.caption`).
+- Aubergine panels beside photos (`ui/SplitPanel`), the trust strip (`ui/TrustStrip`), the promo line and the footer.
+- Serif headings (Fraunces, soft) and Hanken Grotesk text; eyebrows in tracked capitals (`.eyebrow`) like the logo's strapline.
+- One round stamp per page (`.sticker`), for an offer or a standout fact.
+- Link buttons: `.button`, `.button-secondary`, and `.button-on-dark` / `.button-outline-on-dark` on aubergine.
+- The home page's moving wall of brochure photos (`features/home/components/Showcase`) is CSS only. It pauses on hover, on focus and with its Pause switch, and stands still for anyone who asks their device for less motion.
+- Sections ease in on scroll (`data-reveal`) only where the browser supports scroll-linked animation and the visitor allows motion; otherwise they are simply there.
+
+Brochure photos are in `public/images/brand/`, listed in `features/home/brand.ts`. Some were contributed by landscaping firms (credited on talasey.co.uk/brochures/); keep their credit and check with Amy before using them anywhere else. The design itself is the "Talasey" design system and "Talasey shop screens" canvas in Claude.
+
 ## Waiting on brand input
 
-- The palette is taken from the live site and mockups. Confirm against the brand guidelines, including `warning` (#8A4B00) and `error` (#B3261E), which we picked.
-- Brand fonts: Jost and Mulish until the guidelines say otherwise.
-- The logo is text in the header until we have the SVG.
+- Confirm the palette against the brand guidelines, including `warning` (#8A4B00) and `error` (#B3261E), which we picked.
+- Headings use Fraunces in place of The Seasons until Talasey's Adobe Fonts licence covers the site.
+- The logo is a PNG from talasey.co.uk until we have the SVG.
+- Product photos: the master sheet has none yet, so products show a placeholder.
 - The grid gap (24px) and the sticky basket bar shadow aren't in the PRD.
 - Colour set swatches need the real powder coat names and hex values.

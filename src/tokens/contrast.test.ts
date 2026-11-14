@@ -28,10 +28,11 @@ describe('Talasey palette', () => {
     },
   );
 
-  it('matches the ratios PRD section 18 quotes for the brand colours', () => {
-    expect(contrastRatio(color.brand600, color.white)).toBeCloseTo(10.9, 0);
-    expect(contrastRatio(color.brand800, color.white)).toBeCloseTo(14, 0);
-    expect(contrastRatio(color.ink, color.white)).toBeCloseTo(17, 0);
+  it('keeps the ratios the design system quotes for the brand colours', () => {
+    expect(contrastRatio(color.brand600, color.white)).toBeCloseTo(10.2, 0);
+    expect(contrastRatio(color.brand800, color.white)).toBeCloseTo(14.1, 0);
+    expect(contrastRatio(color.stone, color.brand950)).toBeCloseTo(14.4, 0);
+    expect(contrastRatio(color.ink, color.white)).toBeCloseTo(14.6, 0);
     expect(contrastRatio(color.success, color.white)).toBeCloseTo(6.5, 0);
   });
 

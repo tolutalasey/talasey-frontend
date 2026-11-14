@@ -23,7 +23,6 @@
   display: block;
   width: 100%;
   height: auto;
-  border-radius: var(--radius-card);
   background: var(--color-stone50);
 }
 
@@ -43,6 +42,10 @@
   margin: 0;
 }
 
+.buy :global(.eyebrow) {
+  margin-bottom: calc(-1 * var(--space-3));
+}
+
 .subtitle,
 .description {
   max-width: var(--layout-measure);
@@ -60,7 +63,7 @@
 
 .price {
   margin: 0;
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--font-size-h3);
   font-weight: var(--font-weight-semibold);
 }
@@ -135,8 +138,48 @@
 .facts {
   display: grid;
   gap: var(--space-12);
-  max-width: 48rem;
   margin-top: var(--space-16);
+}
+
+/* About and specifications sit side by side like a brochure spread: an aubergine panel and a
+   stone one. Everything after them runs full width. */
+.facts > section:first-child:has(#about-title) {
+  padding: var(--space-12) var(--space-8);
+  background: var(--color-brand950);
+  color: var(--color-stone-muted);
+}
+
+.facts > section:first-child:has(#about-title) h2 {
+  color: var(--color-stone);
+}
+
+.facts > section:first-child:has(#about-title) .description {
+  color: var(--color-stone-muted);
+  font-weight: 300;
+}
+
+.facts > section:has(#specs-title) {
+  padding: var(--space-12) var(--space-8);
+  background: var(--color-stone50);
+}
+
+@media (min-width: 64rem) {
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 0;
+  }
+
+  .facts > section:not(:first-child, :has(#specs-title)) {
+    grid-column: 1 / -1;
+  }
+
+  .facts > section:first-child:has(#about-title) {
+    padding: var(--space-16);
+  }
+
+  .facts > section:has(#specs-title) {
+    padding: var(--space-16);
+  }
 }
 
 .specs {
