@@ -29,7 +29,15 @@ export function ProductFacts({ product, variant, brand, content }: ProductFactsP
       {product.description && (
         <section aria-labelledby="about-title">
           <h2 id="about-title">About this product</h2>
-          <p className={styles.description}>{product.description}</p>
+          {product.description
+            .split(/\n\s*\n/)
+            .map((paragraph) => paragraph.trim())
+            .filter(Boolean)
+            .map((paragraph) => (
+              <p key={paragraph} className={styles.description}>
+                {paragraph}
+              </p>
+            ))}
           {content.features.length > 0 && (
             <ul>
               {content.features.map((feature) => (
