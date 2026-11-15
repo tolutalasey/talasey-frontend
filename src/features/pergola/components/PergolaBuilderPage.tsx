@@ -9,9 +9,9 @@ import styles from './PergolaBuilderPage.module.css';
 
 export type Design = 'amy' | 'tolu';
 
-export const DESIGNS: { id: Design; label: string; detail: string }[] = [
-  { id: 'amy', label: 'Design A', detail: "Step by step, from Amy's spec" },
-  { id: 'tolu', label: 'Design B', detail: "In 3D, from Tolu's first version" },
+export const DESIGNS: { id: Design; label: string; short: string; detail: string }[] = [
+  { id: 'amy', label: 'Design A', short: 'Step by step', detail: "Step by step, from Amy's spec" },
+  { id: 'tolu', label: 'Design B', short: 'In 3D', detail: "In 3D, from Tolu's first version" },
 ];
 
 interface Props {

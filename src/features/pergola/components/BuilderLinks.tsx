@@ -29,7 +29,8 @@ export function BuilderLinks({ builders }: { builders: PergolaContent[] }) {
                     href={design.id === 'amy' ? path : `${path}?design=${design.id}`}
                     className={design.id === 'amy' ? 'button' : 'button-secondary'}
                   >
-                    {design.label}: {design.detail.split(',')[0]}
+                    <span>{design.short}</span>
+                    <small>{design.label}</small>
                   </NextLink>
                 ))}
               </div>
