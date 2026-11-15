@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useMemo, useState, useTransition } from 'react';
 import { addPergolaToBasket } from '../actions';
 import {
@@ -21,6 +22,7 @@ export function usePergolaBuild(rules: PergolaRules, catalogue: Catalogue) {
   const [build, setBuild] = useState<Build>(emptyBuild);
   const [message, setMessage] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const router = useRouter();
   const summary = useMemo(() => summarise(rules, catalogue, build), [rules, catalogue, build]);
 
   const change = (update: Partial<Build>) => {
@@ -40,6 +42,7 @@ export function usePergolaBuild(rules: PergolaRules, catalogue: Catalogue) {
     startTransition(async () => {
       const result = await addPergolaToBasket(summary.parts);
       if (result?.message) setMessage(result.message);
+      if (result?.added) router.push('/basket/', { scroll: false });
     });
 
   return { build, summary, change, chooseSide, chooseSlat, addToBag, pending, message };

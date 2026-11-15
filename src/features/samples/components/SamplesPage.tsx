@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import type { SampleOffer } from '@/api-client';
 import type { FormState } from '@/lib/form-feedback';
+import { standInPhoto } from '@/lib/stand-in-photo';
 import { VisuallyHidden } from '@/ui/VisuallyHidden/VisuallyHidden';
 import { addSample, removeSample, requestSamples } from '../actions';
 import { MAX_SAMPLES } from '../samples';
@@ -58,6 +59,9 @@ function Field({
 
 const nameOf = (offer: SampleOffer) => `${offer.productTitle}: ${offer.label}`;
 
+const photoOf = (offer: SampleOffer) =>
+  offer.image?.url ?? standInPhoto(`${offer.productTitle} ${offer.label}`).src;
+
 // Plain HTML forms throughout: the page works the same with or without JavaScript, and adds
 // nothing to what the browser downloads.
 export function SamplesPage({ offers, chosenIds, feedback }: Props) {
@@ -103,12 +107,8 @@ export function SamplesPage({ offers, chosenIds, feedback }: Props) {
                 return (
                   <li key={offer.id} className={styles.card} data-added={added || undefined}>
                     <span className={styles.cardPhoto}>
-                      {offer.image ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={offer.image.url} alt="" width={400} height={400} loading="lazy" />
-                      ) : (
-                        <span className={styles.noPhoto} aria-hidden="true" />
-                      )}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={photoOf(offer)} alt="" width={400} height={400} loading="lazy" />
                       {added && (
                         <span className={styles.tick} aria-hidden="true">
                           ✓
@@ -136,14 +136,31 @@ export function SamplesPage({ offers, chosenIds, feedback }: Props) {
         </section>
 
         <aside className={styles.tray} aria-labelledby="chosen-title">
-          <h2 id="chosen-title">
-            Your samples · {chosen.length} of {MAX_SAMPLES}
-          </h2>
+          <div className={styles.trayHead}>
+            <h2 id="chosen-title">Your samples</h2>
+            <span className={styles.trayCount}>
+              {chosen.length} of {MAX_SAMPLES}
+            </span>
+          </div>
+          <span className={styles.meter} aria-hidden="true">
+            <span style={{ width: `${(chosen.length / MAX_SAMPLES) * 100}%` }} />
+          </span>
           <ol className={styles.slots} aria-label="Chosen samples">
             {slots.map((offer, index) =>
               offer ? (
                 <li key={offer.id} className={styles.slot}>
-                  <span className={styles.slotName}>{nameOf(offer)}</span>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={photoOf(offer)}
+                    alt=""
+                    width={40}
+                    height={40}
+                    className={styles.slotPhoto}
+                  />
+                  <span className={styles.slotName}>
+                    {offer.productTitle}
+                    <span>{offer.label}</span>
+                  </span>
                   <form action={removeSample}>
                     <input type="hidden" name="offerId" value={offer.id} />
                     <button type="submit" className={styles.remove}>
@@ -177,36 +194,40 @@ export function SamplesPage({ offers, chosenIds, feedback }: Props) {
                   autoComplete="email"
                   feedback={feedback}
                 />
-                <Field
-                  name="firstName"
-                  label="First name"
-                  autoComplete="given-name"
-                  feedback={feedback}
-                />
-                <Field
-                  name="lastName"
-                  label="Last name"
-                  autoComplete="family-name"
-                  feedback={feedback}
-                />
+                <div className={styles.row}>
+                  <Field
+                    name="firstName"
+                    label="First name"
+                    autoComplete="given-name"
+                    feedback={feedback}
+                  />
+                  <Field
+                    name="lastName"
+                    label="Last name"
+                    autoComplete="family-name"
+                    feedback={feedback}
+                  />
+                </div>
                 <Field
                   name="address1"
                   label="Address"
                   autoComplete="address-line1"
                   feedback={feedback}
                 />
-                <Field
-                  name="city"
-                  label="Town or city"
-                  autoComplete="address-level2"
-                  feedback={feedback}
-                />
-                <Field
-                  name="postcode"
-                  label="Postcode"
-                  autoComplete="postal-code"
-                  feedback={feedback}
-                />
+                <div className={styles.row}>
+                  <Field
+                    name="city"
+                    label="Town or city"
+                    autoComplete="address-level2"
+                    feedback={feedback}
+                  />
+                  <Field
+                    name="postcode"
+                    label="Postcode"
+                    autoComplete="postal-code"
+                    feedback={feedback}
+                  />
+                </div>
                 <Field
                   name="phone"
                   label="Phone"

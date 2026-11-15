@@ -83,6 +83,9 @@ export async function SiteHeader({ bag }: { bag: ReactNode }) {
             }}
           />
         </details>
+        <NextLink href="/pergolas/#build-your-own" className={styles.navLink}>
+          Pergola builder
+        </NextLink>
         <NextLink href="/inspiration/" className={styles.navLink}>
           Inspiration
         </NextLink>

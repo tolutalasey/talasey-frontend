@@ -4,7 +4,8 @@ import type { Basket } from '@/api-client';
 import { PageBreadcrumbs } from '@/features/layout';
 import { formatDay, formatPrice } from '@/lib/format';
 import { hasFeedback } from '@/lib/form-feedback';
-import { CheckIcon } from '@/ui/icons';
+import { trustPoints } from '@/lib/trust-points';
+import { CheckIcon, LockIcon, TruckIcon } from '@/ui/icons';
 import type { CheckoutView } from '../loaders.server';
 import { AccessForm } from './AccessForm';
 import { BasketLines } from './BasketLines';
@@ -70,6 +71,32 @@ const VisuallyNumbered = ({ number }: { number: number }) => (
   <span className={styles.hiddenNumber}>Step {number}: </span>
 );
 
+interface Stage {
+  title: string;
+  done: boolean;
+}
+
+// The steps across the top, so shoppers see how far they have to go.
+function Progress({ stages }: { stages: Stage[] }) {
+  const current = stages.findIndex((stage) => !stage.done);
+  return (
+    <ol className={styles.progress} aria-label="Checkout steps">
+      {stages.map((stage, index) => (
+        <li
+          key={stage.title}
+          data-state={stage.done ? 'done' : index === current ? 'current' : 'next'}
+          aria-current={index === current ? 'step' : undefined}
+        >
+          <span className={styles.progressDot} aria-hidden="true">
+            {stage.done ? <CheckIcon /> : index + 1}
+          </span>
+          <span className={styles.progressName}>{stage.title}</span>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 function DeliveryDays({ view }: { view: CheckoutView }) {
   const { days, basket } = view;
   if (!days) return null;
@@ -103,6 +130,16 @@ function OrderSummary({ basket }: { basket: Basket }) {
         promotions={basket.promotions}
         total={basket.total}
       />
+      <ul className={styles.reassure}>
+        <li>
+          <LockIcon />
+          Card payments are taken securely by Stripe.
+        </li>
+        <li>
+          <TruckIcon />
+          {trustPoints[0].title}. {trustPoints[0].text}
+        </li>
+      </ul>
     </aside>
   );
 }
@@ -139,10 +176,21 @@ export function CheckoutFlow({ view }: { view: CheckoutView | null }) {
   const dayDone = pallet && delivery.day ? `Held for you: ${formatDay(delivery.day.date)}` : null;
   const accessDone = pallet && delivery.access ? 'Answered' : null;
 
+  const stages: Stage[] = [
+    { title: 'Address', done: !!basket.address },
+    { title: 'Delivery', done: !!deliveryDone && !!basket.address },
+    ...(pallet ? [{ title: 'Day', done: !!dayDone }] : []),
+    ...(pallet && delivery.day ? [{ title: 'Access', done: !!accessDone }] : []),
+    { title: 'Payment', done: false },
+  ];
+
   return (
     <div className={`container ${styles.page} ${styles.checkout}`}>
       <PageBreadcrumbs items={CHECKOUT_TRAIL} />
-      <h1>Checkout</h1>
+      <header className={styles.top}>
+        <h1>Checkout</h1>
+        <Progress stages={stages} />
+      </header>
       <ol className={styles.steps}>
         <li>
           <Step

@@ -8,6 +8,7 @@ import type {
 } from '@/api-client';
 import { getBasketClient, getCatalog } from '@/lib/commerce';
 import { env } from '@/lib/env';
+import { standInPhoto } from '@/lib/stand-in-photo';
 import { paymentMode } from '@/lib/payment';
 import { cacheLife, cacheTag } from 'next/cache';
 import { cacheTags } from '@/lib/cache-tags';
@@ -42,7 +43,7 @@ async function firstPicture(handle: string) {
 
   const product = await getCatalog().getProductByHandle(handle);
   const image = product?.images?.[0];
-  return image ? { src: image.url, alt: '' } : null;
+  return { src: image?.url ?? standInPhoto(product?.title ?? handle).src, alt: '' };
 }
 
 export async function getBasketView(): Promise<BasketView | null> {

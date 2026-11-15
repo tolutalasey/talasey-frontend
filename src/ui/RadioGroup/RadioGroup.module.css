@@ -20,17 +20,17 @@
 }
 
 .cards .radio[data-selected] {
-  box-shadow: inset 0 0 0 1px var(--color-brand950);
+  box-shadow: 0 0 0 3px rgb(108 27 120 / 0.12);
 }
 
 .radio {
   display: flex;
   align-items: flex-start;
   gap: var(--space-3);
-  min-height: 44px;
-  padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius-card);
+  min-height: 3.25rem;
+  padding: var(--space-4);
+  border: 1.5px solid #ddd2cb;
+  border-radius: 12px;
   background: var(--color-white);
   cursor: pointer;
   transition:
@@ -44,12 +44,13 @@
 }
 
 .radio[data-hovered] {
-  border-color: var(--color-ink);
+  border-color: #bfb1b9;
 }
 
 .radio[data-selected] {
-  border-color: var(--color-brand950);
+  border-color: var(--color-brand600);
   background: var(--color-brand50);
+  box-shadow: 0 0 0 3px rgb(108 27 120 / 0.12);
 }
 
 .radio[data-focus-visible] {
@@ -73,9 +74,9 @@
 }
 
 .radio[data-selected] .mark {
-  border-color: var(--color-brand950);
+  border-color: var(--color-brand600);
   box-shadow: inset 0 0 0 0.25rem var(--color-white);
-  background: var(--color-brand950);
+  background: var(--color-brand600);
 }
 
 .text {

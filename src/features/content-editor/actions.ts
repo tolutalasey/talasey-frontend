@@ -48,6 +48,16 @@ export async function createContent(form: FormData) {
   redirect(`/content/edit/${data.id}/`);
 }
 
+export async function deleteContent(form: FormData) {
+  const id = text(form, 'id') ?? '';
+  const list = `/content/${text(form, 'type') ?? ''}/`;
+  const { error } = await (
+    await staffApi()
+  ).DELETE('/content/documents/{id}', { params: { path: { id } } });
+  if (error) failed(list, problemText(error));
+  done(list, 'Deleted. It can be brought back from the change log.');
+}
+
 // One form, several buttons: save the draft, then publish or unpublish it if asked to.
 export async function saveContent(form: FormData) {
   const id = text(form, 'id') ?? '';

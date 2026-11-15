@@ -3,7 +3,8 @@
 import { Button } from '@/ui/Button/Button';
 import { Form } from '@/ui/Form/Form';
 import { TextField } from '@/ui/TextField/TextField';
-import { useActionState, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useActionState, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { addToBasket } from '../actions';
 import { CoverageCalculator } from './CoverageCalculator';
 import type { FormState } from '../forms';
@@ -117,6 +118,23 @@ function Extras({ extras }: { extras: BasketExtra[] }) {
   );
 }
 
+// Once the page has JavaScript, adding to the bag slides the bag drawer open over the product
+// instead of loading the bag page.
+const noChanges = () => () => {};
+
+function useOpenBagWhenAdded(added: number | undefined) {
+  const router = useRouter();
+  const ready = useSyncExternalStore(
+    noChanges,
+    () => true,
+    () => false,
+  );
+  useEffect(() => {
+    if (added) router.push('/basket/', { scroll: false });
+  }, [added, router]);
+  return ready;
+}
+
 export function AddToBasket({
   variantId,
   colours,
@@ -128,6 +146,7 @@ export function AddToBasket({
 }: AddToBasketProps) {
   const [state, action, pending] = useActionState<FormState, FormData>(addToBasket, initialState);
   const [buttonArea, buttonOutOfView] = useOutOfView();
+  const openBagWhenAdded = useOpenBagWhenAdded(state.added);
 
   return (
     <>
@@ -138,6 +157,7 @@ export function AddToBasket({
         className={styles.form}
       >
         <input type="hidden" name="variantId" value={variantId ?? ''} />
+        {openBagWhenAdded && <input type="hidden" name="js" value="1" />}
         {colours && colours.options.length > 0 && (
           <ColourSwatches {...colours} error={state.fieldErrors?.colourId} />
         )}

@@ -7,6 +7,7 @@ export { NotAllowed } from './components/NotAllowed';
 export { Notice } from './components/Notice';
 export { PageHeader } from './components/PageHeader';
 export { Pager, pageOf } from './components/Pager';
+export { RowActions } from './components/RowActions';
 export { SaveBar } from './components/SaveBar';
 export { SignInPage } from './components/SignInPage';
 export { StaffShell, type StaffLink, type StaffNavGroup } from './components/StaffShell';

@@ -5,6 +5,8 @@ export {
   type ColourChoiceProps,
   type ColourOption,
 } from './components/AddToBasket';
+export { BagDrawer } from './components/BagDrawer';
+export { BagPanel, BagPanelLoading } from './components/BagPanel';
 export { BasketSummary } from './components/BasketSummary';
 export { CheckoutFlow } from './components/CheckoutFlow';
 export { OrderConfirmation } from './components/OrderConfirmation';

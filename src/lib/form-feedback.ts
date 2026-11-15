@@ -7,6 +7,8 @@ export interface FormState {
   fieldErrors?: Record<string, string>;
   // What was typed, so a page rendered without JavaScript can put it back in the fields.
   values?: Record<string, string>;
+  // When something went into the bag, so the page can slide the bag open.
+  added?: number;
 }
 
 // Every form whose result is handed back to the page for browsers without JavaScript (ADR 0020).

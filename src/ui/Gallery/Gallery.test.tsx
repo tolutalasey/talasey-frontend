@@ -22,6 +22,7 @@ describe('Gallery', () => {
     const user = userEvent.setup();
     render(<Gallery label="Dusk grey porcelain paving" images={images} />);
     await user.tab();
+    await user.tab();
     expect(document.activeElement?.getAttribute('aria-label')).toBe(
       'Show image 1: Dusk grey paving, dry',
     );
@@ -36,6 +37,13 @@ describe('Gallery', () => {
 
   it('shows no thumbnails for a single image', () => {
     render(<Gallery label="Sample" images={images.slice(0, 1)} />);
-    expect(screen.queryByRole('button')).toBeNull();
+    expect(screen.getAllByRole('button')).toHaveLength(1);
+  });
+
+  it('opens the photo full screen from the zoom button', async () => {
+    const user = userEvent.setup();
+    render(<Gallery label="Dusk grey porcelain paving" images={images} />);
+    await user.click(screen.getByRole('button', { name: 'View Dusk grey paving, dry larger' }));
+    expect(screen.getByRole('dialog', { name: 'Dusk grey porcelain paving, larger' })).toBeTruthy();
   });
 });

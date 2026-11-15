@@ -3,12 +3,12 @@ import { TextField } from '@/ui/TextField/TextField';
 import NextLink from 'next/link';
 import {
   Badge,
-  ChevronRightIcon,
   EmptyState,
+  RowActions,
   staffStyles as styles,
   type BadgeTone,
 } from '@/features/staff';
-import { createContent } from '../actions';
+import { createContent, deleteContent } from '../actions';
 import { typeMeta } from '../type-meta';
 import type { ContentSummary, ContentTypeInfo } from '../types';
 
@@ -135,7 +135,17 @@ export function ContentList({ type, documents, view }: Props) {
                 </span>
                 <span className={styles.listEnd}>
                   <Badge tone={status.tone}>{status.label}</Badge>
-                  <ChevronRightIcon className={styles.chev} />
+                  <RowActions
+                    name={document.title}
+                    editHref={`/content/edit/${document.id}/`}
+                    remove={deleteContent}
+                    fields={{ id: document.id, type: type.type }}
+                    afterDelete={
+                      document.status === 'draft'
+                        ? 'The draft goes. You can bring it back from the change log.'
+                        : 'It comes off the site. You can bring it back from the change log.'
+                    }
+                  />
                 </span>
               </li>
             );

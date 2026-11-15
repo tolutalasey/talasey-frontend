@@ -105,7 +105,7 @@
 }
 
 .links h2 {
-  margin: 0 0 var(--space-4);
+  margin: 0 0 var(--space-2);
 }
 
 .links ul {
@@ -128,15 +128,16 @@
   margin: 0;
 }
 
-.links h3 a {
-  color: inherit;
-  text-decoration: none;
+.linksIntro {
+  max-width: 40rem;
+  margin: 0 0 var(--space-6);
 }
 
-.links h3 a::after {
-  content: '';
-  position: absolute;
-  inset: 0;
+.linkDesigns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
 }
 
 .links p {

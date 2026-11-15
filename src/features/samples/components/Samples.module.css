@@ -80,7 +80,7 @@
   gap: var(--space-2);
   align-content: start;
   padding: var(--space-3) var(--space-3) var(--space-4);
-  border-radius: var(--radius-card);
+  border-radius: 16px;
   background: var(--color-white);
   transition:
     translate var(--motion-medium) var(--motion-ease),
@@ -93,7 +93,9 @@
 }
 
 .card[data-added] {
-  box-shadow: inset 0 0 0 2px var(--color-brand950);
+  box-shadow:
+    inset 0 0 0 2px var(--color-brand600),
+    0 0 0 4px rgb(108 27 120 / 0.1);
 }
 
 .card > :not(.cardPhoto) {
@@ -104,7 +106,7 @@
   position: relative;
   display: block;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: 10px;
   aspect-ratio: 1;
   background: var(--color-stone50);
 }
@@ -114,17 +116,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.noPhoto {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    transparent 49.5%,
-    var(--color-line) 49.5% 50.5%,
-    transparent 50.5%
-  );
 }
 
 .tick {
@@ -165,12 +156,42 @@
   align-content: start;
   gap: var(--space-4);
   padding: var(--space-6);
-  border-radius: var(--radius-card);
+  border-radius: 16px;
   background: var(--color-white);
+  box-shadow: 0 12px 32px rgb(42 40 44 / 0.06);
 }
 
 .tray h2 {
   font-size: 1.5rem;
+}
+
+.trayHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.trayCount {
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+}
+
+.meter {
+  display: block;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-stone50);
+}
+
+.meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-brand600);
+  transition: width var(--motion-medium) var(--motion-ease);
 }
 
 .slots {
@@ -185,11 +206,18 @@
 .slotEmpty {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-3);
-  min-height: 3rem;
-  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-4);
-  border-radius: var(--radius-card);
+  min-height: 3.25rem;
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-2);
+  border-radius: 12px;
+}
+
+.slotPhoto {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 8px;
+  object-fit: cover;
 }
 
 .slot {
@@ -205,13 +233,23 @@
 }
 
 .slotName {
+  display: grid;
+  flex: 1;
+  min-width: 0;
   font-size: var(--font-size-small);
   font-weight: var(--font-weight-semibold);
+  line-height: 1.3;
+}
+
+.slotName span {
+  color: var(--color-ink-muted);
+  font-weight: var(--font-weight-regular);
 }
 
 .slotEmpty {
-  border: 1px dashed var(--color-ink-muted);
-  color: var(--color-ink-muted);
+  justify-content: center;
+  border: 1.5px dashed #d6cbc4;
+  color: #9b8f98;
   font-size: var(--font-size-small);
 }
 
@@ -280,35 +318,56 @@
   gap: var(--space-4);
 }
 
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: var(--space-3);
+}
+
 .field {
   display: grid;
-  gap: var(--space-1);
+  gap: 0.375rem;
+  min-width: 0;
 }
 
 .field label {
+  font-size: var(--font-size-small);
   font-weight: var(--font-weight-semibold);
 }
 
 .field input {
-  min-height: 3rem;
+  width: 100%;
+  min-height: 3.25rem;
   padding: var(--space-2) var(--space-4);
-  border: 1px solid var(--color-ink-muted);
-  border-radius: var(--radius-card);
+  border: 1.5px solid #ddd2cb;
+  border-radius: 12px;
   background: var(--color-white);
   font: inherit;
+  transition:
+    border-color var(--motion-fast) var(--motion-ease),
+    box-shadow var(--motion-fast) var(--motion-ease);
 }
 
 .field input:hover {
-  border-color: var(--color-ink);
+  border-color: #bfb1b9;
+}
+
+.field input:focus {
+  border-color: var(--color-brand600);
+  outline: none;
+  box-shadow: 0 0 0 4px rgb(108 27 120 / 0.14);
 }
 
 .field input[aria-invalid='true'] {
   border-color: var(--color-error);
+  box-shadow: 0 0 0 4px rgb(179 38 30 / 0.1);
 }
 
 .error {
   margin: 0;
   color: var(--color-error);
+  font-size: 0.8125rem;
+  font-weight: var(--font-weight-semibold);
 }
 
 .consent {
@@ -358,7 +417,6 @@
 
 .primary:focus-visible,
 .secondary:focus-visible,
-.field input:focus-visible,
 .consent input:focus-visible {
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
   outline-offset: var(--focus-ring-offset);

@@ -22,7 +22,7 @@ interface Props {
   linesFeedback?: FormState;
 }
 
-function Removed({ feedback }: { feedback?: FormState }) {
+export function RemovedNotice({ feedback }: { feedback?: FormState }) {
   if (!feedback?.notice) return null;
   const variantId = feedback.values?.variantId;
   return (
@@ -47,7 +47,7 @@ export function BasketSummary({ view, promotionFeedback, linesFeedback }: Props)
     return (
       <div className={`container ${styles.page}`}>
         <PageBreadcrumbs items={BASKET_TRAIL} />
-        <Removed feedback={linesFeedback} />
+        <RemovedNotice feedback={linesFeedback} />
         <div className={styles.empty}>
           <p className="eyebrow">Basket</p>
           <h1>Your bag is empty</h1>
@@ -79,7 +79,7 @@ export function BasketSummary({ view, promotionFeedback, linesFeedback }: Props)
         </header>
         <div className={styles.layout}>
           <section className={styles.main} aria-label="Items">
-            <Removed feedback={linesFeedback} />
+            <RemovedNotice feedback={linesFeedback} />
             <FormMessage message={linesFeedback?.message} />
             <BasketItems lines={basket.lines} stock={stock} pictures={pictures} />
             <NextLink href="/" className={styles.back}>

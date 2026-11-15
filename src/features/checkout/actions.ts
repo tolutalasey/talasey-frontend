@@ -40,7 +40,10 @@ export async function addToBasket(_state: FormState, form: FormData): Promise<Fo
     if (!extraAdded.ok) return settle('basket', { message: extraAdded.message, values: typed });
   }
   await settle('basket', {});
-  redirect('/basket/');
+  // With JavaScript the product page opens the bag drawer itself; without, the bag page loads.
+  if (form.get('js') !== '1') redirect('/basket/');
+  refresh();
+  return { added: Date.now() };
 }
 
 // A pergola (or any builder) build: all its parts go into the bag as one build.
@@ -54,7 +57,8 @@ export async function addBuildToBasket(parts: BuildPart[]): Promise<FormState> {
   }
   const added = await client.addBuild(basketId, parts);
   if (!added.ok) return { message: added.message };
-  redirect('/basket/');
+  refresh();
+  return { added: Date.now() };
 }
 
 export async function saveDeliveryDetails(_state: FormState, form: FormData): Promise<FormState> {

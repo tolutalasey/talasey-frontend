@@ -1,0 +1,155 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #141016;
+}
+
+.overlay[data-entering] {
+  animation: fade 160ms ease-out;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.modal,
+.dialog {
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+.dialog {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100dvh;
+}
+
+.bar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-white);
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.count {
+  color: rgb(255 255 255 / 0.7);
+  font-size: var(--font-size-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.tool,
+.step {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.08);
+  color: var(--color-white);
+  cursor: pointer;
+  transition: background-color var(--motion-fast);
+}
+
+.tool[data-hovered],
+.step[data-hovered] {
+  background: rgb(255 255 255 / 0.2);
+}
+
+.tool[data-focus-visible],
+.step[data-focus-visible] {
+  outline: var(--focus-ring-width) solid var(--color-white);
+  outline-offset: 2px;
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  place-items: center;
+  overflow: hidden;
+  padding: 0 var(--space-4);
+  cursor: zoom-in;
+  touch-action: pinch-zoom;
+}
+
+.stage[data-zoomed] {
+  cursor: zoom-out;
+  touch-action: none;
+}
+
+.image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+  user-select: none;
+  transition: scale 260ms var(--motion-ease);
+}
+
+.step {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.previous {
+  left: var(--space-4);
+}
+
+.previous svg {
+  rotate: 180deg;
+}
+
+.next {
+  right: var(--space-4);
+}
+
+.hint {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  color: rgb(255 255 255 / 0.65);
+  font-size: var(--font-size-small);
+  text-align: center;
+}
+
+@media (max-width: 40rem) {
+  .step {
+    top: auto;
+    bottom: var(--space-3);
+    translate: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay[data-entering] {
+    animation: none;
+  }
+
+  .image {
+    transition: none;
+  }
+}

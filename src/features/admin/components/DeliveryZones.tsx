@@ -3,7 +3,8 @@ import { Table } from '@/ui/Table/Table';
 import { TextAreaField } from '@/ui/TextAreaField/TextAreaField';
 import { TextField } from '@/ui/TextField/TextField';
 import NextLink from 'next/link';
-import { money, poundsText, staffStyles as styles } from '@/features/staff';
+import { money, poundsText, RowActions, staffStyles as styles } from '@/features/staff';
+import { VisuallyHidden } from '@/ui/VisuallyHidden/VisuallyHidden';
 import { deleteZone, saveZone } from '../actions';
 import { dateText } from '../labels';
 import type { Zone, ZoneDay } from '../types';
@@ -17,6 +18,9 @@ export function ZoneList({ zones }: { zones: Zone[] }) {
           <th scope="col">Postcode areas</th>
           <th scope="col">Pallet from</th>
           <th scope="col">Pallets a day</th>
+          <th scope="col">
+            <VisuallyHidden>Actions</VisuallyHidden>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -31,6 +35,15 @@ export function ZoneList({ zones }: { zones: Zone[] }) {
               <td>{zone.areas.join(' ')}</td>
               <td>{pallet[0] ? money(pallet[0].pricePence) : 'No pallets'}</td>
               <td>{zone.palletsPerDay ?? '–'}</td>
+              <td>
+                <RowActions
+                  name={zone.zone}
+                  editHref={`/admin/delivery/${zone.zone}/`}
+                  remove={deleteZone}
+                  fields={{ zone: zone.zone }}
+                  afterDelete="Postcodes in it can no longer be delivered to."
+                />
+              </td>
             </tr>
           );
         })}

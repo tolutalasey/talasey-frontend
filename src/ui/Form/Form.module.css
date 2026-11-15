@@ -1,4 +1,35 @@
 .form {
   display: grid;
-  gap: var(--space-6);
+  gap: var(--space-4);
+}
+
+/* Fields side by side on wider screens: first and last name, town and postcode. */
+.row {
+  display: grid;
+  align-items: start;
+  gap: var(--space-4);
+}
+
+@media (min-width: 36rem) {
+  .row {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  }
+}
+
+.group {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.legend {
+  margin-bottom: var(--space-1);
+  padding: 0;
+  color: var(--color-ink-muted);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }

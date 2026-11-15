@@ -1,16 +1,17 @@
 import NextLink from 'next/link';
 import {
   Badge,
-  ChevronRightIcon,
   EmptyState,
   ImageIcon,
   money,
   Pager,
   pageOf,
   ProductsIcon,
+  RowActions,
   SearchIcon,
   staffStyles as styles,
 } from '@/features/staff';
+import { deleteProduct } from '../actions';
 import type { ProductSummary } from '../types';
 
 export type ProductView = 'all' | 'live' | 'hidden' | 'unpriced';
@@ -118,7 +119,12 @@ export function ProductList({ products, view, search, page: pageParam }: Props) 
                 <span className={styles.money}>
                   {product.priceFromPence === null ? '—' : `from ${money(product.priceFromPence)}`}
                 </span>
-                <ChevronRightIcon className={styles.chev} />
+                <RowActions
+                  name={product.title}
+                  editHref={`/admin/products/${product.id}/`}
+                  remove={deleteProduct}
+                  fields={{ id: product.id, confirm: 'on' }}
+                />
               </span>
             </li>
           ))}

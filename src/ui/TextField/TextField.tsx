@@ -27,12 +27,12 @@ export function TextField({
   return (
     <AriaTextField {...props} className={[styles.field, className].filter(Boolean).join(' ')}>
       <Label className={styles.label}>{label}</Label>
+      <Input className={styles.input} />
       {description && (
         <Text slot="description" className={styles.description}>
           {description}
         </Text>
       )}
-      <Input className={styles.input} />
       <FieldError className={styles.error}>{errorMessage}</FieldError>
     </AriaTextField>
   );

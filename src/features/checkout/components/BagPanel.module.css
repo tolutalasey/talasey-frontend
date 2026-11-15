@@ -1,0 +1,122 @@
+.panel {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: calc(100dvh - 4.75rem - 2 * var(--space-6));
+  margin: calc(-1 * var(--space-6));
+}
+
+.lines {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-stone50);
+}
+
+.foot {
+  position: sticky;
+  bottom: 0;
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6) var(--space-6);
+  border-top: 1px solid var(--color-line);
+  background: var(--color-white);
+  box-shadow: 0 -8px 24px rgb(42 40 44 / 0.06);
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-semibold);
+}
+
+.total dt span {
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-regular);
+}
+
+.total dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.saving {
+  margin: 0;
+  color: var(--color-success);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+}
+
+.muted {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-small);
+}
+
+.checkout {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3.25rem;
+}
+
+.full {
+  justify-self: center;
+  color: var(--color-brand600);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+  text-underline-offset: 0.2em;
+}
+
+.empty {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+}
+
+.emptyTitle {
+  margin: var(--space-4) 0 0;
+  font-family: var(--font-display, inherit);
+  font-size: 1.5rem;
+}
+
+.loading {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.skeleton {
+  display: block;
+  height: 6.5rem;
+  border-radius: var(--radius-card);
+  background: linear-gradient(90deg, var(--color-stone50), #fff, var(--color-stone50));
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}

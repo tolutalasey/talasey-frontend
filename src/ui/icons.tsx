@@ -73,9 +73,30 @@ export const SearchIcon = (props: IconProps) => (
   </Icon>
 );
 
+export const ZoomInIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-3.5-3.5M11 8v6M8 11h6" />
+  </Icon>
+);
+
+export const ZoomOutIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-3.5-3.5M8 11h6" />
+  </Icon>
+);
+
 export const StarIcon = ({ filled, ...props }: IconProps & { filled: boolean }) => (
   <Icon fill={filled ? 'currentColor' : 'none'} {...props}>
     <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9L12 3Z" />
+  </Icon>
+);
+
+export const LockIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <rect x="5" y="11" width="14" height="10" rx="2" />
+    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
   </Icon>
 );
 
