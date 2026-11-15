@@ -1,6 +1,7 @@
 import type { AccessAnswers, DeliveryAddress, LineColour } from '@/api-client';
 import { z } from 'zod';
 import type { FormState } from '@/lib/form-feedback';
+import { packsFor } from '@/lib/coverage';
 import { typedValues } from '@/lib/form-values';
 
 export type { FormState };
@@ -84,11 +85,16 @@ export function parseQuantity(form: FormData): Parsed<number> {
   return { ok: true, value: result.data };
 }
 
+export interface BasketExtraRequest {
+  variantId: string;
+  quantity: number;
+}
+
 export interface BasketRequest {
   variantId: string;
   quantity: number;
   colour: LineColour | null;
-  extras: string[];
+  extras: BasketExtraRequest[];
 }
 
 const areaSchema = z.coerce
@@ -101,17 +107,30 @@ const text = (form: FormData, name: string) => {
   return typeof value === 'string' ? value.trim() : '';
 };
 
+// The area typed, or length times width when the shopper measured it that way.
+function areaText(form: FormData): string {
+  const area = text(form, 'area');
+  if (area) return area;
+  const length = Number(text(form, 'length'));
+  const width = Number(text(form, 'width'));
+  return length > 0 && width > 0 ? String(length * width) : '';
+}
+
 // Whole packs for an area: the product's coverage per pack and wastage come with the form.
 function packsForArea(form: FormData): Parsed<number> | null {
-  const area = text(form, 'area');
+  const area = areaText(form);
   const coverage = Number(text(form, 'coverage'));
   if (!area || !(coverage > 0)) return null;
   const parsed = areaSchema.safeParse(area);
   if (!parsed.success) return { ok: false, state: fieldErrors(parsed.error, 'area') };
   const wastage = Number(text(form, 'wastage')) || 0;
-  const needed = (parsed.data * (100 + wastage)) / 100;
-  return { ok: true, value: Math.ceil(Math.round((needed / coverage) * 1e6) / 1e6) };
+  return { ok: true, value: packsFor(parsed.data, coverage, wastage) };
 }
+
+const extraQuantity = (form: FormData, variantId: string) => {
+  const result = quantitySchema.safeParse(form.get(`extraQuantity:${variantId}`));
+  return result.success ? result.data : 1;
+};
 
 // The product form: the variant the options picked, packs (or an area to cover), the colour from
 // the colour set and any "complete the job" items ticked.
@@ -139,7 +158,8 @@ export function parseBasketRequest(form: FormData): Parsed<BasketRequest> {
       colour: colourId ? { id: colourId, name: colourName } : null,
       extras: form
         .getAll('extra')
-        .filter((id): id is string => typeof id === 'string' && id !== ''),
+        .filter((id): id is string => typeof id === 'string' && id !== '')
+        .map((id) => ({ variantId: id, quantity: extraQuantity(form, id) })),
     },
   };
 }

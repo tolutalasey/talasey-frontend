@@ -84,6 +84,7 @@ export default async function Product({ params, searchParams }: Props) {
             colours={colours}
             extras={extras}
             coverageM2={pricing?.coverageM2}
+            packPricePence={pricing ? Math.round(pricing.perPack.amount * 100) : null}
             initialState={feedback.basket}
             bar={
               pricing

@@ -99,7 +99,7 @@ describe('parseBasketRequest', () => {
         variantId: 'variant_pc',
         quantity: 2,
         colour: { id: 'col_1', name: 'Anthracite grey (RAL 7016)' },
-        extras: ['variant_jointing'],
+        extras: [{ variantId: 'variant_jointing', quantity: 1 }],
       },
     });
   });

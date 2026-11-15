@@ -23,9 +23,4 @@ export function packPricing(variant: ProductVariant): PackPricing | null {
   };
 }
 
-// Whole packs to cover an area, with the product's allowance for cuts and breakages.
-export function packsFor(areaM2: number, coverageM2: number, wastagePercent = 0): number {
-  if (areaM2 <= 0 || coverageM2 <= 0) return 0;
-  const needed = (areaM2 * (100 + wastagePercent)) / 100;
-  return Math.ceil(Math.round((needed / coverageM2) * 1e6) / 1e6);
-}
+export { packsFor } from '@/lib/coverage';

@@ -39,7 +39,14 @@ export interface ProductView {
   stock: StockStatusProps;
   options: OptionGroup[];
   colours: ColourView | null;
-  extras: { variantId: string; name: string; reason: string; price: string | null }[];
+  extras: {
+    variantId: string;
+    name: string;
+    reason: string;
+    price: string | null;
+    pricePence: number | null;
+    coverageM2: number | null;
+  }[];
   samples: SampleOffer[];
   content: ProductContent;
   path: string;
@@ -111,8 +118,16 @@ export async function getProductView(handle: string, params: Params): Promise<Pr
     options: optionGroups(product, selection),
     colours,
     extras: companions.map(({ product: extra, variantId, reason }) => {
-      const price = extra.variants.find((v) => v.id === variantId)?.priceIncVat;
-      return { variantId, name: extra.title, reason, price: price ? formatPrice(price) : null };
+      const chosen = extra.variants.find((v) => v.id === variantId);
+      const price = chosen?.priceIncVat;
+      return {
+        variantId,
+        name: extra.title,
+        reason,
+        price: price ? formatPrice(price) : null,
+        pricePence: price ? Math.round(price.amount * 100) : null,
+        coverageM2: chosen?.coverageM2 ?? null,
+      };
     }),
     samples,
     content,

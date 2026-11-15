@@ -5,6 +5,7 @@ import { Form } from '@/ui/Form/Form';
 import { TextField } from '@/ui/TextField/TextField';
 import { useActionState, useEffect, useRef, useState } from 'react';
 import { addToBasket } from '../actions';
+import { CoverageCalculator } from './CoverageCalculator';
 import type { FormState } from '../forms';
 import styles from './AddToBasket.module.css';
 import { FormMessage } from './FormMessage';
@@ -27,6 +28,8 @@ export interface BasketExtra {
   name: string;
   reason: string;
   price: string | null;
+  pricePence: number | null;
+  coverageM2: number | null;
 }
 
 export interface AddToBasketProps {
@@ -34,7 +37,7 @@ export interface AddToBasketProps {
   colours?: ColourChoiceProps | null;
   extras?: BasketExtra[];
   coverageM2?: number | null;
-  wastagePercent?: number;
+  packPricePence?: number | null;
   initialState?: FormState;
   // On phones, a bar at the bottom of the screen with this name and price and its own button.
   bar?: { title: string; price: string };
@@ -119,7 +122,7 @@ export function AddToBasket({
   colours,
   extras = [],
   coverageM2,
-  wastagePercent = 0,
+  packPricePence = null,
   initialState = {},
   bar,
 }: AddToBasketProps) {
@@ -138,30 +141,29 @@ export function AddToBasket({
         {colours && colours.options.length > 0 && (
           <ColourSwatches {...colours} error={state.fieldErrors?.colourId} />
         )}
-        <div className={styles.amount}>
-          <TextField
-            label={coverageM2 ? 'Packs' : 'Quantity'}
-            name="quantity"
-            type="number"
-            inputMode="numeric"
-            defaultValue={state.values?.quantity ?? '1'}
-            isRequired
+        {coverageM2 ? (
+          <CoverageCalculator
+            coverageM2={coverageM2}
+            packPricePence={packPricePence}
+            extras={extras}
+            defaultQuantity={state.values?.quantity ?? '1'}
+            defaultArea={state.values?.area ?? ''}
           />
-          {coverageM2 && (
-            <>
+        ) : (
+          <>
+            <div className={styles.amount}>
               <TextField
-                label="Or the area to cover (m²)"
-                name="area"
-                inputMode="decimal"
-                defaultValue={state.values?.area ?? ''}
-                description={`We round up to whole packs of ${coverageM2} m²${wastagePercent ? `, with ${wastagePercent}% extra for cuts` : ''}.`}
+                label="Quantity"
+                name="quantity"
+                type="number"
+                inputMode="numeric"
+                defaultValue={state.values?.quantity ?? '1'}
+                isRequired
               />
-              <input type="hidden" name="coverage" value={coverageM2} />
-              <input type="hidden" name="wastage" value={wastagePercent} />
-            </>
-          )}
-        </div>
-        {extras.length > 0 && <Extras extras={extras} />}
+            </div>
+            {extras.length > 0 && <Extras extras={extras} />}
+          </>
+        )}
         <FormMessage message={state.message} />
         <div ref={buttonArea}>
           <Button type="submit" isPending={pending} isDisabled={!variantId} className={styles.add}>

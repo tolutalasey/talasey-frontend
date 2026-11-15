@@ -35,7 +35,7 @@ export async function addToBasket(_state: FormState, form: FormData): Promise<Fo
   const added = await client.addItem(basketId, variantId, quantity, colour ?? undefined);
   if (!added.ok) return settle('basket', { message: added.message, values: typed });
   for (const extra of extras) {
-    const extraAdded = await client.addItem(basketId, extra, 1);
+    const extraAdded = await client.addItem(basketId, extra.variantId, extra.quantity);
     if (!extraAdded.ok) return settle('basket', { message: extraAdded.message, values: typed });
   }
   await settle('basket', {});
