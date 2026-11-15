@@ -18,6 +18,7 @@ export function toProduct(product: StoreProduct): Product {
     description: product.description,
     thumbnail: product.thumbnail,
     madeToMeasure: product.madeToMeasure,
+    pageType: product.pageType,
     updatedAt: product.updatedAt,
     categories: product.categories,
     options: product.options,

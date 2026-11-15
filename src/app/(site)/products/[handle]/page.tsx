@@ -1,3 +1,4 @@
+import NextLink from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getProductRow, getRanges, rangePath, RelatedProducts } from '@/features/catalogue';
@@ -14,7 +15,10 @@ import {
 import { formatPrice } from '@/lib/format';
 import { readFeedback } from '@/lib/form-feedback.server';
 import { JsonLd } from '@/lib/JsonLd';
+import { builderPathFor } from '@/features/pergola';
 import { pageMetadata } from '@/lib/seo';
+
+const BUILT_TO_ORDER = '4';
 
 // Options come from the query string and the basket form shows the server's errors without
 // JavaScript, so the page renders per request and in full before it is sent (ADR 0020). An
@@ -75,7 +79,17 @@ export default async function Product({ params, searchParams }: Props) {
           />
         }
       >
-        {product.madeToMeasure ? (
+        {product.pageType === BUILT_TO_ORDER ? (
+          <p>
+            This is bought as part of a build.{' '}
+            <NextLink
+              href={await builderPathFor(product.variants.flatMap((option) => option.sku ?? []))}
+              className="button"
+            >
+              Build your pergola
+            </NextLink>
+          </p>
+        ) : product.madeToMeasure ? (
           <p>Made to your measurements. Call us for a quote while online ordering is set up.</p>
         ) : (
           <AddToBasket

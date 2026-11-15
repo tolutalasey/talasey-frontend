@@ -10,6 +10,7 @@ const product = (prices: (number | null)[]): Product => ({
   description: null,
   thumbnail: null,
   madeToMeasure: false,
+  pageType: null,
   updatedAt: null,
   categories: [],
   options: [],

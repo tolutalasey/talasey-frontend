@@ -58,6 +58,8 @@ export interface Product {
   description: string | null;
   thumbnail: string | null;
   madeToMeasure: boolean;
+  // 4 means the product is bought through a builder, like the pergolas.
+  pageType: string | null;
   updatedAt: string | null;
   categories: ProductCategory[];
   options: ProductOption[];
