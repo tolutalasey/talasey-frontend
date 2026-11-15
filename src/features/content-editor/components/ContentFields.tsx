@@ -146,6 +146,11 @@ function FieldInput({ field, value, path }: { field: Field; value: unknown; path
             defaultValue={asText(photo.alt)}
             description="What it shows, for people who can't see it"
           />
+          {typeof photo.src === 'string' && (
+            <label className={styles.removePhoto}>
+              <input type="checkbox" name={`${path}.remove`} /> Remove this photo when I save
+            </label>
+          )}
         </fieldset>
       );
     }

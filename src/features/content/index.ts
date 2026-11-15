@@ -19,6 +19,7 @@ export {
 } from './loaders.server';
 export { brandPagePath, guidePath, helpPath, projectPath } from './paths';
 export { projectPhoto } from './project-photos';
+export { fallbackBrands, fallbackFaqs, fallbackGuides, fallbackProjects } from './fallback';
 export {
   HELP_TOPICS,
   type BrandPage,

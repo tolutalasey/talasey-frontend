@@ -48,7 +48,27 @@ const storedRange = rangeSchema.extend({
     .array(z.object({ question: z.string(), answer: z.string() }))
     .nullish()
     .transform((v) => v ?? []),
-  curated: z.array(curatedPageSchema.extend({ filters: storedFilters })),
+  curated: z
+    .array(curatedPageSchema.extend({ filters: storedFilters }))
+    .nullish()
+    .transform((v) => v ?? []),
+  gallery: z
+    .array(
+      z.object({
+        photo: z.object({
+          src: z.string(),
+          alt: z
+            .string()
+            .nullish()
+            .transform((v) => v ?? ''),
+          width: z.number(),
+          height: z.number(),
+        }),
+        caption: z.string().nullish(),
+      }),
+    )
+    .nullish()
+    .transform((v) => v ?? []),
 });
 
 // A range page as the content team wrote it, read the same way the shop reads published ones.

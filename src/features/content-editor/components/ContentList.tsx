@@ -1,14 +1,17 @@
 import { Button } from '@/ui/Button/Button';
 import { TextField } from '@/ui/TextField/TextField';
 import NextLink from 'next/link';
+import type { ReactNode } from 'react';
 import {
   Badge,
+  ChevronRightIcon,
   EmptyState,
   RowActions,
   staffStyles as styles,
   type BadgeTone,
 } from '@/features/staff';
-import { createContent, deleteContent } from '../actions';
+import { createContent, deleteContent, editLiveContent } from '../actions';
+import type { LiveEntry } from '../live-content';
 import { typeMeta } from '../type-meta';
 import type { ContentSummary, ContentTypeInfo } from '../types';
 
@@ -62,14 +65,41 @@ export function NewContentForm({ type }: { type: ContentTypeInfo }) {
 interface Props {
   type: ContentTypeInfo;
   documents: ContentSummary[];
+  // Pages the site shows that have not been saved here yet.
+  unsaved: LiveEntry[];
   view: ContentView;
 }
 
-export function ContentList({ type, documents, view }: Props) {
+function UnsavedRow({ type, entry, icon }: { type: string; entry: LiveEntry; icon: ReactNode }) {
+  return (
+    <li className={styles.listRow}>
+      <span className={styles.docIcon} aria-hidden="true">
+        {icon}
+      </span>
+      <span className={styles.listMain}>
+        <form action={editLiveContent}>
+          <input type="hidden" name="type" value={type} />
+          <input type="hidden" name="key" value={entry.key} />
+          <button type="submit" className={`${styles.listTitle} ${styles.linkButton}`}>
+            {entry.title}
+          </button>
+        </form>
+        <span className={styles.listSub}>As the site shows it now. Open it to change it.</span>
+      </span>
+      <span className={styles.listEnd}>
+        <Badge tone="good">On the site</Badge>
+        <ChevronRightIcon className={styles.chev} />
+      </span>
+    </li>
+  );
+}
+
+export function ContentList({ type, documents, unsaved, view }: Props) {
   const shown = documents.filter((document) => view === 'all' || document.status === view);
   const meta = typeMeta(type.type);
+  const showUnsaved = view === 'all' || view === 'published';
 
-  if (documents.length === 0) {
+  if (documents.length === 0 && unsaved.length === 0) {
     return (
       <section className={styles.panel}>
         <EmptyState
@@ -98,16 +128,17 @@ export function ContentList({ type, documents, view }: Props) {
               >
                 {VIEWS[key]}
                 <span className={styles.tabCount}>
-                  {key === 'all'
+                  {(key === 'all'
                     ? documents.length
-                    : documents.filter((document) => document.status === key).length}
+                    : documents.filter((document) => document.status === key).length) +
+                    (key === 'all' || key === 'published' ? unsaved.length : 0)}
                 </span>
               </NextLink>
             ))}
           </nav>
         </div>
       )}
-      {shown.length === 0 ? (
+      {shown.length === 0 && !(showUnsaved && unsaved.length > 0) ? (
         <EmptyState icon={meta.icon} title="Nothing in this view">
           Choose All to see every entry.
         </EmptyState>
@@ -150,6 +181,10 @@ export function ContentList({ type, documents, view }: Props) {
               </li>
             );
           })}
+          {showUnsaved &&
+            unsaved.map((entry) => (
+              <UnsavedRow key={entry.key} type={type.type} entry={entry} icon={meta.icon} />
+            ))}
         </ul>
       )}
     </section>

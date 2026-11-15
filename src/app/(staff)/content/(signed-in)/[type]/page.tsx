@@ -1,6 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ContentList, NewContentForm, typeMeta, type ContentView } from '@/features/content-editor';
+import {
+  ContentList,
+  NewContentForm,
+  typeMeta,
+  unsavedEntries,
+  type ContentView,
+} from '@/features/content-editor';
 import { Badge, CreateMenu, Notice, PageHeader, staffApi } from '@/features/staff';
 import { contentTypes } from '../types.server';
 
@@ -23,7 +29,14 @@ export default async function ContentOfType({ params, searchParams }: Props) {
   ).GET('/content/documents', {
     params: { query: { type: name } },
   });
-  const canAdd = !type.singleton || documents.length === 0;
+  const unsaved =
+    type.singleton && documents.length > 0
+      ? []
+      : unsavedEntries(
+          type.type,
+          documents.map((document) => document.key),
+        );
+  const canAdd = !type.singleton || (documents.length === 0 && unsaved.length === 0);
   return (
     <>
       <PageHeader
@@ -33,7 +46,7 @@ export default async function ContentOfType({ params, searchParams }: Props) {
         meta={type.locked && <Badge tone="brand">Only the owner publishes this</Badge>}
         actions={
           canAdd &&
-          documents.length > 0 && (
+          documents.length + unsaved.length > 0 && (
             <CreateMenu label="New entry">
               <NewContentForm type={type} />
             </CreateMenu>
@@ -41,7 +54,7 @@ export default async function ContentOfType({ params, searchParams }: Props) {
         }
       />
       <Notice message={message} error={error} />
-      <ContentList type={type} documents={documents} view={view} />
+      <ContentList type={type} documents={documents} unsaved={unsaved} view={view} />
     </>
   );
 }

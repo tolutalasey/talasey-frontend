@@ -76,6 +76,7 @@ function valueOf(
       return rows;
     }
     case 'image': {
+      if (form.get(`${path}.remove`) === 'on') return undefined;
       const uploaded = photos[path];
       const src = uploaded?.src ?? textOf(form, `${path}.src`);
       if (!src) return undefined;

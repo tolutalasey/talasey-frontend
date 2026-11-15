@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { uploadPhoto } from '@/features/admin';
 import { done, failed, staffApi, text } from '@/features/staff';
 import { dataFromForm, imagePaths, type Field, type Photo } from './fields';
+import { liveEntries } from './live-content';
 import { fromLondonTime } from '@/lib/london-time';
 import type { ContentTypeInfo } from './types';
 
@@ -45,6 +46,22 @@ export async function createContent(form: FormData) {
     body: { type, data: { [info.fields[0]?.name ?? 'title']: text(form, 'name') ?? 'Untitled' } },
   });
   if (!data) failed(`/content/${type}/`, problemText(error));
+  redirect(`/content/edit/${data.id}/`);
+}
+
+// Opens a page the site shows but nobody has saved in /content: its entry starts from what
+// shoppers see now and is published straight away, so the editor and the site agree.
+export async function editLiveContent(form: FormData) {
+  const type = text(form, 'type') ?? '';
+  const entry = liveEntries(type).find((live) => live.key === text(form, 'key'));
+  const list = `/content/${type}/`;
+  if (!entry) failed(list, 'That page is not on the site any more');
+  const api = await staffApi();
+  const { data, error } = await api.POST('/content/documents', {
+    body: { type, data: entry.data },
+  });
+  if (!data) failed(list, problemText(error));
+  await api.POST('/content/documents/{id}/publish', { params: { path: { id: data.id } } });
   redirect(`/content/edit/${data.id}/`);
 }
 

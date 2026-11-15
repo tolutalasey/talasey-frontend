@@ -7,7 +7,7 @@ export { ActiveFilters } from './components/ActiveFilters';
 export { Pagination } from './components/Pagination';
 export { productCard } from './cards';
 export { cardImage } from './images';
-export { rangePhoto } from './range-photos';
+export { rangeGallery, rangePhoto } from './range-photos';
 export {
   getProductRow,
   getFeaturedProducts,
