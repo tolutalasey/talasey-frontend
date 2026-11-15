@@ -30,8 +30,8 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
-  gap: var(--space-4);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -43,7 +43,7 @@
   display: grid;
   grid-template-rows: auto auto 1fr;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-3) var(--space-6);
+  padding: var(--space-2) var(--space-2) var(--space-4);
   transition:
     translate var(--motion-medium) var(--motion-ease),
     box-shadow var(--motion-medium) var(--motion-ease);
@@ -64,7 +64,7 @@
   overflow: hidden;
   margin-bottom: var(--space-2);
   border-radius: 4px;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1;
 }
 
 .tilePhoto img {
@@ -81,9 +81,8 @@
 
 .tileTitle {
   margin: 0;
-  padding-inline: var(--space-2);
-  padding-right: var(--space-12);
-  font-size: 1.5rem;
+  padding-inline: var(--space-1);
+  font-size: 1.125rem;
   font-weight: 350;
 }
 
@@ -105,12 +104,13 @@
 
 .tileText {
   margin: 0;
-  padding-inline: var(--space-2);
+  padding-inline: var(--space-1);
   color: var(--color-ink-muted);
   font-size: var(--font-size-small);
 }
 
 .tileGo {
+  display: none;
   position: absolute;
   right: var(--space-4);
   bottom: var(--space-6);
@@ -405,6 +405,34 @@
 
 .storyText p:not(:global(.eyebrow)) {
   color: var(--color-ink-muted);
+}
+
+@media (min-width: 40rem) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: var(--space-4);
+  }
+
+  .tile {
+    padding: var(--space-3) var(--space-3) var(--space-6);
+  }
+
+  .tilePhoto {
+    aspect-ratio: 4 / 5;
+  }
+
+  .tileTitle {
+    padding-inline: var(--space-2) var(--space-12);
+    font-size: 1.5rem;
+  }
+
+  .tileText {
+    padding-inline: var(--space-2);
+  }
+
+  .tileGo {
+    display: inline-grid;
+  }
 }
 
 @media (min-width: 64rem) {

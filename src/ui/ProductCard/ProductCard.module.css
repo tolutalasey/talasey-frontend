@@ -1,6 +1,7 @@
 /* A white frame with the photo set inside it; the whole card is one link. */
 .card {
   position: relative;
+  container-type: inline-size;
   display: grid;
   grid-template-rows: auto 1fr;
   gap: var(--space-3);
@@ -102,6 +103,7 @@
 }
 
 .priceNote {
+  white-space: nowrap;
   font-size: var(--font-size-small);
   font-weight: var(--font-weight-regular);
   color: var(--color-ink-muted);
@@ -125,4 +127,24 @@
 .card:has(.link:hover) .go {
   background: var(--color-brand950);
   color: var(--color-stone);
+}
+
+/* Two to a row on a phone: the whole card is already the link, so the arrow gives its room to
+   the name and price. */
+@container (max-width: 14rem) {
+  .body {
+    padding-inline: var(--space-1);
+  }
+
+  .name {
+    font-size: 0.9375rem;
+  }
+
+  .price {
+    font-size: 1rem;
+  }
+
+  .go {
+    display: none;
+  }
 }
