@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { cacheLife } from 'next/cache';
-import { getProductsByHandle, getRanges } from '@/features/catalogue';
+import { getFeaturedProducts, getRanges } from '@/features/catalogue';
 import { getHomeContent, HomePage, seasonalBlockFor } from '@/features/home';
 import { pageMetadata } from '@/lib/seo';
 
@@ -17,7 +17,7 @@ async function today() {
 
 export default async function Home() {
   const [content, now, ranges] = await Promise.all([getHomeContent(), today(), getRanges()]);
-  const featured = await getProductsByHandle(content.products);
+  const featured = await getFeaturedProducts(content.products);
   return (
     <HomePage
       content={content}

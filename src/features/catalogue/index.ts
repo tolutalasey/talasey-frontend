@@ -10,6 +10,7 @@ export { cardImage, PHOTO_COMING_SOON } from './images';
 export { rangePhoto } from './range-photos';
 export {
   getProductRow,
+  getFeaturedProducts,
   getProductsByHandle,
   getRange,
   getRangeListing,

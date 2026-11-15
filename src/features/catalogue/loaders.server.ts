@@ -107,6 +107,30 @@ export async function getProductRow(request: SearchRequest): Promise<SearchRecor
   }
 }
 
+const FEATURED_COUNT = 4;
+
+const newestFirst = (a: SearchRecord, b: SearchRecord) =>
+  (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '');
+
+// The products staff picked for the homepage, topped up with the newest products that have a
+// photo and a price, so what is added in the admin shows straight away.
+export async function getFeaturedProducts(picked: string[]): Promise<SearchRecord[]> {
+  try {
+    const records = await getSearchRecords();
+    const byHandle = new Map(records.map((record) => [record.handle, record]));
+    const chosen = picked.flatMap((handle) => byHandle.get(handle) ?? []);
+    const newest = records
+      .filter(
+        (record) =>
+          record.thumbnail && record.priceFrom !== null && !picked.includes(record.handle),
+      )
+      .sort(newestFirst);
+    return [...chosen, ...newest].slice(0, Math.max(FEATURED_COUNT, chosen.length));
+  } catch {
+    return [];
+  }
+}
+
 export async function getProductsByHandle(handles: string[]): Promise<SearchRecord[]> {
   try {
     const records = new Map((await getSearchRecords()).map((record) => [record.handle, record]));

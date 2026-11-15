@@ -91,12 +91,7 @@ export const fallbackHomeContent: HomeContent = {
     },
   ],
   featuredHeading: 'Featured products',
-  products: [
-    'sphere-fire-pit-with-stand',
-    'baroque-emblem-decorative-screen',
-    'dellaora-lighting-deck-light-starter-kit',
-    'pavetuf-jointing-compound',
-  ],
+  products: [],
   seo: {
     title: 'Porcelain paving, decking and pergolas | Talasey',
     description:
