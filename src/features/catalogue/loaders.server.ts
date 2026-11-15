@@ -56,6 +56,13 @@ export function rangeFromContent(data: unknown) {
   return storedRange.safeParse(data);
 }
 
+// Published pages come back in address order; the menu keeps the order of the ranges in the brief,
+// with new ranges after them.
+const menuOrder = (slug: string) => {
+  const index = fallbackRanges.findIndex((range) => range.slug === slug);
+  return index === -1 ? fallbackRanges.length : index;
+};
+
 export async function getRanges(): Promise<Range[]> {
   'use cache';
   cacheTag(cacheTags.ranges);
@@ -66,7 +73,9 @@ export async function getRanges(): Promise<Range[]> {
     return parsed.success ? [parsed.data] : [];
   });
   const slugs = new Set(ranges.map((range) => range.slug));
-  return [...ranges, ...fallbackRanges.filter((range) => !slugs.has(range.slug))];
+  return [...ranges, ...fallbackRanges.filter((range) => !slugs.has(range.slug))].sort(
+    (a, b) => menuOrder(a.slug) - menuOrder(b.slug),
+  );
 }
 
 export async function getRange(slug: string): Promise<Range | null> {
