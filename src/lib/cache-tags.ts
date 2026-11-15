@@ -10,6 +10,7 @@ export const cacheTags = {
   navigation: 'content:navigation',
   redirects: 'content:redirect',
   productExtras: 'content:product-extras',
+  pergolaBuilders: 'content:pergola-builder',
   samples: 'samples',
   products: 'products',
   product: (handle: string) => `product:${handle}`,

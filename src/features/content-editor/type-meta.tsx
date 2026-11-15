@@ -39,6 +39,11 @@ const META: Record<string, TypeMeta> = {
     icon: <ProductsIcon />,
     text: 'Extra content shown on product pages.',
   },
+  'pergola-builder': {
+    group: 'Pages',
+    icon: <LayersIcon />,
+    text: 'Sizes, SKUs and side options for each pergola builder.',
+  },
   guide: { group: 'Help and ideas', icon: <CompassIcon />, text: 'Guides and buying advice.' },
   faq: {
     group: 'Help and ideas',

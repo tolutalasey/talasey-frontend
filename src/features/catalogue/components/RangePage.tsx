@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import NextLink from 'next/link';
+import type { ReactNode } from 'react';
 import { PageBreadcrumbs } from '@/features/layout';
 import { hasFilters, withoutFilter, type ListingParams } from '@/features/search';
 import { formatPrice } from '@/lib/format';
@@ -24,6 +25,8 @@ interface RangePageProps {
   curated?: CuratedPage;
   listing: RangeListing;
   params: ListingParams;
+  // Shown under the header, before the products, like the pergola builders on /pergolas/.
+  lead?: ReactNode;
 }
 
 const gbp = (amount: number) => formatPrice({ amount, currencyCode: 'GBP' });
@@ -36,7 +39,7 @@ function priceLine({ priceRange }: RangeListing): string | null {
 
 const productCount = (count: number) => `${count} ${count === 1 ? 'product' : 'products'}`;
 
-export function RangePage({ range, curated, listing, params }: RangePageProps) {
+export function RangePage({ range, curated, listing, params, lead }: RangePageProps) {
   const { result, inRange } = listing;
   const base = rangePath(range);
   const current = { ...params, filters: { ...params.filters, ...curated?.filters } };
@@ -80,6 +83,7 @@ export function RangePage({ range, curated, listing, params }: RangePageProps) {
           />
         </div>
       </header>
+      {lead}
       {range.curated.length > 0 && (
         <nav aria-label={`More ${range.name.toLowerCase()}`} className={styles.curated}>
           <ul>

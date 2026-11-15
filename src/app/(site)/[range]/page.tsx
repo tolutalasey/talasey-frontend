@@ -9,6 +9,7 @@ import {
   RangePage,
   rangePhoto,
 } from '@/features/catalogue';
+import { BuilderLinks, getPergolaBuilders, PERGOLA_RANGE } from '@/features/pergola';
 import { parseListingParams } from '@/features/search';
 import { pageMetadata } from '@/lib/seo';
 
@@ -40,5 +41,13 @@ export default async function Range(props: Props) {
   const { range, query, listing } = await load(props);
   const target = listingRedirect(range, query);
   if (target) permanentRedirect(target);
-  return <RangePage range={range} listing={listing} params={parseListingParams(query)} />;
+  const builders = range.slug === PERGOLA_RANGE ? await getPergolaBuilders() : [];
+  return (
+    <RangePage
+      range={range}
+      listing={listing}
+      params={parseListingParams(query)}
+      lead={builders.length > 0 && <BuilderLinks builders={builders} />}
+    />
+  );
 }
