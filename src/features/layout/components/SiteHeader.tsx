@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import NextLink from 'next/link';
 import type { ReactNode } from 'react';
-import { getRanges, rangePath } from '@/features/catalogue';
-import { getProjectPages, projectPath } from '@/features/content';
+import { getRanges, rangePath, rangePhoto } from '@/features/catalogue';
+import { getProjectPages, projectPath, projectPhoto } from '@/features/content';
 import { SearchLauncher } from '@/features/search';
 import { AccountIcon, ChevronIcon } from '@/ui/icons';
 import { MenuBehaviour } from './MenuBehaviour';
@@ -56,7 +56,12 @@ export async function SiteHeader({ bag }: { bag: ReactNode }) {
           </summary>
           <MenuPanel
             title="Our ranges"
-            links={ranges.map((range) => ({ label: range.name, href: rangePath(range) }))}
+            verb="Shop"
+            links={ranges.map((range) => ({
+              label: range.name,
+              href: rangePath(range),
+              image: rangePhoto(range.slug).src,
+            }))}
             feature={{
               image: '/images/brand/samples-mixed.jpg',
               heading: 'See it in your own garden light',
@@ -71,9 +76,11 @@ export async function SiteHeader({ bag }: { bag: ReactNode }) {
           </summary>
           <MenuPanel
             title="Garden projects"
+            verb="Plan"
             links={projects.map((project) => ({
               label: project.name,
               href: projectPath(project),
+              image: projectPhoto(project.slug),
             }))}
             feature={{
               image: '/images/brand/project-pergola.jpg',

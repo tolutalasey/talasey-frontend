@@ -263,18 +263,27 @@
 }
 
 .featurePhoto {
+  position: relative;
   display: block;
   overflow: hidden;
   border-radius: 4px;
   aspect-ratio: 16 / 10;
 }
 
+/* Every photo is loaded with the menu and the one for the hovered link fades in. */
 .featurePhoto img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: scale 0.8s var(--motion-ease);
+  opacity: 0;
+  transition:
+    opacity var(--motion-medium) var(--motion-ease),
+    scale 0.8s var(--motion-ease);
+}
+
+.featurePhoto img[data-shown] {
+  opacity: 1;
 }
 
 .feature:hover .featurePhoto img {

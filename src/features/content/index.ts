@@ -18,6 +18,7 @@ export {
   storedProjectSchema,
 } from './loaders.server';
 export { brandPagePath, guidePath, helpPath, projectPath } from './paths';
+export { projectPhoto } from './project-photos';
 export {
   HELP_TOPICS,
   type BrandPage,
