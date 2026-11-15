@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { LocalProductSearch } from './local-product-search';
-import { catalogue } from './test-records';
+import { catalogue, searchRecord } from './test-records';
 
 const search = new LocalProductSearch(catalogue);
 const titles = async (query: string) =>
@@ -25,6 +25,20 @@ describe('LocalProductSearch: words', () => {
     expect(await titles('grout')).toEqual(['Pavetuf jointing compound']);
     expect(await titles('corten screen')).toEqual(['Baroque emblem decorative screen']);
     expect(await titles('firepit')).toEqual(['Sphere fire pit with stand']);
+  });
+
+  it('forgives a typo only in the word typed, and only when it is not found as typed', async () => {
+    const nearby = new LocalProductSearch([
+      searchRecord({ title: 'Pavetuf jointing compound' }),
+      searchRecord({ title: 'Mounting bracket' }),
+      searchRecord({ title: 'Wall light' }),
+      searchRecord({ title: 'Eight way connector' }),
+    ]);
+    const found = async (query: string) =>
+      (await nearby.search({ query })).hits.map((hit) => hit.title);
+    expect(await found('grout')).toEqual(['Pavetuf jointing compound']);
+    expect(await found('light')).toEqual(['Wall light']);
+    expect(await found('ligth')).toEqual(['Wall light']);
   });
 
   it('finds a product by its SKU', async () => {

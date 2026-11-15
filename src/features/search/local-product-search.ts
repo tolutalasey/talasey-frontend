@@ -43,20 +43,27 @@ function indexWords(record: SearchRecord): Map<string, number> {
   return weighted;
 }
 
-function matchQuality(queryWord: string, word: string, isLast: boolean): number {
+function matchQuality(queryWord: string, word: string, isLast: boolean, typos: number): number {
   if (word === queryWord) return EXACT;
   if ((isLast || queryWord.length >= 3) && word.startsWith(queryWord)) return PREFIX;
-  const typos = allowedTypos(queryWord);
   return typos > 0 && editDistance(queryWord, word, typos) <= typos ? TYPO : 0;
 }
 
-// The best score any of the record's words gives one query word (or one of its synonyms).
-function wordScore(entry: IndexedRecord, queryWord: string, isLast: boolean): number {
-  let best = 0;
+interface WordMatch {
+  score: number;
+  typo: boolean;
+}
+
+// The best match any of the record's words gives one query word. Synonyms must be spelt right:
+// a typo is only forgiven in the word the shopper typed.
+function wordMatch(entry: IndexedRecord, queryWord: string, isLast: boolean): WordMatch {
+  let best: WordMatch = { score: 0, typo: false };
   for (const alternative of alternativesFor(queryWord)) {
+    const typos = alternative === queryWord ? allowedTypos(queryWord) : 0;
     for (const [word, weight] of entry.words) {
-      const quality = matchQuality(alternative, word, isLast);
-      if (quality > 0) best = Math.max(best, quality * weight);
+      const quality = matchQuality(alternative, word, isLast, typos);
+      const score = quality * weight;
+      if (score > best.score) best = { score, typo: quality === TYPO };
     }
   }
   return best;
@@ -186,11 +193,20 @@ export class LocalProductSearch implements ProductSearch {
     if (queryWords.length === 0) {
       return { ranked: entries.map((entry) => entry.record), partialMatch: false };
     }
-    const scored = entries.map((entry) => ({
+    const rows = entries.map((entry) => ({
       entry,
-      scores: queryWords.map((word, index) =>
-        wordScore(entry, word, index === queryWords.length - 1),
+      matches: queryWords.map((word, index) =>
+        wordMatch(entry, word, index === queryWords.length - 1),
       ),
+    }));
+    // As with Algolia's minimum typo setting: when a word is found as typed, near spellings of it
+    // are left out, so "light" does not also bring back "eight".
+    const spelledRight = queryWords.map((_, index) =>
+      rows.some(({ matches }) => matches[index]?.score && !matches[index]?.typo),
+    );
+    const scored = rows.map(({ entry, matches }) => ({
+      entry,
+      scores: matches.map(({ score, typo }, index) => (typo && spelledRight[index] ? 0 : score)),
     }));
     const all = scored.filter(({ scores }) => scores.every((score) => score > 0));
     const partialMatch = all.length === 0;
