@@ -273,8 +273,9 @@
 }
 
 @media (min-width: 64rem) {
+  /* Wider than the page content, so the photo runs closer to the screen edges. */
   .frame {
-    margin-inline: var(--layout-gutter-desktop);
+    margin-inline: max(var(--space-4), calc(var(--layout-gutter-desktop) / 2));
   }
 
   .scenes {
@@ -296,15 +297,27 @@
     left: var(--space-6);
   }
 
+  /* A smaller card floating over the bottom left of the photo, clear of its edges. */
   .panel {
     position: absolute;
-    left: -1px;
-    bottom: calc(-1 * var(--space-8));
-    gap: var(--space-4);
-    max-width: 36rem;
+    left: var(--space-8);
+    bottom: var(--space-8);
+    gap: var(--space-3);
+    max-width: 27rem;
     margin: 0;
-    padding: var(--space-12);
-    border-radius: 0 var(--radius-card) 0 var(--radius-card);
+    padding: var(--space-8);
+    border-radius: 16px;
+    background: rgb(43 3 55 / 0.9);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 24px 60px rgb(18 6 24 / 0.35);
+  }
+
+  .panel .title {
+    font-size: clamp(1.75rem, 1.2rem + 1.2vw, 2.5rem);
+  }
+
+  .panel .intro {
+    font-size: 0.95rem;
   }
 
   .intro {
@@ -317,7 +330,7 @@
 
   .tabs {
     position: absolute;
-    left: 40rem;
+    left: calc(27rem + var(--space-8) * 2);
     right: var(--space-6);
     bottom: var(--space-6);
     z-index: 2;
@@ -330,7 +343,7 @@
   }
 
   .ribbon {
-    margin-top: var(--space-20);
+    margin-top: var(--space-12);
   }
 }
 
