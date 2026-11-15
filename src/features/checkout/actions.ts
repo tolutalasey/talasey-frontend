@@ -2,6 +2,7 @@
 
 import { refresh } from 'next/cache';
 import { redirect } from 'next/navigation';
+import type { BuildPart } from '@/api-client';
 import { getBasketClient } from '@/lib/commerce';
 import { rememberBasket } from './basket-cookie.server';
 import { completeBasket, currentBasketId, EXPIRED_MESSAGE } from './basket.server';
@@ -39,6 +40,20 @@ export async function addToBasket(_state: FormState, form: FormData): Promise<Fo
     if (!extraAdded.ok) return settle('basket', { message: extraAdded.message, values: typed });
   }
   await settle('basket', {});
+  redirect('/basket/');
+}
+
+// A pergola (or any builder) build: all its parts go into the bag as one build.
+export async function addBuildToBasket(parts: BuildPart[]): Promise<FormState> {
+  if (parts.length === 0) return { message: 'Choose a size and fixing first.' };
+  const client = getBasketClient();
+  let basketId = await currentBasketId();
+  if (!basketId) {
+    basketId = (await client.create()).id;
+    await rememberBasket(basketId);
+  }
+  const added = await client.addBuild(basketId, parts);
+  if (!added.ok) return { message: added.message };
   redirect('/basket/');
 }
 

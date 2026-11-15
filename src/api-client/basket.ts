@@ -6,6 +6,12 @@ type Json<T> = T extends { content: { 'application/json': infer Body } } ? Body 
 type BasketDto = Json<paths['/store/baskets/{id}']['get']['responses'][200]>;
 type OrderDto = Json<paths['/store/orders/{id}']['get']['responses'][200]>;
 
+export interface BuildPart {
+  variantId: string;
+  quantity: number;
+  side?: string;
+}
+
 export type Shipment = 'pallet' | 'parcel';
 export type VehicleAccess = 'articulated' | 'rigid' | 'small';
 export type PaymentKind = 'stripe' | 'test';
@@ -192,6 +198,14 @@ export function createBasketClient(options: ApiClientOptions) {
             ...path(basketId),
             body: { variantId, quantity, ...(colour && { colourId: colour.id }) },
           }),
+        );
+      }),
+
+    // A build from a builder page: every part goes in together, kept as one build.
+    addBuild: (basketId: string, parts: BuildPart[]) =>
+      attempt(async () => {
+        await unwrap(
+          api.POST('/store/baskets/{id}/builds', { ...path(basketId), body: { parts } }),
         );
       }),
 

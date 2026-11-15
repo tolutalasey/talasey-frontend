@@ -15,6 +15,7 @@ export {
   type Basket,
   type BasketClient,
   type BasketLine,
+  type BuildPart,
   type CheckoutResult,
   type DeliveryAddress,
   type DeliveryDay,
