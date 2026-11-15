@@ -289,7 +289,16 @@
 
   .intro {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    min-height: 22rem;
+    min-height: clamp(22rem, 26vw, 26rem);
+  }
+
+  .introPhoto {
+    position: relative;
+  }
+
+  .introPhoto img {
+    position: absolute;
+    inset: 0;
   }
 
   .introText {

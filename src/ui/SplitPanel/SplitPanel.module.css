@@ -26,6 +26,12 @@
   .photo {
     aspect-ratio: auto;
   }
+
+  /* The panel's text sets the height, so a wide screen doesn't stretch the photo. */
+  .photo img {
+    position: absolute;
+    inset: 0;
+  }
 }
 
 .photo img {

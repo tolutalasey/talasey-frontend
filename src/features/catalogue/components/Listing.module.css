@@ -473,13 +473,24 @@ form[data-apply-on-change] .apply {
     padding: var(--space-4) var(--layout-gutter-desktop) var(--space-8);
   }
 
+  /* The text sets the height and the photo fills it, so a wide screen doesn't stretch the band. */
   .rangeHeader {
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    min-height: 22rem;
+    min-height: clamp(22rem, 28vw, 28rem);
   }
 
   .headerText {
-    padding: var(--space-12);
+    align-content: center;
+    padding: var(--space-8) var(--space-12);
+  }
+
+  .headerPhoto {
+    position: relative;
+  }
+
+  .headerPhoto img {
+    position: absolute;
+    inset: 0;
   }
 
   .layout {
