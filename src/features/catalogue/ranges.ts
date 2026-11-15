@@ -9,6 +9,15 @@ const faq = z.object({ question: z.string().min(1), answer: z.string().min(1) })
 
 const slug = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 
+const photo = z.object({
+  src: z.string().min(1),
+  alt: z.string().default(''),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+});
+
+const galleryItem = z.object({ photo, caption: z.string().nullish() });
+
 // A filter state with demand of its own (PRD section 13): it gets a clean URL, its own intro and
 // an index tag. Every other filter state is a query string and noindex.
 export const curatedPageSchema = z.object({
@@ -26,6 +35,8 @@ export const rangeSchema = z.object({
   name: z.string().min(1),
   h1: z.string().min(1),
   intro: z.string().min(1),
+  photo: photo.nullish(),
+  gallery: z.array(galleryItem).default([]),
   scope: z.object({
     categories: z.array(z.string()).optional(),
     titleIncludes: z.array(z.string()).optional(),
@@ -37,6 +48,7 @@ export const rangeSchema = z.object({
 });
 
 export type Range = z.infer<typeof rangeSchema>;
+export type RangeGalleryItem = z.infer<typeof galleryItem>;
 export type CuratedPage = z.infer<typeof curatedPageSchema>;
 export type RangeFaq = z.infer<typeof faq>;
 
@@ -60,6 +72,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Porcelain paving',
     intro:
       'Porcelain paving is hard-wearing, easy to clean and keeps its colour, which makes it a good choice for patios, paths and garden steps.',
+    gallery: [],
     scope: { titleIncludes: ['porcelain paving'] },
     buyingGuide: [
       'Porcelain is made at high temperatures, so it absorbs very little water and stands up well to frost and stains.',
@@ -80,6 +93,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Natural stone paving',
     intro:
       'Indian sandstone, limestone, granite and slate paving for patios and paths, each slab with its own natural variation in colour.',
+    gallery: [],
     scope: { titleIncludes: ['sandstone', 'limestone', 'granite', 'slate'] },
     buyingGuide: [],
     faqs: [samplesFaq],
@@ -97,6 +111,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Composite decking',
     intro:
       'Composite decking boards, frames and fixings for a deck that does not need staining or oiling each year.',
+    gallery: [],
     scope: { titleIncludes: ['decking'] },
     buyingGuide: [],
     faqs: [samplesFaq],
@@ -114,6 +129,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Composite cladding',
     intro:
       'Composite cladding boards, trims and clips for garden rooms, sheds and walls, in finishes that need no painting.',
+    gallery: [],
     scope: { categories: ['landscaping-materials-cladding'] },
     buyingGuide: [],
     faqs: [],
@@ -131,6 +147,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Composite fencing',
     intro:
       'Composite fence boards with aluminium posts, trellis and trims, plus lights that fit the posts.',
+    gallery: [],
     scope: { categories: ['landscaping-materials-fencing-gates-balustrades'] },
     buyingGuide: [],
     faqs: [],
@@ -148,6 +165,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Paving jointing compound',
     intro:
       'Brush-in jointing compound for porcelain and natural stone patios, in colours to match your paving.',
+    gallery: [],
     scope: { titleIncludes: ['jointing'] },
     buyingGuide: [],
     faqs: [],
@@ -164,6 +182,7 @@ export const fallbackRanges: Range[] = [
     name: 'Pergolas',
     h1: 'Pergolas',
     intro: 'Pergolas for shade over a patio or deck, freestanding or fixed to the house.',
+    gallery: [],
     scope: { titleIncludes: ['pergola'] },
     buyingGuide: [],
     faqs: [],
@@ -180,6 +199,7 @@ export const fallbackRanges: Range[] = [
     name: 'Garden rooms',
     h1: 'Garden rooms',
     intro: 'Garden rooms and garden offices, with the cladding, lighting and base to go with them.',
+    gallery: [],
     scope: { titleIncludes: ['garden room'] },
     buyingGuide: [],
     faqs: [],
@@ -197,6 +217,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Planters',
     intro:
       'Steel planters made to your measurements, in mild steel, Corten or a powder-coated finish.',
+    gallery: [],
     scope: { titleIncludes: ['planter'] },
     buyingGuide: [],
     faqs: [],
@@ -214,6 +235,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Fire pits',
     intro:
       'Steel and hand-cut natural stone fire pits, with liners and heat deflectors to go with them.',
+    gallery: [],
     scope: { categories: ['outdoor-living-fire-pits'] },
     buyingGuide: [],
     faqs: [],
@@ -230,6 +252,7 @@ export const fallbackRanges: Range[] = [
     name: 'Garden sculptures',
     h1: 'Garden sculptures',
     intro: 'Sculptures and water features for the garden, from stock pieces to commissions.',
+    gallery: [],
     scope: { titleIncludes: ['sculpture'] },
     buyingGuide: [],
     faqs: [],
@@ -247,6 +270,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Decorative garden screens',
     intro:
       'Laser-cut steel screens in three sizes, in weathered steel, galvanised steel or a powder-coated colour.',
+    gallery: [],
     scope: { categories: ['architectural-steelwork-screens'] },
     buyingGuide: [],
     faqs: [],
@@ -290,6 +314,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Outdoor lighting',
     intro:
       'Low-voltage garden lights for decks, paths, walls and planting, with the transformers, cables and controllers to run them.',
+    gallery: [],
     scope: { categories: ['outdoor-living-outdoor-lighting'] },
     buyingGuide: [],
     faqs: [],
@@ -306,6 +331,7 @@ export const fallbackRanges: Range[] = [
     name: 'Garden furniture',
     h1: 'Garden furniture',
     intro: 'Hanging egg chairs, parasols and outdoor furniture for the patio.',
+    gallery: [],
     scope: { categories: ['outdoor-living-garden-furniture'] },
     buyingGuide: [],
     faqs: [],
@@ -323,6 +349,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Garden edging',
     intro:
       'Steel and aluminium edging to keep lawns, borders and paths crisp, with the brackets to fix it.',
+    gallery: [],
     scope: { categories: ['architectural-steelwork-garden-edging'] },
     buyingGuide: [],
     faqs: [],
@@ -340,6 +367,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Patio cleaners and sealers',
     intro:
       'Cleaners, sealers and stain removers to look after porcelain, stone and resin-bound surfaces.',
+    gallery: [],
     scope: { categories: ['landscaping-materials-cleaners-sealers'] },
     buyingGuide: [],
     faqs: [],
@@ -357,6 +385,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Paving supports and installation',
     intro:
       'Adjustable paving risers, top plates, profiles and tools for laying porcelain on roofs, balconies and raised terraces.',
+    gallery: [],
     scope: { categories: ['landscaping-materials-paving-installation'] },
     buyingGuide: [],
     faqs: [],

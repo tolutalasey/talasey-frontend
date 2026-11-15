@@ -10,7 +10,7 @@ import { collectionPageJsonLd } from '@/lib/seo';
 import { productPath } from '@/lib/urls/keyword-map';
 import { curatedTargets } from '../listing-urls';
 import type { RangeListing } from '../loaders.server';
-import { offersSamples, rangePhoto } from '../range-photos';
+import { offersSamples, rangeGallery, rangePhoto } from '../range-photos';
 import { curatedPath, rangePath, type CuratedPage, type Range } from '../ranges';
 import { ActiveFilters } from './ActiveFilters';
 import { FilterForm } from './FilterForm';
@@ -18,6 +18,7 @@ import styles from './Listing.module.css';
 import { Pagination } from './Pagination';
 import { ProductGrid } from './ProductGrid';
 import { RangeAfterword } from './RangeAfterword';
+import { RangeGallery } from './RangeGallery';
 import { SamplesCard } from './SamplesCard';
 
 interface RangePageProps {
@@ -53,7 +54,10 @@ export function RangePage({ range, curated, listing, params, lead }: RangePagePr
   ];
   const price = priceLine(listing);
   const applied = result.facets.flatMap((facet) => facet.values.filter((v) => v.selected)).length;
-  const photo = rangePhoto(range.slug);
+  const photo = range.photo ?? { ...rangePhoto(range.slug), alt: '' };
+  const gallery = (range.gallery.length > 0 ? range.gallery : rangeGallery(range.slug)).filter(
+    (item) => item.photo.src !== photo.src,
+  );
 
   return (
     <article className={styles.rangePage}>
@@ -75,7 +79,7 @@ export function RangePage({ range, curated, listing, params, lead }: RangePagePr
         <div className={styles.headerPhoto}>
           <Image
             src={photo.src}
-            alt=""
+            alt={photo.alt}
             width={photo.width}
             height={photo.height}
             sizes="(min-width: 64rem) 55vw, 100vw"
@@ -107,21 +111,12 @@ export function RangePage({ range, curated, listing, params, lead }: RangePagePr
       )}
 
       {inRange === 0 ? (
-        <section className={`frame ${styles.empty}`} aria-labelledby="coming-title">
-          <h2 id="coming-title">Coming to the new site soon</h2>
-          <p>
-            We&rsquo;re still adding {range.name.toLowerCase()} to the online shop. For prices,
-            samples or advice, get in touch and we&rsquo;ll help.
-          </p>
-          <p className={styles.headerActions}>
-            <NextLink href="/contact/" className="button">
-              Contact us
-            </NextLink>
-            <NextLink href="/samples/" className="chip">
-              Free samples
-            </NextLink>
-          </p>
-        </section>
+        <RangeGallery
+          name={range.name}
+          items={gallery}
+          withEnquiry
+          samples={offersSamples(range.slug)}
+        />
       ) : (
         <div className={styles.layout}>
           <FilterForm
@@ -171,6 +166,9 @@ export function RangePage({ range, curated, listing, params, lead }: RangePagePr
         </div>
       )}
 
+      {inRange > 0 && range.gallery.length > 0 && (
+        <RangeGallery name={range.name} items={range.gallery} withEnquiry={false} samples={false} />
+      )}
       <RangeAfterword range={range} />
       <JsonLd
         data={collectionPageJsonLd(
