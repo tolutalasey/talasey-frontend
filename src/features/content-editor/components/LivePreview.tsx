@@ -3,6 +3,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { stagePreview } from '../actions';
 import styles from './LivePreview.module.css';
+import {
+  EDIT,
+  editableAt,
+  markPage,
+  PAGE_STYLE,
+  setHover,
+  showNewPhoto,
+  showPicked,
+  targetsIn,
+} from './page-picker';
+import { usePick } from './PickContext';
 
 type View = 'draft' | 'live';
 type Device = 'desktop' | 'phone';
@@ -32,6 +43,10 @@ export function LivePreview({ documentId, livePath }: Props) {
   const [state, setState] = useState<State>('updating');
   const [version, setVersion] = useState(0);
   const [size, setSize] = useState({ width: 0, height: 0 });
+  const [page, setPage] = useState<Document | null>(null);
+  const newPhotos = useRef(new Map<string, string>());
+  const pick = usePick();
+  const pickedPath = pick?.picked?.path ?? null;
 
   useEffect(() => {
     const element = screen.current;
@@ -77,6 +92,87 @@ export function LivePreview({ documentId, livePath }: Props) {
     };
   }, []);
 
+  useEffect(() => {
+    const form = panel.current?.closest('form');
+    if (!form) return;
+    const photos = newPhotos.current;
+    const chosen = (event: Event) => {
+      const input = event.target;
+      if (!(input instanceof HTMLInputElement) || input.type !== 'file') return;
+      const path = input.name.replace(/\.file$/, '');
+      const file = input.files?.[0];
+      const old = photos.get(path);
+      if (old) URL.revokeObjectURL(old);
+      if (file) photos.set(path, URL.createObjectURL(file));
+      else photos.delete(path);
+      const thumbnail = form.querySelector<HTMLImageElement>(
+        `[data-field="${CSS.escape(path)}"] img`,
+      );
+      const shown = photos.get(path);
+      if (thumbnail && shown) thumbnail.src = shown;
+    };
+    form.addEventListener('change', chosen, true);
+    return () => {
+      form.removeEventListener('change', chosen, true);
+      photos.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, []);
+
+  useEffect(() => {
+    const form = panel.current?.closest('form');
+    if (!page || !form || !pick) return;
+    const style = page.createElement('style');
+    style.textContent = PAGE_STYLE;
+    page.head.append(style);
+    markPage(page, targetsIn(form));
+    newPhotos.current.forEach((url, path) => showNewPhoto(page, path, url));
+
+    const labelOf = (path: string) => {
+      const field = form.querySelector<HTMLElement>(`[data-field="${CSS.escape(path)}"]`);
+      const label = field?.dataset.label ?? 'This part';
+      const row = field?.closest<HTMLElement>('[data-row]');
+      const list = row?.parentElement?.closest<HTMLElement>('[data-field]');
+      if (!row || !list) return label;
+      const number = [...list.querySelectorAll(':scope > fieldset > [data-row]')].indexOf(row) + 1;
+      return `${list.dataset.label} ${number} · ${label}`;
+    };
+    const move = (event: MouseEvent) =>
+      setHover(page, editableAt(page, event.clientX, event.clientY));
+    const click = (event: MouseEvent) => {
+      const found = editableAt(page, event.clientX, event.clientY);
+      const target = event.target instanceof Element ? event.target : null;
+      if (found) {
+        event.preventDefault();
+        event.stopPropagation();
+        const path = found.getAttribute(EDIT) ?? '';
+        pick.pick({ path, label: labelOf(path) });
+        pick.setShowAll(false);
+        return;
+      }
+      if (target?.closest('a, form')) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      if (!target?.closest('button')) pick.miss();
+    };
+    const submit = (event: Event) => event.preventDefault();
+    page.addEventListener('mousemove', move);
+    page.addEventListener('click', click, true);
+    page.addEventListener('submit', submit, true);
+    return () => {
+      page.removeEventListener('mousemove', move);
+      page.removeEventListener('click', click, true);
+      page.removeEventListener('submit', submit, true);
+      style.remove();
+    };
+    // The page is marked once per load; picking only changes what is outlined.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
+  useEffect(() => {
+    if (page) showPicked(page, pickedPath);
+  }, [page, pickedPath]);
+
   const showing = view === 'live' && livePath ? livePath : `/preview/${documentId}/?v=${version}`;
   const pageWidth = WIDTH[device];
   const scale = size.width > 0 ? Math.min(1, size.width / pageWidth) : 1;
@@ -91,7 +187,10 @@ export function LivePreview({ documentId, livePath }: Props) {
           <button
             type="button"
             aria-pressed={view === 'live'}
-            onClick={() => setView('live')}
+            onClick={() => {
+              setView('live');
+              setPage(null);
+            }}
             disabled={!livePath}
             title={livePath ? undefined : 'Not on the site yet'}
           >
@@ -136,9 +235,11 @@ export function LivePreview({ documentId, livePath }: Props) {
             src={showing}
             title={view === 'live' ? 'The page as it is now' : 'Preview of your draft'}
             className={styles.frame}
-            onLoad={() =>
-              view === 'draft' && setState((current) => (current === 'failed' ? current : 'ready'))
-            }
+            onLoad={(event) => {
+              if (view !== 'draft') return;
+              setState((current) => (current === 'failed' ? current : 'ready'));
+              setPage(event.currentTarget.contentDocument);
+            }}
             style={{
               width: pageWidth,
               height: size.height / scale,

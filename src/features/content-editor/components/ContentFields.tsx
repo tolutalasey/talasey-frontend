@@ -22,12 +22,14 @@ export function ContentFields({ fields, data, prefix = 'data' }: Props) {
   return (
     <div className={styles.stack}>
       {fields.map((field) => (
-        <FieldInput
+        <div
           key={field.name}
-          field={field}
-          value={data[field.name]}
-          path={fieldPath(prefix, field.name)}
-        />
+          data-field={fieldPath(prefix, field.name)}
+          data-kind={field.kind}
+          data-label={field.label}
+        >
+          <FieldInput field={field} value={data[field.name]} path={fieldPath(prefix, field.name)} />
+        </div>
       ))}
     </div>
   );
@@ -105,7 +107,12 @@ function FieldInput({ field, value, path }: { field: Field; value: unknown; path
           <legend>{field.label}</legend>
           {field.help && <p className={styles.muted}>{field.help}</p>}
           {[...rows, ...Array.from({ length: EXTRA_ROWS }, () => ({}))].map((row, index) => (
-            <fieldset key={index} className={styles.itemSet}>
+            <fieldset
+              key={index}
+              className={styles.itemSet}
+              data-row=""
+              data-extra={index < rows.length ? undefined : ''}
+            >
               <legend>
                 {index < rows.length ? `${index + 1}` : 'Add another (leave empty to skip)'}
               </legend>

@@ -14,7 +14,7 @@ export function ProjectTiles({ tiles }: { tiles: ProjectTile[] }) {
       </div>
       <ul className={styles.grid}>
         {tiles.map((tile, index) => {
-          const photo = projectPhotos[index % projectPhotos.length];
+          const photo = tile.photo ?? projectPhotos[index % projectPhotos.length];
           return (
             <li key={tile.href} className={`frame ${styles.tile}`} data-reveal="">
               {photo && (

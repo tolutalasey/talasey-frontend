@@ -16,6 +16,8 @@ import type { ContentDocument, ContentRelease, ContentTypeInfo } from '../types'
 import { ContentFields } from './ContentFields';
 import { CONTENT_STATUS, savedAt } from './ContentList';
 import { LivePreview } from './LivePreview';
+import { PickPanel } from './PickPanel';
+import { PickProvider } from './PickContext';
 
 const STATUS_TEXT = {
   draft: 'Not on the site yet.',
@@ -164,7 +166,9 @@ function Main({ document, type }: Pick<Props, 'document' | 'type'>) {
       )}
 
       <section className={styles.panel} aria-label="Content">
-        <ContentFields fields={type.fields} data={document.draft} />
+        <PickPanel>
+          <ContentFields fields={type.fields} data={document.draft} />
+        </PickPanel>
       </section>
 
       <SaveBar saved={`Saved by ${document.updatedBy}, ${savedAt(document.updatedAt)}`}>
@@ -202,24 +206,26 @@ export function ContentEditor({ document, type, releases, preview }: Props) {
         className={styles.workspace}
         data-wide=""
       >
-        {hidden}
-        <div className={styles.workspaceForm}>
-          <details className={styles.publishing}>
-            <summary>
-              <span>Status, release and history</span>
-              <Badge tone={CONTENT_STATUS[document.status].tone}>
-                {CONTENT_STATUS[document.status].label}
-              </Badge>
-            </summary>
-            <div className={styles.publishingPanels}>
-              <Publishing document={document} type={type} releases={releases} />
-            </div>
-          </details>
-          <Main document={document} type={type} />
-        </div>
-        <div className={styles.workspacePreview}>
-          <LivePreview documentId={document.id} livePath={preview.livePath} />
-        </div>
+        <PickProvider>
+          {hidden}
+          <div className={styles.workspaceForm}>
+            <details className={styles.publishing}>
+              <summary>
+                <span>Status, release and history</span>
+                <Badge tone={CONTENT_STATUS[document.status].tone}>
+                  {CONTENT_STATUS[document.status].label}
+                </Badge>
+              </summary>
+              <div className={styles.publishingPanels}>
+                <Publishing document={document} type={type} releases={releases} />
+              </div>
+            </details>
+            <Main document={document} type={type} />
+          </div>
+          <div className={styles.workspacePreview}>
+            <LivePreview documentId={document.id} livePath={preview.livePath} />
+          </div>
+        </PickProvider>
       </form>
     );
   }

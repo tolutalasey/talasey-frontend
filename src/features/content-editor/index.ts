@@ -10,4 +10,4 @@ export {
 export { NewReleaseForm, ReleaseList } from './components/ReleaseList';
 export { CONTENT_GROUPS, typeMeta, type ContentGroup } from './type-meta';
 export type { ContentDocument, ContentRelease, ContentSummary, ContentTypeInfo } from './types';
-export { unsavedEntries, type LiveEntry } from './live-content';
+export { unsavedEntries, withPhotoDefaults, type LiveEntry } from './live-content';

@@ -7,7 +7,7 @@ import {
   type BrandPage,
   type ProjectPage,
 } from '@/features/content';
-import { fallbackHomeContent } from '@/features/home';
+import { fallbackHomeContent, heroScenes, projectPhotos } from '@/features/home';
 import { slugify } from '@/lib/slug';
 import type { Data } from './fields';
 
@@ -52,8 +52,48 @@ const rangeData = (range: Range): Data => {
   };
 };
 
+interface SitePhoto {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+const plainPhoto = ({ src, alt, width, height }: SitePhoto) => ({ src, alt, width, height });
+const listOf = (value: unknown): Data[] => (Array.isArray(value) ? (value as Data[]) : []);
+const isEmptyList = (value: unknown) => !Array.isArray(value) || value.length === 0;
+
+// Photos the site draws from the brochures when an entry has none of its own, so the editor
+// shows the photo that is really on the page and it can be clicked and changed.
+const PHOTO_DEFAULTS: Record<string, (data: Data) => Data> = {
+  home: (data) => ({
+    ...data,
+    heroScenes: isEmptyList(data.heroScenes)
+      ? heroScenes.map(({ photo, ...scene }) => ({ ...scene, photo: plainPhoto(photo) }))
+      : data.heroScenes,
+    projectTiles: listOf(data.projectTiles).map((tile, index) => {
+      const fallback = projectPhotos[index % projectPhotos.length];
+      return tile.photo || !fallback ? tile : { ...tile, photo: plainPhoto(fallback) };
+    }),
+  }),
+  'range-page': (data) => {
+    const slug = typeof data.slug === 'string' ? data.slug : '';
+    const name = typeof data.name === 'string' ? data.name : '';
+    return {
+      ...data,
+      photo: data.photo ?? { ...rangePhoto(slug), alt: name },
+      gallery: isEmptyList(data.gallery) ? rangeGallery(slug) : data.gallery,
+    };
+  },
+};
+
+export const withPhotoDefaults = (type: string, data: Data): Data =>
+  PHOTO_DEFAULTS[type]?.(data) ?? data;
+
 const LIVE: Record<string, () => LiveEntry[]> = {
-  home: () => [{ key: 'home', title: 'Homepage', data: fallbackHomeContent }],
+  home: () => [
+    { key: 'home', title: 'Homepage', data: withPhotoDefaults('home', fallbackHomeContent) },
+  ],
   'range-page': () =>
     fallbackRanges.map((range) => ({ key: range.slug, title: range.name, data: rangeData(range) })),
   'brand-page': () =>

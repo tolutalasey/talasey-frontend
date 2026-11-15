@@ -4,13 +4,36 @@ export const SEASONS = ['spring', 'summer', 'autumn', 'winter'] as const;
 export type Season = (typeof SEASONS)[number];
 
 const link = z.object({ label: z.string().min(1), href: z.string().min(1) });
+const photo = z.object({
+  src: z.string().min(1),
+  alt: z.string().default(''),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+});
 
 export const homeContentSchema = z.object({
   h1: z.string().min(1),
   intro: z.string().min(1),
   heroActions: z.tuple([link, link]),
+  heroScenes: z
+    .array(
+      z.object({
+        photo,
+        topic: z.string().min(1),
+        title: z.string().min(1),
+        href: z.string().min(1),
+      }),
+    )
+    .default([]),
   projectTiles: z
-    .array(z.object({ title: z.string().min(1), summary: z.string().min(1), href: z.string() }))
+    .array(
+      z.object({
+        photo: photo.nullish(),
+        title: z.string().min(1),
+        summary: z.string().min(1),
+        href: z.string(),
+      }),
+    )
     .min(2),
   seasonalBlocks: z
     .array(
@@ -42,6 +65,7 @@ export const fallbackHomeContent: HomeContent = {
     { label: 'Order free samples', href: '/samples/' },
     { label: 'Shop porcelain paving', href: '/porcelain-paving/' },
   ],
+  heroScenes: [],
   projectTiles: [
     {
       title: 'A new patio',

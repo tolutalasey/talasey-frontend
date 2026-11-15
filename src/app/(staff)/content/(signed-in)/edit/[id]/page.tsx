@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { CONTENT_STATUS, ContentEditor } from '@/features/content-editor';
+import { CONTENT_STATUS, ContentEditor, withPhotoDefaults } from '@/features/content-editor';
 import { hasPagePreview, sitePathFor } from '@/features/live-preview';
 import { Badge, Notice, PageHeader, staffApi } from '@/features/staff';
 import { contentTypes } from '../../types.server';
@@ -34,7 +34,7 @@ export default async function EditContent({ params, searchParams }: Props) {
       />
       <Notice message={message} error={error} />
       <ContentEditor
-        document={document}
+        document={{ ...document, draft: withPhotoDefaults(type.type, document.draft) }}
         type={type}
         releases={releases.filter((release) => release.status !== 'published')}
         preview={

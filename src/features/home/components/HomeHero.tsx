@@ -12,11 +12,12 @@ interface Props {
 
 export function HomeHero({ content, rangeNames }: Props) {
   const [primary, secondary] = content.heroActions;
+  const scenes = content.heroScenes.length > 0 ? content.heroScenes : heroScenes;
   return (
     <section className={styles.hero} aria-labelledby="home-title" data-motion="">
       <div className={styles.frame}>
         <div className={styles.scenes}>
-          {heroScenes.map((scene, index) => (
+          {scenes.map((scene, index) => (
             <div key={scene.href} className={styles.scene}>
               <Image
                 src={scene.photo.src}
@@ -48,7 +49,7 @@ export function HomeHero({ content, rangeNames }: Props) {
           </p>
         </div>
         <ul className={styles.tabs} aria-label="In the photos">
-          {heroScenes.map((scene, index) => (
+          {scenes.map((scene, index) => (
             <li key={scene.href}>
               <NextLink href={scene.href} className={styles.tab}>
                 <span className={styles.line} aria-hidden="true" />
