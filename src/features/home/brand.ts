@@ -6,6 +6,7 @@ export interface BrandPhoto {
   width: number;
   height: number;
   caption?: string;
+  href?: string;
 }
 
 const photo = (name: string, alt: string, width: number, height: number, caption?: string) => ({
@@ -55,24 +56,31 @@ export const samplesPhoto = photo(
   1200,
 );
 
-const showcase = (n: number, caption: string, width: number, height: number): BrandPhoto => ({
+const showcase = (
+  n: number,
+  caption: string,
+  width: number,
+  height: number,
+  href?: string,
+): BrandPhoto => ({
   src: `/images/brand/showcase/${String(n).padStart(2, '0')}.jpg`,
   alt: caption,
   width,
   height,
   caption,
+  href,
 });
 
 // The sliding row of finished gardens under "Popular this season".
 export const gardenPhotos: BrandPhoto[] = [
-  showcase(3, 'Porcelain terrace by a pool', 720, 686),
-  showcase(15, 'Laser-cut privacy screens', 720, 510),
-  showcase(14, 'Sandstone patio from above', 646, 720),
-  showcase(13, 'Fire pit sphere, lit', 720, 510),
-  showcase(21, 'Steel planters on a deck', 720, 510),
-  showcase(9, 'Pale paving around a garden lounge', 720, 510),
-  showcase(2, 'Corten edging along a curved border', 720, 510),
-  showcase(10, 'Anthracite porcelain patio', 720, 478),
+  showcase(3, 'Porcelain terrace by a pool', 720, 686, '/porcelain-paving/'),
+  showcase(15, 'Laser-cut privacy screens', 720, 510, '/garden-screens/'),
+  showcase(14, 'Sandstone patio from above', 646, 720, '/projects/new-patio/'),
+  showcase(13, 'Fire pit sphere, lit', 720, 510, '/fire-pits/'),
+  showcase(21, 'Steel planters on a deck', 720, 510, '/planters/'),
+  showcase(9, 'Pale paving around a garden lounge', 720, 510, '/porcelain-paving/'),
+  showcase(2, 'Corten edging along a curved border', 720, 510, '/garden-edging/'),
+  showcase(10, 'Anthracite porcelain patio', 720, 478, '/porcelain-paving/'),
 ];
 
 // The pergola card cycles through these, one every five seconds.

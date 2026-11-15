@@ -4,8 +4,24 @@ export const trustPoints = [
     icon: 'truck',
     title: 'Delivery on a day you choose',
     text: 'Book the day at checkout. We call before we come.',
+    href: '/help/delivery/',
   },
-  { icon: 'samples', title: 'Free samples', text: 'Up to five, sent to your door at no cost.' },
-  { icon: 'ruler', title: 'Made to measure', text: 'Planters and screens cut to your size.' },
-  { icon: 'chat', title: 'Help from our team', text: 'Call or email before you order.' },
+  {
+    icon: 'samples',
+    title: 'Free samples',
+    text: 'Up to five, sent to your door at no cost.',
+    href: '/samples/',
+  },
+  {
+    icon: 'ruler',
+    title: 'Made to measure',
+    text: 'Planters and screens cut to your size.',
+    href: '/planters/',
+  },
+  {
+    icon: 'chat',
+    title: 'Help from our team',
+    text: 'Call or email before you order.',
+    href: '/contact/',
+  },
 ] as const;

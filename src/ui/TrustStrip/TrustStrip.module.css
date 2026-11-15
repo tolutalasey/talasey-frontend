@@ -61,3 +61,26 @@
 .item:hover .ring {
   background: var(--color-stone);
 }
+
+/* The whole item is the link's target. */
+.item {
+  position: relative;
+}
+
+.link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.item:has(.link:hover) .title,
+.link:focus-visible {
+  color: var(--color-brand600);
+  text-decoration: underline;
+}

@@ -19,6 +19,12 @@ export function PergolaFeature({ photos }: { photos: BrandPhoto[] }) {
             >
               <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 64rem) 58vw, 100vw" />
               <figcaption className={styles.cycleCaption}>{photo.caption}</figcaption>
+              <NextLink
+                href="/pergolas/"
+                className={styles.cycleLink}
+                tabIndex={-1}
+                aria-hidden="true"
+              />
             </figure>
           ))}
           <span className={styles.dashes} aria-hidden="true">

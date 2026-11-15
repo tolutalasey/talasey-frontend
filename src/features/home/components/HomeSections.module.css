@@ -493,3 +493,32 @@
     display: none;
   }
 }
+
+/* Garden cards and pergola photos open what they show. */
+.reelCard {
+  position: relative;
+}
+
+.reelLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.reelLink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.reelCard:has(.reelLink:hover) .reelCaption,
+.reelLink:focus-visible {
+  color: var(--color-brand600);
+  text-decoration: underline;
+}
+
+.cycleLink {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}

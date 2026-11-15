@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import NextLink from 'next/link';
 import { MotionToggle } from '@/ui/MotionToggle/MotionToggle';
 import type { BrandPhoto } from '../brand';
 import styles from './HomeSections.module.css';
@@ -34,7 +35,19 @@ export function GardenReel({ photos }: { photos: BrandPhoto[] }) {
                     sizes="20rem"
                   />
                 </div>
-                <p className={styles.reelCaption}>{photo.caption}</p>
+                <p className={styles.reelCaption}>
+                  {photo.href ? (
+                    <NextLink
+                      href={photo.href}
+                      className={styles.reelLink}
+                      tabIndex={copy ? -1 : undefined}
+                    >
+                      {photo.caption}
+                    </NextLink>
+                  ) : (
+                    photo.caption
+                  )}
+                </p>
               </li>
             );
           })}
