@@ -17,6 +17,7 @@ import {
   TrashIcon,
 } from '@/features/staff';
 import { deleteProduct, saveProduct } from '../actions';
+import { NEW_OPTION_ROWS } from '../product-form';
 import {
   PAGE_TYPES,
   STOCK_MODES,
@@ -105,76 +106,51 @@ export function ProductEditor({ product, categories, colourSets }: Props) {
         <section className={styles.panel} aria-labelledby="prices">
           <h2 id="prices">Prices and stock</h2>
           <p>Prices include VAT. Leave a price empty if the option isn&rsquo;t for sale yet.</p>
+          <TextField
+            label="Choices shoppers make"
+            name="optionNames"
+            defaultValue={optionNames.join(', ')}
+            description="Separate them with commas, like Size, Colour. Each becomes a column below."
+          />
           <Table caption="Options">
             <thead>
               <tr>
                 <th scope="col">Option</th>
+                {optionNames.map((name) => (
+                  <th key={name} scope="col">
+                    {name}
+                  </th>
+                ))}
                 <th scope="col">SKU</th>
                 <th scope="col">Price (£)</th>
                 <th scope="col">In stock</th>
                 <th scope="col">Weight (kg)</th>
                 <th scope="col">m² per pack</th>
+                <th scope="col">Remove</th>
               </tr>
             </thead>
             <tbody>
               {product.variants.map((variant, index) => (
-                <tr key={variant.id}>
-                  <th scope="row">
-                    <input
-                      className={styles.cellInput}
-                      name={`variant.${index}.title`}
-                      defaultValue={variant.title}
-                      aria-label="Option name"
-                    />
-                  </th>
-                  <td>
-                    <input
-                      className={styles.cellInput}
-                      name={`variant.${index}.sku`}
-                      defaultValue={variant.sku ?? ''}
-                      aria-label={`SKU for ${variant.title}`}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className={styles.cellInput}
-                      name={`variant.${index}.price`}
-                      defaultValue={poundsText(variant.pricePence)}
-                      inputMode="decimal"
-                      aria-label={`Price for ${variant.title} in pounds`}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className={styles.cellInput}
-                      name={`variant.${index}.stock`}
-                      defaultValue={String(variant.stockQuantity)}
-                      inputMode="numeric"
-                      aria-label={`Stock for ${variant.title}`}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className={styles.cellInput}
-                      name={`variant.${index}.weight`}
-                      defaultValue={variant.weightKg ?? ''}
-                      inputMode="decimal"
-                      aria-label={`Weight of ${variant.title} in kilograms`}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className={styles.cellInput}
-                      name={`variant.${index}.coverage`}
-                      defaultValue={variant.coverageM2 ?? ''}
-                      inputMode="decimal"
-                      aria-label={`Square metres covered by one ${variant.title}`}
-                    />
-                  </td>
-                </tr>
+                <OptionRow
+                  key={variant.id}
+                  prefix={`variant.${index}`}
+                  optionNames={optionNames}
+                  variant={variant}
+                />
+              ))}
+              {Array.from({ length: NEW_OPTION_ROWS }, (_, index) => (
+                <OptionRow
+                  key={`new-${index}`}
+                  prefix={`newVariant.${index}`}
+                  optionNames={optionNames}
+                />
               ))}
             </tbody>
           </Table>
+          <p className={`${styles.muted} ${styles.small}`}>
+            Fill in a blank row to add an option. Left blank, the option name is made from its
+            choices, like 600 x 600 mm / Dove.
+          </p>
           <hr className={styles.divider} />
           <div className={styles.fields}>
             <div className={styles.wide}>
@@ -371,5 +347,75 @@ export function ProductEditor({ product, categories, colourSets }: Props) {
         </form>
       </aside>
     </div>
+  );
+}
+
+type Variant = AdminProduct['variants'][number];
+
+interface OptionRowProps {
+  prefix: string;
+  optionNames: string[];
+  variant?: Variant;
+}
+
+function OptionRow({ prefix, optionNames, variant }: OptionRowProps) {
+  const name = variant?.title || 'the new option';
+  const cell = (field: string, label: string, value: string, inputMode?: 'decimal' | 'numeric') => (
+    <td>
+      <input
+        className={styles.cellInput}
+        data-size={inputMode ? undefined : 'wide'}
+        name={`${prefix}.${field}`}
+        defaultValue={value}
+        inputMode={inputMode}
+        aria-label={label}
+      />
+    </td>
+  );
+  return (
+    <tr>
+      <th scope="row">
+        <input
+          className={styles.cellInput}
+          name={`${prefix}.title`}
+          defaultValue={variant?.title ?? ''}
+          placeholder={variant ? undefined : 'New option'}
+          data-size="wide"
+          aria-label="Option name"
+        />
+      </th>
+      {optionNames.map((option) =>
+        cell(`option.${option}`, `${option} for ${name}`, variant?.options[option] ?? ''),
+      )}
+      {cell('sku', `SKU for ${name}`, variant?.sku ?? '')}
+      {cell(
+        'price',
+        `Price for ${name} in pounds`,
+        variant ? poundsText(variant.pricePence) : '',
+        'decimal',
+      )}
+      {cell('stock', `Stock for ${name}`, variant ? String(variant.stockQuantity) : '', 'numeric')}
+      {cell(
+        'weight',
+        `Weight of ${name} in kilograms`,
+        variant?.weightKg?.toString() ?? '',
+        'decimal',
+      )}
+      {cell(
+        'coverage',
+        `Square metres covered by one ${name}`,
+        variant?.coverageM2?.toString() ?? '',
+        'decimal',
+      )}
+      <td>
+        {variant && (
+          <input
+            type="checkbox"
+            name={`${prefix}.remove`}
+            aria-label={`Remove ${name} when I save`}
+          />
+        )}
+      </td>
+    </tr>
   );
 }

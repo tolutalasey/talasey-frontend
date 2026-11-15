@@ -1162,6 +1162,10 @@ ul.grid {
     box-shadow var(--motion-fast);
 }
 
+.cellInput[data-size='wide'] {
+  min-width: 9.5rem;
+}
+
 .cellInput:hover {
   border-color: #d9cfc8;
 }

@@ -10,37 +10,80 @@ export interface UploadedPhoto {
   height: number;
 }
 
+// Blank rows under the options table, for adding options without leaving the page.
+export const NEW_OPTION_ROWS = 3;
+
+const optionNamesFrom = (form: FormData, current: AdminProduct) => {
+  const typed = text(form, 'optionNames');
+  if (typed === null) return form.has('optionNames') ? [] : current.options.map((o) => o.title);
+  return [
+    ...new Set(
+      typed
+        .split(',')
+        .map((name) => name.trim())
+        .filter(Boolean),
+    ),
+  ];
+};
+
+const valuesOf = (variants: { options: Record<string, string> }[], name: string) => [
+  ...new Set(variants.flatMap((variant) => variant.options[name] ?? [])),
+];
+
 // The product as staff left the form: the fields on the page replace the saved ones; anything
-// the form doesn't show (options, colour photos, made-to-measure sizes) is kept as it was.
+// the form doesn't show (colour photos, made-to-measure sizes) is kept as it was.
 export function productFromForm(
   current: AdminProduct,
   form: FormData,
   uploaded: UploadedPhoto | null,
 ): { input: ProductInput; problems: string[] } {
   const problems: string[] = [];
+  const optionNames = optionNamesFrom(form, current);
 
-  const variants = current.variants.map((variant, index) => {
-    const field = (name: string) => `variant.${index}.${name}`;
+  const readRow = (prefix: string, fallbackTitle: string) => {
+    const field = (name: string) => `${prefix}.${name}`;
+    const options = Object.fromEntries(
+      optionNames.flatMap((name) => {
+        const value = text(form, field(`option.${name}`));
+        return value ? [[name, value]] : [];
+      }),
+    );
     const price = pence(form, field('price'));
     const stock = whole(form, field('stock'));
     const weight = decimal(form, field('weight'));
     const coverage = decimal(form, field('coverage'));
-    const title = text(form, field('title')) ?? variant.title;
+    const title =
+      text(form, field('title')) ?? (Object.values(options).join(' / ') || fallbackTitle);
     if (Number.isNaN(price)) problems.push(`Enter the price of ${title} in pounds, like 89.99`);
     if (Number.isNaN(stock)) problems.push(`Enter the stock of ${title} as a whole number`);
     if (Number.isNaN(weight) || Number.isNaN(coverage)) {
       problems.push(`Enter the weight and coverage of ${title} as numbers`);
     }
     return {
-      ...variant,
       title,
+      options,
       sku: text(form, field('sku')),
       pricePence: price,
       stockQuantity: stock ?? 0,
       weightKg: weight,
       coverageM2: coverage,
     };
-  });
+  };
+
+  const kept = current.variants.flatMap((variant, index) =>
+    form.get(`variant.${index}.remove`) === 'on'
+      ? []
+      : [{ ...variant, ...readRow(`variant.${index}`, variant.title) }],
+  );
+  const added = Array.from({ length: NEW_OPTION_ROWS }, (_, index) => `newVariant.${index}`)
+    .filter((prefix) =>
+      ['title', 'sku', 'price', ...optionNames.map((name) => `option.${name}`)].some((name) =>
+        text(form, `${prefix}.${name}`),
+      ),
+    )
+    .map((prefix) => ({ barcode: null, ...readRow(prefix, current.title) }));
+  const variants = [...kept, ...added];
+  if (variants.length === 0) problems.push('Keep at least one option, so the product can be sold');
 
   const images = current.images
     .map((image, index) => ({ ...image, alt: text(form, `image.${index}.alt`) ?? '' }))
@@ -66,12 +109,13 @@ export function productFromForm(
     pimSku: _pim,
     updatedAt: _updated,
     problems: _checks,
-    ...kept
+    ...unchanged
   } = current;
   return {
     problems,
     input: {
-      ...kept,
+      ...unchanged,
+      options: optionNames.map((title) => ({ title, values: valuesOf(variants, title) })),
       title: text(form, 'title') ?? '',
       handle: text(form, 'handle') ?? '',
       subtitle: text(form, 'subtitle'),
