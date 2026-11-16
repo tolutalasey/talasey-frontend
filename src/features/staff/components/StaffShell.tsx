@@ -8,6 +8,7 @@ import { ShellFrame } from './ShellFrame';
 import styles from './Shell.module.css';
 import { StaffBreadcrumbs } from './StaffBreadcrumbs';
 import { StaffNavLink } from './StaffNavLink';
+import { TwoFactorReminder } from './TwoFactorReminder';
 
 export interface StaffLink {
   href: string;
@@ -24,7 +25,7 @@ export interface StaffNavGroup {
 interface Props {
   area: StaffArea;
   groups: StaffNavGroup[];
-  me: { name: string; role: string; permissions: Permission[] };
+  me: { name: string; role: string; permissions: Permission[]; twoFactor: boolean };
   children: ReactNode;
 }
 
@@ -97,7 +98,11 @@ export function StaffShell({ area, groups, me, children }: Props) {
       </nav>
 
       <div className={styles.me}>
-        <NextLink href={`/${area}/account/`} className={styles.meLink}>
+        <NextLink
+          href={`/${area}/account/`}
+          className={styles.meLink}
+          title="Your account, password and two-factor sign-in"
+        >
           <span className={styles.avatar} aria-hidden="true">
             {initials(me.name)}
           </span>
@@ -132,6 +137,7 @@ export function StaffShell({ area, groups, me, children }: Props) {
         }
       >
         <main id="main" className={styles.main}>
+          {!me.twoFactor && <TwoFactorReminder area={area} />}
           {children}
         </main>
       </ShellFrame>

@@ -1,6 +1,7 @@
 import { Button } from '@/ui/Button/Button';
 import { TextField } from '@/ui/TextField/TextField';
 import { changePassword, startTwoFactor, turnOffTwoFactor, turnOnTwoFactor } from '../actions';
+import { qrCodeImage } from '../qr-code.server';
 import type { StaffArea, TwoFactorSetup } from '../session.server';
 import { Notice } from './Notice';
 import { PageHeader } from './PageHeader';
@@ -27,7 +28,8 @@ const CodeField = () => (
   />
 );
 
-export function AccountPage({ area, me, setup, message, error }: Props) {
+export async function AccountPage({ area, me, setup, message, error }: Props) {
+  const qrCode = setup ? await qrCodeImage(setup.uri) : null;
   return (
     <>
       <PageHeader
@@ -58,16 +60,30 @@ export function AccountPage({ area, me, setup, message, error }: Props) {
             </form>
           ) : setup ? (
             <form action={turnOnTwoFactor} className={styles.stack}>
-              <ol>
+              <ol className={styles.setupSteps}>
                 <li>
-                  Open an authenticator app on your phone (Google Authenticator, Microsoft
-                  Authenticator or 1Password) and add an account.
+                  Open an authenticator app on your phone, such as Google Authenticator, Microsoft
+                  Authenticator or 1Password, and choose to add an account.
                 </li>
                 <li>
-                  Choose to enter a key, and type <strong>{grouped(setup.secret)}</strong>. On this
-                  phone you can <a href={setup.uri}>open it in the app</a> instead.
+                  Scan this code with the app.
+                  {qrCode && (
+                    // eslint-disable-next-line @next/next/no-img-element -- made on the server for this set-up only
+                    <img
+                      src={qrCode}
+                      alt="QR code to add Talasey to your authenticator app"
+                      width={200}
+                      height={200}
+                      className={styles.qrCode}
+                    />
+                  )}
+                  <span className={styles.muted}>
+                    Can&apos;t scan it? Choose to enter a key and type{' '}
+                    <strong>{grouped(setup.secret)}</strong>. On this phone you can{' '}
+                    <a href={setup.uri}>open it in the app</a> instead.
+                  </span>
                 </li>
-                <li>Enter the 6-digit code the app shows.</li>
+                <li>Type the 6-digit code the app shows for Talasey below.</li>
               </ol>
               <input type="hidden" name="area" value={area} />
               <CodeField />
@@ -78,8 +94,8 @@ export function AccountPage({ area, me, setup, message, error }: Props) {
           ) : (
             <form action={startTwoFactor} className={styles.stack}>
               <p>
-                Off. With it on, someone who learns your password still can&apos;t sign in without
-                your phone.
+                Off. Turn it on so that someone who learns your password still can&apos;t sign in
+                without your phone. It takes about a minute.
               </p>
               <input type="hidden" name="area" value={area} />
               <div className={styles.actions}>
