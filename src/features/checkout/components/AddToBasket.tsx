@@ -10,6 +10,7 @@ import { CoverageCalculator } from './CoverageCalculator';
 import type { FormState } from '../forms';
 import styles from './AddToBasket.module.css';
 import { FormMessage } from './FormMessage';
+import { KitExtras, type BasketExtra } from './KitExtras';
 
 export interface ColourOption {
   id: string;
@@ -22,15 +23,6 @@ export interface ColourChoiceProps {
   required: boolean;
   options: ColourOption[];
   selected: string | null;
-}
-
-export interface BasketExtra {
-  variantId: string;
-  name: string;
-  reason: string;
-  price: string | null;
-  pricePence: number | null;
-  coverageM2: number | null;
 }
 
 export interface AddToBasketProps {
@@ -99,25 +91,6 @@ function ColourSwatches({
   );
 }
 
-// "Complete the job": nothing is ticked until the shopper ticks it (PRD section 17).
-function Extras({ extras }: { extras: BasketExtra[] }) {
-  return (
-    <fieldset className={styles.extras}>
-      <legend>Complete the job</legend>
-      {extras.map((extra) => (
-        <label key={extra.variantId} className={styles.extra}>
-          <input type="checkbox" name="extra" value={extra.variantId} />
-          <span>
-            <span className={styles.extraName}>{extra.name}</span>
-            {extra.price && <span> · {extra.price}</span>}
-            <span className={styles.reason}>{extra.reason}</span>
-          </span>
-        </label>
-      ))}
-    </fieldset>
-  );
-}
-
 // Once the page has JavaScript, adding to the bag slides the bag drawer open over the product
 // instead of loading the bag page.
 const noChanges = () => () => {};
@@ -181,7 +154,7 @@ export function AddToBasket({
                 isRequired
               />
             </div>
-            {extras.length > 0 && <Extras extras={extras} />}
+            {extras.length > 0 && <KitExtras extras={extras} areaM2={0} mainTotalPence={null} />}
           </>
         )}
         <FormMessage message={state.message} />

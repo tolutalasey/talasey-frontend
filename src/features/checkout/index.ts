@@ -1,10 +1,10 @@
 export {
   AddToBasket,
   type AddToBasketProps,
-  type BasketExtra,
   type ColourChoiceProps,
   type ColourOption,
 } from './components/AddToBasket';
+export type { BasketExtra, ExtraChoice } from './components/KitExtras';
 export { BagDrawer } from './components/BagDrawer';
 export { BagPanel, BagPanelLoading } from './components/BagPanel';
 export { BasketSummary } from './components/BasketSummary';

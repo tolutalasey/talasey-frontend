@@ -1,0 +1,85 @@
+.extras {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.extras legend {
+  margin-bottom: var(--space-2);
+  font-weight: var(--font-weight-bold);
+}
+
+.all,
+.extra {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+  transition: border-color var(--motion-fast) var(--motion-ease);
+}
+
+.all {
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  background: var(--color-stone50);
+  cursor: pointer;
+}
+
+.all:has(input:checked),
+.extra[data-ticked] {
+  border-color: var(--color-brand950);
+  box-shadow: inset 0 0 0 1px var(--color-brand950);
+}
+
+.tick {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3);
+  align-items: start;
+  min-height: var(--target-min);
+  cursor: pointer;
+}
+
+.all input,
+.tick input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.2rem;
+  accent-color: var(--color-brand950);
+}
+
+.name {
+  font-weight: var(--font-weight-semibold);
+}
+
+.reason {
+  display: block;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-small);
+}
+
+.choice {
+  display: grid;
+  gap: var(--space-1);
+  padding-left: calc(1.25rem + var(--space-3));
+  font-size: var(--font-size-small);
+}
+
+.choice select {
+  min-height: var(--target-min);
+  padding: 0 var(--space-3);
+  border: var(--border-input) solid var(--color-line);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-ink);
+  font: inherit;
+}
+
+.total {
+  margin: var(--space-2) 0 0;
+  font-size: 1.125rem;
+}

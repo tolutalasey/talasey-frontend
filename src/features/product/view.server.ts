@@ -8,9 +8,9 @@ import {
 } from '@/api-client';
 import type { StockStatusProps } from '@/ui/StockStatus/StockStatus';
 import { getRanges, rangeForProduct, rangePath } from '@/features/catalogue';
+import type { BasketExtra } from '@/features/checkout';
 import { getProductSampleOffers } from '@/features/samples';
 import { brandOf } from '@/lib/brands';
-import { formatPrice } from '@/lib/format';
 import type { BreadcrumbItem } from '@/lib/seo';
 import { slugify } from '@/lib/slug';
 import { productPath } from '@/lib/urls/keyword-map';
@@ -39,14 +39,8 @@ export interface ProductView {
   stock: StockStatusProps;
   options: OptionGroup[];
   colours: ColourView | null;
-  extras: {
-    variantId: string;
-    name: string;
-    reason: string;
-    price: string | null;
-    pricePence: number | null;
-    coverageM2: number | null;
-  }[];
+  extras: BasketExtra[];
+
   samples: SampleOffer[];
   content: ProductContent;
   path: string;
@@ -121,18 +115,17 @@ export async function getProductView(handle: string, params: Params): Promise<Pr
     stock: stockOf(variant),
     options: optionGroups(product, selection),
     colours,
-    extras: companions.map(({ product: extra, variantId, reason }) => {
-      const chosen = extra.variants.find((v) => v.id === variantId);
-      const price = chosen?.priceIncVat;
-      return {
-        variantId,
-        name: extra.title,
-        reason,
-        price: price ? formatPrice(price) : null,
-        pricePence: price ? Math.round(price.amount * 100) : null,
-        coverageM2: chosen?.coverageM2 ?? null,
-      };
-    }),
+    extras: companions.map(({ product: extra, variants, reason }) => ({
+      key: extra.handle,
+      name: extra.title,
+      reason,
+      choices: variants.map((choice) => ({
+        variantId: choice.id,
+        label: choice.title,
+        pricePence: choice.priceIncVat ? Math.round(choice.priceIncVat.amount * 100) : null,
+        coverageM2: choice.coverageM2 ?? null,
+      })),
+    })),
     samples,
     content,
     path,

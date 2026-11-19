@@ -1,5 +1,5 @@
 import 'server-only';
-import { isAvailable, type ColourOffer, type Product } from '@/api-client';
+import { isAvailable, type ColourOffer, type Product, type ProductVariant } from '@/api-client';
 import { cacheLife, cacheTag } from 'next/cache';
 import { cacheTags } from '@/lib/cache-tags';
 import { getCatalog, orEmpty } from '@/lib/commerce';
@@ -59,20 +59,21 @@ export async function getProductContent(handle: string): Promise<ProductContent>
 
 export interface Companion {
   product: Product;
-  variantId: string;
+  // The versions that can be bought now, cheapest first.
+  variants: ProductVariant[];
   reason: string;
 }
 
-// The products in "complete the job", each with the option to add: the cheapest one that can be
-// bought. Products that can't be bought online are left out.
+// The products in "complete the job", each with the versions that can be bought online. Products
+// with none are left out.
 export async function getCompanions(content: ProductContent): Promise<Companion[]> {
   const found = await Promise.all(
     content.completeTheJob.map(async ({ handle, reason }) => {
       const product = await getProduct(handle);
-      const variant = product?.variants
+      const variants = (product?.variants ?? [])
         .filter((candidate) => candidate.priceIncVat && isAvailable(candidate))
-        .sort((a, b) => (a.priceIncVat?.amount ?? 0) - (b.priceIncVat?.amount ?? 0))[0];
-      return product && variant ? [{ product, variantId: variant.id, reason }] : [];
+        .sort((a, b) => (a.priceIncVat?.amount ?? 0) - (b.priceIncVat?.amount ?? 0));
+      return product && variants.length > 0 ? [{ product, variants, reason }] : [];
     }),
   );
   return found.flat();

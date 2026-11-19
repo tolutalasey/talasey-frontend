@@ -4,7 +4,7 @@ import { TextField } from '@/ui/TextField/TextField';
 import { useState } from 'react';
 import { DEFAULT_WASTAGE, packsFor, WASTAGE_CHOICES } from '@/lib/coverage';
 import { formatPrice } from '@/lib/format';
-import type { BasketExtra } from './AddToBasket';
+import { KitExtras, type BasketExtra } from './KitExtras';
 import styles from './CoverageCalculator.module.css';
 
 type Mode = 'dimensions' | 'area';
@@ -23,8 +23,6 @@ const numberFrom = (value: string) => {
 };
 
 const pounds = (pence: number) => formatPrice({ amount: pence / 100, currencyCode: 'GBP' });
-
-const sentence = (text: string) => (/[.!?]$/.test(text) ? text : `${text}.`);
 
 const plural = (count: number, one: string, many: string) => `${count} ${count === 1 ? one : many}`;
 
@@ -50,8 +48,6 @@ export function CoverageCalculator({
       : Math.round(numberFrom(length) * numberFrom(width) * 100) / 100;
   const packs = packsFor(areaM2, coverageM2, wastage);
   const measured = packs > 0;
-  const extraCount = (extra: BasketExtra) =>
-    measured && extra.coverageM2 ? packsFor(areaM2, extra.coverageM2) : 1;
 
   return (
     <div className={styles.calculator}>
@@ -142,28 +138,11 @@ export function CoverageCalculator({
       )}
 
       {extras.length > 0 && (
-        <fieldset className={styles.extras}>
-          <legend>Complete the job</legend>
-          {extras.map((extra) => {
-            const count = extraCount(extra);
-            return (
-              <label key={extra.variantId} className={styles.extra}>
-                <input type="checkbox" name="extra" value={extra.variantId} />
-                <input type="hidden" name={`extraQuantity:${extra.variantId}`} value={count} />
-                <span>
-                  <span className={styles.extraName}>
-                    {extra.name} × {count}
-                  </span>
-                  {extra.pricePence !== null && <span> · {pounds(count * extra.pricePence)}</span>}
-                  <span className={styles.reason}>
-                    {sentence(extra.reason)}
-                    {measured && extra.coverageM2 ? ` About ${extra.coverageM2} m² each.` : ''}
-                  </span>
-                </span>
-              </label>
-            );
-          })}
-        </fieldset>
+        <KitExtras
+          extras={extras}
+          areaM2={measured ? areaM2 : 0}
+          mainTotalPence={measured && packPricePence !== null ? packs * packPricePence : null}
+        />
       )}
     </div>
   );
