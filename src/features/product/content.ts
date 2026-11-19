@@ -22,6 +22,8 @@ export const productContentSchema = z.object({
   installation: z.string().nullish(),
   care: z.string().nullish(),
   faqs: z.array(z.object({ question: z.string(), answer: z.string() })).default([]),
+  soldAs: z.string().nullish(),
+  suits: z.array(z.string()).default([]),
 });
 
 export type ProductContent = z.infer<typeof productContentSchema>;
@@ -33,6 +35,7 @@ export const emptyProductContent: ProductContent = {
   documents: [],
   features: [],
   faqs: [],
+  suits: [],
 };
 
 // What the content team publishes for a product in /content ("Product extras").

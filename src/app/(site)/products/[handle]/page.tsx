@@ -99,12 +99,13 @@ export default async function Product({ params, searchParams }: Props) {
             extras={extras}
             coverageM2={pricing?.coverageM2}
             packPricePence={pricing ? Math.round(pricing.perPack.amount * 100) : null}
+            profile={view.profile}
             initialState={feedback.basket}
             bar={
               pricing
                 ? {
                     title: product.title,
-                    price: `${formatPrice(pricing.perPack)}${pricing.coverageM2 ? ' per pack' : ''}`,
+                    price: `${formatPrice(pricing.perPack)}${pricing.coverageM2 ? ` per ${view.profile.unit.one}` : ''}`,
                   }
                 : undefined
             }

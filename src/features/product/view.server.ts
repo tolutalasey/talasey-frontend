@@ -13,6 +13,7 @@ import { getProductSampleOffers } from '@/features/samples';
 import { brandOf } from '@/lib/brands';
 import type { BreadcrumbItem } from '@/lib/seo';
 import { slugify } from '@/lib/slug';
+import { salesProfile, soldAsFor, type SalesProfile } from '@/lib/sold-as';
 import { productPath } from '@/lib/urls/keyword-map';
 import type { ProductContent, ProductPhoto } from './content';
 import { photosFor } from './gallery';
@@ -43,6 +44,7 @@ export interface ProductView {
 
   samples: SampleOffer[];
   content: ProductContent;
+  profile: SalesProfile;
   path: string;
 }
 
@@ -128,6 +130,7 @@ export async function getProductView(handle: string, params: Params): Promise<Pr
     })),
     samples,
     content,
+    profile: salesProfile(soldAsFor(content.soldAs, product)),
     path,
   };
 }

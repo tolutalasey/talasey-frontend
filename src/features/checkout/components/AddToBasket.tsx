@@ -5,6 +5,7 @@ import { Form } from '@/ui/Form/Form';
 import { TextField } from '@/ui/TextField/TextField';
 import { useRouter } from 'next/navigation';
 import { useActionState, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { salesProfile, type SalesProfile } from '@/lib/sold-as';
 import { addToBasket } from '../actions';
 import { CoverageCalculator } from './CoverageCalculator';
 import type { FormState } from '../forms';
@@ -31,6 +32,8 @@ export interface AddToBasketProps {
   extras?: BasketExtra[];
   coverageM2?: number | null;
   packPricePence?: number | null;
+  // The words and calculator for how the product is sold: packs, boards, tubs.
+  profile?: SalesProfile;
   initialState?: FormState;
   // On phones, a bar at the bottom of the screen with this name and price and its own button.
   bar?: { title: string; price: string };
@@ -114,6 +117,7 @@ export function AddToBasket({
   extras = [],
   coverageM2,
   packPricePence = null,
+  profile = salesProfile('paving'),
   initialState = {},
   bar,
 }: AddToBasketProps) {
@@ -136,6 +140,7 @@ export function AddToBasket({
         )}
         {coverageM2 ? (
           <CoverageCalculator
+            profile={profile}
             coverageM2={coverageM2}
             packPricePence={packPricePence}
             extras={extras}

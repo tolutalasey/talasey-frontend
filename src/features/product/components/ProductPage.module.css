@@ -72,6 +72,16 @@
   margin: calc(-1 * var(--space-2)) 0 0;
 }
 
+.suits {
+  margin: 0;
+  color: var(--color-ink-muted);
+}
+
+.suits strong {
+  margin-right: var(--space-1);
+  color: var(--color-ink);
+}
+
 .priceSummary {
   display: grid;
   gap: var(--space-1);

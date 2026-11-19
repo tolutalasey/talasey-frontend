@@ -1,7 +1,7 @@
 import type { AccessAnswers, DeliveryAddress, LineColour } from '@/api-client';
 import { z } from 'zod';
 import type { FormState } from '@/lib/form-feedback';
-import { packsFor } from '@/lib/coverage';
+import { packsFor, wastageFrom } from '@/lib/coverage';
 import { typedValues } from '@/lib/form-values';
 
 export type { FormState };
@@ -123,7 +123,7 @@ function packsForArea(form: FormData): Parsed<number> | null {
   if (!area || !(coverage > 0)) return null;
   const parsed = areaSchema.safeParse(area);
   if (!parsed.success) return { ok: false, state: fieldErrors(parsed.error, 'area') };
-  const wastage = Number(text(form, 'wastage')) || 0;
+  const wastage = wastageFrom(text(form, 'wastage'));
   return { ok: true, value: packsFor(parsed.data, coverage, wastage) };
 }
 

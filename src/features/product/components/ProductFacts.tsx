@@ -49,6 +49,7 @@ function specsOf({ variant, brand, content }: Omit<ProductFactsProps, 'product'>
     ...Object.entries(variant?.options ?? {}),
     ...(variant?.coverageM2 ? [['Coverage per pack', `${variant.coverageM2} m²`]] : []),
     ...(variant?.weightKg ? [['Weight', `${variant.weightKg} kg`]] : []),
+    ...(content.suits.length > 0 ? [['Suits', content.suits.join(', ')]] : []),
     ...(content.warranty ? [['Guarantee', content.warranty]] : []),
     ...(variant?.sku ? [['Product code', variant.sku]] : []),
   ] as [string, string][];

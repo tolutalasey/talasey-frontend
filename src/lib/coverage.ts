@@ -5,10 +5,22 @@ export function packsFor(areaM2: number, coverageM2: number, wastagePercent = 0)
   return Math.ceil(Math.round((needed / coverageM2) * 1e6) / 1e6);
 }
 
-export const WASTAGE_CHOICES = [
+export interface WastageChoice {
+  percent: number;
+  label: string;
+  detail: string;
+}
+
+export const WASTAGE_CHOICES: readonly WastageChoice[] = [
   { percent: 5, label: '5%', detail: 'Simple grid' },
   { percent: 10, label: '10%', detail: 'Most patios' },
   { percent: 15, label: '15%', detail: 'Curves and herringbone' },
-] as const;
+];
+
+// The allowance for cuts as sent with the form, kept to what any calculator offers.
+export const wastageFrom = (value: unknown) => {
+  const percent = Number(value);
+  return Number.isFinite(percent) ? Math.min(Math.max(percent, 0), 25) : 0;
+};
 
 export const DEFAULT_WASTAGE = 10;

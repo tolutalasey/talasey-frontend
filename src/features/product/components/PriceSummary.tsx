@@ -6,16 +6,18 @@ import styles from './ProductPage.module.css';
 export function PriceSummary({
   pricing,
   stock,
+  unit,
 }: {
   pricing: PackPricing | null;
   stock: StockStatusProps;
+  unit: string;
 }) {
   return (
     <div className={styles.priceSummary}>
       {pricing ? (
         <p className={styles.price} data-testid="product-price">
           {formatPrice(pricing.perPack)}
-          {pricing.coverageM2 && <span className={styles.unit}> per pack</span>}{' '}
+          {pricing.coverageM2 && <span className={styles.unit}> per {unit}</span>}{' '}
           <span className={styles.vat}>inc. VAT</span>
         </p>
       ) : (
@@ -25,7 +27,7 @@ export function PriceSummary({
       )}
       {pricing?.perM2 && (
         <p className={styles.perM2} data-testid="price-per-m2">
-          {formatPrice(pricing.perM2)} per m² inc. VAT · each pack covers {pricing.coverageM2} m²
+          {formatPrice(pricing.perM2)} per m² inc. VAT · each {unit} covers {pricing.coverageM2} m²
         </p>
       )}
       <StockStatus {...stock} />

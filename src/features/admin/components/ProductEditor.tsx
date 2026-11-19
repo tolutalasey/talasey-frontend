@@ -126,7 +126,7 @@ export function ProductEditor({ product, categories, colourSets }: Props) {
                 <th scope="col">Price (£)</th>
                 <th scope="col">In stock</th>
                 <th scope="col">Weight (kg)</th>
-                <th scope="col">m² per pack</th>
+                <th scope="col">m² each (pack, board, tub)</th>
                 <th scope="col">Remove</th>
               </tr>
             </thead>

@@ -7,6 +7,7 @@ import { PageBreadcrumbs } from '@/features/layout';
 import { trustPoints } from '@/lib/trust-points';
 import { ProductSamples } from '@/features/samples';
 import type { BreadcrumbItem } from '@/lib/seo';
+import type { SalesProfile } from '@/lib/sold-as';
 import type { ProductContent, ProductPhoto } from '../content';
 import type { PackPricing } from '../pricing';
 import type { OptionGroup } from '../selection';
@@ -26,6 +27,7 @@ export interface ProductPageProps {
   stock: StockStatusProps;
   options: OptionGroup[];
   content: ProductContent;
+  profile: SalesProfile;
   samples: SampleOffer[];
   path: string;
   // The purchase area: the basket form, or what to do instead for made-to-measure products.
@@ -44,6 +46,7 @@ export function ProductPage({
   stock,
   options,
   content,
+  profile,
   samples,
   path,
   children,
@@ -67,7 +70,12 @@ export function ProductPage({
             {(range ?? brand) && <p className="eyebrow">{range ?? brand}</p>}
             <h1>{product.title}</h1>
             {product.subtitle && <p className={styles.subtitle}>{product.subtitle}</p>}
-            <PriceSummary pricing={pricing} stock={stock} />
+            {content.suits.length > 0 && (
+              <p className={styles.suits}>
+                <strong>Suits</strong> {content.suits.join(', ')}
+              </p>
+            )}
+            <PriceSummary pricing={pricing} stock={stock} unit={profile.unit.one} />
             {options.length > 0 && <OptionPicker groups={options} path={path} />}
             {children}
             <ProductSamples offers={samples} />
