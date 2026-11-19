@@ -75,7 +75,7 @@
 
 :global([data-staff]) .primary {
   box-shadow:
-    0 1px 2px rgb(43 3 55 / 0.25),
+    0 1px 2px color-mix(in srgb, var(--color-brand950) 25%, transparent),
     inset 0 1px 0 rgb(255 255 255 / 0.08);
 }
 

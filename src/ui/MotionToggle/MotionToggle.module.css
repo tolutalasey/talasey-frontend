@@ -23,7 +23,7 @@
 }
 
 .dark {
-  background: rgb(43 3 55 / 0.6);
+  background: color-mix(in srgb, var(--color-brand950) 60%, transparent);
   color: var(--color-stone);
   backdrop-filter: blur(10px);
 }

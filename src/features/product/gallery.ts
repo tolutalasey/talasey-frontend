@@ -5,14 +5,20 @@ export interface PhotoChoice {
   size?: string;
   finish?: string;
   colour?: string;
+  // Every option chosen, by name, such as { Colour: 'Kandla Grey', Size: '600 × 900' }.
+  options?: Record<string, string>;
 }
 
 const KEYS = ['size', 'finish', 'colour'] as const;
 
-const matches = (photo: ProductPhoto, chosen: PhotoChoice) =>
-  KEYS.every((key) => !photo[key] || photo[key] === chosen[key]);
+const showsChosen = (photo: ProductPhoto, chosen: PhotoChoice) =>
+  !photo.shows || chosen.options?.[photo.shows.option] === photo.shows.value;
 
-const specificity = (photo: ProductPhoto) => KEYS.filter((key) => photo[key]).length;
+const matches = (photo: ProductPhoto, chosen: PhotoChoice) =>
+  KEYS.every((key) => !photo[key] || photo[key] === chosen[key]) && showsChosen(photo, chosen);
+
+const specificity = (photo: ProductPhoto) =>
+  KEYS.filter((key) => photo[key]).length + (photo.shows ? 1 : 0);
 
 // Photos for the size, finish and colour chosen: the closest matches first, then the photos that
 // suit every option. The option's own photo, if there is one, leads.

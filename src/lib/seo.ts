@@ -119,6 +119,18 @@ export function productJsonLd(product: ProductSchemaInput) {
   };
 }
 
+export function faqPageJsonLd(faqs: { question: string; answer: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  };
+}
+
 export function organizationJsonLd() {
   return {
     '@context': 'https://schema.org',

@@ -2,6 +2,7 @@ import { SkipLink } from '@/ui/SkipLink/SkipLink';
 import type { ReactNode } from 'react';
 import { ConsentManager, consentDefaultsScript, consentPromptScript } from '@/features/consent';
 import { SiteFooter, SiteHeader } from '@/features/layout';
+import { PalettePreview } from '@/features/palette-preview';
 import { env } from '@/lib/env';
 import { JsonLd } from '@/lib/JsonLd';
 import { organizationJsonLd, websiteJsonLd } from '@/lib/seo';
@@ -20,6 +21,7 @@ export function SiteChrome({ children, bag }: { children: ReactNode; bag: ReactN
       <JsonLd data={organizationJsonLd()} />
       <JsonLd data={websiteJsonLd()} />
       <ConsentManager secureCookie={env.APP_ENV !== 'development'} />
+      <PalettePreview />
     </>
   );
 }

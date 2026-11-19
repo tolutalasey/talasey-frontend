@@ -1,6 +1,6 @@
 import { isInStock, lowestPrice, type Product, type ProductVariant } from '@/api-client';
 import { brandOf } from '@/lib/brands';
-import { productJsonLd, type Availability } from '@/lib/seo';
+import { faqPageJsonLd, productJsonLd, type Availability } from '@/lib/seo';
 import { productPath } from '@/lib/urls/keyword-map';
 
 export { productPath };
@@ -18,8 +18,13 @@ function availabilityOf(variant: ProductVariant): Availability {
 const SIZE_OPTIONS = ['Size', 'Diameter', 'Length'];
 
 // One Offer for the option the page opens on, with the identifiers the data has: GTIN from the
-// barcode, otherwise our SKU as the MPN (PRD section 13).
-export function productStructuredData(product: Product, variant: ProductVariant | null = null) {
+// barcode, otherwise our SKU as the MPN (PRD section 13). The product's questions, when it has
+// any, go with it as an FAQ page.
+export function productStructuredData(
+  product: Product,
+  variant: ProductVariant | null = null,
+  faqs: { question: string; answer: string }[] = [],
+) {
   const shown = variant ?? product.variants[0] ?? null;
   const size = SIZE_OPTIONS.map((title) => shown?.options[title]).find(Boolean);
   return [
@@ -38,5 +43,6 @@ export function productStructuredData(product: Product, variant: ProductVariant 
       availability: shown ? availabilityOf(shown) : undefined,
       returnable: !product.madeToMeasure,
     }),
-  ] as const;
+    ...(faqs.length > 0 ? [faqPageJsonLd(faqs)] : []),
+  ];
 }

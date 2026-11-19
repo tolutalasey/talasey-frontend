@@ -114,7 +114,7 @@ export default async function Product({ params, searchParams }: Props) {
           <StockAlertForm key={variant.id} variantId={variant.id} feedback={feedback.alert} />
         )}
       </ProductPage>
-      {productStructuredData(product, variant).map((data) => (
+      {productStructuredData(product, variant, view.content.faqs).map((data) => (
         <JsonLd key={String(data['@type'])} data={data} />
       ))}
     </>

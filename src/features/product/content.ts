@@ -9,6 +9,8 @@ const photo = z.object({
   size: z.string().nullish(),
   finish: z.string().nullish(),
   colour: z.string().nullish(),
+  // Set in /admin: the one option this photo shows, such as Colour: Kandla Grey.
+  shows: z.object({ option: z.string(), value: z.string() }).nullish(),
 });
 
 export const productContentSchema = z.object({
@@ -17,6 +19,9 @@ export const productContentSchema = z.object({
   documents: z.array(z.object({ title: z.string(), url: z.string() })).default([]),
   features: z.array(z.string()).default([]),
   warranty: z.string().nullish(),
+  installation: z.string().nullish(),
+  care: z.string().nullish(),
+  faqs: z.array(z.object({ question: z.string(), answer: z.string() })).default([]),
 });
 
 export type ProductContent = z.infer<typeof productContentSchema>;
@@ -27,6 +32,7 @@ export const emptyProductContent: ProductContent = {
   completeTheJob: [],
   documents: [],
   features: [],
+  faqs: [],
 };
 
 // What the content team publishes for a product in /content ("Product extras").

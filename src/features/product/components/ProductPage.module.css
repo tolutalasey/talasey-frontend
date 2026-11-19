@@ -266,6 +266,64 @@
   background: var(--color-stone50);
 }
 
+/* "On this page": jumps to each part of the details. */
+.factsNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.factsNav a {
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  color: var(--color-ink);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+}
+
+.factsNav a:hover,
+.factsNav a:focus-visible {
+  border-color: var(--color-ink);
+}
+
+.factsSection {
+  scroll-margin-top: var(--space-16);
+}
+
+.steps {
+  max-width: var(--layout-measure);
+  margin: 0;
+  padding-left: 1.5rem;
+  color: var(--color-ink-muted);
+}
+
+.steps li + li {
+  margin-top: var(--space-3);
+}
+
+.faqs {
+  max-width: var(--layout-measure);
+  border-top: 1px solid var(--color-line);
+}
+
+.faqs details {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.faqs summary {
+  padding: var(--space-4) 0;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.faqs details > p:last-child {
+  margin-bottom: var(--space-4);
+}
+
 .visuallyHidden {
   position: absolute;
   width: 1px;

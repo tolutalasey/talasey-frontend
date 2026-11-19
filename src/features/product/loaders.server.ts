@@ -51,6 +51,7 @@ export async function getProductContent(handle: string): Promise<ProductContent>
     alt: image.alt,
     width: image.width ?? 1200,
     height: image.height ?? 900,
+    shows: image.shows ?? null,
   }));
   const extras = extrasFor(handle, await publishedContent('product-extras'));
   return { ...extras, photos };

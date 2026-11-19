@@ -17,7 +17,7 @@ import {
   TrashIcon,
 } from '@/features/staff';
 import { deleteProduct, saveProduct } from '../actions';
-import { NEW_OPTION_ROWS } from '../product-form';
+import { NEW_OPTION_ROWS, photoShowsChoices, photoShowsValue } from '../product-form';
 import {
   PAGE_TYPES,
   STOCK_MODES,
@@ -38,6 +38,7 @@ const FORM = 'product-form';
 // Everything staff change day to day on one page. Fields left blank mean "not set".
 export function ProductEditor({ product, categories, colourSets }: Props) {
   const optionNames = product.options.map((option) => option.title);
+  const showsChoices = photoShowsChoices(product.options);
   const prices = product.variants
     .map((variant) => variant.pricePence)
     .filter((price): price is number => price !== null);
@@ -180,6 +181,8 @@ export function ProductEditor({ product, categories, colourSets }: Props) {
           <h2 id="photos">Photos</h2>
           <p>
             The first photo leads on the shop. Describe each one for people who can&rsquo;t see it.
+            Set what a photo shows, such as a colour, and the shop swaps to it when a customer picks
+            that option.
           </p>
           <div className={styles.photos}>
             {product.images.map((image, index) => (
@@ -193,6 +196,15 @@ export function ProductEditor({ product, categories, colourSets }: Props) {
                   name={`image.${index}.alt`}
                   defaultValue={image.alt}
                 />
+                {showsChoices.length > 0 && (
+                  <SelectField
+                    label="Shows"
+                    name={`image.${index}.shows`}
+                    options={showsChoices}
+                    defaultValue={photoShowsValue(image.shows)}
+                    emptyLabel="Every option"
+                  />
+                )}
                 <Checkbox name={`image.${index}.remove`}>Remove when I save</Checkbox>
               </div>
             ))}
@@ -207,6 +219,14 @@ export function ProductEditor({ product, categories, colourSets }: Props) {
                 accept="image/jpeg,image/png,image/webp"
               />
               <TextField label="What it shows" name="newPhotoAlt" />
+              {showsChoices.length > 0 && (
+                <SelectField
+                  label="Shows"
+                  name="newPhotoShows"
+                  options={showsChoices}
+                  emptyLabel="Every option"
+                />
+              )}
             </div>
           </div>
         </section>

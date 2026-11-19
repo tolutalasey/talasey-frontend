@@ -13,6 +13,25 @@ export interface UploadedPhoto {
 // Blank rows under the options table, for adding options without leaving the page.
 export const NEW_OPTION_ROWS = 3;
 
+const SHOWS_SEPARATOR = '::';
+
+// The choices for "this photo shows", one per option value, like Colour: Kandla Grey.
+export const photoShowsChoices = (options: { title: string; values: string[] }[]) =>
+  options.flatMap((option) =>
+    option.values.map((value) => ({
+      value: `${option.title}${SHOWS_SEPARATOR}${value}`,
+      label: `${option.title}: ${value}`,
+    })),
+  );
+
+export const photoShowsValue = (shows: { option: string; value: string } | null | undefined) =>
+  shows ? `${shows.option}${SHOWS_SEPARATOR}${shows.value}` : '';
+
+const photoShowsFrom = (form: FormData, name: string) => {
+  const [option, value] = (text(form, name) ?? '').split(SHOWS_SEPARATOR);
+  return option && value ? { option, value } : null;
+};
+
 const optionNamesFrom = (form: FormData, current: AdminProduct) => {
   const typed = text(form, 'optionNames');
   if (typed === null) return form.has('optionNames') ? [] : current.options.map((o) => o.title);
@@ -86,7 +105,11 @@ export function productFromForm(
   if (variants.length === 0) problems.push('Keep at least one option, so the product can be sold');
 
   const images = current.images
-    .map((image, index) => ({ ...image, alt: text(form, `image.${index}.alt`) ?? '' }))
+    .map((image, index) => ({
+      ...image,
+      alt: text(form, `image.${index}.alt`) ?? '',
+      shows: photoShowsFrom(form, `image.${index}.shows`),
+    }))
     .filter((_, index) => form.get(`image.${index}.remove`) !== 'on');
   if (uploaded) {
     images.push({
@@ -94,6 +117,7 @@ export function productFromForm(
       width: uploaded.width,
       height: uploaded.height,
       alt: text(form, 'newPhotoAlt') ?? '',
+      shows: photoShowsFrom(form, 'newPhotoShows'),
     });
   }
 

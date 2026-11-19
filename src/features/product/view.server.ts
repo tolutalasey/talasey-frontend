@@ -109,6 +109,10 @@ export async function getProductView(handle: string, params: Params): Promise<Pr
         size: variant?.options.Size,
         finish: variant?.options.Finish,
         colour: variant?.options.Colour ?? colourName,
+        options: {
+          ...(colourName && { Colour: colourName }),
+          ...variant?.options,
+        },
       },
       variant ?? { title: product.title },
       product.title,

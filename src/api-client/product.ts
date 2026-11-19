@@ -47,6 +47,8 @@ export interface ProductImage {
   alt: string;
   width?: number | null;
   height?: number | null;
+  // The one option this photo shows, such as Colour: Kandla Grey; none suits every option.
+  shows?: { option: string; value: string } | null;
 }
 
 export interface Product {

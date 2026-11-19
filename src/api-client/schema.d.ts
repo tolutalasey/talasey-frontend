@@ -2560,6 +2560,11 @@ export interface operations {
                             alt: string;
                             width?: number | null;
                             height?: number | null;
+                            /** @description The option this photo shows, such as Colour: Kandla Grey; empty suits every option */
+                            shows?: {
+                                option: string;
+                                value: string;
+                            } | null;
                         }[];
                         /** @enum {string|null} */
                         pageType: "2" | "3" | "4" | "1A" | "1B" | null;
@@ -2640,6 +2645,11 @@ export interface operations {
                             alt: string;
                             width?: number | null;
                             height?: number | null;
+                            /** @description The option this photo shows, such as Colour: Kandla Grey; empty suits every option */
+                            shows?: {
+                                option: string;
+                                value: string;
+                            } | null;
                         }[];
                         /** @enum {string|null} */
                         pageType: "2" | "3" | "4" | "1A" | "1B" | null;
@@ -2907,12 +2917,22 @@ export interface operations {
                             alt: string;
                             width?: number | null;
                             height?: number | null;
+                            /** @description The option this photo shows, such as Colour: Kandla Grey; empty suits every option */
+                            shows?: {
+                                option: string;
+                                value: string;
+                            } | null;
                         }[];
                         colourImages: {
                             url: string;
                             alt: string;
                             width?: number | null;
                             height?: number | null;
+                            /** @description The option this photo shows, such as Colour: Kandla Grey; empty suits every option */
+                            shows?: {
+                                option: string;
+                                value: string;
+                            } | null;
                             /** Format: uuid */
                             colourId: string;
                             size: string;
@@ -3018,12 +3038,22 @@ export interface operations {
                             alt: string;
                             width?: number | null;
                             height?: number | null;
+                            /** @description The option this photo shows, such as Colour: Kandla Grey; empty suits every option */
+                            shows?: {
+                                option: string;
+                                value: string;
+                            } | null;
                         }[];
                         colourImages: {
                             url: string;
                             alt: string;
                             width?: number | null;
                             height?: number | null;
+                            /** @description The option this photo shows, such as Colour: Kandla Grey; empty suits every option */
+                            shows?: {
+                                option: string;
+                                value: string;
+                            } | null;
                             /** Format: uuid */
                             colourId: string;
                             size: string;
@@ -3127,12 +3157,22 @@ export interface operations {
                         alt: string;
                         width?: number | null;
                         height?: number | null;
+                        /** @description The option this photo shows, such as Colour: Kandla Grey; empty suits every option */
+                        shows?: {
+                            option: string;
+                            value: string;
+                        } | null;
                     }[];
                     colourImages: {
                         url: string;
                         alt: string;
                         width?: number | null;
                         height?: number | null;
+                        /** @description The option this photo shows, such as Colour: Kandla Grey; empty suits every option */
+                        shows?: {
+                            option: string;
+                            value: string;
+                        } | null;
                         /** Format: uuid */
                         colourId: string;
                         size: string;
@@ -3195,12 +3235,22 @@ export interface operations {
                             alt: string;
                             width?: number | null;
                             height?: number | null;
+                            /** @description The option this photo shows, such as Colour: Kandla Grey; empty suits every option */
+                            shows?: {
+                                option: string;
+                                value: string;
+                            } | null;
                         }[];
                         colourImages: {
                             url: string;
                             alt: string;
                             width?: number | null;
                             height?: number | null;
+                            /** @description The option this photo shows, such as Colour: Kandla Grey; empty suits every option */
+                            shows?: {
+                                option: string;
+                                value: string;
+                            } | null;
                             /** Format: uuid */
                             colourId: string;
                             size: string;
