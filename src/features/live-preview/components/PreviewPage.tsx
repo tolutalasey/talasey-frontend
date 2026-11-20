@@ -26,7 +26,7 @@ import {
   fenceBuilderSchema,
   getFenceCatalogue,
 } from '@/features/fencing';
-import { homeContentSchema, HomePage, seasonalBlockFor } from '@/features/home';
+import { getLatestNews, homeContentSchema, HomePage, seasonalBlockFor } from '@/features/home';
 import { plainPageSchema, PlainPageView } from '@/features/pages';
 import { ProductFinderPage, toFinder } from '@/features/product-finder';
 import { parseListingParams } from '@/features/search';
@@ -47,15 +47,17 @@ export async function PreviewPage({ type, data }: Props) {
       const parsed = homeContentSchema.safeParse(data);
       if (!parsed.success) return <NotReady problems={problemsOf(parsed.error)} />;
       const content = parsed.data;
-      const [featured, ranges] = await Promise.all([
+      const [featured, ranges, news] = await Promise.all([
         getProductsByHandle(content.products),
         getRanges(),
+        getLatestNews(),
       ]);
       return (
         <HomePage
           content={content}
           season={seasonalBlockFor(content, new Date())}
           featured={featured}
+          news={news}
           rangeNames={ranges.map((range) => range.name)}
         />
       );

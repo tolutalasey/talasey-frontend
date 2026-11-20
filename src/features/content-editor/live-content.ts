@@ -7,7 +7,7 @@ import {
   type BrandPage,
   type ProjectPage,
 } from '@/features/content';
-import { fallbackHomeContent, heroScenes, projectPhotos } from '@/features/home';
+import { fallbackHomeContent, heroScenes, tilePhoto } from '@/features/home';
 import { slugify } from '@/lib/slug';
 import type { Data } from './fields';
 
@@ -61,6 +61,14 @@ interface SitePhoto {
 
 const plainPhoto = ({ src, alt, width, height }: SitePhoto) => ({ src, alt, width, height });
 const listOf = (value: unknown): Data[] => (Array.isArray(value) ? (value as Data[]) : []);
+const text = (value: unknown) => (typeof value === 'string' ? value : '');
+const withTilePhoto = (tile: Data): Data =>
+  tile.photo
+    ? tile
+    : {
+        ...tile,
+        photo: tilePhoto({ photo: null, href: text(tile.href), title: text(tile.title) }),
+      };
 const isEmptyList = (value: unknown) => !Array.isArray(value) || value.length === 0;
 
 // Photos the site draws from the brochures when an entry has none of its own, so the editor
@@ -71,10 +79,8 @@ const PHOTO_DEFAULTS: Record<string, (data: Data) => Data> = {
     heroScenes: isEmptyList(data.heroScenes)
       ? heroScenes.map(({ photo, ...scene }) => ({ ...scene, photo: plainPhoto(photo) }))
       : data.heroScenes,
-    projectTiles: listOf(data.projectTiles).map((tile, index) => {
-      const fallback = projectPhotos[index % projectPhotos.length];
-      return tile.photo || !fallback ? tile : { ...tile, photo: plainPhoto(fallback) };
-    }),
+    projectTiles: listOf(data.projectTiles).map(withTilePhoto),
+    collections: listOf(data.collections).map(withTilePhoto),
   }),
   'range-page': (data) => {
     const slug = typeof data.slug === 'string' ? data.slug : '';

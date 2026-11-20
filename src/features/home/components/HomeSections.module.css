@@ -121,227 +121,6 @@
   color: var(--color-stone);
 }
 
-/* The sliding row of gardens. */
-.reel {
-  padding-top: var(--space-12);
-}
-
-.reel > .headRow {
-  padding-inline: var(--layout-gutter-mobile);
-}
-
-.strip {
-  overflow: hidden;
-  padding-block: var(--space-2) var(--space-4);
-}
-
-.track {
-  display: flex;
-  gap: var(--space-4);
-  width: max-content;
-  margin: 0;
-  padding: 0 0 0 var(--layout-gutter-mobile);
-  list-style: none;
-  animation: slide 70s linear infinite;
-}
-
-.strip:hover .track,
-.strip:focus-within .track {
-  animation-play-state: paused;
-}
-
-@keyframes slide {
-  to {
-    translate: -50% 0;
-  }
-}
-
-.reelCard {
-  display: grid;
-  gap: var(--space-3);
-  width: 16rem;
-  padding: var(--space-3) var(--space-3) var(--space-4);
-}
-
-.reelPhoto {
-  overflow: hidden;
-  border-radius: 4px;
-  aspect-ratio: 4 / 5;
-}
-
-.reelPhoto img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.reelCaption {
-  margin: 0;
-  padding-inline: var(--space-2);
-  font-family: var(--font-display);
-  font-variation-settings: 'SOFT' 100;
-  font-size: 1.25rem;
-  font-weight: 350;
-  line-height: 1.2;
-}
-
-/* The pergola card: an aubergine frame, photos taking turns on a five second beat. */
-.feature {
-  --beat: 5s;
-  --loop: calc(var(--beat) * var(--count));
-  display: grid;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  border-radius: var(--radius-card);
-  background: var(--color-brand950);
-  color: var(--color-stone);
-}
-
-.cycle {
-  position: relative;
-  overflow: hidden;
-  border-radius: 4px;
-  aspect-ratio: 4 / 3;
-}
-
-.cyclePhoto {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  opacity: 0;
-  animation: turn var(--loop) infinite;
-  animation-delay: calc(var(--beat) * var(--index));
-}
-
-.cyclePhoto:first-child {
-  opacity: 1;
-  animation-name: turn-first;
-}
-
-.cyclePhoto img {
-  object-fit: cover;
-}
-
-/* Six photos: each is in view for a sixth of the loop. */
-@keyframes turn {
-  0% {
-    opacity: 0;
-  }
-
-  3%,
-  17% {
-    opacity: 1;
-  }
-
-  20%,
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes turn-first {
-  0%,
-  17% {
-    opacity: 1;
-  }
-
-  20%,
-  97% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-.cycleCaption {
-  position: absolute;
-  left: var(--space-4);
-  bottom: var(--space-4);
-  padding: var(--space-2) var(--space-4);
-  border-radius: 999px;
-  background: var(--color-white);
-  color: var(--color-ink);
-  font-size: var(--font-size-small);
-  font-weight: var(--font-weight-semibold);
-}
-
-.dashes {
-  position: absolute;
-  right: var(--space-4);
-  bottom: var(--space-6);
-  display: flex;
-  gap: 6px;
-}
-
-.dashes i {
-  position: relative;
-  width: 1.5rem;
-  height: 3px;
-  overflow: hidden;
-  border-radius: 2px;
-  background: rgb(255 255 255 / 0.4);
-}
-
-.dashes i::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--color-white);
-  transform: scaleX(0);
-  transform-origin: left;
-  animation: dash var(--loop) linear infinite;
-  animation-delay: calc(var(--beat) * var(--index));
-}
-
-@keyframes dash {
-  0% {
-    transform: scaleX(0);
-  }
-
-  16.6% {
-    transform: scaleX(1);
-  }
-
-  16.7%,
-  100% {
-    transform: scaleX(0);
-  }
-}
-
-.cycleToggle {
-  position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
-  z-index: 1;
-}
-
-.featureText {
-  display: grid;
-  align-content: center;
-  gap: var(--space-4);
-  padding: var(--space-6) var(--space-4) var(--space-8);
-}
-
-.featureText > * {
-  margin: 0;
-}
-
-.featureText :global(.eyebrow) {
-  color: var(--color-stone-muted);
-}
-
-.featureText h2 {
-  color: var(--color-stone);
-}
-
-.featureText p:not(:global(.eyebrow)) {
-  color: var(--color-stone-muted);
-  font-weight: 300;
-}
-
 /* This season: one white frame. */
 .season {
   display: grid;
@@ -356,12 +135,7 @@
   color: var(--color-ink-muted);
 }
 
-/* Made to measure and free samples, side by side. */
-.pair {
-  display: grid;
-  gap: var(--space-4);
-}
-
+/* A photo beside text. */
 .story {
   display: grid;
   align-content: start;
@@ -407,6 +181,203 @@
   color: var(--color-ink-muted);
 }
 
+.intro {
+  max-width: 44em;
+  margin: 0;
+  color: var(--color-ink-muted);
+}
+
+/* Why Talasey: four reasons and the numbers behind them. */
+.why {
+  display: grid;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-6);
+}
+
+.points {
+  display: grid;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.points h3 {
+  margin: 0 0 var(--space-2);
+  font-size: 1.25rem;
+}
+
+.points p {
+  margin: 0;
+  color: var(--color-ink-muted);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  margin: 0;
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-line);
+}
+
+.stats > div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-1);
+}
+
+.stats dt {
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-small);
+}
+
+.stats dd {
+  margin: 0;
+  color: var(--color-brand950);
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+/* The four planning steps. */
+.steps {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps > li {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  padding: var(--space-6);
+}
+
+.steps h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.stepNumber {
+  color: var(--color-brand600);
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.stepLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Latest articles. */
+.news {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.newsCard {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: var(--space-3);
+  padding: var(--space-6);
+}
+
+.newsCard > * {
+  margin: 0;
+}
+
+.newsCard h3 {
+  font-size: 1.375rem;
+}
+
+.newsCard p:not(:global(.eyebrow)) {
+  color: var(--color-ink-muted);
+}
+
+.readMore {
+  color: var(--color-brand600);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
+}
+
+/* Samples and brochures. */
+.samples {
+  align-items: center;
+}
+
+.ticks {
+  display: grid;
+  gap: var(--space-2) var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ticks li {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.ticks svg {
+  flex: none;
+  color: var(--color-brand600);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* The closing call to action. */
+.closing {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-12) var(--space-6);
+  background: var(--color-brand950);
+  color: var(--color-stone);
+  text-align: center;
+}
+
+.closing > * {
+  margin: 0;
+}
+
+.closing p {
+  max-width: 42em;
+  color: var(--color-stone);
+  opacity: 0.85;
+}
+
+.closing .actions {
+  justify-content: center;
+}
+
+.closing :global(.button) {
+  background: var(--color-stone);
+  color: var(--color-brand950);
+}
+
+.closing :global(.button-secondary) {
+  border-color: var(--color-stone);
+  background: transparent;
+  color: var(--color-stone);
+}
+
 @media (min-width: 40rem) {
   .grid {
     grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
@@ -433,6 +404,20 @@
   .tileGo {
     display: inline-grid;
   }
+
+  .points,
+  .steps,
+  .news {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .ticks {
+    grid-template-columns: repeat(2, minmax(0, max-content));
+  }
 }
 
 @media (min-width: 64rem) {
@@ -440,37 +425,34 @@
     padding: var(--space-16) var(--layout-gutter-desktop) 0;
   }
 
-  .reel {
-    padding-top: var(--space-16);
-  }
-
-  .reel > .headRow {
-    padding-inline: var(--layout-gutter-desktop);
-  }
-
-  .track {
-    padding-left: var(--layout-gutter-desktop);
-  }
-
-  .reelCard {
-    width: 19rem;
-  }
-
   .grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .feature {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  .grid.gridThree {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .cycle {
-    aspect-ratio: auto;
-    min-height: 34rem;
+  .gridThree .tilePhoto {
+    aspect-ratio: 4 / 3;
   }
 
-  .featureText {
+  .why {
     padding: var(--space-12);
+  }
+
+  .points,
+  .steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .news {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .samples {
+    grid-template-columns: 1fr 1fr;
+    padding-bottom: var(--space-3);
   }
 
   .season {
@@ -479,46 +461,7 @@
     padding: var(--space-8) var(--space-12);
   }
 
-  .pair {
-    grid-template-columns: 1fr 1fr;
+  .closing {
+    padding: var(--space-16) var(--space-12);
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cyclePhoto:first-child {
-    animation: none;
-  }
-
-  .cyclePhoto:not(:first-child) {
-    display: none;
-  }
-}
-
-/* Garden cards and pergola photos open what they show. */
-.reelCard {
-  position: relative;
-}
-
-.reelLink {
-  color: inherit;
-  text-decoration: none;
-}
-
-.reelLink::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-}
-
-.reelCard:has(.reelLink:hover) .reelCaption,
-.reelLink:focus-visible {
-  color: var(--color-brand600);
-  text-decoration: underline;
-}
-
-.cycleLink {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { cacheLife } from 'next/cache';
 import { getFeaturedProducts, getRanges } from '@/features/catalogue';
-import { getHomeContent, HomePage, seasonalBlockFor } from '@/features/home';
+import { getHomeContent, getLatestNews, HomePage, seasonalBlockFor } from '@/features/home';
 import { pageMetadata } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -16,13 +16,19 @@ async function today() {
 }
 
 export default async function Home() {
-  const [content, now, ranges] = await Promise.all([getHomeContent(), today(), getRanges()]);
+  const [content, now, ranges, news] = await Promise.all([
+    getHomeContent(),
+    today(),
+    getRanges(),
+    getLatestNews(),
+  ]);
   const featured = await getFeaturedProducts(content.products);
   return (
     <HomePage
       content={content}
       season={seasonalBlockFor(content, now)}
       featured={featured}
+      news={news}
       rangeNames={ranges.map((range) => range.name)}
     />
   );
