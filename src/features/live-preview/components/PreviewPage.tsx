@@ -2,11 +2,9 @@ import type { z } from 'zod';
 import {
   getProductsByHandle,
   getRangeListing,
-  getRange,
   getRanges,
   rangeFromContent,
   RangePage,
-  rangePath,
 } from '@/features/catalogue';
 import {
   BrandStory,
@@ -20,10 +18,9 @@ import {
   storedProjectSchema,
 } from '@/features/content';
 import {
-  FENCING_RANGE,
-  FenceBuilderPage,
   fenceBuilderPath,
   fenceBuilderSchema,
+  FenceProduct,
   getFenceCatalogue,
 } from '@/features/fencing';
 import { getLatestNews, homeContentSchema, HomePage, seasonalBlockFor } from '@/features/home';
@@ -87,17 +84,18 @@ export async function PreviewPage({ type, data }: Props) {
     case 'fence-builder': {
       const parsed = fenceBuilderSchema.safeParse(data);
       if (!parsed.success) return <NotReady problems={problemsOf(parsed.error)} />;
-      const [catalogue, range] = await Promise.all([
-        getFenceCatalogue(parsed.data),
-        getRange(FENCING_RANGE),
-      ]);
       return (
-        <FenceBuilderPage
-          builder={parsed.data}
-          catalogue={catalogue}
-          range={range && { name: range.name, path: rangePath(range) }}
-          path={fenceBuilderPath(parsed.data)}
-        />
+        <div className="container">
+          <FenceProduct
+            builder={parsed.data}
+            catalogue={await getFenceCatalogue(parsed.data)}
+            startStyle={0}
+            title={parsed.data.name}
+            subtitle={parsed.data.intro}
+            photos={null}
+            singlePath={fenceBuilderPath(parsed.data)}
+          />
+        </div>
       );
     }
     case 'page': {

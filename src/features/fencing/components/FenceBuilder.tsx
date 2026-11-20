@@ -2,7 +2,7 @@
 
 import { Button } from '@/ui/Button/Button';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState, useTransition } from 'react';
+import { useMemo, useState, useTransition, type ReactNode } from 'react';
 import { formatPrice } from '@/lib/format';
 import { addFenceKitToBasket } from '../actions';
 import type { FenceBuilder as Rules } from '../content';
@@ -30,9 +30,12 @@ const swatch = (colour: string | null) => (colour && SWATCHES[colour]) || '#9a95
 const pounds = (pence: number) => formatPrice({ amount: pence / 100, currencyCode: 'GBP' });
 const metres = (mm: number) => `${(mm / 1000).toFixed(2)} m`;
 
-function firstChoice(rules: Rules, catalogue: FenceCatalogue): FenceChoice {
+function firstChoice(rules: Rules, catalogue: FenceCatalogue, startStyle?: number): FenceChoice {
   const available = offered(rules, catalogue);
-  const style = Math.max(available.styles.indexOf(true), 0);
+  const style =
+    startStyle !== undefined && available.styles[startStyle]
+      ? startStyle
+      : Math.max(available.styles.indexOf(true), 0);
   return {
     style,
     colour: coloursFor(rules, catalogue, style)[0] ?? null,
@@ -47,13 +50,18 @@ function firstChoice(rules: Rules, catalogue: FenceCatalogue): FenceChoice {
 interface Props {
   rules: Rules;
   catalogue: FenceCatalogue;
+  // On a board's product page: that board's style, the product's name above the steps and its
+  // photos above the kit.
+  startStyle?: number;
+  head?: ReactNode;
+  photos?: ReactNode;
 }
 
 // Step by step: style, colour, length, height, posts and extras, with the kit and its price
 // worked out as each choice changes. Adding to the bag sends the choices, not the parts.
-export function FenceBuilder({ rules, catalogue }: Props) {
+export function FenceBuilder({ rules, catalogue, startStyle, head, photos }: Props) {
   const router = useRouter();
-  const [choice, setChoice] = useState(() => firstChoice(rules, catalogue));
+  const [choice, setChoice] = useState(() => firstChoice(rules, catalogue, startStyle));
   const [lengthText, setLengthText] = useState(String(choice.lengthM));
   const [message, setMessage] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -88,8 +96,9 @@ export function FenceBuilder({ rules, catalogue }: Props) {
   const lengthValid = Number(lengthText.replace(',', '.')) >= MIN_LENGTH_M;
 
   return (
-    <div className={styles.builder}>
+    <div className={styles.builder} data-product={photos ? '' : undefined}>
       <div className={styles.steps}>
+        {head}
         <fieldset className={`frame ${styles.step}`}>
           <legend>1. Style</legend>
           <div className={styles.cards}>
@@ -239,6 +248,7 @@ export function FenceBuilder({ rules, catalogue }: Props) {
       </div>
 
       <aside className={`frame ${styles.summary}`} aria-labelledby="fence-kit-title">
+        {photos}
         <h2 id="fence-kit-title">Your fence kit</h2>
         <FenceDrawing
           bays={kit.bays}

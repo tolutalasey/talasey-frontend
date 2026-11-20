@@ -17,7 +17,6 @@ import {
   helpPath,
   projectPath,
 } from '@/features/content';
-import { fenceBuilderPath, getFenceBuilders } from '@/features/fencing';
 import { getVideos, videoPath } from '@/features/knowledge-hub';
 import { getNewsPosts, newsPostPath } from '@/features/news';
 import { getPlainPages, plainPagePath } from '@/features/pages';
@@ -91,10 +90,9 @@ async function inspirationEntries(): Promise<SitemapEntry[]> {
 
 // Pages with no reliable date leave lastmod out rather than claim one.
 async function pageEntries(): Promise<SitemapEntry[]> {
-  const [brands, projects, fenceBuilders, plainPages] = await Promise.all([
+  const [brands, projects, plainPages] = await Promise.all([
     getBrandPages(),
     getProjectPages(),
-    getFenceBuilders(),
     getPlainPages(),
   ]);
   return [
@@ -114,7 +112,6 @@ async function pageEntries(): Promise<SitemapEntry[]> {
     entry('/find-a-stockist/'),
     entry('/find-an-installer/'),
     entry('/book-a-showroom-visit/'),
-    ...fenceBuilders.map((builder) => entry(fenceBuilderPath(builder))),
     ...plainPages.filter((page) => !page.placeholder).map((page) => entry(plainPagePath(page))),
   ];
 }

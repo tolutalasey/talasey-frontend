@@ -61,3 +61,17 @@ export async function getFenceCatalogue(builder: FenceBuilder): Promise<FenceCat
       ]),
   );
 }
+
+// The builder for a fence board's own product page, opened on that board's style.
+export async function getFenceForProduct(handle: string) {
+  const builders = await getFenceBuilders();
+  const builder = builders.find((candidate) =>
+    candidate.styles.some((style) => style.boardProduct === handle),
+  );
+  if (!builder) return null;
+  return {
+    builder,
+    catalogue: await getFenceCatalogue(builder),
+    startStyle: builder.styles.findIndex((style) => style.boardProduct === handle),
+  };
+}

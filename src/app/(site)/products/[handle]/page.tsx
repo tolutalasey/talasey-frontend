@@ -28,6 +28,7 @@ import {
   PergolaProduct,
   startFromSku,
 } from '@/features/pergola';
+import { FenceProduct, getFenceForProduct } from '@/features/fencing';
 import { getProductResources, ProductResources } from '@/features/knowledge-hub';
 import { pageMetadata } from '@/lib/seo';
 
@@ -81,11 +82,20 @@ export default async function Product({ params, searchParams }: Props) {
   if (!view) notFound();
   const { product, variant, colours, extras, pricing, stock } = view;
   const skus = product.variants.flatMap((option) => option.sku ?? []);
-  const [related, resources, pergola] = await Promise.all([
+  const [related, resources, pergola, fence] = await Promise.all([
     relatedTo(product),
     getProductResources(product.handle),
     getPergolaForProduct(skus),
+    query.buy === 'boards' ? null : getFenceForProduct(product.handle),
   ]);
+  const actions = (
+    <ProductActions
+      title={product.title}
+      handle={product.handle}
+      path={view.path}
+      hasSamples={false}
+    />
+  );
   const outOfStock = Boolean(variant?.priceIncVat) && stock.level === 'out-of-stock';
 
   return (
@@ -94,28 +104,32 @@ export default async function Product({ params, searchParams }: Props) {
         {...view}
         enquiryOnly={product.pageType === ENQUIRY_ONLY}
         top={
-          pergola && (
-            <PergolaProduct
-              {...pergola}
-              design={query.design === 'tolu' ? 'tolu' : 'amy'}
-              path={view.path}
+          fence ? (
+            <FenceProduct
+              {...fence}
               title={product.title}
               subtitle={product.subtitle}
               photos={<ProductPhotos photos={view.photos} name={product.title} />}
-              actions={
-                <ProductActions
-                  title={product.title}
-                  handle={product.handle}
-                  path={view.path}
-                  hasSamples={false}
-                />
-              }
-              start={
-                Object.keys(query).some((key) => key !== 'design')
-                  ? startFromSku(pergola.builder, variant?.sku)
-                  : undefined
-              }
+              actions={actions}
+              singlePath={`${view.path}?buy=boards`}
             />
+          ) : (
+            pergola && (
+              <PergolaProduct
+                {...pergola}
+                design={query.design === 'tolu' ? 'tolu' : 'amy'}
+                path={view.path}
+                title={product.title}
+                subtitle={product.subtitle}
+                photos={<ProductPhotos photos={view.photos} name={product.title} />}
+                actions={actions}
+                start={
+                  Object.keys(query).some((key) => key !== 'design')
+                    ? startFromSku(pergola.builder, variant?.sku)
+                    : undefined
+                }
+              />
+            )
           )
         }
         resources={<ProductResources {...resources} />}

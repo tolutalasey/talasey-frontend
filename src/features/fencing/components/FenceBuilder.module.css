@@ -296,4 +296,23 @@
     position: sticky;
     top: var(--space-4);
   }
+
+  /* On a product page the photos and kit come first, like every other product. */
+  .builder[data-product] {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  }
+
+  .builder[data-product] .summary {
+    order: -1;
+  }
+}
+
+.head {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-6);
+}
+
+.head > * {
+  margin: 0;
 }
