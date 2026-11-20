@@ -13,7 +13,13 @@ import { setEnquiryStatus } from '../actions';
 import { initials } from '../initials';
 import { ENQUIRY_STATUS, type Enquiry } from '../types';
 
-const KIND = { contact: 'Contact form', 'site-survey': 'Site survey' } as const;
+const KIND: Record<Enquiry['kind'], string> = {
+  contact: 'Contact form',
+  'site-survey': 'Site survey',
+  stockist: 'Find a stockist',
+  installer: 'Find an installer',
+  showroom: 'Showroom visit',
+};
 
 const STATUS_OPTIONS = Object.entries(ENQUIRY_STATUS).map(([value, { label }]) => ({
   value,
@@ -34,9 +40,9 @@ const when = (iso: string) =>
   }).format(new Date(iso));
 
 const subjectOf = (enquiry: Enquiry) =>
-  enquiry.kind === 'site-survey'
-    ? (enquiry.productTitle ?? enquiry.productHandle ?? 'Site survey')
-    : (enquiry.topic ?? 'General question');
+  enquiry.productTitle ??
+  enquiry.topic ??
+  (enquiry.kind === 'contact' ? 'General question' : KIND[enquiry.kind]);
 
 export const photoPath = (id: string, number: number) =>
   `/api/staff/enquiry-photo/${id}/${number}/`;

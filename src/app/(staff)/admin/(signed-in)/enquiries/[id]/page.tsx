@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ENQUIRY_STATUS, EnquiryDetail } from '@/features/admin';
+import { ENQUIRY_STATUS, ENQUIRY_TITLE, EnquiryDetail } from '@/features/admin';
 import { Badge, NotAllowed, Notice, PageHeader, requireStaff, staffApi } from '@/features/staff';
 
 export const metadata: Metadata = { title: 'Enquiry' };
@@ -22,7 +22,7 @@ export default async function EnquiryPage({ params, searchParams }: Props) {
     <>
       <PageHeader
         back={{ href: '/admin/enquiries/', label: 'Enquiries' }}
-        title={enquiry.kind === 'site-survey' ? 'Site survey request' : 'Enquiry'}
+        title={ENQUIRY_TITLE[enquiry.kind]}
         meta={<Badge tone={status.tone}>{status.label}</Badge>}
       />
       <Notice message={message} error={error} />

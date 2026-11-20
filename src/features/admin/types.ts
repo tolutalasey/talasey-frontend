@@ -54,3 +54,11 @@ export const ENQUIRY_STATUS: Record<EnquiryStatus, { label: string; tone: BadgeT
   'in-progress': { label: 'In progress', tone: 'info' },
   done: { label: 'Done', tone: 'good' },
 };
+
+export const ENQUIRY_TITLE: Record<Enquiry['kind'], string> = {
+  contact: 'Enquiry',
+  'site-survey': 'Site survey request',
+  stockist: 'Stockist request',
+  installer: 'Installer request',
+  showroom: 'Showroom visit request',
+};

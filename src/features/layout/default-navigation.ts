@@ -117,6 +117,8 @@ export const defaultNavigation: Navigation = {
         { label: 'Know Before You Buy', href: '/know-before-you-buy/', links: [] },
         { label: 'Product Gallery', href: '/inspiration/', links: [] },
         { label: 'Help me choose', href: '/product-finder/', links: [] },
+        { label: 'Find a stockist', href: '/find-a-stockist/', links: [] },
+        { label: 'Find an installer', href: '/find-an-installer/', links: [] },
       ],
     },
     {

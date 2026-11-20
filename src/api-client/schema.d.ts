@@ -8166,7 +8166,7 @@ export interface operations {
                         /** Format: uuid */
                         id: string;
                         /** @enum {string} */
-                        kind: "contact" | "site-survey";
+                        kind: "contact" | "site-survey" | "stockist" | "installer" | "showroom";
                         name: string;
                         email: string;
                         phone: string | null;
@@ -8223,7 +8223,7 @@ export interface operations {
                         /** Format: uuid */
                         id: string;
                         /** @enum {string} */
-                        kind: "contact" | "site-survey";
+                        kind: "contact" | "site-survey" | "stockist" | "installer" | "showroom";
                         name: string;
                         email: string;
                         phone: string | null;
@@ -8294,7 +8294,7 @@ export interface operations {
                         /** Format: uuid */
                         id: string;
                         /** @enum {string} */
-                        kind: "contact" | "site-survey";
+                        kind: "contact" | "site-survey" | "stockist" | "installer" | "showroom";
                         name: string;
                         email: string;
                         phone: string | null;

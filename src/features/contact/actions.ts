@@ -7,6 +7,7 @@ import { settle } from '@/lib/form-feedback.server';
 import { ApiError } from '@/api-client';
 import { getEnquiriesClient } from '@/lib/commerce';
 import { ENQUIRY_FIELDS, ENQUIRY_TOPICS, parseEnquiry } from './enquiry';
+import { LOCAL_HELP_FIELDS, localHelpSchema, type LocalHelpKind } from './local-help';
 import { photosProblem, SURVEY_FIELDS, SURVEY_QUESTIONS, surveySchema } from './site-survey';
 
 export async function sendEnquiry(_state: FormState, form: FormData): Promise<FormState> {
@@ -89,6 +90,55 @@ export async function requestSiteSurvey(
   payload.set('consent', 'true');
   payload.set('website', text(form, 'website'));
   for (const photo of photos) payload.append('photos', photo, photo.name);
+
+  try {
+    await getEnquiriesClient().submit(payload);
+  } catch (error) {
+    return {
+      message:
+        error instanceof ApiError && error.status === 422
+          ? error.message
+          : 'We could not send your request. Please try again, or call us.',
+      values,
+    };
+  }
+  return { sent: true };
+}
+
+export type LocalHelpState = FormState & { sent?: boolean };
+
+// Find a stockist, find an installer and showroom visits: an enquiry the team answers with
+// someone local. The product, when there is one, comes from the page, never typed.
+export async function requestLocalHelp(
+  kind: LocalHelpKind,
+  productHandle: string | null,
+  _state: LocalHelpState,
+  form: FormData,
+): Promise<LocalHelpState> {
+  const values = typedValues(form, LOCAL_HELP_FIELDS);
+  const parsed = localHelpSchema.safeParse(
+    Object.fromEntries(LOCAL_HELP_FIELDS.map((name) => [name, text(form, name)])),
+  );
+  const fieldErrors: Record<string, string> = {};
+  if (!parsed.success) {
+    for (const issue of parsed.error.issues) fieldErrors[String(issue.path[0])] ??= issue.message;
+  }
+  if (form.get('consent') !== 'on') fieldErrors.consent = 'Tick to let us contact you about this';
+  if (!parsed.success || Object.keys(fieldErrors).length > 0) return { fieldErrors, values };
+
+  const { visitDate, visitTime, message, ...contact } = parsed.data;
+  const answers = Object.fromEntries([
+    ...(visitDate ? [['Preferred day', visitDate]] : []),
+    ...(visitTime ? [['Preferred time', visitTime]] : []),
+  ]);
+  const payload = new FormData();
+  payload.set('kind', kind);
+  if (productHandle) payload.set('productHandle', productHandle);
+  for (const [name, value] of Object.entries(contact)) payload.set(name, value);
+  if (message) payload.set('message', message);
+  payload.set('answers', JSON.stringify(answers));
+  payload.set('consent', 'true');
+  payload.set('website', text(form, 'website'));
 
   try {
     await getEnquiriesClient().submit(payload);

@@ -106,6 +106,9 @@ async function pageEntries(): Promise<SitemapEntry[]> {
     entry('/samples/'),
     entry('/product-finder/'),
     entry('/contact/'),
+    entry('/find-a-stockist/'),
+    entry('/find-an-installer/'),
+    entry('/book-a-showroom-visit/'),
     ...fenceBuilders.map((builder) => entry(fenceBuilderPath(builder))),
     ...plainPages.filter((page) => !page.placeholder).map((page) => entry(plainPagePath(page))),
   ];

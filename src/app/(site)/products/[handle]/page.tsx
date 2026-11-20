@@ -110,7 +110,11 @@ export default async function Product({ params, searchParams }: Props) {
             </NextLink>
           </p>
         ) : !product.sellOnline ? (
-          <OfflineAction action={product.offlineAction} phone={settings.contactPhone} />
+          <OfflineAction
+            action={product.offlineAction}
+            phone={settings.contactPhone}
+            handle={product.handle}
+          />
         ) : product.madeToMeasure && product.measurements && product.variants[0] ? (
           <MadeToMeasure
             handle={product.handle}
