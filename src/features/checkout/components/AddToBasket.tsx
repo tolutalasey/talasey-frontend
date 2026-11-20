@@ -35,6 +35,8 @@ export interface AddToBasketProps {
   // The words and calculator for how the product is sold: packs, boards, tubs.
   profile?: SalesProfile;
   initialState?: FormState;
+  // An area to open the calculator with, from a link such as the product finder's.
+  startArea?: number | null;
   // On phones, a bar at the bottom of the screen with this name and price and its own button.
   bar?: { title: string; price: string };
 }
@@ -119,6 +121,7 @@ export function AddToBasket({
   packPricePence = null,
   profile = salesProfile('paving'),
   initialState = {},
+  startArea = null,
   bar,
 }: AddToBasketProps) {
   const [state, action, pending] = useActionState<FormState, FormData>(addToBasket, initialState);
@@ -145,7 +148,7 @@ export function AddToBasket({
             packPricePence={packPricePence}
             extras={extras}
             defaultQuantity={state.values?.quantity ?? '1'}
-            defaultArea={state.values?.area ?? ''}
+            defaultArea={state.values?.area ?? (startArea ? String(startArea) : '')}
           />
         ) : (
           <>

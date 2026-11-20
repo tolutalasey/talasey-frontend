@@ -95,6 +95,7 @@ async function pageEntries(): Promise<SitemapEntry[]> {
     entry('/help/'),
     ...HELP_TOPICS.map((topic) => entry(helpPath(topic))),
     entry('/samples/'),
+    entry('/product-finder/'),
     entry('/contact/'),
     ...fenceBuilders.map((builder) => entry(fenceBuilderPath(builder))),
   ];

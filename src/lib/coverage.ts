@@ -24,3 +24,12 @@ export const wastageFrom = (value: unknown) => {
 };
 
 export const DEFAULT_WASTAGE = 10;
+
+const MAX_AREA_M2 = 10_000;
+
+// An area from a link such as ?area=24.5: a positive number of m², to one decimal place.
+export function areaFrom(value: unknown): number | null {
+  const area = Number(String(value ?? '').replace(',', '.'));
+  if (!Number.isFinite(area) || area <= 0) return null;
+  return Math.min(Math.round(area * 10) / 10, MAX_AREA_M2);
+}

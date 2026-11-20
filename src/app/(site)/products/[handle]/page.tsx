@@ -12,6 +12,7 @@ import {
   productPath,
   productStructuredData,
 } from '@/features/product';
+import { areaFrom } from '@/lib/coverage';
 import { formatPrice } from '@/lib/format';
 import { readFeedback } from '@/lib/form-feedback.server';
 import { JsonLd } from '@/lib/JsonLd';
@@ -58,10 +59,8 @@ async function relatedTo(product: { handle: string; categories: { handle: string
 
 export default async function Product({ params, searchParams }: Props) {
   const { handle } = await params;
-  const [view, feedback] = await Promise.all([
-    getProductView(handle, await searchParams),
-    readFeedback(),
-  ]);
+  const query = await searchParams;
+  const [view, feedback] = await Promise.all([getProductView(handle, query), readFeedback()]);
   if (!view) notFound();
   const { product, variant, colours, extras, pricing, stock } = view;
   const related = await relatedTo(product);
@@ -101,6 +100,7 @@ export default async function Product({ params, searchParams }: Props) {
             packPricePence={pricing ? Math.round(pricing.perPack.amount * 100) : null}
             profile={view.profile}
             initialState={feedback.basket}
+            startArea={areaFrom(query.area)}
             bar={
               pricing
                 ? {

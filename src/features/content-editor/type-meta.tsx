@@ -49,6 +49,11 @@ const META: Record<string, TypeMeta> = {
     icon: <LayersIcon />,
     text: 'Styles, heights, posts and extras for each fence kit builder.',
   },
+  'product-finder': {
+    group: 'Help and ideas',
+    icon: <CompassIcon />,
+    text: 'The answers in the product finder and what each one favours.',
+  },
   guide: { group: 'Help and ideas', icon: <CompassIcon />, text: 'Guides and buying advice.' },
   faq: {
     group: 'Help and ideas',

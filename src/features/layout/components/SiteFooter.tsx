@@ -28,6 +28,7 @@ export function SiteFooter() {
           <NextLink href="/samples/">Free samples</NextLink>
           <NextLink href="/brands/">Our brands</NextLink>
           <NextLink href="/guides/">Guides</NextLink>
+          <NextLink href="/product-finder/">Product finder</NextLink>
           <NextLink href="/inspiration/">Inspiration</NextLink>
           <NextLink href="/help/">Help centre</NextLink>
           <NextLink href="/contact/">Contact us</NextLink>

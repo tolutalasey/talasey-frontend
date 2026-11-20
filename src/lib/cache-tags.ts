@@ -12,6 +12,7 @@ export const cacheTags = {
   productExtras: 'content:product-extras',
   pergolaBuilders: 'content:pergola-builder',
   fenceBuilders: 'content:fence-builder',
+  productFinder: 'content:product-finder',
   samples: 'samples',
   products: 'products',
   product: (handle: string) => `product:${handle}`,
