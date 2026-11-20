@@ -10,6 +10,7 @@ import {
   partsForSide,
   sidesOf,
   sizeOf,
+  type Build,
   type Catalogue,
   type Fixing,
   type PergolaRules,
@@ -72,13 +73,17 @@ export function ToluBuilder({
   rules,
   catalogue,
   others,
+  start,
+  head,
 }: {
   rules: PergolaRules;
   catalogue: Catalogue;
   others: OtherBuilder[];
+  start?: Partial<Build>;
+  head?: ReactNode;
 }) {
   const { build, summary, change, chooseSide, chooseSlat, addToBag, pending, message } =
-    usePergolaBuild(rules, catalogue);
+    usePergolaBuild(rules, catalogue, start);
   const [evening, setEvening] = useState(false);
   const [louvreAngle, setLouvreAngle] = useState(35);
   const [view, setView] = useState<CameraView>('corner');
@@ -271,6 +276,7 @@ export function ToluBuilder({
       </div>
 
       <div className={styles.steps}>
+        {head}
         <fieldset className={styles.options}>
           <legend>1. Size</legend>
           {rules.sizes.map((option, index) => (

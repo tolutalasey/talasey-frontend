@@ -8,13 +8,7 @@ import {
   listingRedirect,
   RangePage,
 } from '@/features/catalogue';
-import {
-  getPergolaBuilder,
-  getPergolaBuilders,
-  getPergolaCatalogue,
-  PERGOLA_RANGE,
-  PergolaBuilderPage,
-} from '@/features/pergola';
+import { getPergolaPage, PERGOLA_RANGE } from '@/features/pergola';
 import { parseListingParams } from '@/features/search';
 import { pageMetadata } from '@/lib/seo';
 
@@ -22,10 +16,14 @@ export const instant = false;
 
 type Props = PageProps<'/[range]/[curated]'>;
 
-// /pergolas/<builder>/ is a pergola builder (page type 4) rather than a curated listing.
-async function builderFor({ params }: Props) {
+// /pergolas/<builder>/ was a builder page of its own; each builder now sits on its pergola's
+// product page, so old links go there.
+async function moveToProduct({ params, searchParams }: Props) {
   const { range, curated } = await params;
-  return range === PERGOLA_RANGE ? getPergolaBuilder(curated) : null;
+  const page = range === PERGOLA_RANGE ? await getPergolaPage(curated) : null;
+  if (!page) return;
+  const { design } = await searchParams;
+  permanentRedirect(design === 'tolu' ? `${page.path}?design=tolu` : page.path);
 }
 
 async function load({ params, searchParams }: Props) {
@@ -39,14 +37,7 @@ async function load({ params, searchParams }: Props) {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const builder = await builderFor(props);
-  if (builder) {
-    return pageMetadata({
-      ...builder.seo,
-      path: `/${PERGOLA_RANGE}/${builder.slug}/`,
-      noindex: Object.keys(await props.searchParams).length > 0,
-    });
-  }
+  await moveToProduct(props);
   const { range, curated, query, listing } = await load(props);
   return pageMetadata({
     ...curated.seo,
@@ -56,34 +47,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function CuratedRange(props: Props) {
-  const builder = await builderFor(props);
-  if (builder) {
-    const [catalogue, all, query] = await Promise.all([
-      getPergolaCatalogue(),
-      getPergolaBuilders(),
-      props.searchParams,
-    ]);
-    const others = all
-      .filter((other) => other.slug !== builder.slug)
-      .map((other) => {
-        const biggest = [...other.sizes].sort((a, b) => b.width * b.depth - a.width * a.depth)[0];
-        return {
-          slug: other.slug,
-          range: other.range,
-          biggest: biggest?.label ?? '',
-          area: biggest ? biggest.width * biggest.depth : 0,
-        };
-      });
-    return (
-      <PergolaBuilderPage
-        builder={builder}
-        catalogue={catalogue}
-        others={others}
-        design={query.design === 'tolu' ? 'tolu' : 'amy'}
-        path={`/${PERGOLA_RANGE}/${builder.slug}/`}
-      />
-    );
-  }
+  await moveToProduct(props);
   const { range, curated, query, listing } = await load(props);
   const target = listingRedirect(range, query, curated);
   if (target) permanentRedirect(target);

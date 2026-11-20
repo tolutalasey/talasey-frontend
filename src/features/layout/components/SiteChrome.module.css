@@ -12,7 +12,8 @@
   justify-content: space-between;
   gap: var(--space-1) var(--space-6);
   padding: var(--space-2) var(--layout-gutter-mobile);
-  border-bottom: 1px solid var(--color-line);
+  background: var(--color-brand950);
+  color: var(--color-stone);
   font-size: 0.8125rem;
 }
 
@@ -31,13 +32,17 @@
   display: inline-flex;
   align-items: center;
   min-height: 2rem;
-  color: var(--color-ink-muted);
+  color: var(--color-stone);
   text-decoration: none;
 }
 
 .topBar a:hover {
-  color: var(--color-brand600);
+  color: var(--color-white);
   text-decoration: underline;
+}
+
+.topBar a:focus-visible {
+  outline-color: var(--color-white);
 }
 
 .bar {

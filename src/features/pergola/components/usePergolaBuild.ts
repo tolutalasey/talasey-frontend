@@ -18,8 +18,10 @@ const formatter = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 
 export const pounds = (pence: number) => formatter.format(pence / 100);
 
 // One build, shared by both builder designs: the choices, what they cost and adding them to the bag.
-export function usePergolaBuild(rules: PergolaRules, catalogue: Catalogue) {
-  const [build, setBuild] = useState<Build>(emptyBuild);
+export function usePergolaBuild(rules: PergolaRules, catalogue: Catalogue, start?: Partial<Build>) {
+  const [build, setBuild] = useState<Build>(() =>
+    start ? updateBuild(rules, emptyBuild(), start) : emptyBuild(),
+  );
   const [message, setMessage] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const router = useRouter();

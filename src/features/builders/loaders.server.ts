@@ -1,17 +1,17 @@
 import 'server-only';
 import { rangePhoto } from '@/features/catalogue';
 import { FENCING_RANGE, fenceBuilderPath, getFenceBuilders } from '@/features/fencing';
-import { getPergolaBuilders, PERGOLA_RANGE } from '@/features/pergola';
+import { getPergolaPages, PERGOLA_RANGE } from '@/features/pergola';
 import type { Builder } from './builders';
 
 // Every builder published in /content: pergolas first, then fences.
 export async function getBuilders(): Promise<Builder[]> {
-  const [pergolas, fences] = await Promise.all([getPergolaBuilders(), getFenceBuilders()]);
+  const [pergolas, fences] = await Promise.all([getPergolaPages(), getFenceBuilders()]);
   return [
-    ...pergolas.map((builder) => ({
+    ...pergolas.map(({ builder, path }) => ({
       name: `${builder.range} pergola builder`,
       summary: 'Pick the size, sides and extras, and see the price as you go.',
-      path: `/${PERGOLA_RANGE}/${builder.slug}/`,
+      path,
       image: rangePhoto(PERGOLA_RANGE).src,
       topics: ['pergola', 'gazebo', 'canopy', 'shade'],
     })),

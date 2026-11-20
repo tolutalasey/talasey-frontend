@@ -1,4 +1,3 @@
-import NextLink from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getProductRow, getRanges, rangePath, RelatedProducts } from '@/features/catalogue';
@@ -11,6 +10,8 @@ import {
   leadTimeText,
   OfflineAction,
   ProductPage,
+  ProductActions,
+  ProductPhotos,
   productDescription,
   StockAlertForm,
   productPath,
@@ -20,7 +21,13 @@ import { areaFrom } from '@/lib/coverage';
 import { formatPrice } from '@/lib/format';
 import { readFeedback } from '@/lib/form-feedback.server';
 import { JsonLd } from '@/lib/JsonLd';
-import { builderPathFor } from '@/features/pergola';
+import {
+  getPergolaForProduct,
+  getPergolaPagesUsing,
+  PergolaAddOnLinks,
+  PergolaProduct,
+  startFromSku,
+} from '@/features/pergola';
 import { getProductResources, ProductResources } from '@/features/knowledge-hub';
 import { pageMetadata } from '@/lib/seo';
 
@@ -73,9 +80,11 @@ export default async function Product({ params, searchParams }: Props) {
   ]);
   if (!view) notFound();
   const { product, variant, colours, extras, pricing, stock } = view;
-  const [related, resources] = await Promise.all([
+  const skus = product.variants.flatMap((option) => option.sku ?? []);
+  const [related, resources, pergola] = await Promise.all([
     relatedTo(product),
     getProductResources(product.handle),
+    getPergolaForProduct(skus),
   ]);
   const outOfStock = Boolean(variant?.priceIncVat) && stock.level === 'out-of-stock';
 
@@ -84,6 +93,31 @@ export default async function Product({ params, searchParams }: Props) {
       <ProductPage
         {...view}
         enquiryOnly={product.pageType === ENQUIRY_ONLY}
+        top={
+          pergola && (
+            <PergolaProduct
+              {...pergola}
+              design={query.design === 'tolu' ? 'tolu' : 'amy'}
+              path={view.path}
+              title={product.title}
+              subtitle={product.subtitle}
+              photos={<ProductPhotos photos={view.photos} name={product.title} />}
+              actions={
+                <ProductActions
+                  title={product.title}
+                  handle={product.handle}
+                  path={view.path}
+                  hasSamples={false}
+                />
+              }
+              start={
+                Object.keys(query).some((key) => key !== 'design')
+                  ? startFromSku(pergola.builder, variant?.sku)
+                  : undefined
+              }
+            />
+          )
+        }
         resources={<ProductResources {...resources} />}
         related={
           <RelatedProducts
@@ -100,15 +134,7 @@ export default async function Product({ params, searchParams }: Props) {
             sizes={product.options.find((option) => option.title === 'Size')?.values ?? []}
           />
         ) : product.pageType === BUILT_TO_ORDER ? (
-          <p>
-            This is bought as part of a build.{' '}
-            <NextLink
-              href={await builderPathFor(product.variants.flatMap((option) => option.sku ?? []))}
-              className="button"
-            >
-              Build your pergola
-            </NextLink>
-          </p>
+          <PergolaAddOnLinks pages={await getPergolaPagesUsing(skus)} />
         ) : !product.sellOnline ? (
           <OfflineAction
             action={product.offlineAction}

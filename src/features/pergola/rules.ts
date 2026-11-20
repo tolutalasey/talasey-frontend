@@ -292,3 +292,15 @@ export function updateBuild(rules: PergolaRules, build: Build, change: Partial<B
   if (lightingIncluded(rules) || !size.lightingKitSku) next.lighting = false;
   return next;
 }
+
+// The size and fixing a structure SKU stands for, to open the builder on that choice.
+export function startFromSku(rules: PergolaRules, sku: string | null | undefined): Partial<Build> {
+  const size = rules.sizes.findIndex(
+    (option) => option.freeStandingSku === sku || option.wallMountedSku === sku,
+  );
+  if (!sku || size < 0) return {};
+  return {
+    size,
+    fixing: rules.sizes[size]?.wallMountedSku === sku ? 'wall-mounted' : 'free-standing',
+  };
+}

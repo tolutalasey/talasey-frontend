@@ -1,0 +1,105 @@
+/* A pergola's product page: the builder beside the photos, then the size details. */
+.product {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.head {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+}
+
+.head > * {
+  margin: 0;
+}
+
+.head :global(.eyebrow) {
+  margin: 0;
+}
+
+.subtitle {
+  color: var(--color-ink-muted);
+}
+
+.from {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+}
+
+.from small {
+  margin-left: var(--space-2);
+  color: var(--color-ink-muted);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+}
+
+.designs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border-radius: var(--radius-card);
+  background: var(--color-stone);
+}
+
+.designs a {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: 8px;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.designs a[aria-current='page'] {
+  background: var(--color-brand950);
+  color: var(--color-stone);
+}
+
+.designs small {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.details {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-6);
+}
+
+.details h2 {
+  margin: 0 0 var(--space-2);
+}
+
+.details details {
+  border-top: 1px solid var(--color-line);
+  padding: var(--space-3) 0;
+}
+
+.details summary {
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.details p {
+  max-width: var(--layout-measure);
+  margin: var(--space-2) 0 0;
+  color: var(--color-ink-muted);
+}
+
+.spec {
+  width: 100%;
+  margin-top: var(--space-3);
+  border-collapse: collapse;
+  font-size: var(--font-size-small);
+}
+
+.spec th,
+.spec td {
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--color-line);
+  text-align: left;
+}

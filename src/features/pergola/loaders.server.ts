@@ -3,6 +3,8 @@ import { cacheLife, cacheTag } from 'next/cache';
 import { getCatalog, orEmpty } from '@/lib/commerce';
 import { cacheTags } from '@/lib/cache-tags';
 import { publishedContent } from '@/lib/content';
+import { productPath } from '@/lib/urls/keyword-map';
+import type { OtherBuilder } from './components/BiggerSize';
 import { pergolaContentSchema, type PergolaContent } from './content';
 import type { Catalogue } from './rules';
 
@@ -49,12 +51,12 @@ export async function getPergolaCatalogue(): Promise<Catalogue> {
   );
 }
 
+const structureSkus = (builder: PergolaContent) =>
+  builder.sizes.flatMap((size) => [size.freeStandingSku, size.wallMountedSku]);
+
 const skusOf = (builder: PergolaContent) => [
-  ...builder.sizes.flatMap((size) => [
-    size.freeStandingSku,
-    size.wallMountedSku,
-    size.lightingKitSku,
-  ]),
+  ...structureSkus(builder),
+  ...builder.sizes.map((size) => size.lightingKitSku),
   ...builder.sides.flatMap((side) => [
     side.sku3m,
     side.sku4m,
@@ -64,11 +66,66 @@ const skusOf = (builder: PergolaContent) => [
   builder.heaterSku,
 ];
 
-// The builder a product is bought through, found by any of its SKUs.
-export async function builderPathFor(skus: string[]): Promise<string> {
-  const builders = await getPergolaBuilders();
-  const found = builders.find((builder) =>
+export interface PergolaPage {
+  builder: PergolaContent;
+  path: string;
+}
+
+async function handlesBySku(): Promise<Record<string, string>> {
+  'use cache';
+  cacheTag(cacheTags.products);
+  cacheLife('hours');
+  const products = await orEmpty(() => getCatalog().listProducts());
+  return Object.fromEntries(
+    products.flatMap((product) =>
+      product.variants.flatMap((variant) => (variant.sku ? [[variant.sku, product.handle]] : [])),
+    ),
+  );
+}
+
+// Each builder with the product page it is on: the product that sells that range's pergolas.
+export async function getPergolaPages(): Promise<PergolaPage[]> {
+  const [builders, handles] = await Promise.all([getPergolaBuilders(), handlesBySku()]);
+  return builders.flatMap((builder) => {
+    const handle = structureSkus(builder)
+      .map((sku) => sku && handles[sku])
+      .find(Boolean);
+    return handle ? [{ builder, path: productPath(handle) }] : [];
+  });
+}
+
+export async function getPergolaPage(slug: string): Promise<PergolaPage | null> {
+  return (await getPergolaPages()).find((page) => page.builder.slug === slug) ?? null;
+}
+
+const otherFrom = ({ builder, path }: PergolaPage): OtherBuilder => {
+  const biggest = [...builder.sizes].sort((a, b) => b.width * b.depth - a.width * a.depth)[0];
+  return {
+    path,
+    range: builder.range,
+    biggest: biggest?.label ?? '',
+    area: biggest ? biggest.width * biggest.depth : 0,
+  };
+};
+
+// The builder for a pergola's own product page, found by the product's SKUs, with the other ranges.
+export async function getPergolaForProduct(skus: string[]) {
+  const pages = await getPergolaPages();
+  const page = pages.find(({ builder }) =>
+    structureSkus(builder).some((sku) => sku && skus.includes(sku)),
+  );
+  if (!page) return null;
+  const catalogue = await getPergolaCatalogue();
+  return {
+    builder: page.builder,
+    catalogue,
+    others: pages.filter((other) => other !== page).map(otherFrom),
+  };
+}
+
+// The pergola pages an add-on such as a screen or heater is chosen on.
+export async function getPergolaPagesUsing(skus: string[]): Promise<PergolaPage[]> {
+  return (await getPergolaPages()).filter(({ builder }) =>
     skusOf(builder).some((sku) => sku && skus.includes(sku)),
   );
-  return found ? `/pergolas/${found.slug}/` : '/pergolas/';
 }

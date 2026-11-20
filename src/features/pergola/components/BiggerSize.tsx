@@ -3,7 +3,7 @@ import type { PergolaRules } from '../rules';
 import styles from './AmyBuilder.module.css';
 
 export interface OtherBuilder {
-  slug: string;
+  path: string;
   range: string;
   biggest: string;
   area: number;
@@ -18,9 +18,9 @@ export function BiggerSize({ rules, others }: { rules: PergolaRules; others: Oth
   if (!bigger) return null;
   return (
     <p className={styles.note}>
-      Need something bigger? See the{' '}
-      <NextLink href={`/pergolas/${bigger.slug}/`}>{bigger.range} range</NextLink> (up to{' '}
-      {bigger.biggest}) or <NextLink href="/contact/">contact us</NextLink> about a bespoke size.
+      Need something bigger? See the <NextLink href={bigger.path}>{bigger.range} range</NextLink>{' '}
+      (up to {bigger.biggest}) or <NextLink href="/contact/">contact us</NextLink> about a bespoke
+      size.
     </p>
   );
 }

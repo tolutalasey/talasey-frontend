@@ -10,7 +10,7 @@ import {
   rangePhoto,
 } from '@/features/catalogue';
 import { FENCING_RANGE, FenceBuilderLinks, getFenceBuilders } from '@/features/fencing';
-import { BuilderLinks, getPergolaBuilders, PERGOLA_RANGE } from '@/features/pergola';
+import { BuilderLinks, getPergolaPages, PERGOLA_RANGE } from '@/features/pergola';
 import { getPlainPage, plainPagePath, PlainPageView } from '@/features/pages';
 import { parseListingParams } from '@/features/search';
 import { pageMetadata } from '@/lib/seo';
@@ -55,8 +55,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 // The kit builders a range is bought through, shown above its products.
 async function builderLinksFor(slug: string) {
   if (slug === PERGOLA_RANGE) {
-    const builders = await getPergolaBuilders();
-    return builders.length > 0 && <BuilderLinks builders={builders} />;
+    const pages = await getPergolaPages();
+    return pages.length > 0 && <BuilderLinks pages={pages} />;
   }
   if (slug === FENCING_RANGE) return <FenceBuilderLinks builders={await getFenceBuilders()} />;
   return null;

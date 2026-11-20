@@ -6,7 +6,7 @@ import styles from './Samples.module.css';
 export function ProductSamples({ offers }: { offers: SampleOffer[] }) {
   if (offers.length === 0) return null;
   return (
-    <section className={styles.productSamples} aria-labelledby="product-samples-title">
+    <section id="samples" className={styles.productSamples} aria-labelledby="product-samples-title">
       <h2 id="product-samples-title">Free samples</h2>
       <p className={styles.muted}>Three free with every order, sent the next working day.</p>
       <ul>

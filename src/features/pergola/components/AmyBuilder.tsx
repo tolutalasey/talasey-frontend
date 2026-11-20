@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, type ReactNode } from 'react';
 import {
   canMixSlats,
   lightingIncluded,
@@ -8,6 +9,7 @@ import {
   partsForSide,
   sidesOf,
   sizeOf,
+  type Build,
   type Catalogue,
   type Fixing,
   type PergolaRules,
@@ -23,7 +25,15 @@ interface Props {
   rules: PergolaRules;
   catalogue: Catalogue;
   others: OtherBuilder[];
+  // The size and fixing to start from, such as the one a shopper followed a link to.
+  start?: Partial<Build>;
+  // The product's name and price line, above the steps.
+  head?: ReactNode;
+  // The product photos, shown beside the drawing until the shopper has a size and fixing.
+  photos?: ReactNode;
 }
+
+type View = 'photos' | 'design';
 
 const FIXINGS: { id: Fixing; label: string }[] = [
   { id: 'free-standing', label: 'Free-standing' },
@@ -62,11 +72,13 @@ const sidePrice = (catalogue: Catalogue, option: SideOption, length: number) =>
   );
 
 // Amy's design: the steps from her product page spec, tab 4, with the drawing beside them.
-export function AmyBuilder({ rules, catalogue, others }: Props) {
+export function AmyBuilder({ rules, catalogue, others, start, head, photos }: Props) {
   const { build, summary, change, chooseSide, chooseSlat, addToBag, pending, message } =
-    usePergolaBuild(rules, catalogue);
+    usePergolaBuild(rules, catalogue, start);
   const size = sizeOf(rules, build);
   const ready = Boolean(size && build.fixing);
+  const [picked, setPicked] = useState<View | null>(null);
+  const view: View = !photos ? 'design' : (picked ?? (ready ? 'design' : 'photos'));
   const lightingKit = size?.lightingKitSku ? catalogue[size.lightingKitSku] : undefined;
   const heater = rules.heaterSku ? catalogue[rules.heaterSku] : undefined;
   const fromPrice = (index: number) => {
@@ -80,9 +92,27 @@ export function AmyBuilder({ rules, catalogue, others }: Props) {
   return (
     <div className={styles.builder}>
       <div className={styles.preview}>
-        <div className={styles.drawing}>
-          <BuildDrawing rules={rules} build={build} />
-        </div>
+        {view === 'photos' ? (
+          photos
+        ) : (
+          <div className={styles.drawing}>
+            <BuildDrawing rules={rules} build={build} />
+          </div>
+        )}
+        {photos && (
+          <div className={styles.views} role="group" aria-label="Show">
+            {(['photos', 'design'] as const).map((option) => (
+              <button
+                key={option}
+                type="button"
+                aria-pressed={view === option}
+                onClick={() => setPicked(option)}
+              >
+                {option === 'photos' ? 'Photos' : 'Your design'}
+              </button>
+            ))}
+          </div>
+        )}
         <div className={styles.total}>
           <span>Your pergola</span>
           <strong>
@@ -92,6 +122,7 @@ export function AmyBuilder({ rules, catalogue, others }: Props) {
       </div>
 
       <div className={styles.steps}>
+        {head}
         <Step number={1} title="Size" required>
           <div className={styles.chips}>
             {rules.sizes.map((option, index) => {

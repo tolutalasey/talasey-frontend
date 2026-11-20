@@ -16,6 +16,7 @@ import { PriceSummary } from './PriceSummary';
 import { ProductFacts } from './ProductFacts';
 import styles from './ProductPage.module.css';
 import { ProductPhotos } from './ProductPhotos';
+import { ProductActions } from './ProductActions';
 
 export interface ProductPageProps {
   product: Product;
@@ -31,7 +32,9 @@ export interface ProductPageProps {
   samples: SampleOffer[];
   path: string;
   // The purchase area: the basket form, or what to do instead for made-to-measure products.
-  children: ReactNode;
+  children?: ReactNode;
+  // Takes the place of the photos and purchase area, for products bought through a builder.
+  top?: ReactNode;
   // Template 3: priced after a site survey, so no price, stock or delivery line.
   enquiryOnly?: boolean;
   // Downloads and videos for the product, under the details.
@@ -54,6 +57,7 @@ export function ProductPage({
   samples,
   path,
   children,
+  top,
   enquiryOnly = false,
   resources,
   related,
@@ -63,46 +67,55 @@ export function ProductPage({
     <>
       <article className={styles.product}>
         <PageBreadcrumbs items={breadcrumbs} />
-        <div className={styles.top}>
-          <div className={`frame ${styles.media}`}>
-            <ProductPhotos photos={photos} name={product.title} />
-            {photos.length > 0 && samples.length > 0 && (
-              <span className={`sticker ${styles.sticker}`} aria-hidden="true">
-                Free samples
-              </span>
-            )}
-          </div>
-          <div className={`frame ${styles.buy}`}>
-            {(range ?? brand) && <p className="eyebrow">{range ?? brand}</p>}
-            <h1>{product.title}</h1>
-            {product.subtitle && <p className={styles.subtitle}>{product.subtitle}</p>}
-            {content.suits.length > 0 && (
-              <p className={styles.suits}>
-                <strong>Suits</strong> {content.suits.join(', ')}
-              </p>
-            )}
-            {enquiryOnly ? (
-              <p className={styles.subtitle}>
-                Designed and built to order. Every one is priced individually after a free site
-                survey.
-              </p>
-            ) : (
-              <PriceSummary pricing={pricing} stock={stock} unit={profile.unit.one} />
-            )}
-            {options.length > 0 && <OptionPicker groups={options} path={path} />}
-            {children}
-            <ProductSamples offers={samples} />
-            {!enquiryOnly && product.sellOnline && (
-              <p className={styles.delivery}>
-                <TruckIcon width={22} height={22} />
-                <span>
-                  <strong>Delivery on a day you choose.</strong> Book the day at checkout. We call
-                  before we come.
+        {top ?? (
+          <div className={styles.top}>
+            <div className={`frame ${styles.media}`}>
+              <ProductPhotos photos={photos} name={product.title} />
+              {photos.length > 0 && samples.length > 0 && (
+                <span className={`sticker ${styles.sticker}`} aria-hidden="true">
+                  Free samples
                 </span>
-              </p>
-            )}
+              )}
+            </div>
+            <div className={`frame ${styles.buy}`}>
+              {(range ?? brand) && <p className="eyebrow">{range ?? brand}</p>}
+              <h1>{product.title}</h1>
+              {product.subtitle && <p className={styles.subtitle}>{product.subtitle}</p>}
+              {content.suits.length > 0 && (
+                <p className={styles.suits}>
+                  <strong>Suits</strong> {content.suits.join(', ')}
+                </p>
+              )}
+              <ProductActions
+                title={product.title}
+                handle={product.handle}
+                path={path}
+                hasSamples={samples.length > 0}
+                without={product.sellOnline ? null : product.offlineAction}
+              />
+              {enquiryOnly ? (
+                <p className={styles.subtitle}>
+                  Designed and built to order. Every one is priced individually after a free site
+                  survey.
+                </p>
+              ) : (
+                <PriceSummary pricing={pricing} stock={stock} unit={profile.unit.one} />
+              )}
+              {options.length > 0 && <OptionPicker groups={options} path={path} />}
+              {children}
+              <ProductSamples offers={samples} />
+              {!enquiryOnly && product.sellOnline && (
+                <p className={styles.delivery}>
+                  <TruckIcon width={22} height={22} />
+                  <span>
+                    <strong>Delivery on a day you choose.</strong> Book the day at checkout. We call
+                    before we come.
+                  </span>
+                </p>
+              )}
+            </div>
           </div>
-        </div>
+        )}
         <ProductFacts product={product} variant={variant} brand={brand} content={content} />
         {resources}
         {related}
