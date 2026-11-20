@@ -81,7 +81,7 @@ export const fallbackVideos: Video[] = [
   video(
     'zsOZuMcf2Us',
     'Pavetuf Landscape Solutions by Talasey Ltd',
-    ['Installation', 'Cleaners', 'Sealers'],
+    ['Installation'],
     '2025-06-16',
   ),
   video('CIeuF-iaybU', 'Vitripiazza by Talasey Ltd', ['Porcelain'], '2025-06-12'),
