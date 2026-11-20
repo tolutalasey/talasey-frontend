@@ -18,6 +18,7 @@ import {
   projectPath,
 } from '@/features/content';
 import { fenceBuilderPath, getFenceBuilders } from '@/features/fencing';
+import { getVideos, videoPath } from '@/features/knowledge-hub';
 import { getPlainPages, plainPagePath } from '@/features/pages';
 import { getSearchRecords, searchProducts } from '@/features/search';
 import { latest, type SitemapEntry } from '@/lib/sitemap-xml';
@@ -70,9 +71,15 @@ async function rangeEntries(): Promise<SitemapEntry[]> {
 }
 
 async function guideEntries(): Promise<SitemapEntry[]> {
-  return (await getGuides())
-    .filter((guide) => !guide.placeholder)
-    .map((guide) => entry(guidePath(guide), guide.reviewedOn ?? guide.publishedOn));
+  const [guides, videos] = await Promise.all([getGuides(), getVideos()]);
+  return [
+    ...guides
+      .filter((guide) => !guide.placeholder)
+      .map((guide) => entry(guidePath(guide), guide.reviewedOn ?? guide.publishedOn)),
+    entry('/knowledge-hub/'),
+    entry('/videos/', latest(videos.map((video) => video.publishedOn))),
+    ...videos.map((video) => entry(videoPath(video), video.publishedOn)),
+  ];
 }
 
 async function inspirationEntries(): Promise<SitemapEntry[]> {

@@ -34,6 +34,8 @@ export interface ProductPageProps {
   children: ReactNode;
   // Template 3: priced after a site survey, so no price, stock or delivery line.
   enquiryOnly?: boolean;
+  // Downloads and videos for the product, under the details.
+  resources?: ReactNode;
   // Products shown under the details, such as others from the same range.
   related?: ReactNode;
 }
@@ -53,6 +55,7 @@ export function ProductPage({
   path,
   children,
   enquiryOnly = false,
+  resources,
   related,
 }: ProductPageProps) {
   const range = breadcrumbs.length > 2 ? breadcrumbs[1]?.name : null;
@@ -101,6 +104,7 @@ export function ProductPage({
           </div>
         </div>
         <ProductFacts product={product} variant={variant} brand={brand} content={content} />
+        {resources}
         {related}
       </article>
       <TrustStrip points={trustPoints} label="Why buy from Talasey" />

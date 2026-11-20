@@ -124,6 +124,25 @@ function FieldInput({ field, value, path }: { field: Field; value: unknown; path
         </fieldset>
       );
     }
+    case 'file': {
+      const address = asText(value);
+      return (
+        <fieldset className={styles.fieldSet}>
+          <legend>{field.label}</legend>
+          {address && (
+            <p>
+              <a href={address} target="_blank" rel="noreferrer">
+                Open the current file
+              </a>
+            </p>
+          )}
+          <input type="hidden" name={path} value={address} />
+          <label htmlFor={`${path}.file`}>{address ? 'Replace the PDF' : 'Choose a PDF'}</label>
+          <input id={`${path}.file`} name={`${path}.file`} type="file" accept="application/pdf" />
+          {field.help && <p className={styles.muted}>{field.help}</p>}
+        </fieldset>
+      );
+    }
     case 'image': {
       const photo = asData(value);
       return (

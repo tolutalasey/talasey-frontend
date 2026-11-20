@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { dataFromForm, imagePaths, type Field } from './fields';
+import { dataFromForm, uploadPaths, type Field } from './fields';
 
 const fields: Field[] = [
   { name: 'title', label: 'Title', kind: 'text' },
@@ -67,6 +67,6 @@ describe('dataFromForm', () => {
         'data.photo': { src: '/uploads/b.png', width: 10, height: 5 },
       }).photo,
     ).toEqual({ src: '/uploads/b.png', alt: 'New', width: 10, height: 5 });
-    expect(imagePaths(fields, posted)).toEqual(['data.photo']);
+    expect(uploadPaths(fields, posted)).toEqual([{ path: 'data.photo', kind: 'image' }]);
   });
 });

@@ -1,5 +1,7 @@
 import type { Navigation, SiteSettings } from './navigation';
 
+const INSTALLATION_GUIDES = '/knowledge-hub/?type=Installation+%26+Technical+Guides';
+
 const at = (label: string, href: string) => ({ label, href });
 
 // The current talasey.co.uk menu, pointed at the new site's pages. Used until the menu is
@@ -102,12 +104,13 @@ export const defaultNavigation: Navigation = {
       href: null,
       sections: [
         {
-          label: 'Installation & Technical Guides',
-          href: '/guides/',
+          label: 'Knowledge Hub',
+          href: '/knowledge-hub/',
           links: [
             at('FAQs', '/help/'),
             at('Health & safety', '/health-safety/'),
-            at('Installation & technical guide', '/guides/'),
+            at('Installation & technical guides', INSTALLATION_GUIDES),
+            at('Videos', '/videos/'),
             at('Product warranty / guarantee', '/product-warranty-guarantee/'),
           ],
         },
@@ -140,7 +143,7 @@ export const defaultNavigation: Navigation = {
       links: [
         at('FAQs', '/help/'),
         at('Health & safety', '/health-safety/'),
-        at('Installation & technical guides', '/guides/'),
+        at('Installation & technical guides', INSTALLATION_GUIDES),
         at('Product awareness courses', '/product-awareness-courses/'),
         at('Product warranty / guarantee', '/product-warranty-guarantee/'),
       ],

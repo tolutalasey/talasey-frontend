@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     localPatterns: [{ pathname: '/uploads/**' }, { pathname: '/images/**' }],
+    // Video stills, and Knowledge Hub covers still on the current site until they are moved.
+    remotePatterns: [
+      { protocol: 'https', hostname: 'i.ytimg.com', pathname: '/vi/**' },
+      { protocol: 'https', hostname: 'talasey.co.uk', pathname: '/wp-content/uploads/**' },
+    ],
   },
   // Photos uploaded in the admin are stored by the API and served through the site's own domain.
   async rewrites() {

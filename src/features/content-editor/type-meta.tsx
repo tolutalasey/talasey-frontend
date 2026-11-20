@@ -65,6 +65,16 @@ const META: Record<string, TypeMeta> = {
     icon: <QuestionIcon />,
     text: 'Questions and answers for shoppers.',
   },
+  'hub-document': {
+    group: 'Help and ideas',
+    icon: <DocumentIcon />,
+    text: 'PDFs in the Knowledge Hub: guides, data sheets and declarations.',
+  },
+  video: {
+    group: 'Help and ideas',
+    icon: <ImageIcon />,
+    text: 'YouTube videos in the Knowledge Hub and on product pages.',
+  },
   inspiration: {
     group: 'Help and ideas',
     icon: <ImageIcon />,

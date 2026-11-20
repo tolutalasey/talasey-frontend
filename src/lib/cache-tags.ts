@@ -10,6 +10,8 @@ export const cacheTags = {
   navigation: 'content:navigation',
   siteSettings: 'content:site-settings',
   pages: 'content:page',
+  hubDocuments: 'content:hub-document',
+  videos: 'content:video',
   redirects: 'content:redirect',
   productExtras: 'content:product-extras',
   pergolaBuilders: 'content:pergola-builder',

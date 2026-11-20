@@ -21,6 +21,7 @@ import { formatPrice } from '@/lib/format';
 import { readFeedback } from '@/lib/form-feedback.server';
 import { JsonLd } from '@/lib/JsonLd';
 import { builderPathFor } from '@/features/pergola';
+import { getProductResources, ProductResources } from '@/features/knowledge-hub';
 import { pageMetadata } from '@/lib/seo';
 
 const ENQUIRY_ONLY = '3';
@@ -72,7 +73,10 @@ export default async function Product({ params, searchParams }: Props) {
   ]);
   if (!view) notFound();
   const { product, variant, colours, extras, pricing, stock } = view;
-  const related = await relatedTo(product);
+  const [related, resources] = await Promise.all([
+    relatedTo(product),
+    getProductResources(product.handle),
+  ]);
   const outOfStock = Boolean(variant?.priceIncVat) && stock.level === 'out-of-stock';
 
   return (
@@ -80,6 +84,7 @@ export default async function Product({ params, searchParams }: Props) {
       <ProductPage
         {...view}
         enquiryOnly={product.pageType === ENQUIRY_ONLY}
+        resources={<ProductResources {...resources} />}
         related={
           <RelatedProducts
             heading="More from this range"

@@ -2,7 +2,7 @@ import 'server-only';
 import { cacheLife, cacheTag } from 'next/cache';
 import { z } from 'zod';
 import { cacheTags } from '@/lib/cache-tags';
-import { publishedContent } from '@/lib/content';
+import { bySlug, contentOr } from '@/lib/content';
 import {
   fallbackBrands,
   fallbackFaqs,
@@ -33,25 +33,6 @@ const list = <T extends z.ZodType>(item: T) =>
     .array(item)
     .nullish()
     .transform((value) => value ?? []);
-
-// What is published in /content, with the built-in copy for anything not published yet: a
-// published entry replaces the built-in one with the same key.
-async function contentOr<T>(
-  type: string,
-  schema: z.ZodType<T>,
-  fallback: T[],
-  keyOf: (entry: T) => string,
-  keep: (entry: T) => boolean = () => true,
-): Promise<T[]> {
-  const published = (await publishedContent(type)).flatMap((entry) => {
-    const parsed = schema.safeParse(entry);
-    return parsed.success && keep(parsed.data) ? [parsed.data] : [];
-  });
-  const keys = new Set(published.map(keyOf));
-  return [...published, ...fallback.filter((entry) => !keys.has(keyOf(entry)))];
-}
-
-const bySlug = (entry: { slug: string }) => entry.slug;
 
 export const storedPageSchema = brandPageSchema.extend({
   story: paragraphs,

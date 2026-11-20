@@ -16,4 +16,4 @@ export { SamplesAdmin } from './components/SamplesAdmin';
 export { SkuChecks } from './components/SkuChecks';
 export { AddStaffForm, StaffAccounts } from './components/StaffAccounts';
 export * from './types';
-export { uploadPhoto } from './upload.server';
+export { uploadDocument, uploadPhoto } from './upload.server';

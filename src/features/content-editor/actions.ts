@@ -1,9 +1,9 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { uploadPhoto } from '@/features/admin';
+import { uploadDocument, uploadPhoto } from '@/features/admin';
 import { done, failed, staffApi, text } from '@/features/staff';
-import { dataFromForm, imagePaths, type Field, type Photo } from './fields';
+import { dataFromForm, uploadPaths, type Field, type Uploaded } from './fields';
 import { liveEntries } from './live-content';
 import { fromLondonTime } from '@/lib/london-time';
 import type { ContentTypeInfo } from './types';
@@ -21,19 +21,25 @@ async function typeInfo(type: string): Promise<ContentTypeInfo | undefined> {
 }
 
 async function formData(fields: Field[], form: FormData, page: string) {
-  const photos: Record<string, Photo> = {};
-  for (const path of imagePaths(fields, form)) {
-    const uploaded = await uploadPhoto(form, `${path}.file`);
-    if (!uploaded.ok) failed(page, uploaded.problem);
-    if (uploaded.photo) {
-      photos[path] = {
-        src: uploaded.photo.url,
-        width: uploaded.photo.width,
-        height: uploaded.photo.height,
+  const uploaded: Uploaded = {};
+  for (const { path, kind } of uploadPaths(fields, form)) {
+    if (kind === 'file') {
+      const result = await uploadDocument(form, `${path}.file`);
+      if (!result.ok) failed(page, result.problem);
+      if (result.url) uploaded[path] = result.url;
+      continue;
+    }
+    const result = await uploadPhoto(form, `${path}.file`);
+    if (!result.ok) failed(page, result.problem);
+    if (result.photo) {
+      uploaded[path] = {
+        src: result.photo.url,
+        width: result.photo.width,
+        height: result.photo.height,
       };
     }
   }
-  return dataFromForm(fields, form, photos);
+  return dataFromForm(fields, form, uploaded);
 }
 
 export async function createContent(form: FormData) {
