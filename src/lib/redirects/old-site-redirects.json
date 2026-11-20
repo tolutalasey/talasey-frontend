@@ -360,6 +360,16 @@
     "permanent": true
   },
   {
+    "from": "/resiscape/",
+    "to": "/paving/",
+    "permanent": true
+  },
+  {
+    "from": "/supporting-our-industry/",
+    "to": "/about-talasey/",
+    "permanent": true
+  },
+  {
     "from": "/order-recieved/",
     "to": "/",
     "permanent": true

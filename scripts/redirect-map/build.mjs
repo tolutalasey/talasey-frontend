@@ -59,6 +59,8 @@ const PAGES = {
   '/bespoke-services/': '/custom-made/',
   '/bespoke-paving/': '/custom-made/',
   '/designer-installer-network/': '/find-an-installer/',
+  '/resiscape/': '/paving/',
+  '/supporting-our-industry/': '/about-talasey/',
   '/order-recieved/': '/',
   '/thank-you/': '/',
 };

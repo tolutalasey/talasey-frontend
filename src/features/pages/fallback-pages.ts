@@ -8,6 +8,111 @@ const contact = { label: 'Contact us', href: '/contact/' };
 export const fallbackPages: PlainPageInput[] = [
   ...legalPages,
   {
+    slug: 'responsible-trading',
+    title: 'Responsible trading',
+    intro:
+      'At Talasey, we believe responsible trading means doing business in a way that considers our customers, suppliers, people and the wider environment.',
+    body: `## Our commitment to responsible trading
+
+Responsible trading is at the heart of how we operate. We work closely with our suppliers and partners to promote high standards across our supply chain, while ensuring that the products and services we provide meet the expectations of our customers.
+
+We continually look for ways to improve how we source, manufacture and supply our products, taking into consideration quality, sustainability, ethical practices and environmental impact.
+
+## Responsible sourcing
+
+We work with trusted suppliers and partners to support responsible sourcing and maintain high standards throughout our supply chain.
+
+## Ethical business practices
+
+We are committed to conducting our business fairly, responsibly and transparently, while maintaining strong relationships with our customers, suppliers and partners.
+
+## Continuous improvement
+
+We continually review our processes and practices to identify opportunities to improve our environmental and social impact while delivering quality products.`,
+    actions: [{ label: 'Modern slavery statement', href: '/modern-slavery-statement/' }, contact],
+    seo: {
+      title: 'Responsible trading | Talasey Ltd',
+      description:
+        'How Talasey trades responsibly: responsible sourcing, ethical business practices and continuous improvement across our supply chain.',
+    },
+  },
+  {
+    slug: 'brochure-terms-and-conditions',
+    title: 'Brochure terms and conditions',
+    intro: 'The terms that apply to the information in our brochures, guides and website.',
+    body: `## About us
+
+Talasey Ltd is one of the UK’s leading suppliers of high-quality, ethically sourced landscaping products. We supply a large range of branded landscaping products including Natural Paving, Vitripiazza, Baksteen, Pavetuf, Luxigraze and Piranha to businesses and their consumers. We have a team of highly experienced sales and technical staff who are available to provide advice and guidance on our products. For further information, please contact our Customer Engagement Team on [0330 333 8030](tel:03303338030).
+
+## Understanding our products
+
+We have Understanding and Installation Guides for all our ranges that we recommend you read prior to purchase. They are designed to help you with your choice, what to expect upon delivery, some basic installation advice and how to look after your investment.
+
+## Purchasing our products
+
+If you would like to purchase any product/s from our range, please contact us directly through our Customer Engagement Team. We can assist you by providing contact details for our network of stockists, designers and/or installers. All sales will be subject to applicable Terms and Conditions, which are available directly upon request.
+
+## Samples
+
+Samples are available by enquiry through our Customer Engagement Team, our webpage or through your local merchant.
+
+## Distribution
+
+Talasey Ltd’s products are available to our stockists for collection or delivery from our distribution centres at Tilbury, Doncaster and Grangemouth.
+
+## Upon delivery
+
+All products must be checked on arrival, and in the unlikely event of products reaching you in a less than satisfactory condition, please refer to your stockist immediately, allowing time for the affected product to be replaced. Do not install any affected product as we will be unable to consider changing it nor will we accept any installation costs. We recommend if you are going to be away from home whilst the product is laid by a contractor, check you’re happy with it before you go.
+
+## Dimensions
+
+All sizes and coverages stated throughout our brochure are estimates and will be subject to minor variations, subject to tolerances. Tolerances will vary from product to product, and specific guidance should be sought from our Customer Engagement Team before placing an order.
+
+## Wastage
+
+Allow for cuts and positioning during install, allow for individual units with characteristics that may not be to the user’s personal liking, and, in addition, consider that due to the nature of some of our products and the journeys that they endure to get to your door some breakages may be incurred. Therefore, we recommend that you order an additional 10% for wastage.
+
+## Specifications
+
+We reserve the right to change or discontinue any of our product specifications or designs without notice. We cannot accept any liability for products used for purposes that they were not intended for. We recommend taking expert advice on the suitability of products for your specific needs. Product Specification and Design Guidance documents are available on request, via your local merchant or stockist.
+
+## Installation
+
+We have Planning and Laying Guides and/or technical advice available on our webpage (as above), to assist your installation. If in doubt, always speak to a local expert and/or carry out research from reputable independent sources.
+
+## Colours
+
+The images in our portfolio are only indicative of the shades and their proportions that may be represented in any given production batch. The colours shown are as accurate as reprographic processes allow. Mixing packs is recommended even if the entire delivery has been batch matched. Always try and order enough product to complete the project to minimise the batch variation and try not to mix sources of supply without checking compatibility, prior to installation. It is strongly recommended that you check that all the products supplied are from the same production batch before commencing installation.
+
+## Colour stabilisation
+
+All our Piranha products contain UV stabilisers; however, due to their high natural content, all composite landscaping products will go through an initial colour stabilisation. Talasey Ltd cannot accept responsibility for any potential weathering characteristics or the effects of potentially deleterious materials.
+
+## Maintenance and cleaning
+
+For full advice, refer to our Understanding and Installing Guides in our [Knowledge Hub](/knowledge-hub/). We have a wide range of Pavetuf maintenance and cleaning products to either help protect your products or make cleaning easier. Refer to our webpage.
+
+## Health and safety
+
+For full advice, refer to our Understanding and Installing Guides in our [Knowledge Hub](/knowledge-hub/) and always follow the product labels. Material Safety Data Sheets are available on request. It is your responsibility to ensure that you comply with all applicable health and safety legislation and guidelines.
+
+## Talasey Partner Programme
+
+Please note that our programme is designed to provide a list of members who are independent contractors, installers and designers, to assist you in choosing a landscaping professional. Talasey Ltd cannot accept credit or responsibility for their actions and work.
+
+## Legal notice
+
+The information in our brochure, on our website, in a guide or any document referred to herein (the “Materials”) is for guidance purposes and intended to assist you in your purchase and enjoyment of the product. Talasey Ltd will have no responsibility or liability, howsoever arising, for reliance on the information provided in the Materials. Talasey Ltd’s sole liability in respect of any products shall be as outlined in the terms and conditions of purchase or in any express guarantee relating to the product purchased. Any product guarantee referenced in the Materials is subject to terms and conditions. Whilst we work closely with our partners, any arrangement you make or advice you take from them will be subject to your contract with them. Talasey Ltd has no liability in respect of any act or omission of any third party.
+
+Every effort has been taken to ensure that the information contained in the Materials is accurate, specifications and tolerances will be as contained in your order for the products, and may differ from those stated in the Materials, particularly with respect to natural materials, where colours may differ from those illustrated. Guidance provided by Talasey Ltd is generic, and advice should be sought in respect of local environmental and building regulations as applicable.`,
+    actions: [{ label: 'View our brochures', href: '/brochures/' }, contact],
+    seo: {
+      title: 'Brochure terms and conditions | Talasey Ltd',
+      description:
+        'The terms that apply to Talasey brochures and guides: samples, delivery, dimensions, wastage, colours, installation and our legal notice.',
+    },
+  },
+  {
     slug: 'about-talasey',
     title: 'About Talasey',
     intro:
