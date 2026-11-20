@@ -1,4 +1,5 @@
 import 'server-only';
+import { cacheLife } from 'next/cache';
 import {
   createAccountClient,
   createBasketClient,
@@ -53,6 +54,18 @@ export async function orEmpty<T>(load: () => Promise<T[]>): Promise<T[]> {
   try {
     return await load();
   } catch {
+    keepBriefly();
     return [];
+  }
+}
+
+// An empty list from a failed load is kept for a minute instead of the caller's usual hours or
+// days, so pages fill in again soon after the API is back. Outside a cached function there is
+// nothing to shorten.
+export function keepBriefly() {
+  try {
+    cacheLife('minutes');
+  } catch {
+    return;
   }
 }
