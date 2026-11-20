@@ -122,7 +122,7 @@ function OrderSummary({ basket }: { basket: Basket }) {
         <h2 id="summary">Your order</h2>
         <NextLink href="/basket/">Edit bag</NextLink>
       </div>
-      <BasketLines lines={basket.lines} />
+      <BasketLines lines={basket.lines} samples={basket.samples} />
       <Totals
         itemTotal={basket.itemTotal}
         deliveryTotal={basket.deliveryTotal}

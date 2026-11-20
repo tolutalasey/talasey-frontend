@@ -48,7 +48,7 @@ async function firstPicture(handle: string) {
 
 export async function getBasketView(): Promise<BasketView | null> {
   const basket = await getBasket();
-  if (!basket || basket.lines.length === 0) return null;
+  if (!basket || (basket.lines.length === 0 && basket.samples.length === 0)) return null;
 
   const handles = [...new Set(basket.lines.flatMap((line) => (line.handle ? [line.handle] : [])))];
   const [stock, products] = await Promise.all([
@@ -69,7 +69,7 @@ export async function getBasketView(): Promise<BasketView | null> {
 // pallet days need a pallet delivery to be chosen.
 export async function getCheckoutView(): Promise<CheckoutView | null> {
   const basket = await getBasket();
-  if (!basket || basket.lines.length === 0) return null;
+  if (!basket || (basket.lines.length === 0 && basket.samples.length === 0)) return null;
 
   const client = getBasketClient();
   const { shipment, day, access } = basket.delivery;

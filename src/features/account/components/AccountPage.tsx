@@ -28,7 +28,11 @@ function orderStatus(order: AccountOrder): { label: string; tone: 'good' | 'warn
 function Order({ order }: { order: AccountOrder }) {
   const status = orderStatus(order);
   const again = repeatable(order);
-  const count = order.lines.length;
+  const count = order.lines.length + order.samples.length;
+  const names = [
+    ...order.lines.map((line) => line.title),
+    ...order.samples.map((sample) => `Sample: ${sample.productTitle}, ${sample.label}`),
+  ];
   return (
     <li className={`frame ${styles.order}`}>
       <div className={styles.orderMain}>
@@ -39,7 +43,7 @@ function Order({ order }: { order: AccountOrder }) {
           Placed {dateText(order.placedAt)}
           {order.delivery.day && ` · delivery ${formatDay(order.delivery.day.date)}`}
         </p>
-        <p className={styles.lineNames}>{order.lines.map((line) => line.title).join(', ')}</p>
+        <p className={styles.lineNames}>{names.join(' · ')}</p>
       </div>
       <span className={`${styles.pill} ${styles[status.tone]}`}>{status.label}</span>
       <strong className={styles.orderTotal}>{formatPrice(order.total)}</strong>

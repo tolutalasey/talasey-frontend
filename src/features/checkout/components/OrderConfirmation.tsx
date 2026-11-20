@@ -99,7 +99,7 @@ export function OrderConfirmation({ order }: { order: PlacedOrder }) {
 
       <section className={`frame ${styles.confirmItems}`} aria-labelledby="items-title">
         <h2 id="items-title">Your order</h2>
-        <BasketLines lines={order.lines} />
+        <BasketLines lines={order.lines} samples={order.samples} />
         <Totals
           itemTotal={order.itemTotal}
           deliveryTotal={order.deliveryTotal}

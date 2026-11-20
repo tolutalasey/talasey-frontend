@@ -21,7 +21,7 @@ export default async function Samples({ searchParams }: Props) {
     <>
       <PageHeader
         title="Samples"
-        description="Free sample requests to post, and the samples shoppers can ask for."
+        description="The samples shoppers can order. Sample orders now arrive in Orders; requests from before are listed here."
       />
       <Notice message={message} error={error} />
       <SamplesAdmin waiting={waiting} sent={sent} offers={offers} />

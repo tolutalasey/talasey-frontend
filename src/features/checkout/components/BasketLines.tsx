@@ -1,13 +1,14 @@
-import type { BasketLine } from '@/api-client';
+import type { BasketLine, BasketSample } from '@/api-client';
 import { formatPrice } from '@/lib/format';
 import styles from './Checkout.module.css';
 
 interface Props {
   lines: BasketLine[];
+  samples?: BasketSample[];
   stock?: Record<string, string>;
 }
 
-export function BasketLines({ lines, stock }: Props) {
+export function BasketLines({ lines, samples = [], stock }: Props) {
   return (
     <table className={styles.lines}>
       <caption className={styles.caption}>Items</caption>
@@ -29,6 +30,16 @@ export function BasketLines({ lines, stock }: Props) {
             </th>
             <td>{line.quantity}</td>
             <td>{formatPrice(line.total)}</td>
+          </tr>
+        ))}
+        {samples.map((sample) => (
+          <tr key={sample.offerId}>
+            <th scope="row">
+              {sample.productTitle}
+              <span className={styles.muted}> · Sample · {sample.label}</span>
+            </th>
+            <td>1</td>
+            <td>{sample.price.amount === 0 ? 'Free' : formatPrice(sample.price)}</td>
           </tr>
         ))}
       </tbody>

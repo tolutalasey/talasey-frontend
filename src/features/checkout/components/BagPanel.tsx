@@ -4,6 +4,7 @@ import { formatPrice } from '@/lib/format';
 import { LockIcon } from '@/ui/icons';
 import type { BasketView } from '../loaders.server';
 import { BasketItems } from './BasketItems';
+import { BasketSamples } from './BasketSamples';
 import { RemovedNotice } from './BasketSummary';
 import { FormMessage } from './FormMessage';
 import styles from './BagPanel.module.css';
@@ -45,7 +46,7 @@ export function BagPanel({ view, feedback }: Props) {
     ...basket.itemTotal,
     amount: basket.itemTotal.amount - (basket.discount?.amount ?? 0),
   };
-  const count = basket.lines.reduce((sum, line) => sum + line.quantity, 0);
+  const count = basket.lines.reduce((sum, line) => sum + line.quantity, 0) + basket.samples.length;
 
   return (
     <div className={styles.panel}>
@@ -53,6 +54,7 @@ export function BagPanel({ view, feedback }: Props) {
         <RemovedNotice feedback={feedback} />
         <FormMessage message={feedback?.message} />
         <BasketItems lines={basket.lines} stock={stock} pictures={pictures} />
+        <BasketSamples samples={basket.samples} />
       </div>
       <footer className={styles.foot}>
         <dl className={styles.total}>

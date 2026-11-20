@@ -203,3 +203,36 @@
     font-size: 1.125rem;
   }
 }
+
+/* Samples, listed apart from the products. */
+.samples {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.samplesTitle {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.samplesNote {
+  margin: 0 0 var(--space-2);
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-small);
+}
+
+.item.sample {
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'about total'
+    'controls controls';
+  padding-left: var(--space-4);
+}
+
+@container (min-width: 36rem) {
+  .item.sample {
+    grid-template-columns: minmax(0, 1fr) auto 7rem;
+    grid-template-areas: 'about controls total';
+  }
+}

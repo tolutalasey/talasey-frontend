@@ -49,7 +49,7 @@ export function OrderSummaryBadges({ order }: { order: Order }) {
 export function OrderDetail({ order }: { order: Order }) {
   const { address, delivery } = order;
   const left = order.totalPence - order.payment.refundedPence;
-  const itemsPence = order.lines.reduce((sum, line) => sum + line.totalPence, 0);
+  const itemsPence = order.itemTotalPence;
 
   return (
     <div className={styles.editor}>
@@ -67,6 +67,8 @@ export function OrderDetail({ order }: { order: Order }) {
             </h2>
             <span className={styles.count}>
               {order.lines.length} {order.lines.length === 1 ? 'line' : 'lines'}
+              {order.samples.length > 0 &&
+                `, ${order.samples.length} ${order.samples.length === 1 ? 'sample' : 'samples'}`}
             </span>
           </div>
           <ul className={styles.list}>
@@ -82,6 +84,21 @@ export function OrderDetail({ order }: { order: Order }) {
                 <span className={styles.listEnd}>
                   <span className={styles.small}>{line.stock}</span>
                   <strong className={styles.money}>{money(line.totalPence)}</strong>
+                </span>
+              </li>
+            ))}
+            {order.samples.map((sample) => (
+              <li key={sample.offerId} className={styles.lineRow}>
+                <span className={styles.qty}>1×</span>
+                <span className={styles.listMain}>
+                  <strong>{sample.productTitle}</strong>
+                  <span className={styles.listSub}>Sample · {sample.label}</span>
+                </span>
+                <span className={styles.listEnd}>
+                  <Badge tone="info">Sample</Badge>
+                  <strong className={styles.money}>
+                    {sample.pricePence === 0 ? 'Free' : money(sample.pricePence)}
+                  </strong>
                 </span>
               </li>
             ))}

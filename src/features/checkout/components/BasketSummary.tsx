@@ -6,6 +6,7 @@ import { trustPoints } from '@/lib/trust-points';
 import { undoRemove } from '../actions';
 import type { BasketView } from '../loaders.server';
 import { BasketItems } from './BasketItems';
+import { BasketSamples } from './BasketSamples';
 import { FormMessage } from './FormMessage';
 import { PromotionCodeForm } from './PromotionCodeForm';
 import { Totals } from './Totals';
@@ -66,7 +67,7 @@ export function BasketSummary({ view, promotionFeedback, linesFeedback }: Props)
   }
 
   const { basket, stock, pictures } = view;
-  const count = basket.lines.length;
+  const count = basket.lines.length + basket.samples.length;
   return (
     <>
       <div className={`container ${styles.page}`}>
@@ -82,6 +83,7 @@ export function BasketSummary({ view, promotionFeedback, linesFeedback }: Props)
             <RemovedNotice feedback={linesFeedback} />
             <FormMessage message={linesFeedback?.message} />
             <BasketItems lines={basket.lines} stock={stock} pictures={pictures} />
+            <BasketSamples samples={basket.samples} />
             <NextLink href="/" className={styles.back}>
               Carry on shopping
             </NextLink>

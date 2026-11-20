@@ -65,11 +65,20 @@ export interface DeliveryAddress {
   phone: string;
 }
 
+export interface BasketSample {
+  offerId: string;
+  productTitle: string;
+  productHandle: string;
+  label: string;
+  price: Price;
+}
+
 export interface Basket {
   id: string;
   email: string | null;
   address: DeliveryAddress | null;
   lines: BasketLine[];
+  samples: BasketSample[];
   itemTotal: Price;
   deliveryTotal: Price | null;
   discount: Price | null;
@@ -104,6 +113,7 @@ export interface PlacedOrder {
   displayId: number | null;
   email: string | null;
   lines: BasketLine[];
+  samples: BasketSample[];
   itemTotal: Price;
   deliveryTotal: Price;
   discount: Price | null;
@@ -134,12 +144,18 @@ function toLine(line: BasketDto['lines'][number] | OrderDto['lines'][number]): B
   };
 }
 
+const toSample = ({ pricePence, ...sample }: BasketDto['samples'][number]): BasketSample => ({
+  ...sample,
+  price: pounds(pricePence),
+});
+
 export function toBasket(basket: BasketDto): Basket {
   return {
     id: basket.id,
     email: basket.email,
     address: basket.address,
     lines: basket.lines.map(toLine),
+    samples: basket.samples.map(toSample),
     itemTotal: pounds(basket.itemTotalPence),
     deliveryTotal: basket.deliveryPence === null ? null : pounds(basket.deliveryPence),
     discount: basket.discountPence > 0 ? pounds(basket.discountPence) : null,
@@ -158,6 +174,7 @@ export function toPlacedOrder(order: OrderDto): PlacedOrder {
     displayId: order.number,
     email: order.email,
     lines: order.lines.map(toLine),
+    samples: order.samples.map(toSample),
     itemTotal: pounds(order.itemTotalPence),
     deliveryTotal: pounds(order.deliveryPence),
     discount: order.discountPence > 0 ? pounds(order.discountPence) : null,
@@ -221,6 +238,22 @@ export function createBasketClient(options: ApiClientOptions) {
           api.POST('/store/baskets/{id}/bespoke-items', {
             ...path(basketId),
             body: { variantId, quantity: 1, dimensions, choices },
+          }),
+        );
+      }),
+
+    addSample: (basketId: string, offerId: string) =>
+      attempt(async () => {
+        await unwrap(
+          api.POST('/store/baskets/{id}/samples', { ...path(basketId), body: { offerId } }),
+        );
+      }),
+
+    removeSample: (basketId: string, offerId: string) =>
+      attempt(async () => {
+        await unwrap(
+          api.DELETE('/store/baskets/{id}/samples/{offerId}', {
+            params: { path: { id: basketId, offerId } },
           }),
         );
       }),

@@ -272,3 +272,34 @@ export async function buyAgain(form: FormData) {
   }
   redirect(`/basket/?again=${added}-${items.length}`);
 }
+
+// "Order a sample" on a product or the samples page. Without JavaScript the form says where to go
+// next; problems come back through the feedback cookie.
+export async function addSampleToBasket(form: FormData) {
+  const offerId = String(form.get('offerId') ?? '');
+  const client = getBasketClient();
+  let basketId = await currentBasketId();
+  if (!basketId) {
+    basketId = (await client.create()).id;
+    await rememberBasket(basketId);
+  }
+  const added = await client.addSample(basketId, offerId);
+  await settle('samples', added.ok ? {} : { message: added.message });
+  const next = String(form.get('next') ?? '');
+  if (next.startsWith('/') && !next.startsWith('//')) redirect(next);
+  refresh();
+}
+
+export async function removeSampleFromBasket(form: FormData) {
+  const basketId = await currentBasketId();
+  if (!basketId) {
+    await settle('lines', EXPIRED);
+  } else {
+    const removed = await getBasketClient().removeSample(
+      basketId,
+      String(form.get('offerId') ?? ''),
+    );
+    await settle('lines', removed.ok ? {} : { message: removed.message });
+  }
+  refresh();
+}
