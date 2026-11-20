@@ -2,4 +2,4 @@ export { FenceBuilderLinks } from './components/FenceBuilderLink';
 export { FenceBuilderPage } from './components/FenceBuilderPage';
 export { getFenceBuilder, getFenceBuilders, getFenceCatalogue } from './loaders.server';
 export { FENCING_RANGE, fenceBuilderPath } from './paths';
-export type { FenceBuilder } from './content';
+export { fenceBuilderSchema, type FenceBuilder } from './content';

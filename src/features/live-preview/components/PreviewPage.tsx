@@ -2,9 +2,11 @@ import type { z } from 'zod';
 import {
   getProductsByHandle,
   getRangeListing,
+  getRange,
   getRanges,
   rangeFromContent,
   RangePage,
+  rangePath,
 } from '@/features/catalogue';
 import {
   BrandStory,
@@ -17,7 +19,15 @@ import {
   storedPageSchema,
   storedProjectSchema,
 } from '@/features/content';
+import {
+  FENCING_RANGE,
+  FenceBuilderPage,
+  fenceBuilderPath,
+  fenceBuilderSchema,
+  getFenceCatalogue,
+} from '@/features/fencing';
 import { homeContentSchema, HomePage, seasonalBlockFor } from '@/features/home';
+import { ProductFinderPage, toFinder } from '@/features/product-finder';
 import { parseListingParams } from '@/features/search';
 import { NotReady } from './NotReady';
 
@@ -70,6 +80,29 @@ export async function PreviewPage({ type, data }: Props) {
       const params = parseListingParams({});
       const listing = await getRangeListing(parsed.data, params);
       return <RangePage range={parsed.data} listing={listing} params={params} />;
+    }
+    case 'fence-builder': {
+      const parsed = fenceBuilderSchema.safeParse(data);
+      if (!parsed.success) return <NotReady problems={problemsOf(parsed.error)} />;
+      const [catalogue, range] = await Promise.all([
+        getFenceCatalogue(parsed.data),
+        getRange(FENCING_RANGE),
+      ]);
+      return (
+        <FenceBuilderPage
+          builder={parsed.data}
+          catalogue={catalogue}
+          range={range && { name: range.name, path: rangePath(range) }}
+          path={fenceBuilderPath(parsed.data)}
+        />
+      );
+    }
+    case 'product-finder': {
+      const finder = toFinder(data);
+      if (!finder) return <NotReady problems={['Every question needs at least two answers']} />;
+      return (
+        <ProductFinderPage finder={finder} answers={{ chosen: {}, areaM2: null }} results={null} />
+      );
     }
     default:
       return <NotReady problems={[]} />;

@@ -5,13 +5,17 @@ const PATHS: Record<string, (key: string) => string> = {
   'brand-page': (key) => `/brands/${key}/`,
   'project-page': (key) => `/projects/${key}/`,
   'range-page': (key) => `/${key}/`,
+  'fence-builder': (key) => `/fence-builder/${key}/`,
+  'product-finder': () => '/product-finder/',
 };
+
+const SINGLETONS = new Set(['home', 'product-finder']);
 
 export const hasPagePreview = (type: string) => type in PATHS;
 
 export function sitePathFor(type: string, key: string): string | null {
   const path = PATHS[type];
-  return path && (type === 'home' || key) ? path(key) : null;
+  return path && (SINGLETONS.has(type) || key) ? path(key) : null;
 }
 
 // The other way round, for "Edit this page" on the site.
@@ -19,8 +23,14 @@ export function contentFor(path: string): { type: string; key: string } | null {
   const [first, second, ...rest] = path.split('/').filter(Boolean);
   if (!first) return { type: 'home', key: 'home' };
   if (rest.length > 0) return null;
+  if (first === 'product-finder' && !second) return { type: first, key: first };
   if (second) {
-    const type = { guides: 'guide', brands: 'brand-page', projects: 'project-page' }[first];
+    const type = {
+      guides: 'guide',
+      brands: 'brand-page',
+      projects: 'project-page',
+      'fence-builder': 'fence-builder',
+    }[first];
     return type ? { type, key: second } : null;
   }
   return { type: 'range-page', key: first };
