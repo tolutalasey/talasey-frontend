@@ -78,10 +78,15 @@ export const inspirationSchema = z.object({
 export type Inspiration = z.infer<typeof inspirationSchema>;
 
 export const HELP_TOPICS = [
-  { slug: 'delivery', name: 'Delivery', faqTopic: 'Delivery' },
-  { slug: 'returns', name: 'Returns and refunds', faqTopic: 'Returns' },
+  { slug: 'natural-stone', name: 'Natural stone', faqTopic: 'Natural stone' },
+  { slug: 'porcelain', name: 'Porcelain', faqTopic: 'Porcelain' },
+  { slug: 'composite', name: 'Composite decking, cladding and fencing', faqTopic: 'Composite' },
+  { slug: 'artificial-grass', name: 'Artificial grass', faqTopic: 'Artificial grass' },
   { slug: 'laying', name: 'Laying and installing', faqTopic: 'Laying' },
   { slug: 'care', name: 'Care and cleaning', faqTopic: 'Care' },
+  { slug: 'protecting', name: 'Sealing and protecting', faqTopic: 'Protecting' },
+  { slug: 'delivery', name: 'Delivery', faqTopic: 'Delivery' },
+  { slug: 'returns', name: 'Returns and refunds', faqTopic: 'Returns' },
   { slug: 'finance', name: 'Paying and finance', faqTopic: 'Finance' },
   { slug: 'samples', name: 'Samples', faqTopic: 'Samples' },
 ] as const;

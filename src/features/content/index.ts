@@ -6,8 +6,10 @@ export { InspirationGallery } from './components/InspirationGallery';
 export { SearchBox } from './components/SearchBox';
 export { StoryPage } from './components/StoryPage';
 export { BrandStory, ProjectStory } from './components/StoryViews';
+export { searchFaqs } from './faq-search';
 export { parseInspirationFilters } from './inspiration';
 export {
+  getAllFaqs,
   getBrandPages,
   getFaqs,
   getGuides,

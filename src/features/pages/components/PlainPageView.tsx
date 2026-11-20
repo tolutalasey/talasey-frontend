@@ -1,24 +1,9 @@
 import Image from 'next/image';
 import NextLink from 'next/link';
-import { Fragment } from 'react';
 import { PageBreadcrumbs } from '@/features/layout';
+import { RichText } from './RichText';
 import { plainPagePath, type PlainPage } from '../content';
-import { blocks, type Inline } from '../text';
 import styles from './PlainPage.module.css';
-
-function Text({ parts }: { parts: Inline[] }) {
-  return parts.map((part, index) => (
-    <Fragment key={index}>
-      {part.kind === 'link' ? (
-        <NextLink href={part.href}>{part.text}</NextLink>
-      ) : part.kind === 'bold' ? (
-        <strong>{part.text}</strong>
-      ) : (
-        part.text
-      )}
-    </Fragment>
-  ));
-}
 
 export function PlainPageView({ page }: { page: PlainPage }) {
   return (
@@ -45,23 +30,7 @@ export function PlainPageView({ page }: { page: PlainPage }) {
         />
       )}
       <div className={`frame ${styles.body}`}>
-        {blocks(page.body).map((block, index) =>
-          block.kind === 'heading' ? (
-            <h2 key={index}>{block.text}</h2>
-          ) : block.kind === 'list' ? (
-            <ul key={index}>
-              {block.items.map((item, itemIndex) => (
-                <li key={itemIndex}>
-                  <Text parts={item} />
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p key={index}>
-              <Text parts={block.parts} />
-            </p>
-          ),
-        )}
+        <RichText text={page.body} />
         {page.actions.length > 0 && (
           <p className={styles.actions}>
             {page.actions.map((action, index) => (

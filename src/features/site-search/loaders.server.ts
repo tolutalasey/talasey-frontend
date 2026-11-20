@@ -1,17 +1,19 @@
 import 'server-only';
 import { getRanges, rangePath } from '@/features/catalogue';
-import { getGuides, guidePath } from '@/features/content';
+import { getAllFaqs, getGuides, guidePath, helpPath } from '@/features/content';
+import { slugify } from '@/lib/slug';
 import { getHubDocuments, getVideos, videoPath } from '@/features/knowledge-hub';
 import { getPlainPages, plainPagePath } from '@/features/pages';
 import { searchContent, type ContentEntry } from './content-search';
 
 async function contentEntries(): Promise<ContentEntry[]> {
-  const [ranges, documents, videos, guides, pages] = await Promise.all([
+  const [ranges, documents, videos, guides, pages, faqs] = await Promise.all([
     getRanges(),
     getHubDocuments(),
     getVideos(),
     getGuides(),
     getPlainPages(),
+    getAllFaqs(),
   ]);
   return [
     ...ranges.map((range) => ({
@@ -33,6 +35,15 @@ async function contentEntries(): Promise<ContentEntry[]> {
       text: `${video.summary ?? ''} ${video.ranges.join(' ')}`,
       href: videoPath(video),
     })),
+    ...faqs.flatMap(({ topic, faqs: questions }) =>
+      questions.map((faq) => ({
+        kind: 'faq' as const,
+        title: faq.question,
+        text: faq.answer,
+        href: `${helpPath(topic)}#${slugify(faq.question)}`,
+        label: topic.name,
+      })),
+    ),
     ...guides
       .filter((guide) => !guide.placeholder)
       .map((guide) => ({

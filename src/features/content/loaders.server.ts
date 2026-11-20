@@ -17,7 +17,9 @@ import {
   inspirationSchema,
   projectPageSchema,
   type BrandPage,
+  HELP_TOPICS,
   type Faq,
+  type HelpTopic,
   type Guide,
   type Inspiration,
   type ProjectPage,
@@ -103,4 +105,10 @@ export async function getFaqs(topic: string): Promise<Faq[]> {
     (faq) => faq.question,
     (faq) => faq.topic === topic,
   ).then((faqs) => faqs.map(({ question, answer }) => ({ question, answer })));
+}
+
+export async function getAllFaqs(): Promise<{ topic: HelpTopic; faqs: Faq[] }[]> {
+  return Promise.all(
+    HELP_TOPICS.map(async (topic) => ({ topic, faqs: await getFaqs(topic.faqTopic) })),
+  );
 }

@@ -1,3 +1,4 @@
+import { currentSiteFaqs } from './fallback-faqs';
 import type { BrandPage, Faq, Guide, Inspiration, ProjectPage } from './schemas';
 
 // Shown until the matching entry is published in /content. Everything here is marked as placeholder copy, so it is noindex
@@ -244,7 +245,7 @@ export const fallbackGuides: Guide[] = [
 
 export const fallbackInspiration: Inspiration[] = [];
 
-export const fallbackFaqs: Record<string, Faq[]> = {
+const ownFaqs: Record<string, Faq[]> = {
   Delivery: [
     {
       question: 'How is paving delivered?',
@@ -267,3 +268,10 @@ export const fallbackFaqs: Record<string, Faq[]> = {
     },
   ],
 };
+
+export const fallbackFaqs: Record<string, Faq[]> = Object.fromEntries(
+  [...new Set([...Object.keys(currentSiteFaqs), ...Object.keys(ownFaqs)])].map((topic) => [
+    topic,
+    [...(currentSiteFaqs[topic] ?? []), ...(ownFaqs[topic] ?? [])],
+  ]),
+);
