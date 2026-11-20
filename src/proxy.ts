@@ -9,16 +9,20 @@ import { securityHeaders } from '@/lib/security-headers';
 // The admin and the content editor are for staff only and never appear in search results.
 export const isStaffPath = (pathname: string) => /^\/(admin|content)(\/|$)/.test(pathname);
 
+// The new address keeps the visitor's own query string, added to any the redirect sets.
+function redirectUrl(to: string, request: NextRequest) {
+  const url = new URL(to, request.url);
+  request.nextUrl.searchParams.forEach((value, key) => url.searchParams.append(key, value));
+  return url;
+}
+
 export function createProxy(source: RedirectSource, headers: Record<string, string>) {
   const findRedirect = cachedRedirectLookup(source);
 
   return async function handle(request: NextRequest): Promise<NextResponse> {
     const redirect = await findRedirect(request.nextUrl.pathname);
     const response = redirect
-      ? NextResponse.redirect(
-          new URL(redirect.to + request.nextUrl.search, request.url),
-          redirect.permanent ? 301 : 302,
-        )
+      ? NextResponse.redirect(redirectUrl(redirect.to, request), redirect.permanent ? 301 : 302)
       : withoutFeedback(request);
     for (const [name, value] of Object.entries(headers)) response.headers.set(name, value);
     if (isStaffPath(request.nextUrl.pathname)) {

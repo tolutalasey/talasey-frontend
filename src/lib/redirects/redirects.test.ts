@@ -21,6 +21,16 @@ describe('redirectMatcher', () => {
     expect(find('/shop/pavetuf')?.to).toBe('/brands/pavetuf/');
     expect(find('/porcelain-paving/')).toBeUndefined();
   });
+
+  it('sends anything under a whole section to its new home, unless the address has its own', () => {
+    const find = redirectMatcher([
+      { from: '/brochure/*', to: '/brochure-acknowledgements/', permanent: true },
+      { from: '/brochure/murray/', to: '/inspiration/', permanent: true },
+    ]);
+    expect(find('/brochure/wirral-landscapes/')?.to).toBe('/brochure-acknowledgements/');
+    expect(find('/brochure/murray')?.to).toBe('/inspiration/');
+    expect(find('/brochure/')).toBeUndefined();
+  });
 });
 
 describe('the redirect map', () => {

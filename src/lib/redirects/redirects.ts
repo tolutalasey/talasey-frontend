@@ -23,11 +23,22 @@ export class StaticRedirectSource implements RedirectSource {
 
 const withoutTrailingSlash = (path: string) => (path.length > 1 ? path.replace(/\/+$/, '') : path);
 
+const isSection = (redirect: Redirect) => redirect.from.endsWith('/*');
+
+// An exact address wins; otherwise a whole section such as /brochure/* catches what is under it.
 export function redirectMatcher(redirects: Redirect[]) {
   const byPath = new Map(
-    redirects.map((redirect) => [withoutTrailingSlash(redirect.from), redirect]),
+    redirects
+      .filter((redirect) => !isSection(redirect))
+      .map((redirect) => [withoutTrailingSlash(redirect.from), redirect]),
   );
-  return (pathname: string): Redirect | undefined => byPath.get(withoutTrailingSlash(pathname));
+  const sections = redirects
+    .filter(isSection)
+    .map((redirect) => ({ prefix: redirect.from.slice(0, -1), redirect }))
+    .sort((a, b) => b.prefix.length - a.prefix.length);
+  return (pathname: string): Redirect | undefined =>
+    byPath.get(withoutTrailingSlash(pathname)) ??
+    sections.find(({ prefix }) => pathname.startsWith(prefix) && pathname !== prefix)?.redirect;
 }
 
 // Problems that would send people round in circles or through several hops.
