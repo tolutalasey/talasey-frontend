@@ -6,10 +6,12 @@ import { useState } from 'react';
 import { ArrowIcon } from '@/ui/icons';
 import styles from './SiteChrome.module.css';
 
-interface MenuLink {
+export interface MenuLink {
   label: string;
   href: string;
   image: string;
+  // Smaller links listed under this one, like the paving types under Paving.
+  children?: { label: string; href: string }[];
 }
 
 interface Feature {
@@ -47,7 +49,7 @@ export function MenuPanel({ title, links, feature, verb }: MenuPanelProps) {
           <p className="eyebrow">{title}</p>
           <ul className={styles.menuList}>
             {links.map((link) => (
-              <li key={link.href}>
+              <li key={link.href + link.label}>
                 <NextLink
                   href={link.href}
                   onPointerEnter={() => setActive(link)}
@@ -56,6 +58,21 @@ export function MenuPanel({ title, links, feature, verb }: MenuPanelProps) {
                   {link.label}
                   <ArrowIcon width={14} height={14} />
                 </NextLink>
+                {link.children && link.children.length > 0 && (
+                  <ul className={styles.subList}>
+                    {link.children.map((child) => (
+                      <li key={child.href + child.label}>
+                        <NextLink
+                          href={child.href}
+                          onPointerEnter={() => setActive(link)}
+                          onFocus={() => setActive(link)}
+                        >
+                          {child.label}
+                        </NextLink>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
           </ul>

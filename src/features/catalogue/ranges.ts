@@ -396,6 +396,232 @@ export const fallbackRanges: Range[] = [
         'Adjustable paving risers, top plates, aluminium profiles and tools for raised porcelain terraces, roofs and balconies.',
     },
   },
+  // Ranges on the current site's menu with no products online yet; they invite an enquiry.
+  {
+    slug: 'paving',
+    kind: 'category',
+    name: 'Paving',
+    h1: 'Garden paving',
+    intro:
+      'Natural stone and porcelain paving for patios, paths and steps, with everything needed to lay it.',
+    gallery: [],
+    scope: { titleIncludes: ['paving'] },
+    buyingGuide: [],
+    faqs: [samplesFaq],
+    curated: [],
+    seo: {
+      title: 'Garden paving: natural stone and porcelain | Talasey',
+      description:
+        'Natural stone and porcelain garden paving for patios, paths and steps, with the jointing, primers and supports to lay it.',
+    },
+  },
+  {
+    slug: 'pioneer-decking',
+    kind: 'range',
+    name: 'Pioneer advanced composite decking',
+    h1: 'Pioneer advanced composite decking',
+    intro: 'Pioneer advanced composite decking boards and the parts to build with them.',
+    gallery: [],
+    scope: { titleIncludes: ['pioneer'] },
+    buyingGuide: [],
+    faqs: [samplesFaq],
+    curated: [],
+    seo: {
+      title: 'Pioneer advanced composite decking | Talasey',
+      description:
+        'Pioneer advanced composite decking boards for gardens and terraces. Ask our team about colours, sizes and prices.',
+    },
+  },
+  {
+    slug: 'decking-installation',
+    kind: 'range',
+    name: 'Decking installation',
+    h1: 'Decking installation',
+    intro: 'Joists, clips and fixings for building a composite deck.',
+    gallery: [],
+    scope: { titleIncludes: ['joist', 'decking clip', 'decking fixing'] },
+    buyingGuide: [],
+    faqs: [samplesFaq],
+    curated: [],
+    seo: {
+      title: 'Decking joists, clips and fixings | Talasey',
+      description:
+        'Joists, hidden clips and fixings for building a composite deck that lasts, with help from our team on what you need.',
+    },
+  },
+  {
+    slug: 'composite-gates',
+    kind: 'range',
+    name: 'Composite gates',
+    h1: 'Composite gates',
+    intro: 'Composite gates to match our composite fencing.',
+    gallery: [],
+    scope: { titleIncludes: ['gate'] },
+    buyingGuide: [],
+    faqs: [samplesFaq],
+    curated: [],
+    seo: {
+      title: 'Composite garden gates | Talasey',
+      description:
+        'Composite garden gates made to match our composite fencing. Ask our team about sizes, colours and fitting.',
+    },
+  },
+  {
+    slug: 'balustrades',
+    kind: 'range',
+    name: 'Balustrades',
+    h1: 'Balustrades',
+    intro: 'Balustrades for decks, terraces and steps.',
+    gallery: [],
+    scope: { titleIncludes: ['balustrade'] },
+    buyingGuide: [],
+    faqs: [samplesFaq],
+    curated: [],
+    seo: {
+      title: 'Balustrades for decks and terraces | Talasey',
+      description:
+        'Balustrades for decks, raised terraces and garden steps. Ask our team about the right system for your project.',
+    },
+  },
+  {
+    slug: 'walling-and-cladding',
+    kind: 'category',
+    name: 'Walling & cladding',
+    h1: 'Walling and cladding',
+    intro: 'Composite and porcelain cladding and stone walling for garden walls and buildings.',
+    gallery: [],
+    scope: {
+      categories: ['landscaping-materials-cladding'],
+      titleIncludes: ['cladding', 'walling'],
+    },
+    buyingGuide: [],
+    faqs: [samplesFaq],
+    curated: [],
+    seo: {
+      title: 'Garden walling and cladding | Talasey',
+      description:
+        'Composite cladding, porcelain cladding and stone walling for garden walls, raised beds and outbuildings.',
+    },
+  },
+  {
+    slug: 'porcelain-cladding',
+    kind: 'range',
+    name: 'Porcelain cladding',
+    h1: 'Porcelain cladding',
+    intro: 'Porcelain cladding for garden walls and buildings.',
+    gallery: [],
+    scope: { titleIncludes: ['porcelain cladding'] },
+    buyingGuide: [],
+    faqs: [samplesFaq],
+    curated: [],
+    seo: {
+      title: 'Porcelain wall cladding | Talasey',
+      description:
+        'Porcelain cladding for garden walls, outbuildings and feature walls. Ask our team about finishes and sizes.',
+    },
+  },
+  {
+    slug: 'stone-walling',
+    kind: 'range',
+    name: 'Stone walling',
+    h1: 'Stone walling',
+    intro: 'Natural stone walling for garden walls and raised beds.',
+    gallery: [],
+    scope: { titleIncludes: ['walling'] },
+    buyingGuide: [],
+    faqs: [samplesFaq],
+    curated: [],
+    seo: {
+      title: 'Natural stone walling | Talasey',
+      description:
+        'Natural stone walling for garden walls, raised beds and features. Ask our team about stone types and quantities.',
+    },
+  },
+  {
+    slug: 'drainage',
+    kind: 'range',
+    name: 'Drainage',
+    h1: 'Drainage',
+    intro: 'Drainage channels and gratings for patios and driveways.',
+    gallery: [],
+    scope: { titleIncludes: ['drain'] },
+    buyingGuide: [],
+    faqs: [samplesFaq],
+    curated: [],
+    seo: {
+      title: 'Patio and driveway drainage | Talasey',
+      description:
+        'Drainage channels and gratings to keep patios, paths and driveways clear of standing water. Ask our team for help.',
+    },
+  },
+  {
+    slug: 'artificial-grass',
+    kind: 'range',
+    name: 'Artificial grass',
+    h1: 'Artificial grass',
+    intro: 'Artificial grass for gardens, play areas and terraces.',
+    gallery: [],
+    scope: { titleIncludes: ['artificial grass'] },
+    buyingGuide: [],
+    faqs: [samplesFaq],
+    curated: [],
+    seo: {
+      title: 'Artificial grass for gardens | Talasey',
+      description:
+        'Artificial grass for lawns, play areas, roof terraces and balconies. Ask our team about pile heights and samples.',
+    },
+  },
+  {
+    slug: 'outdoor-kitchens',
+    kind: 'range',
+    name: 'Outdoor kitchens',
+    h1: 'Outdoor kitchens',
+    intro: 'Outdoor kitchens for cooking and entertaining in the garden.',
+    gallery: [],
+    scope: { titleIncludes: ['kitchen'] },
+    buyingGuide: [],
+    faqs: [samplesFaq],
+    curated: [],
+    seo: {
+      title: 'Outdoor kitchens for the garden | Talasey',
+      description:
+        'Outdoor kitchens for cooking and entertaining in the garden. Talk to our team about layouts, finishes and prices.',
+    },
+  },
+  {
+    slug: 'garden-storage',
+    kind: 'range',
+    name: 'Garden storage',
+    h1: 'Garden storage',
+    intro: 'Garden storage to keep tools, cushions and bins tidy.',
+    gallery: [],
+    scope: { titleIncludes: ['storage'] },
+    buyingGuide: [],
+    faqs: [samplesFaq],
+    curated: [],
+    seo: {
+      title: 'Garden storage for tools and cushions | Talasey',
+      description:
+        'Garden storage for tools, cushions and bins, built to stand up to the weather. Ask our team about sizes and finishes.',
+    },
+  },
+  {
+    slug: 'water-features',
+    kind: 'range',
+    name: 'Water features',
+    h1: 'Water features',
+    intro: 'Steel water features for gardens and courtyards.',
+    gallery: [],
+    scope: { titleIncludes: ['water feature'] },
+    buyingGuide: [],
+    faqs: [samplesFaq],
+    curated: [],
+    seo: {
+      title: 'Steel garden water features | Talasey',
+      description:
+        'Steel water features for gardens, patios and courtyards. Talk to our team about sizes, finishes and installation.',
+    },
+  },
 ];
 
 const lower = (text: string) => text.toLowerCase();
