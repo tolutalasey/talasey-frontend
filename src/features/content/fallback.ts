@@ -263,7 +263,7 @@ export const fallbackFaqs: Record<string, Faq[]> = {
     {
       question: 'How do I get samples?',
       answer:
-        'Choose up to five free samples on our Free samples page and we will post them to you.',
+        'Order samples on our Samples page. The first three are free and we post them the next working day.',
     },
   ],
 };

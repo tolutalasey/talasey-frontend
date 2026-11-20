@@ -9,7 +9,7 @@ export const trustPoints = [
   {
     icon: 'samples',
     title: 'Free samples',
-    text: 'Up to five, sent to your door at no cost.',
+    text: 'Three free with every order, sent the next working day.',
     href: '/samples/',
   },
   {

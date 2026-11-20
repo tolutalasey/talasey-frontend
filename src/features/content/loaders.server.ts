@@ -82,7 +82,11 @@ export async function getInspiration(): Promise<Inspiration[]> {
   cacheLife('days');
   return contentOr(
     'inspiration',
-    inspirationSchema.extend({ colours: list(z.string()), products: list(z.string()) }),
+    inspirationSchema.extend({
+      categories: list(z.string()),
+      colours: list(z.string()),
+      products: list(z.string()),
+    }),
     fallbackInspiration,
     bySlug,
   );

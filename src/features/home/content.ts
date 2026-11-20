@@ -80,12 +80,14 @@ const DEFAULTS = {
         { label: 'Paving', href: '/paving/' },
         { label: 'Decking', href: '/composite-decking/' },
         { label: 'Grass', href: '/artificial-grass/' },
+        { label: 'Help me choose', href: '/product-finder/' },
       ],
     },
     {
       title: 'Define space',
       links: [
         { label: 'Pergola', href: '/pergolas/' },
+        { label: 'Build your own pergola', href: '/pergolas/#build-your-own' },
         { label: 'Garden room', href: '/garden-rooms/' },
       ],
     },
@@ -93,6 +95,7 @@ const DEFAULTS = {
       title: 'Add privacy',
       links: [
         { label: 'Fencing', href: '/composite-fencing/' },
+        { label: 'Fence kit builder', href: '/fence-builder/composite-fencing/' },
         { label: 'Screens', href: '/garden-screens/' },
       ],
     },
@@ -101,14 +104,15 @@ const DEFAULTS = {
       links: [
         { label: 'Lighting', href: '/outdoor-lighting/' },
         { label: 'Accessories', href: '/planters/' },
+        { label: 'Order samples', href: '/samples/' },
       ],
     },
   ],
   newsHeading: 'Blogs and news',
   newsIntro: 'Everything you need to plan, design, and maintain your outdoor space.',
-  samplesHeading: 'Experience quality before you buy',
+  samplesHeading: 'Three free samples with every order',
   samplesText:
-    'Order samples, browse brochures, and explore our collections from the comfort of your home. Feel the texture of our porcelain and composite materials before making your decision.',
+    'Experience quality before you buy. Order samples, browse brochures, and explore our collections from the comfort of your home. Feel the texture of our porcelain and composite materials before making your decision.',
   samplesPoints: [
     'Fast UK delivery',
     'Multiple sample selection',
@@ -116,14 +120,14 @@ const DEFAULTS = {
     'Expert recommendations',
   ],
   samplesActions: [
-    { label: 'Order samples', href: '/samples/' },
+    { label: 'Order 3 free samples', href: '/samples/' },
     { label: 'Our brochures', href: 'https://talasey.co.uk/brochures/' },
   ],
   closingHeading: 'Let’s create something extraordinary',
   closingText:
     'Whether you’re planning a new patio, a luxury pergola, or a complete outdoor transformation, Talasey has the products, expertise, and installer network to bring your vision to life.',
   closingActions: [
-    { label: 'Order free samples', href: '/samples/' },
+    { label: 'Order 3 free samples', href: '/samples/' },
     { label: 'Contact us', href: '/contact/' },
   ],
 };

@@ -2,6 +2,7 @@ import { slugify } from '@/lib/slug';
 import type { Inspiration } from './schemas';
 
 export const INSPIRATION_FILTERS = [
+  { id: 'category', label: 'Category', valuesOf: (item: Inspiration) => item.categories },
   { id: 'product', label: 'Product', valuesOf: (item: Inspiration) => item.products },
   { id: 'colour', label: 'Colour', valuesOf: (item: Inspiration) => item.colours },
   {

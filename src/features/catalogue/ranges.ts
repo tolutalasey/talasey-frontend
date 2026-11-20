@@ -59,7 +59,7 @@ export const curatedPath = (range: Pick<Range, 'slug'>, page: Pick<CuratedPage, 
 const samplesFaq: RangeFaq = {
   question: 'Can I see a sample first?',
   answer:
-    'Yes. Choose up to five free samples on our Free samples page and we will post them to you.',
+    'Yes. Order samples on our Samples page. The first three are free and we post them the next working day.',
 };
 
 // Used until range pages are published in /content. The keyword ranges follow the PRD section 13 map; the category

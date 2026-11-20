@@ -5,6 +5,7 @@ import type { Inspiration } from './schemas';
 const item = (slug: string, extra: Partial<Inspiration>): Inspiration => ({
   slug,
   title: slug,
+  categories: [],
   colours: [],
   products: [],
   photo: { src: `/${slug}.jpg`, alt: slug, width: 800, height: 600 },

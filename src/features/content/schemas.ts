@@ -65,6 +65,7 @@ export const inspirationSchema = z.object({
   town: z.string().nullish(),
   style: z.string().nullish(),
   space: z.string().nullish(),
+  categories: z.array(z.string()).default([]),
   colours: z.array(z.string()).default([]),
   products: z.array(z.string()).default([]),
   photo: z.object({

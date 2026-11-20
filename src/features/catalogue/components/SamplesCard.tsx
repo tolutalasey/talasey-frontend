@@ -8,7 +8,7 @@ export function SamplesCard() {
     <NextLink href="/samples/" className={styles.samples}>
       <span className={styles.samplesText}>
         <span className={styles.samplesEyebrow}>Not sure yet?</span>
-        <span className={styles.samplesHeading}>Up to five samples, free to your door</span>
+        <span className={styles.samplesHeading}>Three free samples with every order</span>
         <span className={`button-on-dark ${styles.samplesAction}`}>Choose samples</span>
       </span>
       <span className={styles.samplesPhoto}>

@@ -113,7 +113,8 @@ export function AccountPage({ account }: { account: Account }) {
           <h2 id="samples">Your samples</h2>
           {account.samples.length === 0 ? (
             <p className={`frame ${styles.empty}`}>
-              No samples yet. <NextLink href="/samples/">Choose up to five, free</NextLink>.
+              No samples yet. <NextLink href="/samples/">Choose your samples</NextLink>, the first
+              three are free.
             </p>
           ) : (
             <ul className={styles.list}>

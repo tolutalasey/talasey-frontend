@@ -17,6 +17,8 @@ interface SearchPageProps {
   suggestedRanges: Range[];
   // Shown above the results, such as the builders that match the search.
   shortcuts?: ReactNode;
+  // Ranges, documents, articles and pages that match, under the products.
+  content?: ReactNode;
 }
 
 const PATH = '/search/';
@@ -45,7 +47,14 @@ function NoResults({ query, ranges }: { query: string; ranges: Range[] }) {
   );
 }
 
-export function SearchPage({ query, result, params, suggestedRanges, shortcuts }: SearchPageProps) {
+export function SearchPage({
+  query,
+  result,
+  params,
+  suggestedRanges,
+  shortcuts,
+  content,
+}: SearchPageProps) {
   const hrefWith = (change: Partial<ListingParams>) => {
     const href = listingHref(PATH, { ...params, ...change });
     return `${href}${href.includes('?') ? '&' : '?'}q=${encodeURIComponent(query)}`;
@@ -123,6 +132,7 @@ export function SearchPage({ query, result, params, suggestedRanges, shortcuts }
           </section>
         </div>
       )}
+      {content}
     </article>
   );
 }
