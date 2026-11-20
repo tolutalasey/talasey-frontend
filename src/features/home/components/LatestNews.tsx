@@ -24,7 +24,7 @@ export function LatestNews({ heading, intro, items }: Props) {
           <h2 id="news-title">{heading}</h2>
           {intro && <p className={styles.intro}>{intro}</p>}
         </div>
-        <NextLink href="/guides/" className="chip">
+        <NextLink href="/news/" className="chip">
           See all articles
         </NextLink>
       </div>

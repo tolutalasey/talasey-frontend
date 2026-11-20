@@ -1,8 +1,8 @@
 import 'server-only';
 import { cacheLife, cacheTag } from 'next/cache';
 import { cacheTags } from '@/lib/cache-tags';
-import { getGuides, guidePath } from '@/features/content';
 import { publishedContent } from '@/lib/content';
+import { getNewsPosts, newsPostPath } from '@/features/news';
 import type { NewsItem } from './components/LatestNews';
 import { fallbackHomeContent, homeContentSchema, type HomeContent } from './content';
 
@@ -17,11 +17,11 @@ export async function getHomeContent(): Promise<HomeContent> {
 }
 
 export async function getLatestNews(): Promise<NewsItem[]> {
-  const guides = await getGuides();
-  return guides.slice(0, 3).map((guide) => ({
-    title: guide.title,
-    topic: guide.topic,
-    summary: guide.answer,
-    href: guidePath(guide),
+  const posts = await getNewsPosts();
+  return posts.slice(0, 3).map((post) => ({
+    title: post.title,
+    topic: post.categories[0] ?? 'News',
+    summary: post.excerpt,
+    href: newsPostPath(post),
   }));
 }

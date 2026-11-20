@@ -3,15 +3,17 @@ import { getRanges, rangePath } from '@/features/catalogue';
 import { getAllFaqs, getGuides, guidePath, helpPath } from '@/features/content';
 import { slugify } from '@/lib/slug';
 import { getHubDocuments, getVideos, videoPath } from '@/features/knowledge-hub';
+import { getNewsPosts, newsPostPath } from '@/features/news';
 import { getPlainPages, plainPagePath } from '@/features/pages';
 import { searchContent, type ContentEntry } from './content-search';
 
 async function contentEntries(): Promise<ContentEntry[]> {
-  const [ranges, documents, videos, guides, pages, faqs] = await Promise.all([
+  const [ranges, documents, videos, guides, posts, pages, faqs] = await Promise.all([
     getRanges(),
     getHubDocuments(),
     getVideos(),
     getGuides(),
+    getNewsPosts(),
     getPlainPages(),
     getAllFaqs(),
   ]);
@@ -53,6 +55,13 @@ async function contentEntries(): Promise<ContentEntry[]> {
         href: guidePath(guide),
         label: guide.topic,
       })),
+    ...posts.map((post) => ({
+      kind: 'news' as const,
+      title: post.title,
+      text: `${post.excerpt} ${post.categories.join(' ')}`,
+      href: newsPostPath(post),
+      label: post.categories[0],
+    })),
     ...pages
       .filter((page) => !page.placeholder)
       .map((page) => ({

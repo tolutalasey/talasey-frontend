@@ -60,6 +60,11 @@ const META: Record<string, TypeMeta> = {
     text: 'The answers in the product finder and what each one favours.',
   },
   guide: { group: 'Help and ideas', icon: <CompassIcon />, text: 'Guides and buying advice.' },
+  'news-post': {
+    group: 'Help and ideas',
+    icon: <DocumentIcon />,
+    text: 'News and blog articles, with their categories.',
+  },
   faq: {
     group: 'Help and ideas',
     icon: <QuestionIcon />,

@@ -1,6 +1,7 @@
 // The simple formatting editors use in a page's text: a blank line between paragraphs, "## " for
-// a heading, "- " for a bullet, [text](address) for a link and **text** for bold. Nothing else is
-// treated as markup, so the text can never inject HTML.
+// a heading, "- " for a bullet, [text](address) for a link, **text** for bold and
+// ![description](https://…) on a line of its own for a picture. Nothing else is treated as
+// markup, so the text can never inject HTML.
 
 export type Inline =
   | { kind: 'text'; text: string }
@@ -9,6 +10,7 @@ export type Inline =
 
 export type Block =
   | { kind: 'heading'; text: string }
+  | { kind: 'image'; alt: string; src: string }
   | { kind: 'paragraph'; parts: Inline[] }
   | { kind: 'list'; items: Inline[][] };
 
@@ -32,6 +34,7 @@ export function inline(text: string): Inline[] {
 }
 
 const BULLET = /^[-*•]\s+/;
+const IMAGE = /^!\[([^\]]*)\]\((https:\/\/[^)\s]+)\)$/;
 
 export function blocks(body: string): Block[] {
   return body
@@ -41,6 +44,8 @@ export function blocks(body: string): Block[] {
     .filter(Boolean)
     .flatMap((chunk): Block[] => {
       if (chunk.startsWith('#')) return [{ kind: 'heading', text: chunk.replace(/^#+\s*/, '') }];
+      const picture = IMAGE.exec(chunk);
+      if (picture) return [{ kind: 'image', alt: picture[1] ?? '', src: picture[2] ?? '' }];
       const lines = chunk.split('\n').map((line) => line.trim());
       if (lines.every((line) => BULLET.test(line))) {
         return [{ kind: 'list', items: lines.map((line) => inline(line.replace(BULLET, ''))) }];

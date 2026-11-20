@@ -22,12 +22,15 @@ interface Props {
   heading?: 'h2' | 'h3' | 'h4';
 }
 
-// Text written with the simple formatting in /content: paragraphs, ## headings, - bullets, links
-// and bold.
+// Text written with the simple formatting in /content: paragraphs, ## headings, - bullets, links,
+// bold and pictures.
 export function RichText({ text, heading: Heading = 'h2' }: Props) {
   return blocks(text).map((block, index) =>
     block.kind === 'heading' ? (
       <Heading key={index}>{block.text}</Heading>
+    ) : block.kind === 'image' ? (
+      // eslint-disable-next-line @next/next/no-img-element -- pictures in text have no known size
+      <img key={index} src={block.src} alt={block.alt} loading="lazy" />
     ) : block.kind === 'list' ? (
       <ul key={index}>
         {block.items.map((item, itemIndex) => (

@@ -1,6 +1,6 @@
 import { alternativesFor, allowedTypos, editDistance, words } from '@/features/search';
 
-export type ContentKind = 'range' | 'document' | 'video' | 'faq' | 'guide' | 'page';
+export type ContentKind = 'range' | 'document' | 'video' | 'faq' | 'guide' | 'news' | 'page';
 
 export interface ContentEntry {
   kind: ContentKind;
@@ -16,6 +16,7 @@ export const CONTENT_GROUPS: { kind: ContentKind; heading: string }[] = [
   { kind: 'video', heading: 'Videos' },
   { kind: 'faq', heading: 'Questions and answers' },
   { kind: 'guide', heading: 'Articles and guides' },
+  { kind: 'news', heading: 'News & blogs' },
   { kind: 'page', heading: 'Pages' },
 ];
 

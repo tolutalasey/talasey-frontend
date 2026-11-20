@@ -19,6 +19,7 @@ import {
 } from '@/features/content';
 import { fenceBuilderPath, getFenceBuilders } from '@/features/fencing';
 import { getVideos, videoPath } from '@/features/knowledge-hub';
+import { getNewsPosts, newsPostPath } from '@/features/news';
 import { getPlainPages, plainPagePath } from '@/features/pages';
 import { getSearchRecords, searchProducts } from '@/features/search';
 import { latest, type SitemapEntry } from '@/lib/sitemap-xml';
@@ -71,8 +72,10 @@ async function rangeEntries(): Promise<SitemapEntry[]> {
 }
 
 async function guideEntries(): Promise<SitemapEntry[]> {
-  const [guides, videos] = await Promise.all([getGuides(), getVideos()]);
+  const [guides, videos, posts] = await Promise.all([getGuides(), getVideos(), getNewsPosts()]);
   return [
+    entry('/news/', posts[0]?.publishedOn),
+    ...posts.map((post) => entry(newsPostPath(post), post.publishedOn)),
     ...guides
       .filter((guide) => !guide.placeholder)
       .map((guide) => entry(guidePath(guide), guide.reviewedOn ?? guide.publishedOn)),

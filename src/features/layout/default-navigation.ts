@@ -127,7 +127,7 @@ export const defaultNavigation: Navigation = {
       sections: [
         { label: 'About Talasey', href: '/about-talasey/', links: [] },
         { label: 'Careers', href: '/careers-at-talasey/', links: [] },
-        { label: 'News & blogs', href: '/guides/', links: [] },
+        { label: 'News & blogs', href: '/news/', links: [] },
         { label: 'Contact us', href: '/contact/', links: [] },
       ],
     },
@@ -135,7 +135,7 @@ export const defaultNavigation: Navigation = {
   header: [
     at('Free samples', '/samples/'),
     at('Our brochures', '/brochures/'),
-    at('News', '/guides/'),
+    at('News', '/news/'),
     at('About us', '/about-talasey/'),
     at('Contact us', '/contact/'),
   ],
