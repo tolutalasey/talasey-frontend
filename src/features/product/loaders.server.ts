@@ -5,6 +5,9 @@ import { cacheTags } from '@/lib/cache-tags';
 import { getCatalog, orEmpty } from '@/lib/commerce';
 import { publishedContent } from '@/lib/content';
 import { extrasFor, type ProductContent } from './content';
+import { pageColours } from '@/lib/product-colours';
+import { oldWordingFor, type OldProductPage } from './old-wording';
+import oldPages from './old-product-wording.json';
 
 export async function getProduct(handle: string): Promise<Product | null> {
   'use cache';
@@ -34,7 +37,7 @@ export async function getColours(
 }
 
 // Photos come from the product in /admin; "complete the job", documents, features and warranty
-// from its "Product extras" in /content.
+// from its "Product extras" in /content, or else the words copied from the current site.
 export async function getProductContent(handle: string): Promise<ProductContent> {
   'use cache';
   cacheTag(
@@ -53,7 +56,14 @@ export async function getProductContent(handle: string): Promise<ProductContent>
     height: image.height ?? 900,
     shows: image.shows ?? null,
   }));
-  const extras = extrasFor(handle, await publishedContent('product-extras'));
+  const oldWording = product
+    ? oldWordingFor(handle, pageColours(product.options), oldPages as OldProductPage[])
+    : null;
+  const extras = extrasFor(
+    handle,
+    await publishedContent('product-extras'),
+    oldWording ? [oldWording] : [],
+  );
   return { ...extras, photos };
 }
 

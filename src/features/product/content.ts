@@ -17,6 +17,8 @@ export const productContentSchema = z.object({
   photos: z.array(photo).default([]),
   completeTheJob: z.array(z.object({ handle: z.string(), reason: z.string() })).default([]),
   documents: z.array(z.object({ title: z.string(), url: z.string() })).default([]),
+  // Replaces the product's own description under its name.
+  description: z.string().nullish(),
   features: z.array(z.string()).default([]),
   // The words on each colour's own page, for a product sold in several colours.
   colours: z
@@ -56,11 +58,29 @@ export const productExtrasSchema = productContentSchema
 
 export type ProductExtras = z.infer<typeof productExtrasSchema>;
 
-export function extrasFor(handle: string, published: unknown[]): Omit<ProductContent, 'photos'> {
-  const extras = published
+const filled = (value: unknown) =>
+  Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined && value !== '';
+
+function entryFor(handle: string, entries: unknown[]): ProductExtras | undefined {
+  return entries
     .map((entry) => productExtrasSchema.safeParse(entry))
     .find((parsed) => parsed.success && parsed.data.product === handle)?.data;
-  if (!extras) return emptyProductContent;
-  const { product: _product, ...content } = extras;
-  return content;
+}
+
+// What is published in /content wins, field by field, over the built-in words copied from the
+// current site.
+export function extrasFor(
+  handle: string,
+  published: unknown[],
+  builtIn: unknown[] = [],
+): Omit<ProductContent, 'photos'> {
+  const own = entryFor(handle, published);
+  const base = entryFor(handle, builtIn);
+  if (!own && !base) return emptyProductContent;
+  const merged: Record<string, unknown> = { ...emptyProductContent, ...base };
+  for (const [key, value] of Object.entries(own ?? {})) {
+    if (filled(value)) merged[key] = value;
+  }
+  const { product: _product, ...content } = merged;
+  return content as Omit<ProductContent, 'photos'>;
 }

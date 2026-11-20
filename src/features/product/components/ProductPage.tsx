@@ -98,7 +98,7 @@ export function ProductPage({
               <h1>{product.title}</h1>
               {product.subtitle && <p className={styles.subtitle}>{product.subtitle}</p>}
               <ProductIntro
-                description={colourWords?.description || product.description}
+                description={colourWords?.description || content.description || product.description}
                 sizes={sizes}
                 tags={tags}
               />

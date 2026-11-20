@@ -33,7 +33,7 @@ export function ColourChoicesPage({ view, offers, resources }: Props) {
           <h1>{product.title}</h1>
           {product.subtitle && <p className={styles.subtitle}>{product.subtitle}</p>}
           <ProductIntro
-            description={product.description}
+            description={view.content.description || product.description}
             sizes={sizes}
             tags={[`${record.colours.length} colours`]}
           />
