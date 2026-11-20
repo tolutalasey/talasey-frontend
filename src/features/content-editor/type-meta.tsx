@@ -44,6 +44,11 @@ const META: Record<string, TypeMeta> = {
     icon: <LayersIcon />,
     text: 'Sizes, SKUs and side options for each pergola builder.',
   },
+  'fence-builder': {
+    group: 'Pages',
+    icon: <LayersIcon />,
+    text: 'Styles, heights, posts and extras for each fence kit builder.',
+  },
   guide: { group: 'Help and ideas', icon: <CompassIcon />, text: 'Guides and buying advice.' },
   faq: {
     group: 'Help and ideas',

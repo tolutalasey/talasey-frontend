@@ -17,6 +17,7 @@ import {
   helpPath,
   projectPath,
 } from '@/features/content';
+import { fenceBuilderPath, getFenceBuilders } from '@/features/fencing';
 import { getSearchRecords, searchProducts } from '@/features/search';
 import { latest, type SitemapEntry } from '@/lib/sitemap-xml';
 import { absoluteUrl } from '@/lib/site';
@@ -79,7 +80,11 @@ async function inspirationEntries(): Promise<SitemapEntry[]> {
 
 // Pages with no reliable date leave lastmod out rather than claim one.
 async function pageEntries(): Promise<SitemapEntry[]> {
-  const [brands, projects] = await Promise.all([getBrandPages(), getProjectPages()]);
+  const [brands, projects, fenceBuilders] = await Promise.all([
+    getBrandPages(),
+    getProjectPages(),
+    getFenceBuilders(),
+  ]);
   return [
     entry('/'),
     entry('/brands/'),
@@ -91,6 +96,7 @@ async function pageEntries(): Promise<SitemapEntry[]> {
     ...HELP_TOPICS.map((topic) => entry(helpPath(topic))),
     entry('/samples/'),
     entry('/contact/'),
+    ...fenceBuilders.map((builder) => entry(fenceBuilderPath(builder))),
   ];
 }
 

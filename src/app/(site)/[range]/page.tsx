@@ -9,6 +9,7 @@ import {
   RangePage,
   rangePhoto,
 } from '@/features/catalogue';
+import { FENCING_RANGE, FenceBuilderLinks, getFenceBuilders } from '@/features/fencing';
 import { BuilderLinks, getPergolaBuilders, PERGOLA_RANGE } from '@/features/pergola';
 import { parseListingParams } from '@/features/search';
 import { pageMetadata } from '@/lib/seo';
@@ -37,17 +38,26 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   });
 }
 
+// The kit builders a range is bought through, shown above its products.
+async function builderLinksFor(slug: string) {
+  if (slug === PERGOLA_RANGE) {
+    const builders = await getPergolaBuilders();
+    return builders.length > 0 && <BuilderLinks builders={builders} />;
+  }
+  if (slug === FENCING_RANGE) return <FenceBuilderLinks builders={await getFenceBuilders()} />;
+  return null;
+}
+
 export default async function Range(props: Props) {
   const { range, query, listing } = await load(props);
   const target = listingRedirect(range, query);
   if (target) permanentRedirect(target);
-  const builders = range.slug === PERGOLA_RANGE ? await getPergolaBuilders() : [];
   return (
     <RangePage
       range={range}
       listing={listing}
       params={parseListingParams(query)}
-      lead={builders.length > 0 && <BuilderLinks builders={builders} />}
+      lead={await builderLinksFor(range.slug)}
     />
   );
 }

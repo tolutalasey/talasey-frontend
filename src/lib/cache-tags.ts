@@ -11,6 +11,7 @@ export const cacheTags = {
   redirects: 'content:redirect',
   productExtras: 'content:product-extras',
   pergolaBuilders: 'content:pergola-builder',
+  fenceBuilders: 'content:fence-builder',
   samples: 'samples',
   products: 'products',
   product: (handle: string) => `product:${handle}`,
