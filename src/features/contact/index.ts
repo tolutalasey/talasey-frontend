@@ -4,3 +4,5 @@ export { SURVEY_QUESTIONS } from './site-survey';
 export { SiteSurvey } from './components/SiteSurvey';
 export { LocalHelpPage } from './components/LocalHelpPage';
 export { LOCAL_HELP, type LocalHelpKind } from './local-help';
+export { DetailsForm } from './components/DetailsForm';
+export type { DetailsFormId } from './details-forms';

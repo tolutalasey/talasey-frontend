@@ -7,6 +7,7 @@ import { settle } from '@/lib/form-feedback.server';
 import { ApiError } from '@/api-client';
 import { getEnquiriesClient } from '@/lib/commerce';
 import { ENQUIRY_FIELDS, ENQUIRY_TOPICS, parseEnquiry } from './enquiry';
+import { CORE_FIELDS, DETAILS_FORMS, detailsFields, type DetailsFormId } from './details-forms';
 import { LOCAL_HELP_FIELDS, localHelpSchema, type LocalHelpKind } from './local-help';
 import { photosProblem, SURVEY_FIELDS, SURVEY_QUESTIONS, surveySchema } from './site-survey';
 
@@ -126,10 +127,12 @@ export async function requestLocalHelp(
   if (form.get('consent') !== 'on') fieldErrors.consent = 'Tick to let us contact you about this';
   if (!parsed.success || Object.keys(fieldErrors).length > 0) return { fieldErrors, values };
 
-  const { visitDate, visitTime, message, ...contact } = parsed.data;
+  const { visitDate, visitTime, projectSize, products, message, ...contact } = parsed.data;
   const answers = Object.fromEntries([
     ...(visitDate ? [['Preferred day', visitDate]] : []),
     ...(visitTime ? [['Preferred time', visitTime]] : []),
+    ...(projectSize ? [['Project size (m²)', projectSize]] : []),
+    ...(products ? [['Products of interest', products]] : []),
   ]);
   const payload = new FormData();
   payload.set('kind', kind);
@@ -148,6 +151,65 @@ export async function requestLocalHelp(
         error instanceof ApiError && error.status === 422
           ? error.message
           : 'We could not send your request. Please try again, or call us.',
+      values,
+    };
+  }
+  return { sent: true };
+}
+
+export type DetailsState = FormState & { sent?: boolean };
+
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// The forms from the current site (partner application, warranty registration, messages). Each
+// becomes an enquiry; a product message names the product from the page, never typed.
+export async function sendDetailsForm(
+  id: DetailsFormId,
+  productHandle: string | null,
+  _state: DetailsState,
+  form: FormData,
+): Promise<DetailsState> {
+  const spec = DETAILS_FORMS[id];
+  const fields = detailsFields(spec);
+  const values = Object.fromEntries(fields.map((field) => [field.name, text(form, field.name)]));
+  const fieldErrors: Record<string, string> = {};
+  for (const field of fields) {
+    const value = values[field.name] ?? '';
+    if (field.required && !value)
+      fieldErrors[field.name] = `Enter your ${field.label.toLowerCase()}`;
+    else if (field.type === 'email' && value && !EMAIL.test(value)) {
+      fieldErrors[field.name] = 'Enter an email address like name@example.com';
+    }
+  }
+  if (spec.kind === 'contact' && (values.message ?? '').length < 10) {
+    fieldErrors.message ??= 'Tell us a little more, at least 10 characters';
+  }
+  if (form.get('consent') !== 'on') fieldErrors.consent = 'Tick to let us contact you about this';
+  if (Object.keys(fieldErrors).length > 0) return { fieldErrors, values };
+
+  const payload = new FormData();
+  payload.set('kind', spec.kind);
+  if (productHandle) payload.set('productHandle', productHandle);
+  if (id === 'product') payload.set('topic', 'Product question');
+  const answers: Record<string, string> = {};
+  for (const field of fields) {
+    const value = values[field.name];
+    if (!value) continue;
+    if ((CORE_FIELDS as readonly string[]).includes(field.name)) payload.set(field.name, value);
+    else answers[field.label.replace(/ \(optional\)$/, '')] = value;
+  }
+  payload.set('answers', JSON.stringify(answers));
+  payload.set('consent', 'true');
+  payload.set('website', text(form, 'trap'));
+
+  try {
+    await getEnquiriesClient().submit(payload);
+  } catch (error) {
+    return {
+      message:
+        error instanceof ApiError && error.status === 422
+          ? error.message
+          : 'We could not send this. Please try again, or call us.',
       values,
     };
   }

@@ -63,3 +63,17 @@
 .wide {
   width: 100%;
 }
+
+.group {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.group legend {
+  margin-bottom: var(--space-2);
+  font-size: 1.0625rem;
+}

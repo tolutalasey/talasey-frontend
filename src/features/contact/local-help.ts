@@ -45,6 +45,8 @@ export const localHelpSchema = z.object({
   }),
   visitDate: z.string().trim().optional(),
   visitTime: z.string().trim().optional(),
+  projectSize: z.string().trim().max(40).optional(),
+  products: z.string().trim().max(200).optional(),
   message: z.string().trim().max(3000, 'Keep it under 3,000 characters').optional(),
 });
 

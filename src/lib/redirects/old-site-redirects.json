@@ -320,23 +320,8 @@
     "permanent": true
   },
   {
-    "from": "/downloads/",
-    "to": "/knowledge-hub/",
-    "permanent": true
-  },
-  {
-    "from": "/bespoke-services/",
-    "to": "/custom-made/",
-    "permanent": true
-  },
-  {
     "from": "/designer-installer-network/",
-    "to": "/find-an-installer/",
-    "permanent": true
-  },
-  {
-    "from": "/bespoke-paving/",
-    "to": "/custom-made/",
+    "to": "/talasey-partner-programme/",
     "permanent": true
   },
   {

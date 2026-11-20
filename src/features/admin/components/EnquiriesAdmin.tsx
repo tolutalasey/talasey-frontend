@@ -19,6 +19,8 @@ const KIND: Record<Enquiry['kind'], string> = {
   stockist: 'Find a stockist',
   installer: 'Find an installer',
   showroom: 'Showroom visit',
+  partner: 'Partner Programme',
+  warranty: 'Warranty registration',
 };
 
 const STATUS_OPTIONS = Object.entries(ENQUIRY_STATUS).map(([value, { label }]) => ({

@@ -1,0 +1,128 @@
+.story {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.hero,
+.panel {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-8) var(--space-6);
+}
+
+.hero > *,
+.panel > * {
+  margin: 0;
+}
+
+.hero {
+  background: var(--color-brand950);
+  color: var(--color-stone-muted);
+}
+
+.hero h2 {
+  color: var(--color-stone);
+  font-weight: 350;
+}
+
+.hero :global(.eyebrow) {
+  color: var(--color-stone-muted);
+}
+
+.panel > p:not(:global(.eyebrow)) {
+  max-width: var(--layout-measure);
+  color: var(--color-ink-muted);
+}
+
+.claims {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.claims strong {
+  display: block;
+  color: var(--color-stone);
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.reasons,
+.finishes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: reason;
+}
+
+.reasons li,
+.finishes li {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--color-stone50, #f4efe9);
+}
+
+.reasons li::before {
+  counter-increment: reason;
+  content: counter(reason, decimal-leading-zero);
+  color: var(--color-brand600);
+  font-weight: var(--font-weight-bold);
+}
+
+.reasons h3,
+.finishes h3 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.reasons p,
+.finishes p {
+  margin: 0;
+  color: var(--color-ink-muted);
+}
+
+.swatch {
+  display: block;
+  height: 4rem;
+  border-radius: 4px;
+}
+
+.audience {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.audience li {
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--color-line);
+  font-size: var(--font-size-small);
+}
+
+.why {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+@media (min-width: 64rem) {
+  .hero,
+  .panel {
+    padding: var(--space-12);
+  }
+}

@@ -20,6 +20,9 @@ export const plainPageSchema = z.object({
     })
     .nullish(),
   body: text,
+  // Questions under the text, and a form from the current site such as the partner application.
+  faqs: z.array(z.object({ question: text, answer: text })).default([]),
+  form: z.enum(['partner', 'warranty', 'contact']).nullish(),
   actions: z.array(z.object({ label: text, href: text })).default([]),
   placeholder: z.boolean().default(false),
   seo: z.object({ title: text, description: text }),

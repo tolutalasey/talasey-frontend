@@ -446,3 +446,17 @@
 .colours h2 {
   margin: 0;
 }
+
+.message {
+  padding: var(--space-6);
+}
+
+@media (min-width: 64rem) {
+  .message {
+    padding: var(--space-8) var(--space-12);
+  }
+
+  .message > * {
+    max-width: 44rem;
+  }
+}

@@ -6,6 +6,7 @@ import {
   hasListingParams,
   listingCanonical,
   listingRedirect,
+  PioneerStory,
   RangePage,
   rangePhoto,
 } from '@/features/catalogue';
@@ -53,13 +54,16 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   });
 }
 
-// The kit builders a range is bought through, shown above its products.
+const PIONEER_RANGE = 'pioneer-decking';
+
+// Shown above a range's products: the kit builders it is bought through, or a range's own story.
 async function builderLinksFor(slug: string) {
   if (slug === PERGOLA_RANGE) {
     const pages = await getPergolaPages();
     return pages.length > 0 && <BuilderLinks pages={pages} />;
   }
   if (slug === FENCING_RANGE) return <FenceBuilderLinks builders={await getFenceBuilders()} />;
+  if (slug === PIONEER_RANGE) return <PioneerStory />;
   return null;
 }
 

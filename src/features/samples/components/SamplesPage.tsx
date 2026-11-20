@@ -7,6 +7,7 @@ import { formatPrice } from '@/lib/format';
 import { standInPhoto } from '@/lib/stand-in-photo';
 import { VisuallyHidden } from '@/ui/VisuallyHidden/VisuallyHidden';
 import { FREE_SAMPLES, MAX_SAMPLES } from '../samples';
+import { SampleServiceInfo } from './SampleServiceInfo';
 import styles from './Samples.module.css';
 
 interface Props {
@@ -142,6 +143,7 @@ export function SamplesPage({ offers, chosen, feedback }: Props) {
           )}
         </aside>
       </div>
+      <SampleServiceInfo />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import NextLink from 'next/link';
+import { DetailsForm } from '@/features/contact';
 import { PageBreadcrumbs } from '@/features/layout';
 import { RichText } from './RichText';
 import { plainPagePath, type PlainPage } from '../content';
@@ -45,6 +46,22 @@ export function PlainPageView({ page }: { page: PlainPage }) {
           </p>
         )}
       </div>
+      {page.faqs.length > 0 && (
+        <section className={`frame ${styles.body}`} aria-labelledby="page-questions">
+          <h2 id="page-questions">Questions</h2>
+          {page.faqs.map((faq) => (
+            <details key={faq.question} className={styles.question}>
+              <summary>{faq.question}</summary>
+              <RichText text={faq.answer} heading="h3" />
+            </details>
+          ))}
+        </section>
+      )}
+      {page.form && (
+        <section className={`frame ${styles.body}`}>
+          <DetailsForm id={page.form} />
+        </section>
+      )}
     </article>
   );
 }

@@ -106,6 +106,21 @@ export function LocalHelpForm({ kind, productHandle }: Props) {
           </div>
         </>
       )}
+      {kind === 'installer' && (
+        <>
+          <TextField
+            label="Approximate project size in m² (optional)"
+            name="projectSize"
+            inputMode="decimal"
+            defaultValue={values.projectSize}
+          />
+          <TextField
+            label="Product(s) you're looking at (optional)"
+            name="products"
+            defaultValue={values.products}
+          />
+        </>
+      )}
       <div className={styles.field}>
         <label htmlFor="local-message" className={styles.label}>
           {kind === 'installer' ? 'About your project (optional)' : 'Anything else? (optional)'}

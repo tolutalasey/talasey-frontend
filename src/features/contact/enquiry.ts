@@ -7,6 +7,7 @@ export const ENQUIRY_TOPICS = [
   { value: 'order', label: 'An order I have placed' },
   { value: 'quote', label: 'A quote for a project' },
   { value: 'photos', label: 'Photos of my finished garden' },
+  { value: 'trade', label: 'Becoming a stockist' },
 ] as const;
 
 export const MAX_PHOTOS = 5;

@@ -277,7 +277,7 @@ Everything a modern landscape professional needs to grow, delivered from one tru
 - **Marketing materials.** Photography, samples and co-branded assets.
 - **Exclusive events.** Launches, factory tours and industry evenings.
 - **Priority service.** Fast-tracked delivery and dedicated logistics.`,
-    actions: [{ label: 'Join the waitlist', href: '/contact/' }],
+    form: 'partner',
     seo: {
       title: 'Talasey Partner Programme for installers',
       description:
@@ -347,7 +347,43 @@ For maximum impact, we recommend no more than 8 people per session, with a minim
 
 For customers who would like to take advantage of our conference facilities for their own meetings and wish to include any Product Awareness Courses, this can be combined with a training slot.
 
-All courses will be held at our Head Office at St Vincent House in Scunthorpe. Contact us today to secure your place: [training@talasey.co.uk](mailto:training@talasey.co.uk)`,
+All courses will be held at our Head Office at St Vincent House in Scunthorpe. Contact us today to secure your place: [training@talasey.co.uk](mailto:training@talasey.co.uk)
+
+## Who it's for
+
+Whether you’re on the counter, on the road, or on site — the course is pitched at anyone who needs to talk about our ranges with real authority.
+
+- **Merchant & branch staff.** Answer technical questions at the counter without reaching for a brochure.
+- **Sales representatives.** Sharpen your pitch with feature, benefit and margin-driving talking points.
+- **Landscapers & designers.** Understand what makes each material spec-worthy for different projects.
+- **New starters.** Get up to speed on the full Talasey range in a single, structured day.`,
+    faqs: [
+      {
+        question: 'How many people can attend per session?',
+        answer:
+          'We recommend a minimum of 4 and a maximum of 8 delegates per session, so everyone gets proper time with the training team and the practical demonstrations.',
+      },
+      {
+        question: 'Can we book fewer than all four sessions?',
+        answer:
+          'Yes. If you only need certain product areas covered, tell us when you enquire and we’ll build a shorter, tailored day around them.',
+      },
+      {
+        question: 'Is this the same as the Product Installation Courses?',
+        answer:
+          'No — this course focuses on product knowledge, features and sales confidence. Our separate [Product Installation Courses](/product-installation-courses/) go deeper into hands-on laying and fitting technique.',
+      },
+      {
+        question: 'Is lunch included?',
+        answer:
+          'Lunch can be provided on request — just mention it when you get in touch to book your session.',
+      },
+      {
+        question: 'Can we use the day for our own meeting too?',
+        answer:
+          'Our conference facilities at St Vincent House are available if you’d like to combine a Product Awareness Course with your own team meeting on the same visit.',
+      },
+    ],
     actions: [{ label: 'Book your place', href: '/contact/' }],
     seo: {
       title: 'Product Awareness Courses | Talasey',
@@ -440,17 +476,29 @@ With all Pavetuf products, follow the guidance on the label and wear the appropr
 - Face protection
 - Protective gloves
 - Eye protection
-- Hearing protection
-
-## Questions on site safety
-
-**At what weight should I get help lifting a slab?** For anything over 25kg, we recommend more than one person completes the lift. Some of our larger plan sizes aren’t suitable for one-person installation at all, and vacuum lifting equipment is worth hiring or buying for these.
-
-**What protective equipment should I wear as standard?** Gloves, steel toe-cap safety boots with oil-resistant soles, ear defenders and protective clothing are recommended for general handling and installation work.
-
-**Do I need different protection when cutting products?** Yes — suitable eye and ear protection is essential when cutting, along with respiratory protection to avoid inhaling dust from high-speed cutting devices.
-
-**Where can I find the technical guide or safety data sheet for a product?** Both are available on the individual product pages, as well as in our Knowledge Hub.`,
+- Hearing protection`,
+    faqs: [
+      {
+        question: 'At what weight should I get help lifting a slab?',
+        answer:
+          'For anything over 25kg, we recommend more than one person completes the lift. Some of our larger plan sizes aren’t suitable for one-person installation at all, and vacuum lifting equipment is worth hiring or buying for these.',
+      },
+      {
+        question: 'What protective equipment should I wear as standard?',
+        answer:
+          'Gloves, steel toe-cap safety boots with oil-resistant soles, ear defenders and protective clothing are recommended for general handling and installation work.',
+      },
+      {
+        question: 'Do I need different protection when cutting products?',
+        answer:
+          'Yes — suitable eye and ear protection is essential when cutting, along with respiratory protection to avoid inhaling dust from high-speed cutting devices.',
+      },
+      {
+        question: 'Where can I find the technical guide or safety data sheet for a product?',
+        answer:
+          'Both are available on the individual product pages, as well as in our Knowledge Hub.',
+      },
+    ],
     actions: [],
     seo: {
       title: 'Health and safety when laying paving | Talasey',
@@ -532,12 +580,121 @@ The following product ranges come with a warranty to offer peace of mind with yo
 
 ## Warranty registration
 
-To activate your warranty, we recommend that you complete and submit the warranty activation form when you have completed your landscape installation.`,
-    actions: [{ label: 'Register your warranty', href: '/contact/' }],
+To activate your warranty, we recommend that you complete and submit the warranty activation form below when you have completed your landscape installation.`,
+    form: 'warranty',
     seo: {
       title: 'Product warranties and registration | Talasey',
       description:
         'Warranty periods for Talasey composite decking, cladding and fencing, and how to register your warranty once your installation is complete.',
+    },
+  },
+  {
+    slug: 'downloads',
+    title: 'Downloads & resources',
+    intro:
+      'Everything you need to plan, specify, install and maintain Talasey products. Brochures, installation guides, technical documentation, warranties and product resources, all in one place.',
+    body: `## Browse by purpose
+
+- **[Product brochures](/brochures/).** Explore our latest digital brochures and product collections.
+- **[Installation guides](/knowledge-hub/?type=Installation+%26+Technical+Guides).** Step-by-step installation guidance and best practices.
+- **[Technical documents](/knowledge-hub/).** Technical specifications, product information and supporting documentation.
+- **[Warranty information](/product-warranty-guarantee/).** Warranty guides, guarantees and product care information.
+- **[Videos & tutorials](/videos/).** Installation videos and helpful product demonstrations.
+- **[Training resources](/talasey-training-academy/).** Product awareness material and professional training documentation.`,
+    actions: [{ label: 'Open the Knowledge Hub', href: '/knowledge-hub/' }, contact],
+    seo: {
+      title: 'Downloads and resources | Talasey',
+      description:
+        'Talasey brochures, installation guides, technical documents, warranties, videos and training resources in one place.',
+    },
+  },
+  {
+    slug: 'bespoke-services',
+    title: 'Bespoke service',
+    intro:
+      'From initial ideas to the final detail, our bespoke service is designed around your unique needs. We combine expert craftsmanship, quality materials, and personalised support to create a solution that’s truly made for you.',
+    body: `## For when standard just won’t do
+
+Talasey’s bespoke service allows you to customise and tailor make your own Sculptures, Screens, Planters, Steel Edgings and Drainage Grates to suit the exact needs of your project. All manufactured in Britain.
+
+## Why choose bespoke?
+
+- Powder-coated in any colour of your choice
+- Saves time on site with fewer adjustments
+- Enhances visual and structural impact
+- Allows for client branding, logos or pattern customisation
+- Compatible across residential, commercial and public realm projects
+- Manufactured using high-quality, weather-resistant materials
+
+## Your finish, your way
+
+All bespoke products can be supplied in your chosen finish:
+
+- Corten steel for a natural, weathered patina
+- Powder-coated steel in a range of RAL colours
+- A wider range of matt colours, satin, gloss or other colour effects
+- Stainless steel also available for sculptures and edgings
+
+## RAL colour options
+
+Every Talasey planter, screen, sculpture or steel edge can be powder-coated in your choice of standard RAL colour, or specified in a custom shade to suit your scheme exactly using our bespoke service. All powder coatings are bonded to the steel for long-lasting protection and colour stability, with finishes available in matt as standard, and satin or gloss as a customised option.
+
+## Corten steel
+
+Corten steel isn’t just a material, it’s a process. Known for its evolving, rust-like appearance, Corten weathers naturally when exposed to the elements, forming a rich patina that protects the surface beneath.
+
+Unlike powder-coated finishes, Corten products are not supplied pre-weathered. The patina develops gradually after installation and can take between 6 to 24 months to stabilise, depending on location, exposure, and climate.
+
+The transition begins with a brighter orange surface, deepening into rich, earthy tones as the metal oxidises. This maturing layer becomes the steel’s natural defence, creating a sealed surface that resists further corrosion.
+
+No two pieces weather identically – that’s part of Corten’s enduring charm. Whether you’re specifying planters, sculptures, screens, or edging, the result is always a one-of-a-kind finish, crafted by nature over time.
+
+## Porcelain fabrication
+
+Personalise porcelain paving with our extensive fabrication services:
+
+- **Bespoke cutting.** Bringing intricate designs to life.
+- **Etching and engraving.** Adding personal class and meaning.
+- **Bullnosing.** In a range of styles for steps, wall copings and pool sides.
+- **Hole cutting.** To accommodate lighting.
+- **Preformed steps.** Perfect to match porcelain paved areas, with bullnosing option.
+- **Accessory pieces.** Steps, swimming pool and wall copings.
+
+## Still unsure about a colour, quantity or size?
+
+Talk to us before you order.`,
+    actions: [
+      { label: 'Talk to us', href: '/contact/' },
+      { label: 'Custom made', href: '/custom-made/' },
+    ],
+    seo: {
+      title: 'Bespoke service: made to your design | Talasey',
+      description:
+        'Bespoke sculptures, screens, planters, steel edging and drainage grates in your choice of RAL colour or Corten, plus porcelain fabrication.',
+    },
+  },
+  {
+    slug: 'bespoke-paving',
+    title: 'Bespoke paving',
+    intro:
+      'Create a truly unique outdoor space with bespoke paving solutions tailored to your style, space and requirements. From distinctive designs to carefully crafted finishes, bring your perfect outdoor vision to life.',
+    body: `## Transform with Talasey
+
+Going that extra mile is second nature to our team! At our purpose built distribution centre, we are able to provide a full menu of bespoke services to transform a standard product into a unique landscaping solution.
+
+“We have very fond memories of the site in Doncaster because that’s where our business – which started as Natural Paving Products (UK) Ltd and evolved into Talasey Group – became established as a leading UK supplier of quality, ethically sourced natural stone landscaping products.”
+
+If you would like further information about the Made To Order Service and/or have any bespoke special-order requirements, please contact us.
+
+## Create a space that’s uniquely yours
+
+Tell us about your project and we’ll talk you through what’s possible.`,
+    form: 'contact',
+    actions: [{ label: 'Bespoke service', href: '/bespoke-services/' }],
+    seo: {
+      title: 'Bespoke paving made to your design | Talasey',
+      description:
+        'Bespoke paving from Talasey: our distribution centre can transform a standard product into a unique landscaping solution for your space.',
     },
   },
 ];

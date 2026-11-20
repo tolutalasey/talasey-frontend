@@ -61,4 +61,6 @@ export const ENQUIRY_TITLE: Record<Enquiry['kind'], string> = {
   stockist: 'Stockist request',
   installer: 'Installer request',
   showroom: 'Showroom visit request',
+  partner: 'Partner Programme application',
+  warranty: 'Warranty registration',
 };

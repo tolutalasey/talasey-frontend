@@ -5,6 +5,7 @@ import { TrustStrip } from '@/ui/TrustStrip/TrustStrip';
 import { TruckIcon } from '@/ui/icons';
 import { PageBreadcrumbs } from '@/features/layout';
 import { trustPoints } from '@/lib/trust-points';
+import { DetailsForm } from '@/features/contact';
 import { ProductSamples } from '@/features/samples';
 import type { BreadcrumbItem } from '@/lib/seo';
 import type { SalesProfile } from '@/lib/sold-as';
@@ -143,6 +144,9 @@ export function ProductPage({
           colour={colour}
         />
         {related}
+        <section className={`frame ${styles.message}`}>
+          <DetailsForm id="product" productHandle={product.handle} />
+        </section>
       </article>
       <TrustStrip points={trustPoints} label="Why buy from Talasey" />
     </>

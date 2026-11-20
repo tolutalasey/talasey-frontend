@@ -56,3 +56,34 @@
     padding: var(--space-12);
   }
 }
+
+.ways {
+  display: grid;
+  gap: var(--space-4);
+  margin: var(--space-2) 0 0;
+}
+
+.ways dt {
+  color: var(--color-stone);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: var(--font-size-small);
+}
+
+.ways dd {
+  margin: var(--space-1) 0 0;
+}
+
+.ways a {
+  color: var(--color-stone);
+}
+
+.formTitle {
+  margin: 0 0 var(--space-2);
+}
+
+.formIntro {
+  margin: 0 0 var(--space-6);
+  color: var(--color-ink-muted);
+}
