@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { BuilderResults, buildersFor, getBuilders } from '@/features/builders';
 import { getRanges, SearchPage } from '@/features/catalogue';
 import { parseListingParams, searchProducts } from '@/features/search';
 
@@ -24,11 +25,12 @@ export default async function Search({ searchParams }: Props) {
   const params = await searchParams;
   const query = (Array.isArray(params.q) ? params.q[0] : params.q)?.trim().slice(0, 100) ?? '';
   const listing = parseListingParams(params);
-  const [result, ranges] = await Promise.all([
+  const [result, ranges, builders] = await Promise.all([
     query
       ? searchProducts({ query, filters: listing.filters, sort: listing.sort, page: listing.page })
       : null,
     getRanges(),
+    getBuilders(),
   ]);
   return (
     <SearchPage
@@ -36,6 +38,7 @@ export default async function Search({ searchParams }: Props) {
       result={result}
       params={listing}
       suggestedRanges={ranges.filter((range) => SUGGESTED.includes(range.slug))}
+      shortcuts={query && <BuilderResults builders={buildersFor(query, builders)} />}
     />
   );
 }

@@ -1,4 +1,5 @@
 import NextLink from 'next/link';
+import type { ReactNode } from 'react';
 import { type ListingParams, type SearchResult, withoutFilter } from '@/features/search';
 import { PageBreadcrumbs } from '@/features/layout';
 import { listingHref } from '@/lib/listing-href';
@@ -14,6 +15,8 @@ interface SearchPageProps {
   result: SearchResult | null;
   params: ListingParams;
   suggestedRanges: Range[];
+  // Shown above the results, such as the builders that match the search.
+  shortcuts?: ReactNode;
 }
 
 const PATH = '/search/';
@@ -42,7 +45,7 @@ function NoResults({ query, ranges }: { query: string; ranges: Range[] }) {
   );
 }
 
-export function SearchPage({ query, result, params, suggestedRanges }: SearchPageProps) {
+export function SearchPage({ query, result, params, suggestedRanges, shortcuts }: SearchPageProps) {
   const hrefWith = (change: Partial<ListingParams>) => {
     const href = listingHref(PATH, { ...params, ...change });
     return `${href}${href.includes('?') ? '&' : '?'}q=${encodeURIComponent(query)}`;
@@ -81,6 +84,7 @@ export function SearchPage({ query, result, params, suggestedRanges }: SearchPag
           </p>
         )}
       </header>
+      {shortcuts}
       {!query && <p className={styles.intro}>Type what you are looking for above.</p>}
       {query && result && result.total === 0 && (
         <NoResults query={query} ranges={suggestedRanges} />

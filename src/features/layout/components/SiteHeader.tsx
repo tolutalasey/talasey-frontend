@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import NextLink from 'next/link';
 import type { ReactNode } from 'react';
+import { getBuilders } from '@/features/builders';
 import { getRanges, rangePath, rangePhoto } from '@/features/catalogue';
 import { getProjectPages, projectPath, projectPhoto } from '@/features/content';
 import { SearchLauncher } from '@/features/search';
@@ -12,7 +13,11 @@ import styles from './SiteChrome.module.css';
 // `bag` is the header's bag link with its count, passed in by the app so the header stays
 // cached while the count, which reads the visitor's cookie, streams in.
 export async function SiteHeader({ bag }: { bag: ReactNode }) {
-  const [ranges, projects] = await Promise.all([getRanges(), getProjectPages()]);
+  const [ranges, projects, builders] = await Promise.all([
+    getRanges(),
+    getProjectPages(),
+    getBuilders(),
+  ]);
   return (
     <header className={styles.header}>
       <div className={styles.bar}>
@@ -90,9 +95,28 @@ export async function SiteHeader({ bag }: { bag: ReactNode }) {
             }}
           />
         </details>
-        <NextLink href="/pergolas/#build-your-own" className={styles.navLink}>
-          Pergola builder
-        </NextLink>
+        {builders.length > 0 && (
+          <details className={styles.menu} name="main-menu">
+            <summary>
+              Builders <ChevronIcon className={styles.chevron} width={12} height={12} />
+            </summary>
+            <MenuPanel
+              title="Build it yourself"
+              verb="Open the"
+              links={builders.map((builder) => ({
+                label: builder.name,
+                href: builder.path,
+                image: builder.image,
+              }))}
+              feature={{
+                image: '/images/brand/project-pergola.jpg',
+                heading: 'Not sure what you need?',
+                href: '/product-finder/',
+                action: 'Answer five quick questions',
+              }}
+            />
+          </details>
+        )}
         <NextLink href="/product-finder/" className={styles.navLink}>
           Help me choose
         </NextLink>
