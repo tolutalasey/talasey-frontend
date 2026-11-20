@@ -134,7 +134,7 @@ export const defaultNavigation: Navigation = {
   ],
   header: [
     at('Free samples', '/samples/'),
-    at('Our brochures', 'https://talasey.co.uk/brochures/'),
+    at('Our brochures', '/brochures/'),
     at('News', '/guides/'),
     at('About us', '/about-talasey/'),
     at('Contact us', '/contact/'),

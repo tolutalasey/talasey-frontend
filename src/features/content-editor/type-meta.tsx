@@ -75,6 +75,16 @@ const META: Record<string, TypeMeta> = {
     icon: <ImageIcon />,
     text: 'YouTube videos in the Knowledge Hub and on product pages.',
   },
+  brochure: {
+    group: 'Help and ideas',
+    icon: <DocumentIcon />,
+    text: 'The brochures on the brochures page, with their Flipsnack links.',
+  },
+  acknowledgement: {
+    group: 'Help and ideas',
+    icon: <ImageIcon />,
+    text: 'Installers thanked for the photos in our brochures.',
+  },
   inspiration: {
     group: 'Help and ideas',
     icon: <ImageIcon />,

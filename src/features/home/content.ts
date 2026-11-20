@@ -121,7 +121,7 @@ const DEFAULTS = {
   ],
   samplesActions: [
     { label: 'Order 3 free samples', href: '/samples/' },
-    { label: 'Our brochures', href: 'https://talasey.co.uk/brochures/' },
+    { label: 'Our brochures', href: '/brochures/' },
   ],
   closingHeading: 'Let’s create something extraordinary',
   closingText:

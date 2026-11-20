@@ -106,6 +106,8 @@ async function pageEntries(): Promise<SitemapEntry[]> {
     entry('/samples/'),
     entry('/product-finder/'),
     entry('/contact/'),
+    entry('/brochures/'),
+    entry('/brochure-acknowledgements/'),
     entry('/find-a-stockist/'),
     entry('/find-an-installer/'),
     entry('/book-a-showroom-visit/'),

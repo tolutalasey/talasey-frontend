@@ -5,9 +5,11 @@ interface PaginationProps {
   page: number;
   pageCount: number;
   hrefFor: (page: number) => string;
+  // Stay where the list is rather than jump to the top of the page.
+  keepScroll?: boolean;
 }
 
-export function Pagination({ page, pageCount, hrefFor }: PaginationProps) {
+export function Pagination({ page, pageCount, hrefFor, keepScroll = false }: PaginationProps) {
   if (pageCount <= 1) return null;
   const pages = Array.from({ length: pageCount }, (_, index) => index + 1);
   return (
@@ -15,7 +17,7 @@ export function Pagination({ page, pageCount, hrefFor }: PaginationProps) {
       <ul>
         {page > 1 && (
           <li>
-            <NextLink href={hrefFor(page - 1)} rel="prev">
+            <NextLink scroll={!keepScroll} href={hrefFor(page - 1)} rel="prev">
               Previous
             </NextLink>
           </li>
@@ -25,7 +27,7 @@ export function Pagination({ page, pageCount, hrefFor }: PaginationProps) {
             {number === page ? (
               <span aria-current="page">{number}</span>
             ) : (
-              <NextLink href={hrefFor(number)} aria-label={`Page ${number}`}>
+              <NextLink scroll={!keepScroll} href={hrefFor(number)} aria-label={`Page ${number}`}>
                 {number}
               </NextLink>
             )}
@@ -33,7 +35,7 @@ export function Pagination({ page, pageCount, hrefFor }: PaginationProps) {
         ))}
         {page < pageCount && (
           <li>
-            <NextLink href={hrefFor(page + 1)} rel="next">
+            <NextLink scroll={!keepScroll} href={hrefFor(page + 1)} rel="next">
               Next
             </NextLink>
           </li>

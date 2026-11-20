@@ -12,6 +12,8 @@ export const cacheTags = {
   pages: 'content:page',
   hubDocuments: 'content:hub-document',
   videos: 'content:video',
+  brochures: 'content:brochure',
+  acknowledgements: 'content:acknowledgement',
   redirects: 'content:redirect',
   productExtras: 'content:product-extras',
   pergolaBuilders: 'content:pergola-builder',

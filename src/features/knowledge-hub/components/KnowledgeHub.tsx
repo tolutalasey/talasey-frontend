@@ -118,6 +118,7 @@ export function KnowledgeHub({ documents, videos, filters }: Props) {
           page={result.page}
           pageCount={result.pages}
           hrefFor={(page) => hubHref(filters, { page })}
+          keepScroll
         />
       </section>
 
