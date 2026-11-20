@@ -107,7 +107,7 @@ export const defaultNavigation: Navigation = {
           links: [
             at('FAQs', '/help/'),
             at('Health & safety', '/health-safety/'),
-            at('Installation & technical guide', '/installation-technical-guide/'),
+            at('Installation & technical guide', '/guides/'),
             at('Product warranty / guarantee', '/product-warranty-guarantee/'),
           ],
         },
@@ -140,7 +140,7 @@ export const defaultNavigation: Navigation = {
       links: [
         at('FAQs', '/help/'),
         at('Health & safety', '/health-safety/'),
-        at('Installation & technical guides', '/installation-technical-guide/'),
+        at('Installation & technical guides', '/guides/'),
         at('Product awareness courses', '/product-awareness-courses/'),
         at('Product warranty / guarantee', '/product-warranty-guarantee/'),
       ],
@@ -169,7 +169,7 @@ export const defaultNavigation: Navigation = {
 // From the current site's footer; replaced by "Site settings" in /content once published.
 export const defaultSiteSettings: SiteSettings = {
   contactPhone: '0330 333 8030',
-  contactEmail: null,
+  contactEmail: 'sales@talasey.co.uk',
   openingHours: null,
   address: 'St. Vincent House\nNormanby Road\nScunthorpe\nNorth Lincolnshire\nDN15 8QT',
   socialProfiles: [

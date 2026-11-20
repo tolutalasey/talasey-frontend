@@ -6,6 +6,7 @@ const PATHS: Record<string, (key: string) => string> = {
   'project-page': (key) => `/projects/${key}/`,
   'range-page': (key) => `/${key}/`,
   'fence-builder': (key) => `/fence-builder/${key}/`,
+  page: (key) => `/${key}/`,
   'product-finder': () => '/product-finder/',
 };
 

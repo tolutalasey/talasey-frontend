@@ -1,0 +1,73 @@
+.page {
+  display: grid;
+  gap: var(--space-6);
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: var(--space-4) var(--layout-gutter-mobile) var(--space-16);
+}
+
+.header {
+  max-width: var(--layout-measure);
+}
+
+.header h1 {
+  margin: 0 0 var(--space-3);
+}
+
+.intro {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: 1.125rem;
+}
+
+.photo {
+  width: 100%;
+  height: auto;
+  max-height: 28rem;
+  border-radius: var(--radius-card);
+  object-fit: cover;
+}
+
+.body {
+  max-width: 52rem;
+  padding: var(--space-8) var(--space-6);
+}
+
+.body > :first-child {
+  margin-top: 0;
+}
+
+.body h2 {
+  margin: var(--space-8) 0 var(--space-3);
+  font-size: var(--font-size-h3);
+}
+
+.body p,
+.body ul {
+  margin: 0 0 var(--space-4);
+}
+
+.body ul {
+  padding-left: 1.25rem;
+}
+
+.body li + li {
+  margin-top: var(--space-2);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+@media (min-width: 64rem) {
+  .page {
+    padding-inline: var(--layout-gutter-desktop);
+  }
+
+  .body {
+    padding: var(--space-12) var(--space-12);
+  }
+}

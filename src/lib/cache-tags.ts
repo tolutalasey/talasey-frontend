@@ -9,6 +9,7 @@ export const cacheTags = {
   faqs: 'content:faq',
   navigation: 'content:navigation',
   siteSettings: 'content:site-settings',
+  pages: 'content:page',
   redirects: 'content:redirect',
   productExtras: 'content:product-extras',
   pergolaBuilders: 'content:pergola-builder',

@@ -11,25 +11,39 @@ import {
 } from '@/features/catalogue';
 import { FENCING_RANGE, FenceBuilderLinks, getFenceBuilders } from '@/features/fencing';
 import { BuilderLinks, getPergolaBuilders, PERGOLA_RANGE } from '@/features/pergola';
+import { getPlainPage, plainPagePath, PlainPageView } from '@/features/pages';
 import { parseListingParams } from '@/features/search';
 import { pageMetadata } from '@/lib/seo';
 
-// Filters and sort come from the query string, so the page renders per request and in full
-// before it is sent: filtering works without JavaScript.
+// A range or category page, or else a plain page from /content at the same address (About,
+// the policies and so on keep their current addresses). Filters and sort come from the query
+// string, so the page renders per request and in full before it is sent: filtering works
+// without JavaScript.
 export const instant = false;
 
 type Props = PageProps<'/[range]'>;
 
 async function load({ params, searchParams }: Props) {
   const range = await getRange((await params).range);
-  if (!range) notFound();
+  if (!range) return null;
   const query = await searchParams;
   const listing = await getRangeListing(range, parseListingParams(query));
   return { range, query, listing };
 }
 
+async function plainPage({ params }: Props) {
+  const page = await getPlainPage((await params).range);
+  if (!page) notFound();
+  return page;
+}
+
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { range, query, listing } = await load(props);
+  const loaded = await load(props);
+  if (!loaded) {
+    const page = await plainPage(props);
+    return pageMetadata({ ...page.seo, path: plainPagePath(page), noindex: page.placeholder });
+  }
+  const { range, query, listing } = loaded;
   return pageMetadata({
     ...range.seo,
     path: listingCanonical(range),
@@ -49,7 +63,9 @@ async function builderLinksFor(slug: string) {
 }
 
 export default async function Range(props: Props) {
-  const { range, query, listing } = await load(props);
+  const loaded = await load(props);
+  if (!loaded) return <PlainPageView page={await plainPage(props)} />;
+  const { range, query, listing } = loaded;
   const target = listingRedirect(range, query);
   if (target) permanentRedirect(target);
   return (

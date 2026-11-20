@@ -27,6 +27,7 @@ import {
   getFenceCatalogue,
 } from '@/features/fencing';
 import { homeContentSchema, HomePage, seasonalBlockFor } from '@/features/home';
+import { plainPageSchema, PlainPageView } from '@/features/pages';
 import { ProductFinderPage, toFinder } from '@/features/product-finder';
 import { parseListingParams } from '@/features/search';
 import { NotReady } from './NotReady';
@@ -96,6 +97,11 @@ export async function PreviewPage({ type, data }: Props) {
           path={fenceBuilderPath(parsed.data)}
         />
       );
+    }
+    case 'page': {
+      const parsed = plainPageSchema.safeParse(data);
+      if (!parsed.success) return <NotReady problems={problemsOf(parsed.error)} />;
+      return <PlainPageView page={parsed.data} />;
     }
     case 'product-finder': {
       const finder = toFinder(data);

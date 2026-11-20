@@ -572,7 +572,7 @@
   }
 }
 
-@media (min-width: 64rem) and (max-width: 80rem) {
+@media (min-width: 64rem) and (max-width: 88rem) {
   .menu > summary,
   .navLink {
     font-size: 0.6875rem;

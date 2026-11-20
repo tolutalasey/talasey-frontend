@@ -27,6 +27,11 @@ interface TypeMeta {
 
 const META: Record<string, TypeMeta> = {
   home: { group: 'Pages', icon: <HomeIcon />, text: 'The main heading, introduction and buttons.' },
+  page: {
+    group: 'Pages',
+    icon: <DocumentIcon />,
+    text: 'Plain pages such as About, Careers and the policies.',
+  },
   'brand-page': { group: 'Pages', icon: <SwatchIcon />, text: 'A page for each brand.' },
   'project-page': { group: 'Pages', icon: <LayersIcon />, text: 'Pages about garden projects.' },
   'range-page': {
