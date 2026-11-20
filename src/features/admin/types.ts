@@ -1,4 +1,5 @@
 import type { paths } from '@/api-client';
+import type { BadgeTone } from '@/features/staff';
 
 type Json<T> = T extends { content: { 'application/json': infer Body } } ? Body : never;
 
@@ -29,6 +30,12 @@ export const PAGE_TYPES = [
   { value: '4', label: '4: build your own' },
 ];
 
+export const OFFLINE_ACTIONS = [
+  { value: 'stockist', label: 'Find a stockist' },
+  { value: 'installer', label: 'Find an installer (enquiry)' },
+  { value: 'showroom', label: 'Book a showroom visit' },
+];
+
 export const STOCK_MODES = [
   { value: 'stocked', label: 'Stocked only: stops selling when stock runs out' },
   { value: 'stocked_then_made_to_order', label: 'Stocked, then made to order' },
@@ -39,3 +46,11 @@ export type SampleOfferAdmin = Json<
 >[number];
 export type SampleRequest = Json<paths['/admin/samples/requests']['get']['responses'][200]>[number];
 export type Promotion = Json<paths['/admin/promotions']['get']['responses'][200]>[number];
+export type Enquiry = Json<paths['/admin/enquiries']['get']['responses'][200]>[number];
+export type EnquiryStatus = Enquiry['status'];
+
+export const ENQUIRY_STATUS: Record<EnquiryStatus, { label: string; tone: BadgeTone }> = {
+  new: { label: 'New', tone: 'warn' },
+  'in-progress': { label: 'In progress', tone: 'info' },
+  done: { label: 'Done', tone: 'good' },
+};

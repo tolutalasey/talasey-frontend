@@ -1919,3 +1919,8 @@ th > .cellInput {
   border-radius: 12px;
   background: var(--color-white);
 }
+
+.message {
+  margin: 0;
+  white-space: pre-line;
+}

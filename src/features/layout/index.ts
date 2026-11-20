@@ -4,3 +4,4 @@ export { SiteHeader } from './components/SiteHeader';
 export { NotFoundPage } from './components/NotFoundPage';
 export { SiteChrome } from './components/SiteChrome';
 export { BagLink } from './components/BagLink';
+export { getSiteSettings } from './loaders.server';

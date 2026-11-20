@@ -32,6 +32,8 @@ export interface ProductPageProps {
   path: string;
   // The purchase area: the basket form, or what to do instead for made-to-measure products.
   children: ReactNode;
+  // Template 3: priced after a site survey, so no price, stock or delivery line.
+  enquiryOnly?: boolean;
   // Products shown under the details, such as others from the same range.
   related?: ReactNode;
 }
@@ -50,6 +52,7 @@ export function ProductPage({
   samples,
   path,
   children,
+  enquiryOnly = false,
   related,
 }: ProductPageProps) {
   const range = breadcrumbs.length > 2 ? breadcrumbs[1]?.name : null;
@@ -75,17 +78,26 @@ export function ProductPage({
                 <strong>Suits</strong> {content.suits.join(', ')}
               </p>
             )}
-            <PriceSummary pricing={pricing} stock={stock} unit={profile.unit.one} />
+            {enquiryOnly ? (
+              <p className={styles.subtitle}>
+                Designed and built to order. Every one is priced individually after a free site
+                survey.
+              </p>
+            ) : (
+              <PriceSummary pricing={pricing} stock={stock} unit={profile.unit.one} />
+            )}
             {options.length > 0 && <OptionPicker groups={options} path={path} />}
             {children}
             <ProductSamples offers={samples} />
-            <p className={styles.delivery}>
-              <TruckIcon width={22} height={22} />
-              <span>
-                <strong>Delivery on a day you choose.</strong> Book the day at checkout. We call
-                before we come.
-              </span>
-            </p>
+            {!enquiryOnly && product.sellOnline && (
+              <p className={styles.delivery}>
+                <TruckIcon width={22} height={22} />
+                <span>
+                  <strong>Delivery on a day you choose.</strong> Book the day at checkout. We call
+                  before we come.
+                </span>
+              </p>
+            )}
           </div>
         </div>
         <ProductFacts product={product} variant={variant} brand={brand} content={content} />

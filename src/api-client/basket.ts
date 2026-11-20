@@ -39,7 +39,8 @@ export interface BasketLine {
   unitPrice: Price;
   total: Price;
   buildId: string | null;
-  bespoke: boolean;
+  // How a made-to-measure line reads, like "1200 × 400 × 500 mm, Powder coated".
+  bespoke: string | null;
   stock: string;
 }
 
@@ -128,7 +129,7 @@ function toLine(line: BasketDto['lines'][number] | OrderDto['lines'][number]): B
     unitPrice: pounds(line.unitPricePence ?? 0),
     total: pounds(line.totalPence),
     buildId: line.buildId,
-    bespoke: Boolean(line.bespoke),
+    bespoke: line.bespoke ? (line.bespoke.summary ?? 'Made to measure') : null,
     stock: line.stock,
   };
 }

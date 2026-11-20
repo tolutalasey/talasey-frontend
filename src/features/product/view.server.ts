@@ -48,23 +48,42 @@ export interface ProductView {
   path: string;
 }
 
-function stockOf(variant: ProductVariant | null): StockStatusProps {
+const weeks = (days: number) => Math.max(1, Math.round(days / 7));
+
+// "Made to order, dispatched in 2–3 weeks" from the lead time set on the product, in days.
+export function leadTimeText(leadTime: Product['leadTime']): string | null {
+  if (!leadTime) return null;
+  const { minDays, maxDays } = leadTime;
+  if (maxDays < 14) return minDays === maxDays ? `${maxDays} days` : `${minDays}–${maxDays} days`;
+  const [low, high] = [weeks(minDays), weeks(maxDays)];
+  return low === high ? `about ${high} weeks` : `${low}–${high} weeks`;
+}
+
+function stockOf(variant: ProductVariant | null, leadTime: Product['leadTime']): StockStatusProps {
   if (!variant) return { level: 'out-of-stock', label: 'Not available online yet' };
   if (isInStock(variant)) return { level: 'in-stock', label: `${variant.stock.quantity} in stock` };
   if (!variant.stock.managed || variant.stock.backorder) {
-    return { level: 'made-to-order', label: 'Made to order' };
+    const wait = leadTimeText(leadTime);
+    return {
+      level: 'made-to-order',
+      label: wait ? `Made to order, dispatched in ${wait}` : 'Made to order',
+    };
   }
   return { level: 'out-of-stock', label: 'Out of stock' };
 }
 
-// A colour set opens on the colour asked for with ?colour=, otherwise its first colour.
+// A colour set opens on the colour asked for with ?colour=. When a colour must be chosen,
+// nothing is picked for the shopper, so nobody orders a colour by accident; otherwise it opens
+// on the first colour.
 function colourView(
   offer: ColourOffer | null,
   product: Product,
   asked: string | null,
 ): ColourView | null {
   if (!offer || offer.colours.length === 0) return null;
-  const wanted = offer.colours.find((colour) => slugify(colour.name) === asked) ?? offer.colours[0];
+  const wanted =
+    offer.colours.find((colour) => slugify(colour.name) === asked) ??
+    (offer.required ? null : offer.colours[0]);
   return {
     label: product.colourChoice?.label ?? 'Colour',
     required: offer.required,
@@ -114,7 +133,7 @@ export async function getProductView(handle: string, params: Params): Promise<Pr
       product.title,
     ),
     pricing: variant ? packPricing(variant) : null,
-    stock: stockOf(variant),
+    stock: stockOf(variant, product.leadTime),
     options: optionGroups(product, selection),
     colours,
     extras: companions.map(({ product: extra, variants, reason }) => ({

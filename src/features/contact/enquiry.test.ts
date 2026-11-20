@@ -1,9 +1,5 @@
-import { mkdtemp, readdir, readFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { MAX_PHOTO_BYTES, parseEnquiry } from './enquiry';
-import { LocalEnquiryStore } from './local-enquiry-store';
 
 function enquiryForm(extra: [string, string | File][] = []) {
   const form = new FormData();
@@ -64,34 +60,6 @@ describe('parseEnquiry', () => {
     });
     expect(parseEnquiry(enquiryForm([['photos', photo(10, 'application/pdf')]]))).toMatchObject({
       state: { fieldErrors: { photos: 'Send photos as JPEG, PNG, WebP or HEIC' } },
-    });
-  });
-});
-
-describe('LocalEnquiryStore', () => {
-  it('saves the enquiry and its photos under names it chooses itself', async () => {
-    const directory = await mkdtemp(join(tmpdir(), 'enquiries-'));
-    const store = new LocalEnquiryStore(directory, () => new Date('2026-11-13T09:00:00Z'));
-    const { id } = await store.save(
-      {
-        name: 'Amy',
-        email: 'amy@example.com',
-        phone: null,
-        topic: 'quote',
-        orderNumber: null,
-        message: 'Price a patio please',
-      },
-      [{ name: '../../etc/passwd', type: 'image/png', bytes: new Uint8Array([1, 2, 3]) }],
-    );
-
-    expect(id).toMatch(/^2026-11-13-[a-f0-9]{8}$/);
-    expect((await readdir(join(directory, id))).sort()).toEqual(['enquiry.json', 'photo-1.png']);
-    const saved = JSON.parse(await readFile(join(directory, id, 'enquiry.json'), 'utf8'));
-    expect(saved).toMatchObject({
-      id,
-      receivedAt: '2026-11-13T09:00:00.000Z',
-      topic: 'quote',
-      photos: [{ file: 'photo-1.png', originalName: '../../etc/passwd', bytes: 3 }],
     });
   });
 });

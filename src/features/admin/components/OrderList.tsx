@@ -1,4 +1,5 @@
 import NextLink from 'next/link';
+import { initials } from '../initials';
 import { Badge, ChevronRightIcon, money, staffStyles as styles } from '@/features/staff';
 import { PAYMENT_STATUS, dateText } from '../labels';
 import type { OrderSummary } from '../types';
@@ -9,14 +10,6 @@ const DAY = {
   held: { label: 'Day held', tone: 'warn' },
   'needs-rebooking': { label: 'Rebook day', tone: 'bad' },
 } as const;
-
-const initials = (name: string) =>
-  name
-    .split(' ')
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join('');
 
 function delivery(order: OrderSummary) {
   if (order.shipment !== 'pallet') return 'Parcel';

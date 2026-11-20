@@ -51,7 +51,7 @@ export function BasketItems({ lines, stock, pictures }: Props) {
     <ul className={styles.items} aria-label="Items in your bag">
       {lines.map((line) => {
         const picture = line.handle ? pictures[line.handle] : undefined;
-        const fixed = !!line.buildId || line.bespoke;
+        const fixed = !!line.buildId || !!line.bespoke;
         return (
           <li key={line.id} className={styles.item}>
             <div className={styles.picture}>
@@ -70,7 +70,7 @@ export function BasketItems({ lines, stock, pictures }: Props) {
                 )}
               </h2>
               <p className={styles.details}>
-                {[line.variantTitle, line.colour, line.bespoke && 'Made to measure']
+                {[line.bespoke ? null : line.variantTitle, line.colour, line.bespoke]
                   .filter(Boolean)
                   .join(' · ')}
               </p>

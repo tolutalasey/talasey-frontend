@@ -14,4 +14,5 @@ export { getBasketView, getCheckoutView, getOrder } from './loaders.server';
 export { completeBasket } from './basket.server';
 export { CurrentBag } from './components/CurrentBag';
 export { addBuildToBasket, buyAgain } from './actions';
+export { MadeToMeasure } from './components/MadeToMeasure';
 export { buyAgainFeedback } from './basket-again';

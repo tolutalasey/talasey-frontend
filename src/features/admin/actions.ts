@@ -249,3 +249,20 @@ export async function deletePromotion(form: FormData) {
   if (error) failed(PROMOTIONS, messageOf(error));
   done(PROMOTIONS, 'Promotion removed.');
 }
+
+export async function setEnquiryStatus(form: FormData) {
+  const page = `/admin/enquiries/${id(form)}/`;
+  const status = text(form, 'status');
+  if (status !== 'new' && status !== 'in-progress' && status !== 'done') {
+    failed(page, 'Choose a status.');
+  }
+  const { error } = await (
+    await staffApi()
+  ).PATCH('/admin/enquiries/{id}', {
+    params: { path: { id: id(form) } },
+    body: { status },
+  });
+  if (error) failed(page, messageOf(error));
+  revalidatePath('/admin/enquiries/');
+  done(page, 'Status saved.');
+}

@@ -2,10 +2,14 @@ import NextLink from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getProductRow, getRanges, rangePath, RelatedProducts } from '@/features/catalogue';
-import { AddToBasket } from '@/features/checkout';
+import { AddToBasket, MadeToMeasure } from '@/features/checkout';
+import { SiteSurvey } from '@/features/contact';
+import { getSiteSettings } from '@/features/layout';
 import {
   getProduct,
   getProductView,
+  leadTimeText,
+  OfflineAction,
   ProductPage,
   productDescription,
   StockAlertForm,
@@ -19,6 +23,7 @@ import { JsonLd } from '@/lib/JsonLd';
 import { builderPathFor } from '@/features/pergola';
 import { pageMetadata } from '@/lib/seo';
 
+const ENQUIRY_ONLY = '3';
 const BUILT_TO_ORDER = '4';
 
 // Options come from the query string and the basket form shows the server's errors without
@@ -60,7 +65,11 @@ async function relatedTo(product: { handle: string; categories: { handle: string
 export default async function Product({ params, searchParams }: Props) {
   const { handle } = await params;
   const query = await searchParams;
-  const [view, feedback] = await Promise.all([getProductView(handle, query), readFeedback()]);
+  const [view, feedback, settings] = await Promise.all([
+    getProductView(handle, query),
+    readFeedback(),
+    getSiteSettings(),
+  ]);
   if (!view) notFound();
   const { product, variant, colours, extras, pricing, stock } = view;
   const related = await relatedTo(product);
@@ -70,6 +79,7 @@ export default async function Product({ params, searchParams }: Props) {
     <>
       <ProductPage
         {...view}
+        enquiryOnly={product.pageType === ENQUIRY_ONLY}
         related={
           <RelatedProducts
             heading="More from this range"
@@ -78,7 +88,13 @@ export default async function Product({ params, searchParams }: Props) {
           />
         }
       >
-        {product.pageType === BUILT_TO_ORDER ? (
+        {product.pageType === ENQUIRY_ONLY ? (
+          <SiteSurvey
+            productHandle={product.handle}
+            productTitle={product.title}
+            sizes={product.options.find((option) => option.title === 'Size')?.values ?? []}
+          />
+        ) : product.pageType === BUILT_TO_ORDER ? (
           <p>
             This is bought as part of a build.{' '}
             <NextLink
@@ -88,6 +104,19 @@ export default async function Product({ params, searchParams }: Props) {
               Build your pergola
             </NextLink>
           </p>
+        ) : !product.sellOnline ? (
+          <OfflineAction action={product.offlineAction} phone={settings.contactPhone} />
+        ) : product.madeToMeasure && product.measurements && product.variants[0] ? (
+          <MadeToMeasure
+            handle={product.handle}
+            variantId={product.variants[0].id}
+            measurements={product.measurements}
+            leadTime={`Made to order${
+              leadTimeText(product.leadTime)
+                ? `, dispatched in ${leadTimeText(product.leadTime)}`
+                : ''
+            }`}
+          />
         ) : product.madeToMeasure ? (
           <p>Made to your measurements. Call us for a quote while online ordering is set up.</p>
         ) : (
@@ -115,7 +144,11 @@ export default async function Product({ params, searchParams }: Props) {
           <StockAlertForm key={variant.id} variantId={variant.id} feedback={feedback.alert} />
         )}
       </ProductPage>
-      {productStructuredData(product, variant, view.content.faqs).map((data) => (
+      {productStructuredData(
+        product,
+        product.pageType === ENQUIRY_ONLY ? null : variant,
+        view.content.faqs,
+      ).map((data) => (
         <JsonLd key={String(data['@type'])} data={data} />
       ))}
     </>

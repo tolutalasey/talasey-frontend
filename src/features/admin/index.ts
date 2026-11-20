@@ -1,6 +1,7 @@
 export * from './actions';
 export { formFromConfig } from './bespoke-form';
 export { BespokePricing } from './components/BespokePricing';
+export { EnquiryDetail, EnquiryList } from './components/EnquiriesAdmin';
 export { CatalogueTransfer } from './components/CatalogueTransfer';
 export { ChangeLog } from './components/ChangeLog';
 export { ColourSetEditor } from './components/ColourSetEditor';

@@ -3,6 +3,7 @@ import {
   DeliveryIcon,
   HistoryIcon,
   HomeIcon,
+  MailIcon,
   OrdersIcon,
   ProductsIcon,
   requireStaff,
@@ -23,6 +24,12 @@ const GROUPS: StaffNavGroup[] = [
     links: [
       { href: '/admin/orders/', label: 'Orders', icon: <OrdersIcon />, permission: 'orders' },
       { href: '/admin/samples/', label: 'Samples', icon: <SampleIcon />, permission: 'orders' },
+      {
+        href: '/admin/enquiries/',
+        label: 'Enquiries',
+        icon: <MailIcon />,
+        permission: 'enquiries',
+      },
       {
         href: '/admin/promotions/',
         label: 'Promotions',

@@ -3,6 +3,7 @@ import type { AdminProduct, ProductInput } from './types';
 
 type ProductPageType = ProductInput['pageType'];
 type StockMode = ProductInput['stockMode'];
+type OfflineAction = ProductInput['offlineAction'];
 
 export interface UploadedPhoto {
   url: string;
@@ -149,6 +150,8 @@ export function productFromForm(
       categoryId: text(form, 'categoryId'),
       pageType: (text(form, 'pageType') as ProductPageType | null) ?? null,
       stockMode: (text(form, 'stockMode') as StockMode | null) ?? current.stockMode,
+      sellOnline: form.get('sellOnline') === 'on',
+      offlineAction: (text(form, 'offlineAction') as OfflineAction | null) ?? current.offlineAction,
       leadTimeMinDays: minDays,
       leadTimeMaxDays: maxDays,
       colourSetId,

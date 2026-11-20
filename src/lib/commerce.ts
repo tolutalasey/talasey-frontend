@@ -5,11 +5,13 @@ import {
   createBasketClient,
   createCatalog,
   createContentClient,
+  createEnquiriesClient,
   createSamplesClient,
   type AccountClient,
   type BasketClient,
   type Catalog,
   type ContentClient,
+  type EnquiriesClient,
   type SamplesClient,
 } from '@/api-client';
 import { env } from './env';
@@ -41,6 +43,13 @@ export function getContentClient(): ContentClient {
 export function getAccountClient(): AccountClient {
   accountClient ??= createAccountClient({ baseUrl: apiUrl() });
   return accountClient;
+}
+
+let enquiriesClient: EnquiriesClient | undefined;
+
+export function getEnquiriesClient(): EnquiriesClient {
+  enquiriesClient ??= createEnquiriesClient({ baseUrl: apiUrl() });
+  return enquiriesClient;
 }
 
 export function getSamplesClient(): SamplesClient {

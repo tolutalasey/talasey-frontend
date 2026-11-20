@@ -120,6 +120,14 @@ export function ContactForm({ topic, initialState = {} }: ContactFormProps) {
         />
         <NativeError id="photos-error" message={errors.photos} />
       </div>
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className={styles.trap}
+      />
       <p role="alert" className={styles.error} hidden={!state.message}>
         {state.message}
       </p>

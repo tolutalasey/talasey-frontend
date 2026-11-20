@@ -19,6 +19,7 @@ import {
 import { deleteProduct, saveProduct } from '../actions';
 import { NEW_OPTION_ROWS, photoShowsChoices, photoShowsValue } from '../product-form';
 import {
+  OFFLINE_ACTIONS,
   PAGE_TYPES,
   STOCK_MODES,
   type AdminProduct,
@@ -233,7 +234,9 @@ export function ProductEditor({ product, categories, colourSets }: Props) {
 
         <section className={styles.panel} aria-labelledby="page">
           <h2 id="page">How it sells</h2>
-          <p>The kind of product page, and whether shoppers pick a colour.</p>
+          <p>
+            The kind of product page, whether it's sold online, and whether shoppers pick a colour.
+          </p>
           <div className={styles.fields}>
             <div className={styles.wide}>
               <SelectField
@@ -242,6 +245,23 @@ export function ProductEditor({ product, categories, colourSets }: Props) {
                 defaultValue={product.pageType ?? ''}
                 emptyLabel="Not set up yet"
                 options={PAGE_TYPES}
+              />
+            </div>
+            <div className={styles.wide}>
+              <Checkbox
+                name="sellOnline"
+                defaultSelected={product.sellOnline}
+                description="Off: the page shows the product but it can't go in the basket"
+              >
+                Sell online
+              </Checkbox>
+            </div>
+            <div className={styles.wide}>
+              <SelectField
+                label="When it isn't sold online, the page offers"
+                name="offlineAction"
+                defaultValue={product.offlineAction}
+                options={OFFLINE_ACTIONS}
               />
             </div>
             <div className={styles.wide}>

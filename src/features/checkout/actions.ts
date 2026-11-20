@@ -2,8 +2,8 @@
 
 import { refresh } from 'next/cache';
 import { redirect } from 'next/navigation';
-import type { BuildPart } from '@/api-client';
-import { getBasketClient } from '@/lib/commerce';
+import { ApiError, type BuildPart } from '@/api-client';
+import { getBasketClient, getCatalog } from '@/lib/commerce';
 import { rememberBasket } from './basket-cookie.server';
 import { completeBasket, currentBasketId, EXPIRED_MESSAGE } from './basket.server';
 import { settle } from '@/lib/form-feedback.server';
@@ -56,6 +56,56 @@ export async function addBuildToBasket(parts: BuildPart[]): Promise<FormState> {
     await rememberBasket(basketId);
   }
   const added = await client.addBuild(basketId, parts);
+  if (!added.ok) return { message: added.message };
+  refresh();
+  return { added: Date.now() };
+}
+
+export interface MadeToMeasureChoice {
+  dimensions: Record<string, number>;
+  choices: Record<string, string>;
+}
+
+export type QuoteResult = { ok: true; pricePence: number } | { ok: false; message: string };
+
+// The live price for a made-to-measure product, worked out on the server from the formula the
+// shopper never sees.
+export async function quoteMadeToMeasure(
+  handle: string,
+  choice: MadeToMeasureChoice,
+): Promise<QuoteResult> {
+  try {
+    const price = await getCatalog().quoteMadeToMeasure(handle, choice.dimensions, choice.choices);
+    return price
+      ? { ok: true, pricePence: Math.round(price.amount * 100) }
+      : { ok: false, message: 'We could not price that. Please call us.' };
+  } catch (error) {
+    return {
+      ok: false,
+      message:
+        error instanceof ApiError ? error.message : 'We could not price that. Please try again.',
+    };
+  }
+}
+
+// The basket prices the item again from the same sizes, so the price can't be changed in the
+// browser.
+export async function addMadeToMeasureToBasket(
+  variantId: string,
+  choice: MadeToMeasureChoice,
+): Promise<FormState> {
+  const client = getBasketClient();
+  let basketId = await currentBasketId();
+  if (!basketId) {
+    basketId = (await client.create()).id;
+    await rememberBasket(basketId);
+  }
+  const added = await client.addMadeToMeasure(
+    basketId,
+    variantId,
+    choice.dimensions,
+    choice.choices,
+  );
   if (!added.ok) return { message: added.message };
   refresh();
   return { added: Date.now() };

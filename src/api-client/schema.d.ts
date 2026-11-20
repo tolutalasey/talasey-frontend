@@ -1252,6 +1252,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/store/enquiries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["StoreEnquiriesController_submit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/enquiries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminEnquiriesController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/enquiries/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminEnquiriesController_find"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminEnquiriesController_setStatus"];
+        trace?: never;
+    };
+    "/admin/enquiries/{id}/photos/{number}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminEnquiriesController_photo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/store/account/sign-in-link": {
         parameters: {
             query?: never;
@@ -1460,7 +1524,7 @@ export interface operations {
                             role: "owner" | "editor" | "contributor" | "catalogue";
                             active: boolean;
                             twoFactor: boolean;
-                            permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users")[];
+                            permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users" | "enquiries")[];
                         };
                     } | {
                         /** @enum {string} */
@@ -1519,7 +1583,7 @@ export interface operations {
                             role: "owner" | "editor" | "contributor" | "catalogue";
                             active: boolean;
                             twoFactor: boolean;
-                            permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users")[];
+                            permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users" | "enquiries")[];
                         };
                     };
                 };
@@ -1563,7 +1627,7 @@ export interface operations {
                         role: "owner" | "editor" | "contributor" | "catalogue";
                         active: boolean;
                         twoFactor: boolean;
-                        permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users")[];
+                        permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users" | "enquiries")[];
                     };
                 };
             };
@@ -1687,7 +1751,7 @@ export interface operations {
                         role: "owner" | "editor" | "contributor" | "catalogue";
                         active: boolean;
                         twoFactor: boolean;
-                        permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users")[];
+                        permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users" | "enquiries")[];
                     };
                 };
             };
@@ -1750,7 +1814,7 @@ export interface operations {
                         role: "owner" | "editor" | "contributor" | "catalogue";
                         active: boolean;
                         twoFactor: boolean;
-                        permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users")[];
+                        permissions: ("catalogue" | "orders" | "delivery" | "content.edit" | "content.publish" | "uploads" | "audit" | "users" | "enquiries")[];
                     };
                 };
             };
@@ -2569,6 +2633,26 @@ export interface operations {
                         /** @enum {string|null} */
                         pageType: "2" | "3" | "4" | "1A" | "1B" | null;
                         madeToMeasure: boolean;
+                        sellOnline: boolean;
+                        /** @enum {string} */
+                        offlineAction: "stockist" | "installer" | "showroom";
+                        /** @description The sizes and choices a made-to-measure product asks for; the price formula stays private */
+                        measurements: {
+                            /** @enum {string} */
+                            unit: "mm" | "cm";
+                            dimensions: {
+                                key: string;
+                                label: string;
+                                min: number;
+                                max: number;
+                                step: number;
+                            }[];
+                            choices: {
+                                name: string;
+                                label: string;
+                                answers: string[];
+                            }[];
+                        } | null;
                         leadTime: {
                             minDays: number;
                             maxDays: number;
@@ -2654,6 +2738,26 @@ export interface operations {
                         /** @enum {string|null} */
                         pageType: "2" | "3" | "4" | "1A" | "1B" | null;
                         madeToMeasure: boolean;
+                        sellOnline: boolean;
+                        /** @enum {string} */
+                        offlineAction: "stockist" | "installer" | "showroom";
+                        /** @description The sizes and choices a made-to-measure product asks for; the price formula stays private */
+                        measurements: {
+                            /** @enum {string} */
+                            unit: "mm" | "cm";
+                            dimensions: {
+                                key: string;
+                                label: string;
+                                min: number;
+                                max: number;
+                                step: number;
+                            }[];
+                            choices: {
+                                name: string;
+                                label: string;
+                                answers: string[];
+                            }[];
+                        } | null;
                         leadTime: {
                             minDays: number;
                             maxDays: number;
@@ -2894,6 +2998,13 @@ export interface operations {
                         colourOptionValue: string | null;
                         colourRequired: boolean;
                         colourLabel: string | null;
+                        /** @default true */
+                        sellOnline: boolean;
+                        /**
+                         * @default stockist
+                         * @enum {string}
+                         */
+                        offlineAction: "stockist" | "installer" | "showroom";
                         bespoke: unknown;
                         variants: {
                             /** Format: uuid */
@@ -3015,6 +3126,13 @@ export interface operations {
                         colourOptionValue: string | null;
                         colourRequired: boolean;
                         colourLabel: string | null;
+                        /** @default true */
+                        sellOnline: boolean;
+                        /**
+                         * @default stockist
+                         * @enum {string}
+                         */
+                        offlineAction: "stockist" | "installer" | "showroom";
                         bespoke: unknown;
                         variants: {
                             /** Format: uuid */
@@ -3131,6 +3249,13 @@ export interface operations {
                     colourOptionValue: string | null;
                     colourRequired: boolean;
                     colourLabel: string | null;
+                    /** @default true */
+                    sellOnline?: boolean;
+                    /**
+                     * @default stockist
+                     * @enum {string}
+                     */
+                    offlineAction?: "stockist" | "installer" | "showroom";
                     bespoke: unknown;
                     variants: {
                         /**
@@ -3212,6 +3337,13 @@ export interface operations {
                         colourOptionValue: string | null;
                         colourRequired: boolean;
                         colourLabel: string | null;
+                        /** @default true */
+                        sellOnline: boolean;
+                        /**
+                         * @default stockist
+                         * @enum {string}
+                         */
+                        offlineAction: "stockist" | "installer" | "showroom";
                         bespoke: unknown;
                         variants: {
                             /** Format: uuid */
@@ -3895,6 +4027,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -3989,6 +4123,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -4100,6 +4236,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -4226,6 +4364,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -4338,6 +4478,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -4440,6 +4582,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -4556,6 +4700,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -4656,6 +4802,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -4764,6 +4912,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -4892,6 +5042,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -5039,6 +5191,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -5156,6 +5310,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -5323,6 +5479,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -5473,6 +5631,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -5592,6 +5752,8 @@ export interface operations {
                                 choices: {
                                     [key: string]: string;
                                 };
+                                /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                summary?: string;
                             } | null;
                             /** @description For example "3 now, 2 made to order" */
                             stock: string;
@@ -7445,6 +7607,264 @@ export interface operations {
             };
         };
     };
+    StoreEnquiriesController_submit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": Record<string, never>;
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                    };
+                };
+            };
+            /** @description A field is missing or a photo is the wrong kind */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminEnquiriesController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        /** @enum {string} */
+                        kind: "contact" | "site-survey";
+                        name: string;
+                        email: string;
+                        phone: string | null;
+                        postcode: string | null;
+                        productHandle: string | null;
+                        productTitle: string | null;
+                        topic: string | null;
+                        message: string | null;
+                        answers: {
+                            [key: string]: string;
+                        };
+                        photoCount: number;
+                        consent: boolean;
+                        /** @enum {string} */
+                        status: "new" | "in-progress" | "done";
+                        /** Format: date-time */
+                        createdAt: string;
+                    }[];
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminEnquiriesController_find: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        /** @enum {string} */
+                        kind: "contact" | "site-survey";
+                        name: string;
+                        email: string;
+                        phone: string | null;
+                        postcode: string | null;
+                        productHandle: string | null;
+                        productTitle: string | null;
+                        topic: string | null;
+                        message: string | null;
+                        answers: {
+                            [key: string]: string;
+                        };
+                        photoCount: number;
+                        consent: boolean;
+                        /** @enum {string} */
+                        status: "new" | "in-progress" | "done";
+                        /** Format: date-time */
+                        createdAt: string;
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No such enquiry */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminEnquiriesController_setStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    status: "new" | "in-progress" | "done";
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        /** @enum {string} */
+                        kind: "contact" | "site-survey";
+                        name: string;
+                        email: string;
+                        phone: string | null;
+                        postcode: string | null;
+                        productHandle: string | null;
+                        productTitle: string | null;
+                        topic: string | null;
+                        message: string | null;
+                        answers: {
+                            [key: string]: string;
+                        };
+                        photoCount: number;
+                        consent: boolean;
+                        /** @enum {string} */
+                        status: "new" | "in-progress" | "done";
+                        /** Format: date-time */
+                        createdAt: string;
+                    };
+                };
+            };
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No such enquiry */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminEnquiriesController_photo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                number: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Not signed in */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The role does not allow this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No such photo */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AccountsController_sendLink: {
         parameters: {
             query?: never;
@@ -7569,6 +7989,8 @@ export interface operations {
                                     choices: {
                                         [key: string]: string;
                                     };
+                                    /** @description Like "1200 × 400 × 500 mm, Powder coated" */
+                                    summary?: string;
                                 } | null;
                                 /** @description For example "3 now, 2 made to order" */
                                 stock: string;

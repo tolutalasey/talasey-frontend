@@ -51,6 +51,15 @@ export interface ProductImage {
   shows?: { option: string; value: string } | null;
 }
 
+export type OfflineAction = 'stockist' | 'installer' | 'showroom';
+
+// What a made-to-measure product asks for. The price comes from the server.
+export interface Measurements {
+  unit: 'mm' | 'cm';
+  dimensions: { key: string; label: string; min: number; max: number; step: number }[];
+  choices: { name: string; label: string; answers: string[] }[];
+}
+
 export interface Product {
   id: string;
   handle: string;
@@ -60,6 +69,10 @@ export interface Product {
   description: string | null;
   thumbnail: string | null;
   madeToMeasure: boolean;
+  measurements: Measurements | null;
+  // Off: shown but not sold online; offlineAction says what the page offers instead.
+  sellOnline: boolean;
+  offlineAction: OfflineAction;
   // 4 means the product is bought through a builder, like the pergolas.
   pageType: string | null;
   updatedAt: string | null;

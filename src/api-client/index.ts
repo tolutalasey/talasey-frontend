@@ -49,6 +49,8 @@ export {
   type ColourChoice,
   type ColourOffer,
   type Price,
+  type Measurements,
+  type OfflineAction,
   type Product,
   type ProductCategory,
   type ProductImage,
@@ -66,3 +68,9 @@ export {
   type StaffSession,
 } from './staff';
 export type { components, paths } from './schema';
+export {
+  createEnquiriesClient,
+  type EnquiriesClient,
+  type Enquiry,
+  type EnquiryStatus,
+} from './enquiries';

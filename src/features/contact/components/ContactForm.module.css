@@ -36,3 +36,30 @@
   color: var(--color-error);
   font-weight: var(--font-weight-bold);
 }
+
+.check {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.check input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.15rem;
+  accent-color: var(--color-brand950);
+}
+
+/* Filled only by bots, which fill every field; hidden from people and screen readers. */
+.trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.wide {
+  width: 100%;
+}

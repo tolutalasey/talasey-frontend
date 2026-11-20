@@ -25,9 +25,10 @@ function lineDetail(line: Order['lines'][number]) {
     line.variantTitle,
     line.colour,
     line.bespoke &&
-      Object.entries(line.bespoke.dimensions)
-        .map(([name, value]) => `${name} ${value}${line.bespoke?.unit}`)
-        .join(' × '),
+      (line.bespoke.summary ??
+        Object.entries(line.bespoke.dimensions)
+          .map(([name, value]) => `${name} ${value}${line.bespoke?.unit}`)
+          .join(' × ')),
   ]
     .filter(Boolean)
     .join(' · ');
