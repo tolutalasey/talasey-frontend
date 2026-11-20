@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { StockStatus, type StockStatusProps } from '../StockStatus/StockStatus';
 import styles from './ProductCard.module.css';
 
@@ -18,6 +19,8 @@ export interface ProductCardProps {
   badge?: string;
   // Cards in the first row of a listing load straight away; they are often the largest paint.
   loading?: 'eager' | 'lazy';
+  // Buttons under the card, such as order a sample or share, as on the current site.
+  actions?: ReactNode;
 }
 
 // The whole card is one link, named by the product. Price and stock sit outside the link text so
@@ -31,9 +34,10 @@ export function ProductCard({
   stock,
   badge,
   loading = 'lazy',
+  actions,
 }: ProductCardProps) {
   return (
-    <article className={styles.card}>
+    <article className={styles.card} data-actions={actions ? '' : undefined}>
       <div className={styles.media}>
         <img
           className={styles.image}
@@ -58,6 +62,7 @@ export function ProductCard({
         </p>
         {stock && <StockStatus {...stock} />}
       </div>
+      {actions && <div className={styles.actions}>{actions}</div>}
       <span className={styles.go} aria-hidden="true">
         <svg
           viewBox="0 0 24 24"

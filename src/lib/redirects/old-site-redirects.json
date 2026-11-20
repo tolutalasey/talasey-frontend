@@ -586,17 +586,17 @@
   },
   {
     "from": "/product/anno-lite-pearl-porcelain-paving/",
-    "to": "/porcelain-paving/",
+    "to": "/products/anno-lite-porcelain-paving/pearl/",
     "permanent": true
   },
   {
     "from": "/product/anno-lite-buff-porcelain-paving/",
-    "to": "/porcelain-paving/",
+    "to": "/products/anno-lite-porcelain-paving/buff/",
     "permanent": true
   },
   {
     "from": "/product/anno-lite-grey-porcelain-paving/",
-    "to": "/porcelain-paving/",
+    "to": "/products/anno-lite-porcelain-paving/grey/",
     "permanent": true
   },
   {
@@ -2256,7 +2256,7 @@
   },
   {
     "from": "/product-range/anno-lite/",
-    "to": "/porcelain-paving/",
+    "to": "/products/anno-lite-porcelain-paving/",
     "permanent": true
   },
   {

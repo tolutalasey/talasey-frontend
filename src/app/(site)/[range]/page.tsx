@@ -13,6 +13,7 @@ import { FENCING_RANGE, FenceBuilderLinks, getFenceBuilders } from '@/features/f
 import { BuilderLinks, getPergolaPages, PERGOLA_RANGE } from '@/features/pergola';
 import { getPlainPage, plainPagePath, PlainPageView } from '@/features/pages';
 import { parseListingParams } from '@/features/search';
+import { getSampleOffers } from '@/features/samples';
 import { pageMetadata } from '@/lib/seo';
 
 // A range or category page, or else a plain page from /content at the same address (About,
@@ -74,6 +75,7 @@ export default async function Range(props: Props) {
       listing={listing}
       params={parseListingParams(query)}
       lead={await builderLinksFor(range.slug)}
+      samples={await getSampleOffers()}
     />
   );
 }

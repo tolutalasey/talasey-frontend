@@ -16,6 +16,7 @@ export function searchRecord(overrides: Partial<SearchRecord> & { title: string 
     availability: ['made-to-order'],
     thumbnail: null,
     updatedAt: null,
+    colours: [],
     ...overrides,
   };
 }

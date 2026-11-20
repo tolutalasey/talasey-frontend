@@ -10,6 +10,7 @@ import {
 } from '@/features/catalogue';
 import { getPergolaPage, PERGOLA_RANGE } from '@/features/pergola';
 import { parseListingParams } from '@/features/search';
+import { getSampleOffers } from '@/features/samples';
 import { pageMetadata } from '@/lib/seo';
 
 export const instant = false;
@@ -57,6 +58,7 @@ export default async function CuratedRange(props: Props) {
       curated={curated}
       listing={listing}
       params={parseListingParams(query)}
+      samples={await getSampleOffers()}
     />
   );
 }

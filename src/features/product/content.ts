@@ -18,6 +18,16 @@ export const productContentSchema = z.object({
   completeTheJob: z.array(z.object({ handle: z.string(), reason: z.string() })).default([]),
   documents: z.array(z.object({ title: z.string(), url: z.string() })).default([]),
   features: z.array(z.string()).default([]),
+  // The words on each colour's own page, for a product sold in several colours.
+  colours: z
+    .array(
+      z.object({
+        colour: z.string(),
+        description: z.string().nullish(),
+        features: z.array(z.string()).default([]),
+      }),
+    )
+    .default([]),
   warranty: z.string().nullish(),
   installation: z.string().nullish(),
   care: z.string().nullish(),
@@ -34,6 +44,7 @@ export const emptyProductContent: ProductContent = {
   completeTheJob: [],
   documents: [],
   features: [],
+  colours: [],
   faqs: [],
   suits: [],
 };

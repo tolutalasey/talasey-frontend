@@ -41,6 +41,30 @@ const products = await fetch(`${API_URL}/store/products`).then((response) => {
 });
 const handles = products.map((product) => product.handle);
 
+// Each colour of a product sold in several has its own page, like the current site's colour pages.
+const colourPages = products.flatMap((product) => {
+  const colours = product.options.find((option) => option.title === 'Colour')?.values ?? [];
+  if (colours.length < 2) return [];
+  return colours.map((colour) => ({
+    path: `/products/${product.handle}/${slugify(colour)}/`,
+    colourWords: words(slugify(colour)),
+    allWords: [...words(product.handle), ...words(slugify(colour))],
+  }));
+});
+
+// The colour page an old colour product became: every word of the old address is in the product
+// and colour, and the colour's own words are all in the old address.
+function colourPageFor(slug) {
+  const wanted = words(slug);
+  return (
+    colourPages.find(
+      (page) =>
+        page.colourWords.every((word) => wanted.includes(word)) &&
+        wanted.every((word) => page.allWords.includes(word)),
+    )?.path ?? null
+  );
+}
+
 // Old pages and where they live now. Leaving a page out keeps it as it is, for a page that is
 // built under the same address or still to be added in /content.
 const PAGES = {
@@ -203,6 +227,8 @@ function targetFor({ kind, path }) {
         }[slug] ?? '/'
       );
     case 'product': {
+      const colourPage = colourPageFor(slug);
+      if (colourPage) return colourPage;
       const product = productFor(slug);
       if (product) return `/products/${product}/`;
       break;
@@ -218,6 +244,9 @@ function targetFor({ kind, path }) {
         accessories: '/composite-decking/',
       }[slug];
       if (named) return named;
+      // A range such as Anno Lite is now one product with a page per colour.
+      const listed = colourPages.find((page) => page.path.startsWith(`/products/${slug}-`));
+      if (listed) return listed.path.replace(/[^/]+\/$/, '');
       break;
     }
   }
@@ -245,11 +274,12 @@ writeFileSync(
 );
 
 const toProducts = redirects.filter((r) => r.to.startsWith('/products/')).length;
+const toColours = redirects.filter((r) => /^\/products\/[^/]+\/[^/]+\/$/.test(r.to)).length;
 const oldProducts = oldUrls.filter((url) => url.kind === 'product').length;
 const kept = oldUrls.filter((url) => url.kind === 'page' && !targetFor(url));
 console.log(`${redirects.length} redirects written, plus ${SECTIONS.length} whole sections.`);
 console.log(
-  `${toProducts} of ${oldProducts} old products reach their new product page; the rest go to their range.`,
+  `${toProducts} of ${oldProducts} old products reach their new product page (${toColours} of them a colour page); the rest go to their range.`,
 );
 console.log(`Pages kept at the same address: ${kept.map((url) => url.path).join(' ')}`);
 if (unmapped.length) console.log(`Sent to the homepage, no better match: ${unmapped.join(' ')}`);

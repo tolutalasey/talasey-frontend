@@ -1,5 +1,6 @@
 import { isAvailable, isInStock, lowestPrice, type Product } from '@/api-client';
 import { brandOf } from '@/lib/brands';
+import { COLOUR_OPTION, pageColours } from '@/lib/product-colours';
 
 // What search and listings know about a product. The commerce server sends the same fields to
 // Algolia, so both search adapters return the same thing.
@@ -18,6 +19,15 @@ export interface SearchRecord {
   availability: Availability[];
   thumbnail: string | null;
   updatedAt: string | null;
+  // One entry per colour for a product sold in several, so listings can show each colour.
+  colours: ColourRecord[];
+}
+
+export interface ColourRecord {
+  name: string;
+  image: string | null;
+  priceFrom: number | null;
+  availability: Availability[];
 }
 
 export type Availability = 'in-stock' | 'made-to-order';
@@ -29,6 +39,24 @@ function availabilityOf(product: Product): Availability[] {
     result.push('made-to-order');
   }
   return result;
+}
+
+function coloursOf(product: Product): ColourRecord[] {
+  return pageColours(product.options).map((name) => {
+    const variants = product.variants.filter((variant) => variant.options[COLOUR_OPTION] === name);
+    const prices = variants.flatMap((variant) =>
+      variant.priceIncVat ? [variant.priceIncVat.amount] : [],
+    );
+    const image = product.images?.find(
+      (photo) => photo.shows?.option === COLOUR_OPTION && photo.shows.value === name,
+    );
+    return {
+      name,
+      image: image?.url ?? null,
+      priceFrom: prices.length > 0 ? Math.min(...prices) : null,
+      availability: availabilityOf({ ...product, variants }),
+    };
+  });
 }
 
 export function toSearchRecord(product: Product): SearchRecord {
@@ -47,5 +75,6 @@ export function toSearchRecord(product: Product): SearchRecord {
     availability: availabilityOf(product),
     thumbnail: product.thumbnail,
     updatedAt: product.updatedAt,
+    colours: coloursOf(product),
   };
 }

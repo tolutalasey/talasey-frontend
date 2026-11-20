@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import NextLink from 'next/link';
 import type { ReactNode } from 'react';
+import type { SampleOffer } from '@/api-client';
 import { PageBreadcrumbs } from '@/features/layout';
 import { hasFilters, withoutFilter, type ListingParams } from '@/features/search';
 import { formatPrice } from '@/lib/format';
@@ -28,6 +29,8 @@ interface RangePageProps {
   params: ListingParams;
   // Shown under the header, before the products, like the pergola builders on /pergolas/.
   lead?: ReactNode;
+  // The samples on offer, for each card's Order sample button.
+  samples?: SampleOffer[];
 }
 
 const gbp = (amount: number) => formatPrice({ amount, currencyCode: 'GBP' });
@@ -40,7 +43,7 @@ function priceLine({ priceRange }: RangeListing): string | null {
 
 const productCount = (count: number) => `${count} ${count === 1 ? 'product' : 'products'}`;
 
-export function RangePage({ range, curated, listing, params, lead }: RangePageProps) {
+export function RangePage({ range, curated, listing, params, lead, samples = [] }: RangePageProps) {
   const { result, inRange } = listing;
   const base = rangePath(range);
   const current = { ...params, filters: { ...params.filters, ...curated?.filters } };
@@ -68,13 +71,18 @@ export function RangePage({ range, curated, listing, params, lead }: RangePagePr
           <h1>{curated?.h1 ?? range.h1}</h1>
           <p className={styles.intro}>{curated?.intro ?? range.intro}</p>
           {price && <p className={styles.priceLine}>{price}</p>}
-          {offersSamples(range.slug) && (
-            <p className={styles.headerActions}>
-              <NextLink href="/samples/" className="button">
+          <p className={styles.headerActions}>
+            {inRange > 0 && (
+              <a href="#results-title" className="button">
+                View all products
+              </a>
+            )}
+            {offersSamples(range.slug) && (
+              <NextLink href="/samples/" className="button-secondary">
                 Order free samples
               </NextLink>
-            </p>
-          )}
+            )}
+          </p>
         </div>
         <div className={styles.headerPhoto}>
           <Image
@@ -132,7 +140,11 @@ export function RangePage({ range, curated, listing, params, lead }: RangePagePr
                 Products
               </h2>
               <p role="status" className={styles.total}>
-                {productCount(result.total)}
+                {productCount(
+                  result.pageCount > 1
+                    ? result.total
+                    : result.hits.reduce((sum, hit) => sum + Math.max(1, hit.colours.length), 0),
+                )}
               </p>
             </div>
             <ActiveFilters
@@ -152,6 +164,7 @@ export function RangePage({ range, curated, listing, params, lead }: RangePagePr
                 products={result.hits}
                 label={curated?.h1 ?? range.h1}
                 eager={4}
+                byColour={{ offers: samples }}
                 insert={
                   offersSamples(range.slug) ? { after: 4, content: <SamplesCard /> } : undefined
                 }

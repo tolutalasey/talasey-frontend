@@ -9,6 +9,8 @@ interface ProductFactsProps {
   variant: ProductVariant | null;
   brand: string | null;
   content: ProductContent;
+  // On a colour's own page, only that colour's sizes and packs.
+  colour?: string | null;
 }
 
 interface Section {
@@ -43,7 +45,7 @@ function Steps({ steps }: { steps: string[] }) {
   );
 }
 
-function specsOf({ variant, brand, content }: Omit<ProductFactsProps, 'product'>) {
+function specsOf({ variant, brand, content }: Omit<ProductFactsProps, 'product' | 'colour'>) {
   return [
     ...(brand ? [['Brand', brand]] : []),
     ...Object.entries(variant?.options ?? {}),
@@ -55,29 +57,23 @@ function specsOf({ variant, brand, content }: Omit<ProductFactsProps, 'product'>
   ] as [string, string][];
 }
 
-function sectionsOf({ product, variant, brand, content }: ProductFactsProps): Section[] {
-  const about = paragraphsOf(product.description);
+const sizeOf = (option: ProductVariant) =>
+  Object.entries(option.options)
+    .filter(([title]) => title !== 'Colour')
+    .map(([, value]) => value)
+    .join(', ') || option.title;
+
+function sectionsOf({ product, variant, brand, content, colour }: ProductFactsProps): Section[] {
+  const packs = product.variants.filter(
+    (option) => !colour || option.options.Colour === undefined || option.options.Colour === colour,
+  );
+  const hasCoverage = packs.some((option) => option.coverageM2);
+  const hasWeight = packs.some((option) => option.weightKg);
   const installation = paragraphsOf(content.installation);
   const care = paragraphsOf(content.care);
   const specs = specsOf({ variant, brand, content });
 
   const sections: (Section | false)[] = [
-    about.length > 0 && {
-      id: 'about',
-      title: 'About this product',
-      body: (
-        <>
-          <Paragraphs text={about} />
-          {content.features.length > 0 && (
-            <ul>
-              {content.features.map((feature) => (
-                <li key={feature}>{feature}</li>
-              ))}
-            </ul>
-          )}
-        </>
-      ),
-    },
     specs.length > 0 && {
       id: 'specifications',
       title: 'Specifications',
@@ -116,22 +112,26 @@ function sectionsOf({ product, variant, brand, content }: ProductFactsProps): Se
         </div>
       ),
     },
-    product.variants.length > 1 && {
-      id: 'options',
-      title: 'All options and prices',
+    (packs.length > 1 || hasCoverage || hasWeight) && {
+      id: 'sizes',
+      title: 'Sizes and packs',
       body: (
         <table className={styles.options}>
-          <caption className={styles.visuallyHidden}>Options and prices</caption>
+          <caption className={styles.visuallyHidden}>Sizes, packs and prices</caption>
           <thead>
             <tr>
-              <th scope="col">Option</th>
+              <th scope="col">Product</th>
+              {hasCoverage && <th scope="col">Coverage per pack (m²)</th>}
+              {hasWeight && <th scope="col">Weight per pack (kg)</th>}
               <th scope="col">Price inc. VAT</th>
             </tr>
           </thead>
           <tbody>
-            {product.variants.map((option) => (
+            {packs.map((option) => (
               <tr key={option.id}>
-                <th scope="row">{option.title}</th>
+                <th scope="row">{sizeOf(option)}</th>
+                {hasCoverage && <td>{option.coverageM2 ?? '—'}</td>}
+                {hasWeight && <td>{option.weightKg ?? '—'}</td>}
                 <td>{option.priceIncVat ? formatPrice(option.priceIncVat) : 'Price on request'}</td>
               </tr>
             ))}

@@ -23,6 +23,7 @@ import { getPlainPages, plainPagePath } from '@/features/pages';
 import { getSearchRecords, searchProducts } from '@/features/search';
 import { latest, type SitemapEntry } from '@/lib/sitemap-xml';
 import { absoluteUrl } from '@/lib/site';
+import { colourPath } from '@/lib/product-colours';
 import { productPath } from '@/lib/urls/keyword-map';
 
 export const SITEMAPS = ['products', 'ranges', 'guides', 'inspiration', 'pages'] as const;
@@ -34,9 +35,12 @@ const entry = (path: string, lastModified?: string | null): SitemapEntry => ({
 });
 
 async function productEntries(): Promise<SitemapEntry[]> {
-  return (await getSearchRecords()).map((record) =>
+  return (await getSearchRecords()).flatMap((record) => [
     entry(productPath(record.handle), record.updatedAt),
-  );
+    ...record.colours.map((colour) =>
+      entry(colourPath(record.handle, colour.name), record.updatedAt),
+    ),
+  ]);
 }
 
 // A range is listed once it sells something; a curated page once its filter finds something.

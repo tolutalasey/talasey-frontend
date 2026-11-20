@@ -24,6 +24,7 @@ export function productStructuredData(
   product: Product,
   variant: ProductVariant | null = null,
   faqs: { question: string; answer: string }[] = [],
+  path = productPath(product.handle),
 ) {
   const shown = variant ?? product.variants[0] ?? null;
   const size = SIZE_OPTIONS.map((title) => shown?.options[title]).find(Boolean);
@@ -31,7 +32,7 @@ export function productStructuredData(
     productJsonLd({
       name: product.title,
       description: productDescription(product),
-      path: productPath(product.handle),
+      path,
       sku: shown?.sku,
       gtin: shown?.barcode,
       mpn: shown?.barcode ? null : shown?.sku,

@@ -1,10 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import styles from './ProductActions.module.css';
+
+interface Props {
+  title: string;
+  path: string;
+  className?: string;
+}
 
 // Opens the phone's share sheet, or copies the link where there is none.
-export function ShareButton({ title, path }: { title: string; path: string }) {
+export function ShareButton({ title, path, className }: Props) {
   const [copied, setCopied] = useState(false);
   const share = async () => {
     const url = new URL(path, window.location.origin).href;
@@ -17,7 +22,7 @@ export function ShareButton({ title, path }: { title: string; path: string }) {
     setTimeout(() => setCopied(false), 2500);
   };
   return (
-    <button type="button" className={styles.action} onClick={share}>
+    <button type="button" className={className} onClick={share}>
       <span aria-live="polite">{copied ? 'Link copied' : 'Share'}</span>
     </button>
   );

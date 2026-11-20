@@ -19,5 +19,5 @@ export {
   type Sort,
   type Suggestion,
 } from './product-search';
-export type { SearchRecord } from './record';
+export { toSearchRecord, type SearchRecord } from './record';
 export { allowedTypos, alternativesFor, editDistance, words } from './text';

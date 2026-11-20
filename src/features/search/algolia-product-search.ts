@@ -71,6 +71,7 @@ const toRecord = (hit: AlgoliaHit): SearchRecord => ({
   availability: hit.availability,
   thumbnail: hit.thumbnail,
   updatedAt: null,
+  colours: [],
 });
 
 // Algolia filters on raw values, so a slug from the URL is matched back to the value it came from

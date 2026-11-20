@@ -17,6 +17,8 @@ import { ProductFacts } from './ProductFacts';
 import styles from './ProductPage.module.css';
 import { ProductPhotos } from './ProductPhotos';
 import { ProductActions } from './ProductActions';
+import { FeaturesBox } from './FeaturesBox';
+import { ProductIntro } from './ProductIntro';
 
 export interface ProductPageProps {
   product: Product;
@@ -41,6 +43,9 @@ export interface ProductPageProps {
   resources?: ReactNode;
   // Products shown under the details, such as others from the same range.
   related?: ReactNode;
+  // On a colour's own page: that colour, and the page for each of the product's colours.
+  colour?: string | null;
+  colourPaths?: Record<string, string>;
 }
 
 export function ProductPage({
@@ -61,8 +66,18 @@ export function ProductPage({
   enquiryOnly = false,
   resources,
   related,
+  colour = null,
+  colourPaths,
 }: ProductPageProps) {
   const range = breadcrumbs.length > 2 ? breadcrumbs[1]?.name : null;
+  const colourWords = colour
+    ? content.colours.find((entry) => entry.colour.toLowerCase() === colour.toLowerCase())
+    : undefined;
+  const features = colourWords?.features.length ? colourWords.features : content.features;
+  const tags = [
+    ...new Set([...(range ? [range] : []), ...product.categories.map((category) => category.name)]),
+  ];
+  const sizes = product.options.find((option) => option.title === 'Size')?.values ?? [];
   return (
     <>
       <article className={styles.product}>
@@ -81,11 +96,11 @@ export function ProductPage({
               {(range ?? brand) && <p className="eyebrow">{range ?? brand}</p>}
               <h1>{product.title}</h1>
               {product.subtitle && <p className={styles.subtitle}>{product.subtitle}</p>}
-              {content.suits.length > 0 && (
-                <p className={styles.suits}>
-                  <strong>Suits</strong> {content.suits.join(', ')}
-                </p>
-              )}
+              <ProductIntro
+                description={colourWords?.description || product.description}
+                sizes={sizes}
+                tags={tags}
+              />
               <ProductActions
                 title={product.title}
                 handle={product.handle}
@@ -101,7 +116,9 @@ export function ProductPage({
               ) : (
                 <PriceSummary pricing={pricing} stock={stock} unit={profile.unit.one} />
               )}
-              {options.length > 0 && <OptionPicker groups={options} path={path} />}
+              {options.length > 0 && (
+                <OptionPicker groups={options} path={path} colourPaths={colourPaths} />
+              )}
               {children}
               <ProductSamples offers={samples} />
               {!enquiryOnly && product.sellOnline && (
@@ -113,11 +130,18 @@ export function ProductPage({
                   </span>
                 </p>
               )}
+              <FeaturesBox features={features} />
             </div>
           </div>
         )}
-        <ProductFacts product={product} variant={variant} brand={brand} content={content} />
         {resources}
+        <ProductFacts
+          product={product}
+          variant={variant}
+          brand={brand}
+          content={content}
+          colour={colour}
+        />
         {related}
       </article>
       <TrustStrip points={trustPoints} label="Why buy from Talasey" />

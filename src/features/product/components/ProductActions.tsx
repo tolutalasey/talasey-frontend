@@ -1,6 +1,6 @@
 import NextLink from 'next/link';
 import { LOCAL_HELP, type LocalHelpKind } from '@/features/contact';
-import { ShareButton } from './ShareButton';
+import { ShareButton } from '@/ui/ShareButton/ShareButton';
 import styles from './ProductActions.module.css';
 
 interface Props {
@@ -30,7 +30,7 @@ export function ProductActions({ title, handle, path, hasSamples, without = null
         </li>
       )}
       <li>
-        <ShareButton title={title} path={path} />
+        <ShareButton title={title} path={path} className={styles.action} />
       </li>
       {LOCAL.filter(({ kind }) => kind !== without).map(({ kind, label }) => (
         <li key={kind}>
