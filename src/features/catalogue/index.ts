@@ -9,6 +9,7 @@ export { Pagination } from './components/Pagination';
 export { productCard } from './cards';
 export { cardImage } from './images';
 export { rangeGallery, rangePhoto } from './range-photos';
+export { withCurrentSiteWords } from './old-range-pages';
 export {
   getProductRow,
   getFeaturedProducts,

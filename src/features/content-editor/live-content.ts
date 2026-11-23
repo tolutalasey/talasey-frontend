@@ -1,4 +1,10 @@
-import { fallbackRanges, rangeGallery, rangePhoto, type Range } from '@/features/catalogue';
+import {
+  fallbackRanges,
+  rangeGallery,
+  rangePhoto,
+  withCurrentSiteWords,
+  type Range,
+} from '@/features/catalogue';
 import {
   fallbackBrands,
   fallbackFaqs,
@@ -26,7 +32,8 @@ const pageData = ({ story, ...page }: BrandPage | ProjectPage): Data => ({
   story: paragraphs(story),
 });
 
-const rangeData = (range: Range): Data => {
+const rangeData = (fallback: Range): Data => {
+  const range = withCurrentSiteWords(fallback);
   const top = rangePhoto(range.slug);
   return {
     name: range.name,
@@ -34,6 +41,9 @@ const rangeData = (range: Range): Data => {
     kind: range.kind,
     h1: range.h1,
     intro: range.intro,
+    description: range.description ?? '',
+    slides: (range.slides ?? []).map((photo) => ({ photo })),
+    closing: range.closing ?? '',
     photo: range.photo ?? { ...top, alt: range.name },
     gallery: range.gallery.length > 0 ? range.gallery : rangeGallery(range.slug),
     scope: {

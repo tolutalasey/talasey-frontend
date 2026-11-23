@@ -12,6 +12,7 @@ import {
 } from '@/features/search';
 import { cacheTags } from '@/lib/cache-tags';
 import { publishedContent } from '@/lib/content';
+import { withCurrentSiteWords } from './old-range-pages';
 import {
   curatedPageSchema,
   fallbackRanges,
@@ -52,6 +53,22 @@ const storedRange = rangeSchema.extend({
     .array(curatedPageSchema.extend({ filters: storedFilters }))
     .nullish()
     .transform((v) => v ?? []),
+  slides: z
+    .array(
+      z.object({
+        photo: z.object({
+          src: z.string(),
+          alt: z
+            .string()
+            .nullish()
+            .transform((v) => v ?? ''),
+          width: z.number(),
+          height: z.number(),
+        }),
+      }),
+    )
+    .nullish()
+    .transform((v) => (v ?? []).map((slide) => slide.photo)),
   gallery: z
     .array(
       z.object({
@@ -93,9 +110,9 @@ export async function getRanges(): Promise<Range[]> {
     return parsed.success ? [parsed.data] : [];
   });
   const slugs = new Set(ranges.map((range) => range.slug));
-  return [...ranges, ...fallbackRanges.filter((range) => !slugs.has(range.slug))].sort(
-    (a, b) => menuOrder(a.slug) - menuOrder(b.slug),
-  );
+  return [...ranges, ...fallbackRanges.filter((range) => !slugs.has(range.slug))]
+    .map(withCurrentSiteWords)
+    .sort((a, b) => menuOrder(a.slug) - menuOrder(b.slug));
 }
 
 export async function getRange(slug: string): Promise<Range | null> {

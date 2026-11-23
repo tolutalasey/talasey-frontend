@@ -591,3 +591,27 @@ form[data-apply-on-change] .apply {
   padding: 0;
   list-style: none;
 }
+
+.message {
+  display: grid;
+  gap: var(--space-6);
+  margin-top: var(--space-12);
+  padding: var(--space-8) var(--space-6);
+}
+
+.bespoke {
+  display: grid;
+  gap: var(--space-3);
+  max-width: var(--layout-measure);
+}
+
+.bespoke p {
+  margin: 0;
+  color: var(--color-ink-muted);
+}
+
+@media (min-width: 64rem) {
+  .message {
+    padding: var(--space-12);
+  }
+}

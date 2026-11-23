@@ -2,6 +2,7 @@ import Image from 'next/image';
 import NextLink from 'next/link';
 import type { ReactNode } from 'react';
 import type { SampleOffer } from '@/api-client';
+import { DetailsForm } from '@/features/contact';
 import { PageBreadcrumbs } from '@/features/layout';
 import { hasFilters, withoutFilter, type ListingParams } from '@/features/search';
 import { formatPrice } from '@/lib/format';
@@ -20,6 +21,7 @@ import { Pagination } from './Pagination';
 import { ProductGrid } from './ProductGrid';
 import { RangeAfterword } from './RangeAfterword';
 import { RangeGallery } from './RangeGallery';
+import { RangeSlides } from './RangeSlides';
 import { SamplesCard } from './SamplesCard';
 
 interface RangePageProps {
@@ -40,6 +42,12 @@ function priceLine({ priceRange }: RangeListing): string | null {
   if (priceRange.min === priceRange.max) return `Prices: ${gbp(priceRange.min)} inc. VAT`;
   return `Prices from ${gbp(priceRange.min)} to ${gbp(priceRange.max)} inc. VAT`;
 }
+
+const paragraphsOf = (text: string) =>
+  text
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
 
 const productCount = (count: number) => `${count} ${count === 1 ? 'product' : 'products'}`;
 
@@ -69,7 +77,11 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
         <div className={`frame ${styles.headerText}`}>
           {curated && <p className="eyebrow">{range.name}</p>}
           <h1>{curated?.h1 ?? range.h1}</h1>
-          <p className={styles.intro}>{curated?.intro ?? range.intro}</p>
+          {paragraphsOf(curated?.intro ?? range.description ?? range.intro).map((paragraph) => (
+            <p key={paragraph} className={styles.intro}>
+              {paragraph}
+            </p>
+          ))}
           {price && <p className={styles.priceLine}>{price}</p>}
           <p className={styles.headerActions}>
             {inRange > 0 && (
@@ -85,14 +97,18 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
           </p>
         </div>
         <div className={styles.headerPhoto}>
-          <Image
-            src={photo.src}
-            alt={photo.alt}
-            width={photo.width}
-            height={photo.height}
-            sizes="(min-width: 64rem) 55vw, 100vw"
-            priority
-          />
+          {range.slides?.length ? (
+            <RangeSlides name={range.name} photos={range.slides} />
+          ) : (
+            <Image
+              src={photo.src}
+              alt={photo.alt}
+              width={photo.width}
+              height={photo.height}
+              sizes="(min-width: 64rem) 55vw, 100vw"
+              priority
+            />
+          )}
         </div>
       </header>
       {lead}
@@ -183,6 +199,17 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
         <RangeGallery name={range.name} items={range.gallery} withEnquiry={false} samples={false} />
       )}
       <RangeAfterword range={range} />
+      <section className={`frame ${styles.message}`} aria-label="Send us a message">
+        {range.closing && (
+          <div className={styles.bespoke}>
+            <p className="eyebrow">Made to order</p>
+            {paragraphsOf(range.closing).map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+        )}
+        <DetailsForm id="contact" />
+      </section>
       <JsonLd
         data={collectionPageJsonLd(
           { name: curated?.h1 ?? range.h1, path: crumbs.at(-1)?.path ?? base },

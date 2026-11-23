@@ -35,6 +35,12 @@ export const rangeSchema = z.object({
   name: z.string().min(1),
   h1: z.string().min(1),
   intro: z.string().min(1),
+  // The fuller words under the heading, as on the current site.
+  description: z.string().nullish(),
+  // The photos that slide at the top of the page.
+  slides: z.array(photo).optional(),
+  // An offer to make it to order, above the message form at the bottom.
+  closing: z.string().nullish(),
   photo: photo.nullish(),
   gallery: z.array(galleryItem).default([]),
   scope: z.object({
