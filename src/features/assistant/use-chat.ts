@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from 'react';
 import { loadTurns, saveTurns, type Turn } from './conversation';
+import { uploadPhoto, type ChosenPhoto } from './photo';
 
 const MAX_SENT_TURNS = 30;
 export const MAX_MESSAGE_CHARS = 2000;
@@ -9,6 +10,9 @@ export const MAX_MESSAGE_CHARS = 2000;
 const FAILURES: Record<number, string> = {
   429: "You've sent a lot of messages in a short time. Please try again in a little while, or call us on 0330 333 8030.",
 };
+const PHOTO_TEXT = "Here's a photo of my garden.";
+const PHOTO_FAILED =
+  "Sorry, that photo didn't upload. Try again, or send a smaller one as a JPEG or PNG.";
 const FAILED =
   "Sorry, I couldn't answer just now. Please try again, or [contact the team](/contact/) on 0330 333 8030.";
 
@@ -22,7 +26,7 @@ async function ask(turns: Turn[]): Promise<Answer> {
       turns: turns
         .filter((turn) => !turn.failed)
         .slice(-MAX_SENT_TURNS)
-        .map(({ role, text }) => ({ role, text })),
+        .map(({ role, text, photoId }) => ({ role, text, photoId })),
       page: window.location.pathname,
       pageTitle: document.title.slice(0, 300),
     }),
@@ -39,14 +43,26 @@ export function useChat() {
   const [waiting, setWaiting] = useState(false);
 
   const send = useCallback(
-    async (text: string) => {
-      const message = text.trim().slice(0, MAX_MESSAGE_CHARS);
+    async (text: string, photo?: ChosenPhoto) => {
+      const message = text.trim().slice(0, MAX_MESSAGE_CHARS) || (photo ? PHOTO_TEXT : '');
       if (!message || waiting) return;
-      const asked: Turn[] = [...turns, { role: 'visitor', text: message }];
+      const visitor: Turn = {
+        role: 'visitor',
+        text: message,
+        ...(photo && { photo: photo.thumb }),
+      };
+      let asked: Turn[] = [...turns, visitor];
       setTurns(asked);
-      saveTurns(asked);
       setWaiting(true);
-      const reply = await ask(asked).catch(() => ({ text: FAILED, failed: true }));
+      const answer = async (): Promise<Pick<Turn, 'text' | 'failed' | 'products'>> => {
+        if (photo) {
+          const photoId = await uploadPhoto(photo.blob).catch(() => null);
+          if (!photoId) return { text: PHOTO_FAILED, failed: true };
+          asked = [...turns, { ...visitor, photoId }];
+        }
+        return ask(asked).catch(() => ({ text: FAILED, failed: true }));
+      };
+      const reply = await answer();
       const answered: Turn[] = [...asked, { role: 'assistant', ...reply }];
       setTurns(answered);
       saveTurns(answered);

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CloseIcon, ExpandIcon, RestartIcon, ShrinkIcon } from '@/ui/icons';
 import { cx } from '@/ui/cx';
 import type { Turn } from '../conversation';
+import type { ChosenPhoto } from '../photo';
 import { ASSISTANT_NAME, greeting, STARTERS } from '../greeting';
 import styles from './Assistant.module.css';
 import { Composer } from './Composer';
@@ -14,7 +15,7 @@ import { TalaAvatar } from './TalaAvatar';
 interface Props {
   turns: Turn[];
   waiting: boolean;
-  onSend: (text: string) => void;
+  onSend: (text: string, photo?: ChosenPhoto) => void;
   onRestart: () => void;
   onClose: () => void;
 }
@@ -96,9 +97,13 @@ export function ChatPanel({ turns, waiting, onSend, onRestart, onClose }: Props)
         )}
         {turns.map((turn, index) =>
           turn.role === 'visitor' ? (
-            <p key={index} className={styles.fromVisitor}>
-              {turn.text}
-            </p>
+            <div key={index} className={styles.fromVisitor}>
+              {turn.photo && (
+                // eslint-disable-next-line @next/next/no-img-element -- the visitor's own photo
+                <img src={turn.photo} alt="Photo you sent" className={styles.sentPhoto} />
+              )}
+              <p>{turn.text}</p>
+            </div>
           ) : (
             <div key={index} className={styles.fromTala}>
               <TalaAvatar />

@@ -11,6 +11,16 @@ export function createAssistantClient(options: ApiClientOptions) {
   const api = createApiClient(options);
   return {
     enabled: async () => (await unwrap(api.GET('/store/assistant'))).enabled,
+    addPhoto: async (form: FormData, visitorIp: string | null) =>
+      (
+        await unwrap(
+          api.POST('/store/assistant/photos', {
+            body: form as never,
+            bodySerializer: (body: unknown) => body as FormData,
+            ...(visitorIp && { headers: { 'x-visitor-ip': visitorIp } }),
+          }),
+        )
+      ).photoId,
     reply: (request: AssistantRequest, visitorIp: string | null) =>
       unwrap(
         api.POST('/store/assistant/messages', {

@@ -1444,6 +1444,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/store/assistant/photos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["StoreAssistantController_photo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -8639,6 +8655,8 @@ export interface operations {
                         /** @enum {string} */
                         role: "visitor" | "assistant";
                         text: string;
+                        /** Format: uuid */
+                        photoId?: string;
                     }[];
                     page?: string;
                     pageTitle?: string;
@@ -8680,6 +8698,56 @@ export interface operations {
                 content?: never;
             };
             /** @description The assistant is switched off or could not answer */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    StoreAssistantController_photo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    photo?: string;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        photoId: string;
+                    };
+                };
+            };
+            /** @description No photo, or not a JPEG, PNG or WebP under 5 MB */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Too many photos for now */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The assistant is switched off */
             503: {
                 headers: {
                     [name: string]: unknown;

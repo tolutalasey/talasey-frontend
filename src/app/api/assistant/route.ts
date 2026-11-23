@@ -1,18 +1,9 @@
 import { ApiError, type AssistantProductCard } from '@/api-client';
 import { getSearchRecords } from '@/features/search';
 import { getAssistantClient } from '@/lib/commerce';
+import { fromThisSite, visitorIp } from '@/lib/visitor-request';
 
 const MAX_BODY_BYTES = 200_000;
-
-const visitorIp = (request: Request) =>
-  request.headers.get('x-real-ip') ??
-  request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
-  null;
-
-const fromThisSite = (request: Request) => {
-  const origin = request.headers.get('origin');
-  return !origin || new URL(origin).host === new URL(request.url).host;
-};
 
 // Cards for products with no photo in /admin get the one the site shows for them.
 async function withPhotos(cards: AssistantProductCard[]): Promise<AssistantProductCard[]> {
