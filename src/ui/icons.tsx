@@ -181,3 +181,28 @@ export const BagIcon = (props: IconProps) => (
     <path d="M5 8h14l-1.2 12H6.2zM9 8a3 3 0 0 1 6 0" />
   </Icon>
 );
+
+export const SendIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M12 19V5M5 12l7-7 7 7" />
+  </Icon>
+);
+
+export const ExpandIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M4 9V4h5M20 15v5h-5" />
+  </Icon>
+);
+
+export const ShrinkIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M9 4v5H4M15 20v-5h5" />
+  </Icon>
+);
+
+export const RestartIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+    <path d="M3 3v5h5" />
+  </Icon>
+);

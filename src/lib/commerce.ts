@@ -2,12 +2,14 @@ import 'server-only';
 import { cacheLife } from 'next/cache';
 import {
   createAccountClient,
+  createAssistantClient,
   createBasketClient,
   createCatalog,
   createContentClient,
   createEnquiriesClient,
   createSamplesClient,
   type AccountClient,
+  type AssistantClient,
   type BasketClient,
   type Catalog,
   type ContentClient,
@@ -25,6 +27,7 @@ let basketClient: BasketClient | undefined;
 let contentClient: ContentClient | undefined;
 let samplesClient: SamplesClient | undefined;
 let accountClient: AccountClient | undefined;
+let assistantClient: AssistantClient | undefined;
 
 // Products without photos in /admin show the photos from the current site's product pages.
 function withPhotoFallback(source: Catalog): Catalog {
@@ -51,6 +54,11 @@ export function getBasketClient(): BasketClient {
 export function getContentClient(): ContentClient {
   contentClient ??= createContentClient({ baseUrl: apiUrl() });
   return contentClient;
+}
+
+export function getAssistantClient(): AssistantClient {
+  assistantClient ??= createAssistantClient({ baseUrl: apiUrl() });
+  return assistantClient;
 }
 
 export function getAccountClient(): AccountClient {

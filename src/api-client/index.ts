@@ -34,6 +34,7 @@ export {
   type AccountClient,
   type AccountOrder,
 } from './account';
+export { createAssistantClient, type AssistantClient, type AssistantRequest } from './assistant';
 export { createCatalog, type Catalog } from './catalog';
 export { createContentClient, type ContentClient } from './content';
 export {

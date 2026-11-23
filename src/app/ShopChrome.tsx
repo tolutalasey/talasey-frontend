@@ -1,4 +1,5 @@
 import { Suspense, type ReactNode } from 'react';
+import { Assistant } from '@/features/assistant';
 import { CurrentBag } from '@/features/checkout';
 import { BagLink, SiteChrome } from '@/features/layout';
 import { EditThisPage } from '@/features/live-preview';
@@ -15,6 +16,7 @@ export function ShopChrome({ children }: { children: ReactNode }) {
     >
       {children}
       <EditThisPage />
+      <Assistant />
     </SiteChrome>
   );
 }

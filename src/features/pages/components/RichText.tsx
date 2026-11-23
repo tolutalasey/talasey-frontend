@@ -1,6 +1,6 @@
 import NextLink from 'next/link';
 import { Fragment } from 'react';
-import { blocks, type Inline } from '../rich-text';
+import { blocks, type Inline } from '@/lib/rich-text';
 
 function Text({ parts }: { parts: Inline[] }) {
   return parts.map((part, index) => (

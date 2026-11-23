@@ -13,7 +13,7 @@ function contentSecurityPolicy({ isDev = false, cardPayments = false }: HeaderOp
     "default-src 'self'",
     `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}${stripe(STRIPE_SCRIPTS)}`,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob:",
+    "img-src 'self' data: blob: https://talasey.co.uk",
     "font-src 'self'",
     `connect-src 'self'${stripe('https://api.stripe.com')}`,
     ...(cardPayments ? [`frame-src ${STRIPE_SCRIPTS} https://hooks.stripe.com`] : []),
