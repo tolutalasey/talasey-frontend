@@ -38,9 +38,15 @@ function median(values: number[]): number {
   return sorted[Math.floor((sorted.length - 1) / 2)] ?? 0;
 }
 
-// In stock first, then made to order, then what can't be bought right now.
+// In stock first, then available to order, then made to order, then what can't be bought now.
 const stockRank = ({ availability }: SearchRecord) =>
-  availability.includes('in-stock') ? 0 : availability.includes('made-to-order') ? 1 : 2;
+  availability.includes('in-stock')
+    ? 0
+    : availability.includes('available')
+      ? 1
+      : availability.includes('made-to-order')
+        ? 2
+        : 3;
 
 const priced = (record: SearchRecord): record is SearchRecord & { priceFrom: number } =>
   record.priceFrom !== null;

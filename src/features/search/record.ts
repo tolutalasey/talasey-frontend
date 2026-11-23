@@ -30,13 +30,15 @@ export interface ColourRecord {
   availability: Availability[];
 }
 
-export type Availability = 'in-stock' | 'made-to-order';
+export type Availability = 'in-stock' | 'available' | 'made-to-order';
 
+// Stock that isn't counted can still be ordered: made to order when it has a lead time, otherwise
+// simply available to order.
 function availabilityOf(product: Product): Availability[] {
   const result: Availability[] = [];
   if (product.variants.some(isInStock)) result.push('in-stock');
   if (product.variants.some((variant) => !variant.stock.managed && isAvailable(variant))) {
-    result.push('made-to-order');
+    result.push(product.leadTime ? 'made-to-order' : 'available');
   }
   return result;
 }

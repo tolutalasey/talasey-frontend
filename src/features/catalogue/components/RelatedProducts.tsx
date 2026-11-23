@@ -22,7 +22,7 @@ export function RelatedProducts({ heading, products, more }: Props) {
           </NextLink>
         )}
       </div>
-      <ProductGrid products={products} label={heading} />
+      <ProductGrid products={products} label={heading} fill />
     </section>
   );
 }

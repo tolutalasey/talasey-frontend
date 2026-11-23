@@ -14,6 +14,7 @@ import {
   type EnquiriesClient,
   type SamplesClient,
 } from '@/api-client';
+import { withCurrentSitePhotos } from './current-site/photos';
 import { env } from './env';
 
 const LOCAL_API = 'http://localhost:4000';
@@ -25,8 +26,20 @@ let contentClient: ContentClient | undefined;
 let samplesClient: SamplesClient | undefined;
 let accountClient: AccountClient | undefined;
 
+// Products without photos in /admin show the photos from the current site's product pages.
+function withPhotoFallback(source: Catalog): Catalog {
+  return {
+    ...source,
+    getProductByHandle: async (handle) => {
+      const product = await source.getProductByHandle(handle);
+      return product && withCurrentSitePhotos(product);
+    },
+    listProducts: async () => (await source.listProducts()).map(withCurrentSitePhotos),
+  };
+}
+
 export function getCatalog(): Catalog {
-  catalog ??= createCatalog({ baseUrl: apiUrl() });
+  catalog ??= withPhotoFallback(createCatalog({ baseUrl: apiUrl() }));
   return catalog;
 }
 

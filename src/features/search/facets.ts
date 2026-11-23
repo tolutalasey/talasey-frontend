@@ -18,6 +18,7 @@ export const PRICE_BANDS: PriceBand[] = [
 
 const AVAILABILITY_LABELS: Record<string, string> = {
   'in-stock': 'In stock',
+  available: 'Available to order',
   'made-to-order': 'Made to order',
 };
 

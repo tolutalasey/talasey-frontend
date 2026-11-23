@@ -24,4 +24,8 @@
   .wide {
     grid-column: span 2;
   }
+
+  .fill {
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
 }

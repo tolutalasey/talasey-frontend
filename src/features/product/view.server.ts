@@ -62,6 +62,8 @@ export function leadTimeText(leadTime: Product['leadTime']): string | null {
 function stockOf(variant: ProductVariant | null, leadTime: Product['leadTime']): StockStatusProps {
   if (!variant) return { level: 'out-of-stock', label: 'Not available online yet' };
   if (isInStock(variant)) return { level: 'in-stock', label: `${variant.stock.quantity} in stock` };
+  if (!variant.stock.managed && !leadTime)
+    return { level: 'in-stock', label: 'Available to order' };
   if (!variant.stock.managed || variant.stock.backorder) {
     const wait = leadTimeText(leadTime);
     return {

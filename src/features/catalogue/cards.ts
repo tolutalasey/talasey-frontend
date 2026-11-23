@@ -8,6 +8,7 @@ import { cardImage } from './images';
 
 function stockOf({ availability }: Pick<SearchRecord, 'availability'>): StockStatusProps {
   if (availability.includes('in-stock')) return { level: 'in-stock', label: 'In stock' };
+  if (availability.includes('available')) return { level: 'in-stock', label: 'Available to order' };
   if (availability.includes('made-to-order')) {
     return { level: 'made-to-order', label: 'Made to order' };
   }

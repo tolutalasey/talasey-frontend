@@ -17,6 +17,8 @@ interface ProductGridProps {
   // On a range page: a card per colour, each with View product, Order sample and Share buttons,
   // as on the current site.
   byColour?: { offers: SampleOffer[] };
+  // A short row, such as "You may also need": the cards share the full width.
+  fill?: boolean;
 }
 
 function CardActions({ card, offers }: { card: ListingCard; offers: SampleOffer[] }) {
@@ -30,7 +32,14 @@ function CardActions({ card, offers }: { card: ListingCard; offers: SampleOffer[
   );
 }
 
-export function ProductGrid({ products, label, eager = 0, insert, byColour }: ProductGridProps) {
+export function ProductGrid({
+  products,
+  label,
+  eager = 0,
+  insert,
+  byColour,
+  fill = false,
+}: ProductGridProps) {
   const cards = byColour
     ? products.flatMap(listingCards).map((card, index) => (
         <li key={card.key}>
@@ -56,7 +65,7 @@ export function ProductGrid({ products, label, eager = 0, insert, byColour }: Pr
     );
   }
   return (
-    <ul className={styles.grid} aria-label={label}>
+    <ul className={`${styles.grid} ${fill ? styles.fill : ''}`} aria-label={label}>
       {cards}
     </ul>
   );
