@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { loadTurns, saveTurns, type Turn } from './conversation';
+import { conversationId, loadTurns, saveTurns, type Turn } from './conversation';
 import { uploadPhoto, type ChosenPhoto } from './photo';
 
 const MAX_SENT_TURNS = 30;
@@ -23,6 +23,7 @@ async function ask(turns: Turn[]): Promise<Answer> {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
+      conversationId: conversationId(),
       turns: turns
         .filter((turn) => !turn.failed)
         .slice(-MAX_SENT_TURNS)
@@ -74,6 +75,7 @@ export function useChat() {
   const restart = useCallback(() => {
     setTurns([]);
     saveTurns([]);
+    conversationId(true);
   }, []);
 
   return { turns, waiting, send, restart };

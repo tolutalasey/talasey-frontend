@@ -419,7 +419,25 @@
   cursor: pointer;
 }
 
-.attach:hover:not(:disabled) {
+.listening {
+  background: var(--color-brand600);
+  color: var(--color-white);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    box-shadow: 0 0 0 6px rgb(106 31 98 / 0.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listening {
+    animation: none;
+  }
+}
+
+.attach:hover:not(:disabled):not(.listening) {
   background: var(--color-sand);
 }
 

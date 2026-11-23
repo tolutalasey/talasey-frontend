@@ -266,3 +266,16 @@ export async function setEnquiryStatus(form: FormData) {
   revalidatePath('/admin/enquiries/');
   done(page, 'Status saved.');
 }
+
+const ASSISTANT = '/admin/assistant/';
+
+export async function switchAssistant(form: FormData) {
+  const on = text(form, 'on') === 'yes';
+  const { error } = await (await staffApi()).PUT('/admin/assistant/switch', { body: { on } });
+  if (error) failed(ASSISTANT, messageOf(error));
+  revalidatePath(ASSISTANT);
+  done(
+    ASSISTANT,
+    on ? 'Tala is on. The chat shows on the site.' : 'Tala is off. The chat is hidden.',
+  );
+}

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import {
+  ChatIcon,
   DeliveryIcon,
   HistoryIcon,
   HomeIcon,
@@ -28,6 +29,12 @@ const GROUPS: StaffNavGroup[] = [
         href: '/admin/enquiries/',
         label: 'Enquiries',
         icon: <MailIcon />,
+        permission: 'enquiries',
+      },
+      {
+        href: '/admin/assistant/',
+        label: 'Site assistant',
+        icon: <ChatIcon />,
         permission: 'enquiries',
       },
       {

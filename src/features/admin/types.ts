@@ -64,3 +64,13 @@ export const ENQUIRY_TITLE: Record<Enquiry['kind'], string> = {
   partner: 'Partner Programme application',
   warranty: 'Warranty registration',
 };
+
+export type AssistantStatus = Json<paths['/admin/assistant']['get']['responses'][200]>;
+export type AssistantUsage = Json<paths['/admin/assistant/usage']['get']['responses'][200]>;
+export type AssistantConversationSummary = Json<
+  paths['/admin/assistant/conversations']['get']['responses'][200]
+>[number];
+export type AssistantExchange = Json<
+  paths['/admin/assistant/conversations/{id}']['get']['responses'][200]
+>[number];
+export type AssistantGap = Json<paths['/admin/assistant/gaps']['get']['responses'][200]>[number];

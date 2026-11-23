@@ -1,5 +1,12 @@
 export * from './actions';
 export { formFromConfig } from './bespoke-form';
+export {
+  AssistantConversations,
+  AssistantGaps,
+  AssistantStats,
+  AssistantSwitch,
+  AssistantTranscript,
+} from './components/AssistantAdmin';
 export { BespokePricing } from './components/BespokePricing';
 export { EnquiryDetail, EnquiryList } from './components/EnquiriesAdmin';
 export { CatalogueTransfer } from './components/CatalogueTransfer';

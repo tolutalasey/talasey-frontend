@@ -8,9 +8,10 @@ import {
   type KeyboardEvent,
   type RefObject,
 } from 'react';
-import { CloseIcon, PlusIcon, SendIcon } from '@/ui/icons';
+import { CloseIcon, MicIcon, PlusIcon, SendIcon } from '@/ui/icons';
 import { cx } from '@/ui/cx';
 import { preparePhoto, type ChosenPhoto } from '../photo';
+import { canListen, listen, type Recogniser } from '../speech';
 import { MAX_MESSAGE_CHARS } from '../use-chat';
 import styles from './Assistant.module.css';
 
@@ -27,11 +28,36 @@ export function Composer({ onSend, busy, inputRef }: Props) {
   const [photo, setPhoto] = useState<ChosenPhoto | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
   const picker = useRef<HTMLInputElement>(null);
+  const [voice] = useState(canListen);
+  const recogniser = useRef<Recogniser | null>(null);
+  const [listening, setListening] = useState(false);
   const ready = (text.trim().length > 0 || photo !== null) && !busy;
+
+  const stopListening = () => {
+    recogniser.current?.stop();
+    recogniser.current = null;
+    setListening(false);
+  };
+
+  const toggleListening = () => {
+    if (listening) return stopListening();
+    setProblem(null);
+    const before = text.trim();
+    recogniser.current = listen(
+      (words) => setText(before ? `${before} ${words}` : words),
+      (stopped) => {
+        recogniser.current = null;
+        setListening(false);
+        if (stopped) setProblem(stopped);
+      },
+    );
+    setListening(recogniser.current !== null);
+  };
 
   const submit = (event?: FormEvent) => {
     event?.preventDefault();
     if (!ready) return;
+    stopListening();
     onSend(text, photo ?? undefined);
     setText('');
     setPhoto(null);
@@ -100,11 +126,30 @@ export function Composer({ onSend, busy, inputRef }: Props) {
             rows={1}
             value={text}
             maxLength={MAX_MESSAGE_CHARS}
-            placeholder={photo ? 'Say something about it (optional)…' : 'Write a message…'}
+            placeholder={
+              listening
+                ? 'Listening…'
+                : photo
+                  ? 'Say something about it (optional)…'
+                  : 'Write a message…'
+            }
             onChange={(event) => setText(event.target.value)}
             onKeyDown={onKeyDown}
           />
         </label>
+        {voice && (
+          <button
+            type="button"
+            className={cx(styles.attach, listening && styles.listening)}
+            onClick={toggleListening}
+            disabled={busy}
+            aria-pressed={listening}
+            aria-label={listening ? 'Stop listening' : 'Talk instead of typing'}
+            title={listening ? 'Stop listening' : 'Talk instead of typing'}
+          >
+            <MicIcon />
+          </button>
+        )}
         <button
           type="submit"
           className={cx(styles.send, ready && styles.sendReady)}

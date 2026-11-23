@@ -152,6 +152,13 @@ export const MailIcon = (props: StaffIconProps) => (
   </Icon>
 );
 
+export const ChatIcon = (props: StaffIconProps) => (
+  <Icon {...props}>
+    <path d="M4 5h16v11H9l-5 4z" />
+    <path d="M8 9h8M8 12h5" />
+  </Icon>
+);
+
 export const LockIcon = (props: StaffIconProps) => (
   <Icon {...props}>
     <rect x="4" y="10" width="16" height="11" rx="2" />
