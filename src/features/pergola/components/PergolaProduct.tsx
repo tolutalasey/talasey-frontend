@@ -5,19 +5,24 @@ import type { Build, Catalogue } from '../rules';
 import { AmyBuilder } from './AmyBuilder';
 import type { OtherBuilder } from './BiggerSize';
 import { PergolaDetails } from './PergolaDetails';
+import { PhotoBuilder } from './PhotoBuilder';
 import { formatPrice } from '@/lib/format';
 import { ToluBuilder } from './ToluBuilder';
 import styles from './PergolaProduct.module.css';
 
-export type Design = 'amy' | 'tolu';
+export type Design = 'photos' | 'amy' | 'tolu';
 
 export const DESIGNS: { id: Design; label: string; short: string; detail: string }[] = [
+  { id: 'photos', label: 'Design C', short: 'With photos', detail: 'Studio photos, step by step' },
   { id: 'amy', label: 'Design A', short: 'Step by step', detail: "Step by step, from Amy's spec" },
   { id: 'tolu', label: 'Design B', short: 'In 3D', detail: "In 3D, from Tolu's first version" },
 ];
 
 export const designHref = (path: string, design: Design) =>
-  design === 'amy' ? path : `${path}?design=${design}`;
+  design === 'photos' ? path : `${path}?design=${design}`;
+
+export const designFrom = (asked: unknown): Design =>
+  asked === 'amy' || asked === 'tolu' ? asked : 'photos';
 
 interface Props {
   builder: PergolaContent;
@@ -86,7 +91,15 @@ export function PergolaProduct({
   );
   return (
     <div className={styles.product}>
-      {design === 'tolu' ? (
+      {design === 'photos' ? (
+        <PhotoBuilder
+          rules={builder}
+          catalogue={catalogue}
+          others={others}
+          start={start}
+          head={head}
+        />
+      ) : design === 'tolu' ? (
         <ToluBuilder
           rules={builder}
           catalogue={catalogue}

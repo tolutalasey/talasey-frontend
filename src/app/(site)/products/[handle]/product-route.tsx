@@ -28,6 +28,7 @@ import {
   PergolaAddOnLinks,
   PergolaProduct,
   startFromSku,
+  designFrom,
 } from '@/features/pergola';
 import { FenceProduct, getFenceForProduct } from '@/features/fencing';
 import { getProductResources, ProductResources } from '@/features/knowledge-hub';
@@ -167,7 +168,7 @@ export async function ProductRoute({
             pergola && (
               <PergolaProduct
                 {...pergola}
-                design={query.design === 'tolu' ? 'tolu' : 'amy'}
+                design={designFrom(query.design)}
                 path={view.path}
                 title={product.title}
                 subtitle={product.subtitle}
