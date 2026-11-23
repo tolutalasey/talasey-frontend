@@ -11,10 +11,12 @@ interface Props {
   onOpen: () => void;
   onAsk: (text: string) => void;
   buttonRef: RefObject<HTMLButtonElement | null>;
+  // Just the round button, where the message box would sit over the page's own buttons.
+  compact?: boolean;
 }
 
 // Closed state: a message box to start typing straight away, and the round chat button.
-export function Launcher({ onOpen, onAsk, buttonRef }: Props) {
+export function Launcher({ onOpen, onAsk, buttonRef, compact = false }: Props) {
   const [text, setText] = useState('');
 
   const submit = (event: FormEvent) => {
@@ -25,7 +27,7 @@ export function Launcher({ onOpen, onAsk, buttonRef }: Props) {
 
   return (
     <div className={styles.launcher}>
-      <form className={styles.pill} onSubmit={submit}>
+      <form className={cx(styles.pill, compact && styles.pillHidden)} onSubmit={submit}>
         <label>
           <span className={styles.hidden}>Message {ASSISTANT_NAME}</span>
           <input

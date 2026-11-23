@@ -5,10 +5,11 @@ export {
   getPergolaForProduct,
   getPergolaPage,
   getPergolaPages,
+  getPergolaGuides,
   getPergolaPagesUsing,
   type PergolaPage,
 } from './loaders.server';
-export { startFromSku } from './rules';
+export { startFromQuery, startFromSku } from './rules';
 export type { PergolaContent } from './content';
 export type { OtherBuilder } from './components/BiggerSize';
 

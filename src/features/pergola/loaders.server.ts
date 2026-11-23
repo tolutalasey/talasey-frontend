@@ -5,8 +5,8 @@ import { cacheTags } from '@/lib/cache-tags';
 import { publishedContent } from '@/lib/content';
 import { productPath } from '@/lib/urls/keyword-map';
 import type { OtherBuilder } from './components/BiggerSize';
-import { pergolaContentSchema, type PergolaContent } from './content';
-import type { Catalogue } from './rules';
+import { asRules, pergolaContentSchema, type PergolaContent } from './content';
+import { builderGuide, type Catalogue } from './rules';
 
 export async function getPergolaBuilders(): Promise<PergolaContent[]> {
   'use cache';
@@ -128,4 +128,10 @@ export async function getPergolaPagesUsing(skus: string[]): Promise<PergolaPage[
   return (await getPergolaPages()).filter(({ builder }) =>
     skusOf(builder).some((sku) => sku && skus.includes(sku)),
   );
+}
+
+// What the assistant knows about every builder, for its site knowledge.
+export async function getPergolaGuides(): Promise<string[]> {
+  const [pages, catalogue] = await Promise.all([getPergolaPages(), getPergolaCatalogue()]);
+  return pages.map(({ builder, path }) => builderGuide(asRules(builder), catalogue, path));
 }

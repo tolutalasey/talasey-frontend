@@ -27,6 +27,7 @@ import {
   getPergolaPagesUsing,
   PergolaAddOnLinks,
   PergolaProduct,
+  startFromQuery,
   startFromSku,
   designFrom,
 } from '@/features/pergola';
@@ -175,9 +176,10 @@ export async function ProductRoute({
                 photos={<ProductPhotos photos={view.photos} name={product.title} />}
                 actions={actions}
                 start={
-                  Object.keys(query).some((key) => key !== 'design')
+                  startFromQuery(pergola.builder, query) ??
+                  (Object.keys(query).some((key) => key !== 'design')
                     ? startFromSku(pergola.builder, variant?.sku)
-                    : undefined
+                    : undefined)
                 }
               />
             )

@@ -1,6 +1,7 @@
 import 'server-only';
 import { getRanges, rangePath } from '@/features/catalogue';
 import { getAllFaqs, getGuides, guidePath, helpPath } from '@/features/content';
+import { getPergolaGuides } from '@/features/pergola';
 import { getSearchRecords, type SearchRecord } from '@/features/search';
 import { formatPrice } from '@/lib/format';
 import { productPath } from '@/lib/urls/keyword-map';
@@ -37,11 +38,12 @@ function productLine(product: SearchRecord): string {
 // What the site says, as plain text for the assistant to answer from: ranges, every published
 // product with its price and stock, guides and help answers.
 export async function assistantKnowledge(): Promise<string> {
-  const [ranges, products, guides, faqs] = await Promise.all([
+  const [ranges, products, guides, faqs, pergolas] = await Promise.all([
     getRanges(),
     getSearchRecords(),
     getGuides(),
     getAllFaqs(),
+    getPergolaGuides(),
   ]);
   return [
     '# Ranges',
@@ -54,6 +56,9 @@ export async function assistantKnowledge(): Promise<string> {
     '',
     '# Products (prices include VAT)',
     ...products.map(productLine),
+    '',
+    '# Pergola builders',
+    ...pergolas,
     '',
     '# Guides',
     ...guides

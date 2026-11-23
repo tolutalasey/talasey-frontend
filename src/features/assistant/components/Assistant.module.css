@@ -36,6 +36,10 @@
   box-shadow: var(--shadow-card);
 }
 
+.pillHidden {
+  display: none;
+}
+
 .pill label {
   flex: 1;
   min-width: 0;
@@ -462,7 +466,7 @@
 }
 
 @media (min-width: 40rem) {
-  .pill {
+  .pill:not(.pillHidden) {
     display: flex;
   }
 

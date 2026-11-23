@@ -1,3 +1,5 @@
+import { slugify } from '@/lib/slug';
+
 // The pergola builders' rules, from the "Pergola builders" content in /content: which SKU each
 // size, fixing and side takes, and what a build puts in the bag. Both builder designs use these.
 
@@ -303,4 +305,75 @@ export function startFromSku(rules: PergolaRules, sku: string | null | undefined
     size,
     fixing: rules.sizes[size]?.wallMountedSku === sku ? 'wall-mounted' : 'free-standing',
   };
+}
+
+const SIDE_IDS: SideId[] = ['back', 'left', 'right', 'front'];
+const FIXINGS: Fixing[] = ['free-standing', 'wall-mounted'];
+
+type Query = Record<string, string | string[] | undefined>;
+const one = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value);
+
+// A build described in the address, like ?size=4x3&fixing=wall-mounted&front=wind-screen, so a
+// link from the chat or an email opens the builder ready chosen. Anything not recognised is
+// left for the visitor to choose.
+export function startFromQuery(rules: PergolaRules, query: Query): Partial<Build> | undefined {
+  const wanted = one(query.size)?.toLowerCase().replace(/\s|m/g, '');
+  const size = rules.sizes.findIndex((option) => `${option.width}x${option.depth}` === wanted);
+  const fixing = FIXINGS.find((value) => value === one(query.fixing));
+  if (size < 0 && !fixing) return undefined;
+  const sides = emptyBuild().sides;
+  for (const id of SIDE_IDS) {
+    const option = rules.sides.find((candidate) => slugify(candidate.name) === one(query[id]));
+    sides[id] = { option: option?.name ?? null, slats: [] };
+  }
+  const heaters = Number(one(query.heaters));
+  return {
+    ...(size >= 0 && { size }),
+    ...(fixing && { fixing }),
+    sides,
+    lighting: one(query.lighting) === 'yes',
+    heaters: Number.isInteger(heaters) && heaters > 0 && heaters <= 4 ? heaters : 0,
+  };
+}
+
+// The words the assistant gets about one builder: what can be chosen, what the structure costs
+// and how to write a link that opens it ready chosen.
+export function builderGuide(rules: PergolaRules, catalogue: Catalogue, path: string): string {
+  const price = (sku: string | null) => {
+    const found = sku ? catalogue[sku] : undefined;
+    return found
+      ? new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(
+          found.pricePence / 100,
+        )
+      : null;
+  };
+  const sizes = rules.sizes.map((size) => {
+    const free = price(size.freeStandingSku);
+    const wall = price(size.wallMountedSku);
+    return `  - size=${size.width}x${size.depth} (${size.label}): free-standing ${free ?? 'not sold online'}, wall-mounted ${wall ?? 'not sold online'}`;
+  });
+  const sides = rules.sides.map((option) => {
+    const lengths = [3, 4].filter((length) => partsForSide(option, length));
+    if (lengths.length === 0) {
+      return `  - ${option.name}: not sold online yet, so pass it to the team for a quote`;
+    }
+    const each = lengths.map((length) => {
+      const sku = length === 3 ? option.sku3m : option.sku4m;
+      return option.kind === PANELS
+        ? `${length} m side ${panelCount(option, length)} panels at ${price(sku) ?? '-'} each`
+        : `${length} m side ${price(sku) ?? '-'}`;
+    });
+    return `  - ${slugify(option.name)} (${option.name}): ${each.join(', ')}`;
+  });
+  return [
+    `## ${rules.range} pergola builder: ${path}`,
+    rules.intro,
+    `Roof: ${rules.roof}. Lighting: ${lightingIncluded(rules) ? 'LED lighting included' : 'optional LED kit (lighting=yes)'}.${rules.heaterSku ? ` Heaters: 3kW, ${price(rules.heaterSku) ?? ''} each (heaters=1 to 4).` : ''}`,
+    'Sizes (width x depth; a 6 m side is two 3 m bays) and structure prices:',
+    ...sizes,
+    'Fixing: fixing=free-standing or fixing=wall-mounted (wall-mounted fixes the back to the house, so the back takes no side).',
+    'Sides: back, left, right and front can each take one of these (left and right run along the depth):',
+    ...sides,
+    `Link that opens the builder ready chosen: ${path}?size=4x3&fixing=wall-mounted&front=<side>&left=<side>&lighting=yes&heaters=1 (leave out anything not chosen). The builder shows the full price and has Add to bag.`,
+  ].join('\n');
 }

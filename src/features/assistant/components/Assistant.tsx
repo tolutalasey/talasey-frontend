@@ -9,6 +9,8 @@ import { Launcher } from './Launcher';
 
 // Pages where the chat would sit on top of something more important.
 const QUIET_PATHS = ['/checkout', '/order'];
+// Pages with their own buy buttons in the corner, where only the round chat button shows.
+const BUSY_PATHS = ['/products/'];
 const OPEN_KEY = 'talasey:assistant-open';
 
 function wasOpen(): boolean {
@@ -64,6 +66,7 @@ export function Assistant() {
       ) : (
         <Launcher
           buttonRef={button}
+          compact={BUSY_PATHS.some((path) => pathname.startsWith(path))}
           onOpen={() => show(true)}
           onAsk={(text) => {
             show(true);
