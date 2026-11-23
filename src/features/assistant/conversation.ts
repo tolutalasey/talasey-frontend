@@ -1,6 +1,10 @@
+import type { AssistantProductCard } from '@/api-client';
+
 export interface Turn {
   role: 'visitor' | 'assistant';
   text: string;
+  // Products the assistant picked to show as cards under its words.
+  products?: AssistantProductCard[];
   // A reply that is only an apology for a failed request: shown, but never sent back.
   failed?: boolean;
 }

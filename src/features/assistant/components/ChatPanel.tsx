@@ -8,6 +8,7 @@ import { ASSISTANT_NAME, greeting, STARTERS } from '../greeting';
 import styles from './Assistant.module.css';
 import { Composer } from './Composer';
 import { MessageText } from './MessageText';
+import { ProductCards } from './ProductCards';
 import { TalaAvatar } from './TalaAvatar';
 
 interface Props {
@@ -103,6 +104,7 @@ export function ChatPanel({ turns, waiting, onSend, onRestart, onClose }: Props)
               <TalaAvatar />
               <div className={styles.text}>
                 <MessageText text={turn.text} />
+                {turn.products && <ProductCards products={turn.products} />}
               </div>
             </div>
           ),

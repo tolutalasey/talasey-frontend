@@ -12,7 +12,7 @@ const FAILURES: Record<number, string> = {
 const FAILED =
   "Sorry, I couldn't answer just now. Please try again, or [contact the team](/contact/) on 0330 333 8030.";
 
-type Answer = { text: string; failed?: boolean };
+type Answer = Pick<Turn, 'text' | 'failed' | 'products'>;
 
 async function ask(turns: Turn[]): Promise<Answer> {
   const response = await fetch('/api/assistant/', {
@@ -28,8 +28,10 @@ async function ask(turns: Turn[]): Promise<Answer> {
     }),
   });
   if (!response.ok) return { text: FAILURES[response.status] ?? FAILED, failed: true };
-  const body = (await response.json()) as { reply?: string };
-  return body.reply ? { text: body.reply } : { text: FAILED, failed: true };
+  const body = (await response.json()) as { reply?: string; products?: Turn['products'] };
+  return body.reply
+    ? { text: body.reply, products: body.products?.length ? body.products : undefined }
+    : { text: FAILED, failed: true };
 }
 
 export function useChat() {

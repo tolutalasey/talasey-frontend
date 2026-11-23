@@ -303,3 +303,22 @@ export async function removeSampleFromBasket(form: FormData) {
   }
   refresh();
 }
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// One variant straight into the bag, for places that offer a single button, like the chat.
+export async function addVariantToBag(variantId: string, quantity: number): Promise<FormState> {
+  if (!UUID.test(variantId) || !Number.isInteger(quantity) || quantity < 1 || quantity > 999) {
+    return { message: "That couldn't be added. Open the product to choose." };
+  }
+  const client = getBasketClient();
+  let basketId = await currentBasketId();
+  if (!basketId) {
+    basketId = (await client.create()).id;
+    await rememberBasket(basketId);
+  }
+  const added = await client.addItem(basketId, variantId, quantity);
+  if (!added.ok) return { message: added.message };
+  refresh();
+  return { added: Date.now() };
+}

@@ -1,4 +1,5 @@
-import { ApiError } from '@/api-client';
+import { ApiError, type AssistantProductCard } from '@/api-client';
+import { getSearchRecords } from '@/features/search';
 import { getAssistantClient } from '@/lib/commerce';
 
 const MAX_BODY_BYTES = 200_000;
@@ -12,6 +13,16 @@ const fromThisSite = (request: Request) => {
   const origin = request.headers.get('origin');
   return !origin || new URL(origin).host === new URL(request.url).host;
 };
+
+// Cards for products with no photo in /admin get the one the site shows for them.
+async function withPhotos(cards: AssistantProductCard[]): Promise<AssistantProductCard[]> {
+  if (cards.every((card) => card.image)) return cards;
+  const records = await getSearchRecords();
+  return cards.map((card) => ({
+    ...card,
+    image: card.image ?? records.find((record) => record.handle === card.handle)?.thumbnail ?? null,
+  }));
+}
 
 // Whether the chat button shows: only when the backend has the assistant switched on.
 export async function GET() {
@@ -32,8 +43,11 @@ export async function POST(request: Request) {
     return Response.json({ error: 'That message is too long' }, { status: 413 });
   }
   try {
-    const reply = await getAssistantClient().reply(JSON.parse(text), visitorIp(request));
-    return Response.json({ reply }, { headers: { 'cache-control': 'no-store' } });
+    const answer = await getAssistantClient().reply(JSON.parse(text), visitorIp(request));
+    return Response.json(
+      { reply: answer.reply, products: await withPhotos(answer.products) },
+      { headers: { 'cache-control': 'no-store' } },
+    );
   } catch (error) {
     const status = error instanceof ApiError ? error.status : 500;
     return Response.json({ error: 'No reply' }, { status: status === 429 ? 429 : 503 });

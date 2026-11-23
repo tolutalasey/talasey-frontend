@@ -13,6 +13,12 @@ export { OrderConfirmation } from './components/OrderConfirmation';
 export { getBasket, getBasketView, getCheckoutView, getOrder } from './loaders.server';
 export { completeBasket } from './basket.server';
 export { CurrentBag } from './components/CurrentBag';
-export { addBuildToBasket, addSampleToBasket, buyAgain, removeSampleFromBasket } from './actions';
+export {
+  addBuildToBasket,
+  addVariantToBag,
+  addSampleToBasket,
+  buyAgain,
+  removeSampleFromBasket,
+} from './actions';
 export { MadeToMeasure } from './components/MadeToMeasure';
 export { buyAgainFeedback } from './basket-again';

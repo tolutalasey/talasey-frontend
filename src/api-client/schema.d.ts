@@ -8653,6 +8653,22 @@ export interface operations {
                 content: {
                     "application/json": {
                         reply: string;
+                        products: {
+                            handle: string;
+                            title: string;
+                            href: string;
+                            image: string | null;
+                            choice: string | null;
+                            price: string | null;
+                            stock: string;
+                            /** @description Set when one variant is chosen and it can go straight in the bag */
+                            add: {
+                                /** Format: uuid */
+                                variantId: string;
+                                quantity: number;
+                                label: string;
+                            } | null;
+                        }[];
                     };
                 };
             };

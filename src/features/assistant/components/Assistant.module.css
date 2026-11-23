@@ -419,3 +419,119 @@
     height: 100%;
   }
 }
+
+/* Product cards under a reply */
+
+.cards {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.text .cards {
+  padding-left: 0;
+}
+
+.card {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  border: 1px solid var(--color-line);
+  border-radius: 0.75rem;
+  background: var(--color-white);
+}
+
+.cardPhoto {
+  position: relative;
+  flex: none;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 0.5rem;
+  background: var(--color-stone);
+  overflow: hidden;
+}
+
+.cardImage {
+  object-fit: cover;
+}
+
+.cardBody {
+  display: grid;
+  align-content: start;
+  gap: 0.15rem;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.text a.cardTitle {
+  color: var(--color-ink);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+}
+
+.text a.cardTitle:hover {
+  text-decoration: underline;
+}
+
+.cardChoice,
+.cardMeta {
+  font-size: var(--font-size-small);
+  color: var(--color-ink-muted);
+}
+
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-2);
+}
+
+.cardMeta strong {
+  color: var(--color-ink);
+  font-weight: var(--font-weight-medium);
+}
+
+.cardActions {
+  margin-top: var(--space-1);
+}
+
+.cardAdd,
+.text a.cardView {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font: inherit;
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-regular);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cardAdd {
+  border: 0;
+  background: var(--color-brand600);
+  color: var(--color-white);
+}
+
+.cardAdd:hover:not(:disabled) {
+  background: var(--color-brand800);
+}
+
+.cardAdd:disabled {
+  opacity: 0.8;
+  cursor: default;
+}
+
+.text a.cardView {
+  border: 1px solid var(--color-stone-muted);
+  color: var(--color-brand800);
+}
+
+.cardProblem {
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-small);
+  color: var(--color-error);
+}
