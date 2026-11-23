@@ -11,8 +11,8 @@ describe('toCssVariables', () => {
   });
 
   it('names variables group-name in kebab case', () => {
-    expect(css).toContain('--color-brand600: #6C1B78;');
-    expect(css).toContain('--color-ink-muted: #504A56;');
+    expect(css).toContain('--color-brand600: #6A1F62;');
+    expect(css).toContain('--color-ink-muted: #5A5A58;');
     expect(css).toContain('--focus-ring-width: 3px;');
   });
 

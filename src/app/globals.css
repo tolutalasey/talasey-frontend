@@ -1,5 +1,5 @@
 :root {
-  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-display: var(--font-gilda), Georgia, serif;
   --font-body: var(--font-hanken), system-ui, sans-serif;
 }
 
@@ -16,6 +16,7 @@ body {
   margin: 0;
   font-family: var(--font-body);
   font-size: var(--font-size-body);
+  font-weight: var(--font-weight-extra-light);
   line-height: 1.6;
   color: var(--color-ink);
   background: var(--color-stone);
@@ -27,9 +28,8 @@ h3 {
   margin: 0 0 var(--space-4);
   font-family: var(--font-display);
   font-weight: var(--font-weight-regular);
-  font-variation-settings: 'SOFT' 100;
   line-height: 1.15;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   text-wrap: balance;
 }
 
@@ -80,11 +80,25 @@ main:focus {
   }
 }
 
+/* Small text stays readable a step heavier than the Extra Light body copy. */
+small,
+label,
+legend,
+figcaption,
+input,
+select,
+textarea,
+th,
+td,
+nav {
+  font-weight: var(--font-weight-light);
+}
+
 /* Small capitals with wide tracking, like the strapline under the logo. */
 .eyebrow {
   margin: 0 0 var(--space-3);
   font-size: 0.75rem;
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-regular);
   line-height: 1.4;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -114,7 +128,7 @@ main:focus {
   padding: 0 var(--space-6);
   border: var(--border-input) solid transparent;
   border-radius: 999px;
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-regular);
   letter-spacing: 0.01em;
   text-decoration: none;
   transition:
@@ -204,7 +218,6 @@ main:focus {
     inset 0 0 0 5.5px var(--color-brand800);
   color: var(--color-brand800);
   font-family: var(--font-display);
-  font-variation-settings: 'SOFT' 100;
   font-size: 1.05rem;
   line-height: 1.15;
   text-align: center;

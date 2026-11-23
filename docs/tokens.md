@@ -4,7 +4,7 @@ Design tokens taken from the Talasey logo and the 2026 brochures: colour, type s
 
 - `import { color } from '@/tokens'` for TypeScript.
 - `import '@/tokens/tokens.css'` for CSS custom properties (`--color-brand600`, `--space-4`, `--target-min`, ...). It's generated from `tokens.ts` by `npm run tokens`, which `dev`, `build` and `test` run first.
-- `fonts/`: Fraunces (headings, weight and soft axes, 62 KB) and Hanken Grotesk (text, weight axis, 35 KB) as Latin variable WOFF2 files. Fraunces stands in for The Seasons, the serif in the brochures, which is an Adobe font; Hanken Grotesk is the open version of HK Grotesk, which the brochures and talasey.co.uk use. The storefront loads them with `next/font/local`; `fonts/fonts.css` is for Storybook and anything else without `next/font`.
+- `fonts/`: Gilda Display (headings) and Hanken Grotesk (text, weight axis, 35 KB) as Latin WOFF2 files. Gilda Display stands in for The Seasons, the serif in the brochures, which is an Adobe font; Hanken Grotesk is the open version of HK Grotesk, which the brochures and talasey.co.uk use. The storefront loads them with `next/font/local`; `fonts/fonts.css` is for Storybook and anything else without `next/font`.
 
 ```sh
 npm run tokens
@@ -27,4 +27,4 @@ npm run test     # type scale and the WCAG contrast rules
 
 ## Rebuilding the fonts
 
-The files are the Latin variable fonts from `@fontsource-variable/fraunces` (the `soft` file) and `@fontsource-variable/hanken-grotesk` (version 5, SIL Open Font License, copies in `fonts/`). To use The Seasons instead, add its licensed file and point `--font-display` at it in `src/app/layout.tsx`.
+The files are Gilda Display from `@fontsource/gilda-display` (the free stand-in for the brand's The Seasons) and the Latin variable font from `@fontsource-variable/hanken-grotesk` (version 5, SIL Open Font License, copies in `fonts/`). To use The Seasons instead, add its licensed file and point `--font-display` at it in `src/app/layout.tsx`.

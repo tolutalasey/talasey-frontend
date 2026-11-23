@@ -34,7 +34,7 @@ The design follows the 2026 brochures (Pergolas, Finishing Touches, Porcelain & 
 
 - Real project photos, square-cornered, with a plum caption tag naming the product (`.caption`).
 - Aubergine panels beside photos (`ui/SplitPanel`), the trust strip (`ui/TrustStrip`), the promo line and the footer.
-- Serif headings (Fraunces, soft) and Hanken Grotesk text; eyebrows in tracked capitals (`.eyebrow`) like the logo's strapline.
+- Serif headings (Gilda Display) and Hanken Grotesk text, Extra Light for body copy and Light for small text, as in the Extended Range Brand Styling 2026 guide; eyebrows in tracked capitals (`.eyebrow`) like the logo's strapline.
 - One round stamp per page (`.sticker`), for an offer or a standout fact.
 - Link buttons: `.button`, `.button-secondary`, and `.button-on-dark` / `.button-outline-on-dark` on aubergine.
 - The home page's moving wall of brochure photos (`features/home/components/Showcase`) is CSS only. It pauses on hover, on focus and with its Pause switch, and stands still for anyone who asks their device for less motion.
@@ -45,7 +45,7 @@ Brochure photos are in `public/images/brand/`, listed in `features/home/brand.ts
 ## Waiting on brand input
 
 - Confirm the palette against the brand guidelines, including `warning` (#8A4B00) and `error` (#B3261E), which we picked.
-- Headings use Fraunces in place of The Seasons until Talasey's Adobe Fonts licence covers the site.
+- Headings use Gilda Display in place of The Seasons until Talasey's Adobe Fonts licence covers the site.
 - The logo is a PNG from talasey.co.uk until we have the SVG.
 - Product photos: the master sheet has none yet, so products show a placeholder.
 - The grid gap (24px) and the sticky basket bar shadow aren't in the PRD.

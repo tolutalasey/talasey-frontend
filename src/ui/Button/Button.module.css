@@ -8,7 +8,7 @@
   border: var(--border-input) solid var(--color-brand950);
   border-radius: 999px;
   font: inherit;
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-regular);
   line-height: 1.2;
   cursor: pointer;
   transition:

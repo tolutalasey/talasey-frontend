@@ -5,12 +5,12 @@ import localFont from 'next/font/local';
 import type { ReactNode } from 'react';
 import { site } from '@/lib/site';
 
-// Self-hosted from src/tokens, Latin subset: Fraunces with its weight and soft axes for headings,
-// Hanken Grotesk for text, 97 KB together.
-const fraunces = localFont({
-  src: '../tokens/fonts/fraunces-soft-wght.woff2',
-  weight: '100 900',
-  variable: '--font-fraunces',
+// Self-hosted from src/tokens, Latin subset: Gilda Display for headings until the brand's
+// The Seasons is licensed for the web, Hanken Grotesk for text.
+const gilda = localFont({
+  src: '../tokens/fonts/gilda-display-400.woff2',
+  weight: '400',
+  variable: '--font-gilda',
   display: 'swap',
 });
 
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#2B0337',
+  themeColor: '#3F033A',
 };
 
 // Only what every page shares. The shop's header, footer and consent live in (site), and the
@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang={site.locale}
-      className={`${fraunces.variable} ${hanken.variable}`}
+      className={`${gilda.variable} ${hanken.variable}`}
       suppressHydrationWarning
     >
       <body>{children}</body>

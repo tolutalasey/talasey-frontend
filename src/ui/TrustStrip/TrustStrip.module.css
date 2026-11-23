@@ -1,5 +1,6 @@
 .strip {
   padding: var(--space-12) var(--layout-gutter-mobile);
+  background: var(--color-sand);
 }
 
 .list {

@@ -328,7 +328,6 @@ form[data-apply-on-change] .apply {
 
 .samplesHeading {
   font-family: var(--font-display);
-  font-variation-settings: 'SOFT' 100;
   font-size: 1.625rem;
   font-weight: 350;
   line-height: 1.15;
@@ -574,7 +573,6 @@ form[data-apply-on-change] .apply {
   background: transparent;
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-variation-settings: 'SOFT' 100;
   font-size: 1.5rem;
   outline: none;
 }

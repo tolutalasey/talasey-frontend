@@ -1,30 +1,33 @@
-// From the Talasey logo and the 2026 brochures (docs/design-system.md).
+// From the Extended Range Brand Styling 2026 guide: deep plum, white and soft neutrals.
 export const color = {
-  brand50: '#F4ECF5',
-  brand600: '#6C1B78',
-  brand800: '#4A0F55',
-  brand950: '#2B0337',
-  stone: '#EFE4DC',
+  brand50: '#F3EEF1',
+  brand600: '#6A1F62',
+  brand800: '#52104B',
+  brand950: '#3F033A',
+  sand: '#DDD3CB',
+  stone: '#F3F0EC',
   stoneMuted: '#C4B2BF',
-  silver: '#D1D2D4',
-  ink: '#2A282C',
-  inkMuted: '#504A56',
-  stone50: '#F6F2EF',
-  line: '#E8E1DC',
+  silver: '#DADADA',
+  ink: '#3C3C3B',
+  inkMuted: '#5A5A58',
+  stone50: '#F8F6F3',
+  line: '#E4DED8',
   white: '#FFFFFF',
   success: '#1F6B45',
   warning: '#8A4B00',
   error: '#B3261E',
 } as const;
 
-// Headings in Fraunces, the free stand-in for The Seasons in the brochures; text in Hanken
-// Grotesk, the open version of HK Grotesk used by the brochures and talasey.co.uk.
+// Headings in Gilda Display, the free stand-in for The Seasons (Adobe Fonts) in the brand guide;
+// text in Hanken Grotesk: Extra Light for body copy, Regular for sub-headings.
 export const font = {
-  display: "'Fraunces', Georgia, serif",
+  display: "'Gilda Display', Georgia, serif",
   body: "'Hanken Grotesk', system-ui, sans-serif",
 } as const;
 
 export const fontWeight = {
+  extraLight: '200',
+  light: '300',
   regular: '400',
   medium: '500',
   semibold: '600',
