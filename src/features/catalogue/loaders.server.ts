@@ -110,7 +110,10 @@ export async function getRanges(): Promise<Range[]> {
     return parsed.success ? [parsed.data] : [];
   });
   const slugs = new Set(ranges.map((range) => range.slug));
-  return [...ranges.map(withCodeSettings), ...fallbackRanges.filter((range) => !slugs.has(range.slug))]
+  return [
+    ...ranges.map(withCodeSettings),
+    ...fallbackRanges.filter((range) => !slugs.has(range.slug)),
+  ]
     .map(withCurrentSiteWords)
     .sort((a, b) => menuOrder(a.slug) - menuOrder(b.slug));
 }
@@ -145,6 +148,21 @@ export interface RangeListing {
   // Everything in the range before filters, for the intro's price line and empty states.
   inRange: number;
   priceRange: SearchResult['priceRange'];
+  // The range's own pages that have products, so a button never leads to an empty page.
+  stocked: CuratedPage[];
+}
+
+function withProducts(pages: CuratedPage[], facets: SearchResult['facets']): CuratedPage[] {
+  const counts = new Map(
+    facets.flatMap((facet) =>
+      facet.values.map((value) => [`${facet.id}:${value.slug}`, value.count]),
+    ),
+  );
+  return pages.filter((page) =>
+    Object.entries(page.filters).every(([facet, values]) =>
+      values.some((value) => (counts.get(`${facet}:${value}`) ?? 0) > 0),
+    ),
+  );
 }
 
 export async function getRangeListing(
@@ -161,7 +179,12 @@ export async function getRangeListing(
     }),
     searchProducts({ scope: range.scope, pageSize: 1 }),
   ]);
-  return { result, inRange: unfiltered.total, priceRange: unfiltered.priceRange };
+  return {
+    result,
+    inRange: unfiltered.total,
+    priceRange: unfiltered.priceRange,
+    stocked: withProducts(range.curated, unfiltered.facets),
+  };
 }
 
 // For product rows on content pages, which are built ahead of time: a build without the API

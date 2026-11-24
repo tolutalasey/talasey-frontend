@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useState, type ReactNode } from 'react';
 import {
@@ -21,6 +22,7 @@ import {
 } from '../rules';
 import { PHOTO_HEIGHT, PHOTO_WIDTH, sideLook, sidePhoto, wholePhoto } from '../photo-views';
 import { BiggerSize, type OtherBuilder } from './BiggerSize';
+import { lookOf, type SceneSide } from './PergolaScene3D';
 import { pounds, usePergolaBuild } from './usePergolaBuild';
 import styles from './PhotoBuilder.module.css';
 
@@ -33,7 +35,14 @@ interface Props {
 }
 
 type Step = 'structure' | 'styling' | 'addons' | 'overview';
-type View = 'whole' | 'all' | SideId;
+type View = 'whole' | 'all' | 'spin' | SideId;
+
+const PergolaScene3D = dynamic(() => import('./PergolaScene3D'), {
+  ssr: false,
+  loading: () => <p className={styles.sceneLoading}>Loading the 3D pergola…</p>,
+});
+
+const ignoreCanvas = () => {};
 
 const STEPS: { id: Step; label: string }[] = [
   { id: 'structure', label: 'Structure' },
@@ -127,7 +136,39 @@ export function PhotoBuilder({ rules, catalogue, others, start, head }: Props) {
   const sideCaption = (side: Side) =>
     side.onWall ? 'On the wall' : (build.sides[side.id].option ?? 'Open');
 
+  const sceneSides: SceneSide[] = sides.map((side) => {
+    const option = optionOf(side.id);
+    return {
+      id: side.id,
+      look: option && !side.onWall ? lookOf(option.name, option.kind) : null,
+      slats: build.sides[side.id].slats,
+    };
+  });
+
   const stage = () => {
+    if (view === 'spin' && size) {
+      return (
+        <>
+          <div className={styles.scene}>
+            <PergolaScene3D
+              width={size.width}
+              depth={size.depth}
+              wallMounted={build.fixing === 'wall-mounted'}
+              sides={sceneSides}
+              led={lightingIncluded(rules) || build.lighting}
+              heaters={build.heaters}
+              evening={false}
+              louvreAngle={35}
+              view="corner"
+              viewKey={0}
+              photoMode={false}
+              onCanvas={ignoreCanvas}
+            />
+          </div>
+          <span className={styles.chip}>Drag to spin it round</span>
+        </>
+      );
+    }
     if (view === 'all') {
       return (
         <div className={styles.grid}>
@@ -155,7 +196,7 @@ export function PhotoBuilder({ rules, catalogue, others, start, head }: Props) {
         </div>
       );
     }
-    const side = view === 'whole' ? null : sideById(view);
+    const side = view === 'whole' || view === 'spin' ? null : sideById(view);
     const src = side && !side.onWall ? sideShot(side) : wholePhoto(rules, size, build.fixing);
     const label = side
       ? `${side.name} side (${side.length} m) · ${sideCaption(side)}`
@@ -425,21 +466,25 @@ export function PhotoBuilder({ rules, catalogue, others, start, head }: Props) {
         <section className={styles.stage} aria-label="Preview">
           <div className={styles.frame}>{stage()}</div>
           <div className={styles.views} role="tablist" aria-label="Preview view">
-            {(['whole', 'all', ...SIDE_ORDER] as View[]).map((option) => (
+            {(['whole', 'spin', 'all', ...SIDE_ORDER] as View[]).map((option) => (
               <button
                 key={option}
                 type="button"
                 role="tab"
                 aria-selected={view === option}
                 onClick={() =>
-                  option === 'whole' || option === 'all' ? setView(option) : pickSide(option)
+                  option === 'whole' || option === 'all' || option === 'spin'
+                    ? setView(option)
+                    : pickSide(option)
                 }
               >
                 {option === 'whole'
                   ? 'Whole pergola'
-                  : option === 'all'
-                    ? 'All sides'
-                    : (sideById(option)?.name ?? option)}
+                  : option === 'spin'
+                    ? 'Spin in 3D'
+                    : option === 'all'
+                      ? 'All sides'
+                      : (sideById(option)?.name ?? option)}
               </button>
             ))}
           </div>

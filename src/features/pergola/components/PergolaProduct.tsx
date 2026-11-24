@@ -13,7 +13,7 @@ import styles from './PergolaProduct.module.css';
 export type Design = 'photos' | 'amy' | 'tolu';
 
 export const DESIGNS: { id: Design; label: string; short: string; detail: string }[] = [
-  { id: 'photos', label: 'Design C', short: 'With photos', detail: 'Studio photos, step by step' },
+  { id: 'photos', label: 'Design C', short: 'With photos', detail: 'Studio photos, step by step, and spin it in 3D' },
   { id: 'amy', label: 'Design A', short: 'Step by step', detail: "Step by step, from Amy's spec" },
   { id: 'tolu', label: 'Design B', short: 'In 3D', detail: "In 3D, from Tolu's first version" },
 ];

@@ -130,7 +130,7 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
         </div>
       </header>
       {lead}
-      {range.curated.length > 0 && (
+      {listing.stocked.length > 0 && (
         <nav aria-label={`More ${range.name.toLowerCase()}`} className={styles.curated}>
           <ul>
             <li>
@@ -138,7 +138,7 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
                 All {range.name.toLowerCase()}
               </NextLink>
             </li>
-            {range.curated.map((page) => (
+            {listing.stocked.map((page) => (
               <li key={page.slug}>
                 <NextLink
                   href={curatedPath(range, page)}
