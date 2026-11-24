@@ -1,13 +1,26 @@
-/* Look 4: the photos and the buy box sit in white frames side by side; details below. */
+/* Look 4: the photos and the buy box sit in white frames side by side; details below. Every
+   section of the page keeps the same space from the next, so no two cards touch. */
 .product {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8);
   padding: var(--space-4) var(--layout-gutter-mobile) var(--space-8);
+}
+
+.product > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* The breadcrumbs sit closer to the photos than the sections do to each other. */
+.product > nav:first-child {
+  margin-bottom: calc(var(--space-4) - var(--space-8));
 }
 
 .top {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-4);
-  margin-top: var(--space-4);
 }
 
 .media {
@@ -193,7 +206,6 @@
 .facts {
   display: grid;
   gap: var(--space-8);
-  margin-top: var(--space-4);
   padding: var(--space-8) var(--space-6);
 }
 
@@ -448,7 +460,6 @@
 }
 
 .message {
-  margin-top: var(--space-12);
   padding: var(--space-6);
 }
 
