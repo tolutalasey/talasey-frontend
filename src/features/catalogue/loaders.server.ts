@@ -110,9 +110,24 @@ export async function getRanges(): Promise<Range[]> {
     return parsed.success ? [parsed.data] : [];
   });
   const slugs = new Set(ranges.map((range) => range.slug));
-  return [...ranges, ...fallbackRanges.filter((range) => !slugs.has(range.slug))]
+  return [...ranges.map(withCodeSettings), ...fallbackRanges.filter((range) => !slugs.has(range.slug))]
     .map(withCurrentSiteWords)
     .sort((a, b) => menuOrder(a.slug) - menuOrder(b.slug));
+}
+
+// The admin edits a range's words and photos; how its cards look and lead, and its sub-pages,
+// still come from the code unless the admin has set them.
+function withCodeSettings(range: Range): Range {
+  const code = fallbackRanges.find(({ slug }) => slug === range.slug);
+  if (!code) return range;
+  const stored = new Set(range.curated.map(({ slug }) => slug));
+  return {
+    ...range,
+    cardPhotos: range.cardPhotos ?? code.cardPhotos,
+    leadWith: range.leadWith ?? code.leadWith,
+    restHeading: range.restHeading ?? code.restHeading,
+    curated: [...range.curated, ...code.curated.filter(({ slug }) => !stored.has(slug))],
+  };
 }
 
 export async function getRange(slug: string): Promise<Range | null> {

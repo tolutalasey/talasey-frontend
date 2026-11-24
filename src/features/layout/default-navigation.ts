@@ -26,7 +26,6 @@ export const defaultNavigation: Navigation = {
           href: '/composite-decking/',
           links: [
             at('Composite decking', '/composite-decking/'),
-            at('Pioneer advanced composite decking', '/pioneer-decking/'),
             at('Decking installation', '/decking-installation/'),
           ],
         },

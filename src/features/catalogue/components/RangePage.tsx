@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import type { SampleOffer } from '@/api-client';
 import { DetailsForm } from '@/features/contact';
 import { PageBreadcrumbs } from '@/features/layout';
-import { hasFilters, withoutFilter, type ListingParams } from '@/features/search';
+import { hasFilters, withoutFilter, type FacetCount, type ListingParams } from '@/features/search';
 import { formatPrice } from '@/lib/format';
 import { JsonLd } from '@/lib/JsonLd';
 import { listingTarget } from '@/lib/listing-href';
@@ -52,6 +52,19 @@ const paragraphsOf = (text: string) =>
 
 const productCount = (count: number) => `${count} ${count === 1 ? 'product' : 'products'}`;
 
+// The "Type" filter only offers the kinds this range has its own pages for, such as porcelain
+// and natural stone on paving.
+function rangeFacets(facets: FacetCount[], range: Range): FacetCount[] {
+  const kinds = new Set(range.curated.flatMap((page) => page.filters.type ?? []));
+  return facets
+    .map((facet) =>
+      facet.id === 'type'
+        ? { ...facet, values: facet.values.filter((value) => kinds.has(value.slug)) }
+        : facet,
+    )
+    .filter((facet) => facet.values.length > 0);
+}
+
 export function RangePage({ range, curated, listing, params, lead, samples = [] }: RangePageProps) {
   const { result, inRange } = listing;
   const base = rangePath(range);
@@ -68,7 +81,8 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
   const filtered = hasFilters(current.filters) || (params.sort ?? 'relevance') !== 'relevance';
   const ordered = leadOrder(result.hits, filtered ? [] : range.leadWith);
   const restHeading = range.restHeading && ordered.exact > 0 ? range.restHeading : null;
-  const applied = result.facets.flatMap((facet) => facet.values.filter((v) => v.selected)).length;
+  const facets = rangeFacets(result.facets, range);
+  const applied = facets.flatMap((facet) => facet.values.filter((v) => v.selected)).length;
   const photo = range.photo ?? { ...rangePhoto(range.slug), alt: '' };
   const gallery = (range.gallery.length > 0 ? range.gallery : rangeGallery(range.slug)).filter(
     (item) => item.photo.src !== photo.src,
@@ -149,7 +163,7 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
         <div className={styles.layout}>
           <FilterForm
             action={base}
-            facets={result.facets}
+            facets={facets}
             sort={params.sort ?? 'relevance'}
             applied={applied}
             curated={targets}
@@ -164,7 +178,7 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
               </p>
             </div>
             <ActiveFilters
-              facets={result.facets}
+              facets={facets}
               removeHref={(facet, slug) =>
                 hrefWith({ filters: withoutFilter(current.filters, facet, slug), page: 1 })
               }
