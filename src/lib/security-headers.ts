@@ -6,6 +6,8 @@ export interface HeaderOptions {
 }
 
 const STRIPE_SCRIPTS = 'https://js.stripe.com https://*.js.stripe.com';
+// Videos play from YouTube's privacy-enhanced player.
+const VIDEO_PLAYER = 'https://www.youtube-nocookie.com';
 
 function contentSecurityPolicy({ isDev = false, cardPayments = false }: HeaderOptions): string {
   const stripe = (sources: string) => (cardPayments ? ` ${sources}` : '');
@@ -16,7 +18,7 @@ function contentSecurityPolicy({ isDev = false, cardPayments = false }: HeaderOp
     "img-src 'self' data: blob: https://talasey.co.uk",
     "font-src 'self'",
     `connect-src 'self'${stripe('https://api.stripe.com')}`,
-    ...(cardPayments ? [`frame-src ${STRIPE_SCRIPTS} https://hooks.stripe.com`] : []),
+    `frame-src 'self' ${VIDEO_PLAYER}${stripe(`${STRIPE_SCRIPTS} https://hooks.stripe.com`)}`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
@@ -36,7 +38,7 @@ export function securityHeaders(
     'X-Content-Type-Options': 'nosniff',
     'X-Frame-Options': 'SAMEORIGIN',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(self)',
+    'Permissions-Policy': 'camera=(), microphone=(self), geolocation=(), payment=(self)',
     ...(appEnv !== 'production' && { 'X-Robots-Tag': 'noindex, nofollow' }),
   };
 }

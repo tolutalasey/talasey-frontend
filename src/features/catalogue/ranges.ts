@@ -42,6 +42,12 @@ export const rangeSchema = z.object({
   // An offer to make it to order, above the message form at the bottom.
   closing: z.string().nullish(),
   photo: photo.nullish(),
+  // How product photos sit in the cards: whole ("contain") suits packshots such as bottles.
+  cardPhotos: z.enum(['cover', 'contain']).optional(),
+  // Words in the names of the products to list first, in this order, such as the main pergolas.
+  leadWith: z.array(z.string()).optional(),
+  // A heading between the lead products and the rest, such as "Pergola accessories".
+  restHeading: z.string().nullish(),
   gallery: z.array(galleryItem).default([]),
   scope: z.object({
     categories: z.array(z.string()).optional(),
@@ -70,6 +76,22 @@ const samplesFaq: RangeFaq = {
 
 // Used until range pages are published in /content. The keyword ranges follow the PRD section 13 map; the category
 // pages cover the rest of the published catalogue.
+
+// A curated page that shows one kind of product within a range, such as porcelain within paving.
+const kindPage = (
+  slug: string,
+  name: string,
+  intro: string,
+  seo: { title: string; description: string },
+): z.input<typeof curatedPageSchema> => ({
+  slug,
+  name,
+  h1: name,
+  intro,
+  filters: { type: [slug] },
+  seo,
+});
+
 export const fallbackRanges: Range[] = [
   {
     slug: 'porcelain-paving',
@@ -157,7 +179,23 @@ export const fallbackRanges: Range[] = [
     scope: { categories: ['landscaping-materials-fencing-gates-balustrades'] },
     buyingGuide: [],
     faqs: [],
-    curated: [],
+    curated: [
+      kindPage('fencing', 'Fencing', 'Composite fence boards, posts, trellis and trims.', {
+        title: 'Composite fencing boards and posts | Talasey',
+        description:
+          'Composite fence boards, aluminium posts, trellis and trims for a low-maintenance garden boundary.',
+      }),
+      kindPage('gates', 'Gates', 'Composite gates to match your fencing.', {
+        title: 'Garden gates to match your fencing | Talasey',
+        description:
+          'Composite garden gates that match our composite fencing, for a neat, low-maintenance garden boundary.',
+      }),
+      kindPage('balustrades', 'Balustrades', 'Balustrades for decks, terraces and steps.', {
+        title: 'Fencing balustrades for decks and steps | Talasey',
+        description:
+          'Balustrades for decks, raised terraces and steps, designed to match our decking and fencing ranges.',
+      }),
+    ],
     seo: {
       title: 'Composite fencing, posts and trellis | Talasey',
       description:
@@ -171,6 +209,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Paving jointing compound',
     intro:
       'Brush-in jointing compound for porcelain and natural stone patios, in colours to match your paving.',
+    cardPhotos: 'contain',
     gallery: [],
     scope: { titleIncludes: ['jointing'] },
     buyingGuide: [],
@@ -188,6 +227,8 @@ export const fallbackRanges: Range[] = [
     name: 'Pergolas',
     h1: 'Pergolas',
     intro: 'Pergolas for shade over a patio or deck, freestanding or fixed to the house.',
+    leadWith: ['origin pergola', 'prestige pergola'],
+    restHeading: 'Pergola accessories',
     gallery: [],
     scope: { titleIncludes: ['pergola'] },
     buyingGuide: [],
@@ -245,7 +286,38 @@ export const fallbackRanges: Range[] = [
     scope: { categories: ['outdoor-living-fire-pits'] },
     buyingGuide: [],
     faqs: [],
-    curated: [],
+    curated: [
+      kindPage(
+        'stone-fire-pits',
+        'Stone fire pits',
+        'Hand-cut natural stone fire pits, built to last.',
+        {
+          title: 'Natural stone fire pits | Talasey',
+          description:
+            'Hand-cut natural stone fire pits in sandstone to match your patio, with steel liners and heat deflectors.',
+        },
+      ),
+      kindPage(
+        'steel-fire-pits',
+        'Steel fire pits',
+        'Freestanding steel fire pits for patios and terraces.',
+        {
+          title: 'Steel fire pits for the garden | Talasey',
+          description:
+            'Freestanding steel fire pits for patios, decks and terraces, for warmth and a focal point on cooler evenings.',
+        },
+      ),
+      kindPage(
+        'fire-pit-accessories',
+        'Fire pit accessories',
+        'Liners and heat deflectors for your fire pit.',
+        {
+          title: 'Fire pit liners and heat deflectors | Talasey',
+          description:
+            'Steel fire pit liners and heat deflectors to protect your stone fire pit and spread the warmth further.',
+        },
+      ),
+    ],
     seo: {
       title: 'Fire pits in steel and natural stone | Talasey',
       description:
@@ -320,11 +392,23 @@ export const fallbackRanges: Range[] = [
     h1: 'Outdoor lighting',
     intro:
       'Low-voltage garden lights for decks, paths, walls and planting, with the transformers, cables and controllers to run them.',
+    leadWith: ['starter kit', 'kit'],
     gallery: [],
     scope: { categories: ['outdoor-living-outdoor-lighting'] },
     buyingGuide: [],
     faqs: [],
-    curated: [],
+    curated: [
+      kindPage(
+        'lighting-kits',
+        'Lighting kits',
+        'Starter kits with everything needed for a lighting scheme, plus transformers and controls.',
+        {
+          title: 'Garden lighting kits and starter kits | Talasey',
+          description:
+            'Garden lighting starter kits with lights, cables and transformers in one box, plus controls and smart plugs.',
+        },
+      ),
+    ],
     seo: {
       title: 'Outdoor garden and deck lighting | Talasey',
       description:
@@ -373,11 +457,28 @@ export const fallbackRanges: Range[] = [
     h1: 'Patio cleaners and sealers',
     intro:
       'Cleaners, sealers and stain removers to look after porcelain, stone and resin-bound surfaces.',
+    cardPhotos: 'contain',
     gallery: [],
     scope: { categories: ['landscaping-materials-cleaners-sealers'] },
     buyingGuide: [],
     faqs: [],
-    curated: [],
+    curated: [
+      kindPage(
+        'cleaners',
+        'Cleaners',
+        'Cleaners and stain removers for porcelain, stone, composite and resin.',
+        {
+          title: 'Patio cleaners and stain removers | Talasey',
+          description:
+            'Patio cleaners and stain removers for porcelain, natural stone, composite decking and resin-bound surfaces.',
+        },
+      ),
+      kindPage('sealers', 'Sealers', 'Sealers and protectors that keep paving looking its best.', {
+        title: 'Paving sealers and protectors | Talasey',
+        description:
+          'Paving sealers and protectors for natural stone and porcelain, to keep patios looking their best for longer.',
+      }),
+    ],
     seo: {
       title: 'Patio cleaners, sealers and stain removers | Talasey',
       description:
@@ -391,6 +492,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Paving supports and installation',
     intro:
       'Adjustable paving risers, top plates, profiles and tools for laying porcelain on roofs, balconies and raised terraces.',
+    cardPhotos: 'contain',
     gallery: [],
     scope: { categories: ['landscaping-materials-paving-installation'] },
     buyingGuide: [],
@@ -414,7 +516,28 @@ export const fallbackRanges: Range[] = [
     scope: { titleIncludes: ['paving'] },
     buyingGuide: [],
     faqs: [samplesFaq],
-    curated: [],
+    curated: [
+      kindPage(
+        'porcelain',
+        'Porcelain paving',
+        'Porcelain paving: hard-wearing, easy to clean and fade resistant.',
+        {
+          title: 'Porcelain paving slabs for patios | Talasey',
+          description:
+            'Porcelain paving slabs for patios, paths and steps: hard-wearing, easy to clean and in colours that last.',
+        },
+      ),
+      kindPage(
+        'natural-stone',
+        'Natural stone paving',
+        'Sandstone, limestone, granite and slate paving, each slab with its own character.',
+        {
+          title: 'Natural stone paving slabs | Talasey',
+          description:
+            'Sandstone, limestone, granite and slate paving slabs for UK patios and paths, delivered to your door.',
+        },
+      ),
+    ],
     seo: {
       title: 'Garden paving: natural stone and porcelain | Talasey',
       description:
@@ -502,7 +625,28 @@ export const fallbackRanges: Range[] = [
     },
     buyingGuide: [],
     faqs: [samplesFaq],
-    curated: [],
+    curated: [
+      kindPage(
+        'walling',
+        'Walling',
+        'Natural stone walling and copings for garden walls, raised beds and steps.',
+        {
+          title: 'Natural stone walling and copings | Talasey',
+          description:
+            'Natural stone walling and wall copings for garden walls, raised beds and steps, delivered across the UK.',
+        },
+      ),
+      kindPage(
+        'cladding',
+        'Cladding',
+        'Composite and porcelain cladding for garden rooms, walls and features.',
+        {
+          title: 'Composite and porcelain cladding | Talasey',
+          description:
+            'Composite and porcelain cladding boards and trims for garden rooms, walls and outdoor features.',
+        },
+      ),
+    ],
     seo: {
       title: 'Garden walling and cladding | Talasey',
       description:
@@ -549,6 +693,7 @@ export const fallbackRanges: Range[] = [
     name: 'Drainage',
     h1: 'Drainage',
     intro: 'Drainage channels and gratings for patios and driveways.',
+    cardPhotos: 'contain',
     gallery: [],
     scope: { titleIncludes: ['drain'] },
     buyingGuide: [],

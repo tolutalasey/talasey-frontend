@@ -613,3 +613,7 @@ form[data-apply-on-change] .apply {
     padding: var(--space-12);
   }
 }
+
+.restHeading {
+  margin: var(--space-6) 0 0;
+}

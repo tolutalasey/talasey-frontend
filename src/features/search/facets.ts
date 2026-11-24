@@ -43,10 +43,35 @@ function priceBandOf(record: SearchRecord): string[] {
   return band ? [band.label] : [];
 }
 
+// What a product is, read from its name, so a range can be split into kinds such as porcelain and
+// natural stone. A product can be more than one kind.
+const KINDS: { kind: string; words: RegExp }[] = [
+  { kind: 'Porcelain', words: /\bporcelain\b/i },
+  {
+    kind: 'Natural stone',
+    words: /\b(sandstone|limestone|granite|slate|basalt|yorkstone|natural stone)\b/i,
+  },
+  { kind: 'Walling', words: /\b(walling|copings?)\b/i },
+  { kind: 'Cladding', words: /\bcladding\b/i },
+  { kind: 'Cleaners', words: /\b(cleaners?|cleanser|remover|eraser|green[- ]off)\b/i },
+  { kind: 'Sealers', words: /\b(sealers?|protector|back to black)\b/i },
+  { kind: 'Fencing', words: /\b(fenc(e|ing)|trellis)\b/i },
+  { kind: 'Gates', words: /\bgates?\b/i },
+  { kind: 'Balustrades', words: /\bbalustrades?\b/i },
+  { kind: 'Stone fire pits', words: /\bstone\b.*\bfire pit\b/i },
+  { kind: 'Steel fire pits', words: /\b(sphere|steel)\b.*\bfire pit\b/i },
+  { kind: 'Fire pit accessories', words: /\b(liner|deflector)\b/i },
+  { kind: 'Lighting kits', words: /\b(kit|starter)\b/i },
+];
+
+const kindsOf = (record: SearchRecord) =>
+  KINDS.filter(({ words }) => words.test(record.title)).map(({ kind }) => kind);
+
 // PRD section 6 asks for colour, finish, size, thickness, slip rating, price per m², use and
 // stock. Thickness, slip rating, use and coverage aren't in the product data yet, so those
 // facets wait for it; a facet with no values is never shown.
 export const FACETS: Facet[] = [
+  { id: 'type', label: 'Type', valuesOf: kindsOf },
   { id: 'colour', label: 'Colour', options: ['Colour'], valuesOf: fromOptions('Colour') },
   { id: 'finish', label: 'Finish', options: ['Finish'], valuesOf: fromOptions('Finish') },
   {

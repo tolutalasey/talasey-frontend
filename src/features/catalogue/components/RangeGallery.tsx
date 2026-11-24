@@ -19,22 +19,23 @@ export function RangeGallery({ name, items, withEnquiry, samples }: Props) {
     <section className={styles.gallery} aria-labelledby="range-gallery-title">
       <div className={styles.head}>
         <div>
-          <p className="eyebrow">{withEnquiry ? 'Ask our team' : 'Gallery'}</p>
+          <p className="eyebrow">{withEnquiry ? 'Coming soon' : 'Gallery'}</p>
           <h2 id="range-gallery-title">
-            {withEnquiry ? `Talk to us about ${lower}` : `${name} in real gardens`}
+            {withEnquiry ? `${name}: coming soon` : `${name} in real gardens`}
           </h2>
           {withEnquiry && (
             <p className={styles.text}>
-              Tell us what you have in mind and we&rsquo;ll come back with sizes, finishes and
-              prices.
+              We&rsquo;re adding {lower} to the website now. Send us a message and we&rsquo;ll tell
+              you when they&rsquo;re online, or talk to us about your project today: we can already
+              help with sizes, finishes and prices.
             </p>
           )}
         </div>
         {withEnquiry && (
           <p className={styles.actions}>
-            <NextLink href="/contact/" className="button">
-              Ask about {lower}
-            </NextLink>
+            <a href="#contact-form" className="button">
+              Send us a message
+            </a>
             {samples && (
               <NextLink href="/samples/" className="button-secondary">
                 Free samples

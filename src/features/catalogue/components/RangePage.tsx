@@ -10,6 +10,7 @@ import { JsonLd } from '@/lib/JsonLd';
 import { listingTarget } from '@/lib/listing-href';
 import { collectionPageJsonLd } from '@/lib/seo';
 import { productPath } from '@/lib/urls/keyword-map';
+import { leadOrder } from '../lead-order';
 import { curatedTargets } from '../listing-urls';
 import type { RangeListing } from '../loaders.server';
 import { offersSamples, rangeGallery, rangePhoto } from '../range-photos';
@@ -64,6 +65,9 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
     ...(curated ? [{ name: curated.name, path: curatedPath(range, curated) }] : []),
   ];
   const price = priceLine(listing);
+  const filtered = hasFilters(current.filters) || (params.sort ?? 'relevance') !== 'relevance';
+  const ordered = leadOrder(result.hits, filtered ? [] : range.leadWith);
+  const restHeading = range.restHeading && ordered.exact > 0 ? range.restHeading : null;
   const applied = result.facets.flatMap((facet) => facet.values.filter((v) => v.selected)).length;
   const photo = range.photo ?? { ...rangePhoto(range.slug), alt: '' };
   const gallery = (range.gallery.length > 0 ? range.gallery : rangeGallery(range.slug)).filter(
@@ -156,11 +160,7 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
                 Products
               </h2>
               <p role="status" className={styles.total}>
-                {productCount(
-                  result.pageCount > 1
-                    ? result.total
-                    : result.hits.reduce((sum, hit) => sum + Math.max(1, hit.colours.length), 0),
-                )}
+                {productCount(result.total)}
               </p>
             </div>
             <ActiveFilters
@@ -177,12 +177,20 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
               </p>
             ) : (
               <ProductGrid
-                products={result.hits}
+                products={ordered.hits}
                 label={curated?.h1 ?? range.h1}
                 eager={4}
                 byColour={{ offers: samples }}
+                fit={range.cardPhotos}
                 insert={
-                  offersSamples(range.slug) ? { after: 4, content: <SamplesCard /> } : undefined
+                  restHeading
+                    ? {
+                        after: ordered.exact,
+                        content: <h3 className={styles.restHeading}>{restHeading}</h3>,
+                      }
+                    : offersSamples(range.slug)
+                      ? { after: 4, content: <SamplesCard /> }
+                      : undefined
                 }
               />
             )}

@@ -39,6 +39,12 @@
   transition: scale 0.8s var(--motion-ease);
 }
 
+.contain {
+  object-fit: contain;
+  padding: var(--space-3);
+  background: var(--color-white);
+}
+
 .card:has(.link:hover) .image {
   scale: 1.05;
 }
@@ -212,4 +218,26 @@
 .actions button:focus-visible {
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
   outline-offset: var(--focus-ring-offset);
+}
+
+.swatches {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: var(--space-1) 0 0;
+}
+
+.swatch {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--color-white);
+  border-radius: 50%;
+  background: var(--color-sand) center / cover no-repeat;
+  box-shadow: 0 0 0 1px var(--color-line);
+}
+
+.swatchCount {
+  margin-left: var(--space-1);
+  font-size: var(--font-size-small);
+  color: var(--color-ink-muted);
 }

@@ -15,11 +15,6 @@ function stockOf({ availability }: Pick<SearchRecord, 'availability'>): StockSta
   return { level: 'out-of-stock', label: 'Out of stock' };
 }
 
-function badgeOf(record: SearchRecord): string | undefined {
-  const colours = record.options.Colour?.length ?? 0;
-  return colours > 1 ? `${colours} colours` : undefined;
-}
-
 const gbp = (amount: number | null) =>
   amount === null ? null : formatPrice({ amount, currencyCode: 'GBP' });
 
@@ -32,34 +27,28 @@ export function productCard(record: SearchRecord): ProductCardProps {
     price: price && (record.hasOptions ? `From ${price}` : price),
     priceNote: 'inc. VAT',
     stock: stockOf(record),
-    badge: badgeOf(record),
+    swatches: record.colours.map(({ name, image }) => ({ name, image })),
   };
 }
 
 export interface ListingCard extends ProductCardProps {
   key: string;
   handle: string;
+  // Set when the card is for one colour, so its sample can be ordered from the card.
   colour: string | null;
 }
 
-// On a range page each colour of a product is its own card, as on the current site.
-export function listingCards(record: SearchRecord): ListingCard[] {
-  if (record.colours.length === 0) {
-    return [{ ...productCard(record), key: record.id, handle: record.handle, colour: null }];
-  }
-  return record.colours.map((colour) => {
-    const name = colourTitle(record.title, colour.name);
-    const price = gbp(colour.priceFrom);
-    return {
-      key: `${record.id}-${colour.name}`,
-      handle: record.handle,
-      colour: colour.name,
-      href: colourPath(record.handle, colour.name),
-      name,
-      image: cardImage(colour.image ?? record.thumbnail, name),
-      price,
-      priceNote: 'inc. VAT',
-      stock: stockOf(colour),
-    };
-  });
+// On a range page each product is one card, with its colours shown as swatches.
+export function listingCard(record: SearchRecord): ListingCard {
+  const only = record.colours.length === 1 ? record.colours[0] : undefined;
+  return {
+    ...productCard(record),
+    key: record.id,
+    handle: record.handle,
+    colour: only?.name ?? null,
+    ...(only && {
+      href: colourPath(record.handle, only.name),
+      name: colourTitle(record.title, only.name),
+    }),
+  };
 }

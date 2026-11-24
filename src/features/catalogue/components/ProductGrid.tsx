@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import type { SampleOffer } from '@/api-client';
 import type { SearchRecord } from '@/features/search';
 import { offerFor, SampleButton } from '@/features/samples';
-import { listingCards, productCard, type ListingCard } from '../cards';
+import { listingCard, productCard, type ListingCard } from '../cards';
 import styles from './ProductGrid.module.css';
 
 interface ProductGridProps {
@@ -19,10 +19,13 @@ interface ProductGridProps {
   byColour?: { offers: SampleOffer[] };
   // A short row, such as "You may also need": the cards share the full width.
   fill?: boolean;
+  // How photos sit in the cards: packshots look best whole.
+  fit?: 'cover' | 'contain';
 }
 
 function CardActions({ card, offers }: { card: ListingCard; offers: SampleOffer[] }) {
-  const offer = offerFor(offers, card.handle, card.colour);
+  const manyColours = (card.swatches?.length ?? 0) > 1;
+  const offer = manyColours ? undefined : offerFor(offers, card.handle, card.colour);
   return (
     <>
       <a href={card.href}>View product</a>
@@ -39,12 +42,14 @@ export function ProductGrid({
   insert,
   byColour,
   fill = false,
+  fit = 'cover',
 }: ProductGridProps) {
   const cards = byColour
-    ? products.flatMap(listingCards).map((card, index) => (
+    ? products.map(listingCard).map((card, index) => (
         <li key={card.key}>
           <ProductCard
             {...card}
+            fit={fit}
             loading={index < eager ? 'eager' : 'lazy'}
             actions={<CardActions card={card} offers={byColour.offers} />}
           />
@@ -52,7 +57,11 @@ export function ProductGrid({
       ))
     : products.map((product, index) => (
         <li key={product.id}>
-          <ProductCard {...productCard(product)} loading={index < eager ? 'eager' : 'lazy'} />
+          <ProductCard
+            {...productCard(product)}
+            fit={fit}
+            loading={index < eager ? 'eager' : 'lazy'}
+          />
         </li>
       ));
   if (insert && cards.length > insert.after) {

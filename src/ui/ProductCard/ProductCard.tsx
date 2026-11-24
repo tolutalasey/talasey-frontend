@@ -9,6 +9,13 @@ export interface ProductCardImage {
   height: number;
 }
 
+export interface ProductCardSwatch {
+  name: string;
+  image: string | null;
+}
+
+const SHOWN_SWATCHES = 3;
+
 export interface ProductCardProps {
   href: string;
   name: string;
@@ -17,6 +24,10 @@ export interface ProductCardProps {
   priceNote?: string;
   stock?: StockStatusProps;
   badge?: string;
+  // The colours a product comes in: the first few as small photos, then "+N".
+  swatches?: ProductCardSwatch[];
+  // Packshots, such as tubs and bottles, sit whole in the frame instead of filling it.
+  fit?: 'cover' | 'contain';
   // Cards in the first row of a listing load straight away; they are often the largest paint.
   loading?: 'eager' | 'lazy';
   // Buttons under the card, such as order a sample or share, as on the current site.
@@ -33,6 +44,8 @@ export function ProductCard({
   priceNote,
   stock,
   badge,
+  swatches = [],
+  fit = 'cover',
   loading = 'lazy',
   actions,
 }: ProductCardProps) {
@@ -40,7 +53,7 @@ export function ProductCard({
     <article className={styles.card} data-actions={actions ? '' : undefined}>
       <div className={styles.media}>
         <img
-          className={styles.image}
+          className={fit === 'contain' ? `${styles.image} ${styles.contain}` : styles.image}
           src={image.src}
           alt={image.alt}
           width={image.width}
@@ -56,6 +69,7 @@ export function ProductCard({
             {name}
           </a>
         </h3>
+        {swatches.length > 1 && <Swatches swatches={swatches} />}
         <p className={styles.price}>
           {price ?? 'Price on request'}
           {price && priceNote && <span className={styles.priceNote}> {priceNote}</span>}
@@ -76,5 +90,25 @@ export function ProductCard({
         </svg>
       </span>
     </article>
+  );
+}
+
+function Swatches({ swatches }: { swatches: ProductCardSwatch[] }) {
+  const more = swatches.length - SHOWN_SWATCHES;
+  return (
+    <p className={styles.swatches} aria-label={`Available in ${swatches.length} colours`}>
+      {swatches.slice(0, SHOWN_SWATCHES).map((swatch) => (
+        <span
+          key={swatch.name}
+          className={styles.swatch}
+          title={swatch.name}
+          style={swatch.image ? { backgroundImage: `url("${swatch.image}")` } : undefined}
+          aria-hidden="true"
+        />
+      ))}
+      <span className={styles.swatchCount} aria-hidden="true">
+        {more > 0 ? `+${more}` : `${swatches.length} colours`}
+      </span>
+    </p>
   );
 }

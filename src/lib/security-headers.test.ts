@@ -27,9 +27,11 @@ describe('securityHeaders', () => {
     const off = securityHeaders('production')['Content-Security-Policy'];
     const on = securityHeaders('production', { cardPayments: true })['Content-Security-Policy'];
     expect(off).not.toContain('stripe.com');
-    expect(off).not.toContain('frame-src');
+    expect(off).toContain("frame-src 'self' https://www.youtube-nocookie.com;");
     expect(on).toContain("script-src 'self' 'unsafe-inline' https://js.stripe.com");
     expect(on).toContain("connect-src 'self' https://api.stripe.com");
-    expect(on).toContain('frame-src https://js.stripe.com https://*.js.stripe.com https://hooks');
+    expect(on).toContain(
+      "frame-src 'self' https://www.youtube-nocookie.com https://js.stripe.com https://*.js.stripe.com https://hooks",
+    );
   });
 });
