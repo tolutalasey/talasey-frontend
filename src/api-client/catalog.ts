@@ -8,6 +8,7 @@ type StoreProduct =
 const price = (pence: number | null): Price | null =>
   pence === null ? null : { amount: pence / 100, currencyCode: 'GBP' };
 
+// A product that isn't sold online shows no price, so placeholder prices never reach shoppers.
 export function toProduct(product: StoreProduct): Product {
   return {
     id: product.id,
@@ -34,7 +35,7 @@ export function toProduct(product: StoreProduct): Product {
       sku: variant.sku,
       barcode: variant.barcode,
       options: variant.options,
-      priceIncVat: price(variant.pricePence),
+      priceIncVat: product.sellOnline ? price(variant.pricePence) : null,
       stock: variant.stock,
       coverageM2: variant.coverageM2,
       weightKg: variant.weightKg,
