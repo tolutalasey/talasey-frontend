@@ -50,7 +50,7 @@ export function ColourChoicesPage({ view, offers, resources }: Props) {
           products={[record]}
           label={`${product.title} colours`}
           eager={4}
-          byColour={{ offers }}
+          byColour={{ offers, split: true }}
         />
       </section>
       {resources}

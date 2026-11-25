@@ -397,6 +397,57 @@
   margin: 0;
 }
 
+.offlineColours {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.offlineColours legend {
+  margin-bottom: var(--space-2);
+  font-weight: var(--font-weight-bold);
+}
+
+.offlineSwatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.offlineSwatch {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-1);
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.offlineSwatch:has(input:checked) {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 1px var(--color-brand);
+}
+
+.offlineSwatch input {
+  position: absolute;
+  opacity: 0;
+}
+
+.offlineSwatch span {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-line);
+}
+
+.offlineSwatch:has(input:focus-visible) {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
 .offlineActions {
   display: flex;
   flex-wrap: wrap;

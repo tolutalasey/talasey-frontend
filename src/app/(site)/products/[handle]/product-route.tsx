@@ -36,13 +36,29 @@ import { FenceProduct, getFenceForProduct } from '@/features/fencing';
 import { getProductResources, ProductResources } from '@/features/knowledge-hub';
 import { pageMetadata } from '@/lib/seo';
 import { getSampleOffers, offerFor } from '@/features/samples';
-import { colourFromSlug, colourPath, colourTitle, pageColours } from '@/lib/product-colours';
+import {
+  COLOUR_OPTION,
+  colourFromSlug,
+  colourPath,
+  colourTitle,
+  pageColours,
+} from '@/lib/product-colours';
 import { slugify } from '@/lib/slug';
 
 const ENQUIRY_ONLY = '3';
 const BUILT_TO_ORDER = '4';
 
 type Query = Record<string, string | string[] | undefined>;
+
+// The product and the options chosen on its page, for a stockist enquiry. The colour is already in
+// a colour page's title.
+const specOf = (title: string, options: Record<string, string> = {}) =>
+  [
+    title,
+    ...Object.entries(options)
+      .filter(([name]) => name !== COLOUR_OPTION)
+      .map(([name, value]) => `${name}: ${value}`),
+  ].join(', ');
 
 const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value);
 
@@ -212,6 +228,8 @@ export async function ProductRoute({
             action={product.offlineAction}
             phone={settings.contactPhone}
             handle={product.handle}
+            spec={specOf(product.title, variant?.options)}
+            colours={colours && { label: colours.label, options: colours.options }}
           />
         ) : product.madeToMeasure && product.measurements && product.variants[0] ? (
           <MadeToMeasure

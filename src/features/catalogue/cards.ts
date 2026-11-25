@@ -52,3 +52,23 @@ export function listingCard(record: SearchRecord): ListingCard {
     }),
   };
 }
+
+// A product's own colours page: a card per colour, each leading to that colour's page.
+export function colourCards(record: SearchRecord): ListingCard[] {
+  if (record.colours.length === 0) return [listingCard(record)];
+  return record.colours.map((colour) => {
+    const name = colourTitle(record.title, colour.name);
+    const price = gbp(colour.priceFrom);
+    return {
+      key: `${record.id}-${colour.name}`,
+      handle: record.handle,
+      colour: colour.name,
+      href: colourPath(record.handle, colour.name),
+      name,
+      image: cardImage(colour.image ?? record.thumbnail, name),
+      price,
+      priceNote: 'inc. VAT',
+      stock: stockOf(colour),
+    };
+  });
+}

@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import type { SampleOffer } from '@/api-client';
 import type { SearchRecord } from '@/features/search';
 import { offerFor, SampleButton } from '@/features/samples';
-import { listingCard, productCard, type ListingCard } from '../cards';
+import { colourCards, listingCard, productCard, type ListingCard } from '../cards';
 import styles from './ProductGrid.module.css';
 
 interface ProductGridProps {
@@ -14,9 +14,9 @@ interface ProductGridProps {
   eager?: number;
   // A wide card placed after this many products, such as the free samples offer.
   insert?: { after: number; content: ReactNode };
-  // On a range page: a card per colour, each with View product, Order sample and Share buttons,
-  // as on the current site.
-  byColour?: { offers: SampleOffer[] };
+  // On a range page: each card has View product, Order sample and Share buttons.
+  // With split, each colour is its own card, as on a product's colours page.
+  byColour?: { offers: SampleOffer[]; split?: boolean };
   // A short row, such as "You may also need": the cards share the full width.
   fill?: boolean;
   // How photos sit in the cards: packshots look best whole.
@@ -45,7 +45,7 @@ export function ProductGrid({
   fit = 'cover',
 }: ProductGridProps) {
   const cards = byColour
-    ? products.map(listingCard).map((card, index) => (
+    ? products.flatMap(byColour.split ? colourCards : listingCard).map((card, index) => (
         <li key={card.key}>
           <ProductCard
             {...card}
