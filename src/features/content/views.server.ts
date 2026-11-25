@@ -4,7 +4,7 @@ import type { SearchRecord } from '@/features/search';
 import { slugify } from '@/lib/slug';
 import { filterInspiration, type InspirationFilters } from './inspiration';
 import { getBrandPages, getGuides, getInspiration, getProjectPages } from './loaders.server';
-import type { BrandPage, Guide, HelpTopic, ProjectPage } from './schemas';
+import type { BrandPage, Guide, HelpTopic, Inspiration, ProjectPage } from './schemas';
 
 const ROW = 12;
 
@@ -63,6 +63,17 @@ const GUIDE_TOPIC_FOR_HELP: Record<string, Guide['topic']> = {
 export async function getHelpGuides(topic: HelpTopic): Promise<Guide[]> {
   const guideTopic = GUIDE_TOPIC_FOR_HELP[topic.slug];
   return guideTopic ? (await getGuides()).filter((guide) => guide.topic === guideTopic) : [];
+}
+
+const SHOWN_ON_PRODUCT = 6;
+
+// Gallery photos that name this product, for the "in real gardens" strip on its page.
+export async function getInspirationFor(productTitle: string) {
+  const title = productTitle.toLowerCase();
+  const names = (item: Inspiration) => item.products.map((name) => name.toLowerCase());
+  return (await getInspiration())
+    .filter((item) => names(item).some((name) => title.includes(name) || name.includes(title)))
+    .slice(0, SHOWN_ON_PRODUCT);
 }
 
 export async function getInspirationView(filters: InspirationFilters) {

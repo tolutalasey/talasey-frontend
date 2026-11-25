@@ -1,8 +1,8 @@
-import Image from 'next/image';
 import NextLink from 'next/link';
 import { PageBreadcrumbs } from '@/features/layout';
 import type { InspirationFacet, InspirationFilters } from '../inspiration';
 import type { Inspiration } from '../schemas';
+import { InspirationGrid } from './InspirationGrid';
 import styles from './Content.module.css';
 
 interface InspirationGalleryProps {
@@ -64,19 +64,7 @@ export function InspirationGallery({ shown, facets, filters }: InspirationGaller
           <NextLink href="/contact/?topic=photos">send us yours</NextLink>.
         </p>
       ) : (
-        <ul className={styles.gallery}>
-          {shown.map((item) => (
-            <li key={item.slug}>
-              <figure>
-                <Image {...item.photo} sizes="(min-width: 64rem) 33vw, 100vw" />
-                <figcaption>
-                  {item.title}
-                  {item.town && `, ${item.town}`}
-                </figcaption>
-              </figure>
-            </li>
-          ))}
-        </ul>
+        <InspirationGrid items={shown} />
       )}
     </article>
   );

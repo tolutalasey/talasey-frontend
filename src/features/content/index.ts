@@ -2,6 +2,7 @@ export { GuidePage } from './components/GuidePage';
 export { GuidesHub } from './components/GuidesHub';
 export { HelpCentre, HelpTopicPage } from './components/HelpPages';
 export { IndexPage } from './components/IndexPage';
+export { InGardens } from './components/InGardens';
 export { InspirationGallery } from './components/InspirationGallery';
 export { SearchBox } from './components/SearchBox';
 export { StoryPage } from './components/StoryPage';
@@ -35,6 +36,7 @@ export {
   getGuideView,
   guideViewFor,
   getHelpGuides,
+  getInspirationFor,
   getInspirationView,
   getProjectView,
   projectViewFor,

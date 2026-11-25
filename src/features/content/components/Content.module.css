@@ -322,6 +322,26 @@
   scale: 1.03;
 }
 
+.galleryOpen {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.gallery figcaption {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+}
+
+.galleryProducts {
+  color: var(--color-ink-muted);
+  font-size: 0.875rem;
+}
+
 .search {
   display: flex;
   flex-wrap: wrap;
@@ -381,4 +401,21 @@
 .hits li {
   display: grid;
   gap: 0.125rem;
+}
+
+.inGardens {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.inGardensHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.inGardensHead h2 {
+  margin: 0;
 }

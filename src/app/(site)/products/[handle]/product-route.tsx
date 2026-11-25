@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { getProductRow, getRanges, rangePath, RelatedProducts } from '@/features/catalogue';
 import { AddToBasket, MadeToMeasure } from '@/features/checkout';
+import { getInspirationFor, InGardens } from '@/features/content';
 import { SiteSurvey } from '@/features/contact';
 import { getSiteSettings } from '@/features/layout';
 import {
@@ -100,11 +101,12 @@ export async function ProductRoute({
   if (!view) notFound();
   const { variant, colours, extras, pricing, stock } = view;
   const skus = view.product.variants.flatMap((option) => option.sku ?? []);
-  const [related, resources, pergola, fence] = await Promise.all([
+  const [related, resources, pergola, fence, gardens] = await Promise.all([
     relatedTo(view.product),
     getProductResources(view.product.handle),
     getPergolaForProduct(skus),
     query.buy === 'boards' ? null : getFenceForProduct(view.product.handle),
+    getInspirationFor(view.product.title),
   ]);
   const colourNames = pergola || fence ? [] : pageColours(view.product.options);
 
@@ -187,11 +189,14 @@ export async function ProductRoute({
         }
         resources={<ProductResources {...resources} />}
         related={
-          <RelatedProducts
-            heading="You may also need"
-            products={related.products}
-            more={related.range}
-          />
+          <>
+            <InGardens items={gardens} />
+            <RelatedProducts
+              heading="You may also need"
+              products={related.products}
+              more={related.range}
+            />
+          </>
         }
       >
         {product.pageType === ENQUIRY_ONLY ? (
