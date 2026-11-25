@@ -617,3 +617,19 @@ form[data-apply-on-change] .apply {
 .restHeading {
   margin: var(--space-6) 0 0;
 }
+
+.bespokeCard {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+  padding: var(--space-8);
+}
+
+.bespokeCard h2,
+.bespokeCard p {
+  margin: 0;
+}
+
+.bespokeCard > p:not(.eyebrow) {
+  max-width: 60ch;
+}

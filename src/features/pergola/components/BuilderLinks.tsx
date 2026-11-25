@@ -9,7 +9,7 @@ export function BuilderLinks({ pages }: { pages: PergolaPage[] }) {
   return (
     <section id="build-your-own" className={styles.links} aria-labelledby="build-your-own-title">
       <p className="eyebrow">Pergola builder</p>
-      <h2 id="build-your-own-title">Design your own pergola</h2>
+      <h2 id="build-your-own-title">Try our Pergola Builder</h2>
       <p className={styles.linksIntro}>
         Pick the size, how it is fixed, the sides and the extras, and see the price as you go.
       </p>

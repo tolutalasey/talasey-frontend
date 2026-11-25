@@ -48,6 +48,12 @@ export const rangeSchema = z.object({
   leadWith: z.array(z.string()).optional(),
   // A heading between the lead products and the rest, such as "Pergola accessories".
   restHeading: z.string().nullish(),
+  // A section for one-off pieces made to order, with a button to the message form.
+  bespoke: z
+    .object({ heading: z.string().min(1), text: z.string().min(1), action: z.string().min(1) })
+    .nullish(),
+  // The main button at the top of the page, such as the pergola builder.
+  headerAction: z.object({ label: z.string().min(1), href: z.string().min(1) }).nullish(),
   gallery: z.array(galleryItem).default([]),
   scope: z.object({
     categories: z.array(z.string()).optional(),
@@ -232,6 +238,7 @@ export const fallbackRanges: Range[] = [
     name: 'Pergolas',
     h1: 'Pergolas',
     intro: 'Pergolas for shade over a patio or deck, freestanding or fixed to the house.',
+    headerAction: { label: 'Try our Pergola Builder', href: '#build-your-own' },
     leadWith: ['origin pergola', 'prestige pergola'],
     restHeading: 'Pergola accessories',
     gallery: [],
@@ -335,6 +342,11 @@ export const fallbackRanges: Range[] = [
     name: 'Garden sculptures',
     h1: 'Garden sculptures',
     intro: 'Sculptures and water features for the garden, from stock pieces to commissions.',
+    bespoke: {
+      heading: 'Custom made sculptures',
+      text: 'Want something no one else has? We design and make sculptures to order, in steel or stone, to your size, finish and idea. Tell us what you have in mind and where it will go, and we will come back with designs and a price.',
+      action: 'Talk to us about a commission',
+    },
     gallery: [],
     scope: { titleIncludes: ['sculpture'] },
     buyingGuide: [],

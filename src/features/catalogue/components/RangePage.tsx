@@ -102,8 +102,16 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
           ))}
           {price && <p className={styles.priceLine}>{price}</p>}
           <p className={styles.headerActions}>
+            {range.headerAction && (
+              <a href={range.headerAction.href} className="button">
+                {range.headerAction.label}
+              </a>
+            )}
             {inRange > 0 && (
-              <a href="#results-title" className="button">
+              <a
+                href="#results-title"
+                className={range.headerAction ? 'button-secondary' : 'button'}
+              >
                 View all products
               </a>
             )}
@@ -217,6 +225,18 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
         </div>
       )}
 
+      {range.bespoke && (
+        <section className={`frame ${styles.bespokeCard}`} aria-labelledby="bespoke-title">
+          <p className="eyebrow">Made to order</p>
+          <h2 id="bespoke-title">{range.bespoke.heading}</h2>
+          <p>{range.bespoke.text}</p>
+          <p>
+            <a href="#contact-form" className="button">
+              {range.bespoke.action}
+            </a>
+          </p>
+        </section>
+      )}
       {inRange > 0 && range.gallery.length > 0 && (
         <RangeGallery name={range.name} items={range.gallery} withEnquiry={false} samples={false} />
       )}

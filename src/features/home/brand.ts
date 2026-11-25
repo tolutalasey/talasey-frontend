@@ -43,9 +43,9 @@ export interface HeroScene {
 export const heroScenes: HeroScene[] = [
   {
     photo: heroPhoto,
-    topic: 'Pergolas',
-    title: 'Prestige free standing pergola',
-    href: '/pergolas/',
+    topic: 'Pergola Builder',
+    title: 'Try our Pergola Builder',
+    href: '/pergolas/#build-your-own',
   },
   {
     photo: photo(
