@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
+import { Modal } from '@/ui/Modal/Modal';
 import styles from './ProductPage.module.css';
 
 const WORDING = {
@@ -29,8 +30,8 @@ interface Props {
   size?: string | null;
 }
 
-// For a product that isn't sold online: the same choices as buying, then the stockist (or
-// installer, or showroom) form, which sends what the shopper chose with their details.
+// For a product that isn't sold online: the same choices as buying, then Find a stockist opens
+// the stockist form over the page, which sends what the shopper chose with their details.
 export function OfflineChooser({ phone, form, formId, spec, colours, size }: Props) {
   const { heading, text, label } = WORDING;
   const [colour, setColour] = useState<string | null>(null);
@@ -66,24 +67,21 @@ export function OfflineChooser({ phone, form, formId, spec, colours, size }: Pro
           Size: <strong>{size}</strong>
         </p>
       )}
-      {asking ? (
-        <>
-          <p className={styles.offlineChoice}>
-            You chose: <strong>{chosen}</strong>
-          </p>
-          <input type="hidden" name="products" form={formId} value={chosen} />
-          {form}
-        </>
-      ) : (
-        <p className={styles.offlineActions}>
-          <button type="button" className="button" onClick={() => setAsking(true)}>
-            {label}
-          </button>
-          <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="button-secondary">
-            Call {phone}
-          </a>
+      <p className={styles.offlineActions}>
+        <button type="button" className="button" onClick={() => setAsking(true)}>
+          {label}
+        </button>
+        <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="button-secondary">
+          Call {phone}
+        </a>
+      </p>
+      <Modal title={heading} isOpen={asking} onOpenChange={setAsking}>
+        <p className={styles.offlineChoice}>
+          You chose: <strong>{chosen}</strong>
         </p>
-      )}
+        <input type="hidden" name="products" form={formId} value={chosen} />
+        {form}
+      </Modal>
     </div>
   );
 }

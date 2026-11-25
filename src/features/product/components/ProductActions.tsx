@@ -1,5 +1,4 @@
-import NextLink from 'next/link';
-import { LOCAL_HELP, type LocalHelpKind } from '@/features/contact';
+import { EnquiryPopup } from '@/features/contact';
 import { ShareButton } from '@/ui/ShareButton/ShareButton';
 import styles from './ProductActions.module.css';
 
@@ -8,27 +7,13 @@ interface Props {
   handle: string;
   path: string;
   hasSamples: boolean;
-  // Left out when the page already leads with it, such as a product sold only through stockists.
-  without?: LocalHelpKind | null;
-  // A product not sold online points shoppers to stockists only, never to an installer.
-  onlyStockist?: boolean;
+  // The product and options chosen, to start the installer form with.
+  spec?: string;
 }
 
-const LOCAL: { kind: LocalHelpKind; label: string }[] = [
-  { kind: 'stockist', label: 'Find a stockist' },
-  { kind: 'installer', label: 'Find an installer' },
-];
-
-// The row of buttons every product page has, like the current site: sample, share, stockist and
-// installer.
-export function ProductActions({
-  title,
-  handle,
-  path,
-  hasSamples,
-  without = null,
-  onlyStockist = false,
-}: Props) {
+// The row of buttons every product page has: sample, share and Find an installer, which opens
+// the installer form over the page. Find a stockist is the main button on products not sold online.
+export function ProductActions({ title, handle, path, hasSamples, spec }: Props) {
   return (
     <ul className={styles.actions} aria-label="More ways to buy">
       {hasSamples && (
@@ -41,18 +26,15 @@ export function ProductActions({
       <li>
         <ShareButton title={title} path={path} className={styles.action} />
       </li>
-      {LOCAL.filter(({ kind }) => kind !== without && !(onlyStockist && kind === 'installer')).map(
-        ({ kind, label }) => (
-          <li key={kind}>
-            <NextLink
-              href={`${LOCAL_HELP[kind].path}?product=${encodeURIComponent(handle)}`}
-              className={styles.action}
-            >
-              {label}
-            </NextLink>
-          </li>
-        ),
-      )}
+      <li>
+        <EnquiryPopup
+          kind="installer"
+          label="Find an installer"
+          productHandle={handle}
+          products={spec ?? title}
+          className={styles.action}
+        />
+      </li>
     </ul>
   );
 }

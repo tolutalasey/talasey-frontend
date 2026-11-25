@@ -164,9 +164,16 @@ export async function ProductRoute({
     colourNames.map((name) => [name, colourPath(handle, name)]),
   );
   const actions = (
-    <ProductActions title={product.title} handle={product.handle} path={path} hasSamples={false} />
+    <ProductActions
+      title={product.title}
+      handle={product.handle}
+      path={path}
+      hasSamples={false}
+      spec={product.title}
+    />
   );
   const oneSize = sizeInWords(view.content.description, product.description, product.subtitle);
+  const spec = specOf(product.title, variant?.options ?? {}, oneSize);
   const outOfStock = Boolean(variant?.priceIncVat) && stock.level === 'out-of-stock';
 
   return (
@@ -178,6 +185,7 @@ export async function ProductRoute({
         breadcrumbs={breadcrumbs}
         colour={colour}
         colourPaths={colourPaths}
+        spec={spec}
         samples={samples}
         enquiryOnly={product.pageType === ENQUIRY_ONLY}
         top={
@@ -234,7 +242,7 @@ export async function ProductRoute({
           <OfflineAction
             phone={settings.contactPhone}
             handle={product.handle}
-            spec={specOf(product.title, variant?.options ?? {}, oneSize)}
+            spec={spec}
             size={variant?.options.Size ? null : oneSize}
             colours={colours && { label: colours.label, options: colours.options }}
           />

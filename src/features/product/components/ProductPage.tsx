@@ -50,6 +50,8 @@ export interface ProductPageProps {
   // On a colour's own page: that colour, and the page for each of the product's colours.
   colour?: string | null;
   colourPaths?: Record<string, string>;
+  // The product and the options chosen, sent with stockist and installer enquiries.
+  spec?: string;
 }
 
 export function ProductPage({
@@ -72,6 +74,7 @@ export function ProductPage({
   related,
   colour = null,
   colourPaths,
+  spec,
 }: ProductPageProps) {
   const range = breadcrumbs.length > 2 ? breadcrumbs[1]?.name : null;
   // On a colour's own page the colours show as photo swatches instead of plain buttons.
@@ -127,8 +130,7 @@ export function ProductPage({
                 handle={product.handle}
                 path={path}
                 hasSamples={samples.length > 0}
-                without={product.sellOnline ? null : 'stockist'}
-                onlyStockist={!product.sellOnline}
+                spec={spec}
               />
               {enquiryOnly ? (
                 <p className={styles.subtitle}>

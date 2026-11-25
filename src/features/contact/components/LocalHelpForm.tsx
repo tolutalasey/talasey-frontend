@@ -12,6 +12,10 @@ import styles from './ContactForm.module.css';
 interface Props {
   kind: LocalHelpKind;
   productHandle: string | null;
+  // Needed when a page has more than one of these forms, such as stockist and installer.
+  id?: string;
+  // The product the shopper is looking at, to start the installer form's products field.
+  products?: string;
 }
 
 function Problem({ id, message }: { id: string; message?: string }) {
@@ -22,7 +26,7 @@ function Problem({ id, message }: { id: string; message?: string }) {
   ) : null;
 }
 
-export function LocalHelpForm({ kind, productHandle }: Props) {
+export function LocalHelpForm({ kind, productHandle, id = 'local-help-form', products }: Props) {
   const [state, action, pending] = useActionState<LocalHelpState, FormData>(
     requestLocalHelp.bind(null, kind, productHandle),
     {},
@@ -30,7 +34,7 @@ export function LocalHelpForm({ kind, productHandle }: Props) {
   const errors = state.fieldErrors ?? {};
   const values = state.values ?? {};
   const wording = LOCAL_HELP[kind];
-  useFocusFirstError('local-help-form', state.fieldErrors);
+  useFocusFirstError(id, state.fieldErrors);
 
   if (state.sent) {
     return (
@@ -43,7 +47,7 @@ export function LocalHelpForm({ kind, productHandle }: Props) {
 
   return (
     <Form
-      id="local-help-form"
+      id={id}
       action={action}
       validationErrors={errors}
       validationBehavior="aria"
@@ -89,11 +93,11 @@ export function LocalHelpForm({ kind, productHandle }: Props) {
             defaultValue={values.visitDate}
           />
           <div className={styles.field}>
-            <label htmlFor="local-visit-time" className={styles.label}>
+            <label htmlFor={`${id}-visit-time`} className={styles.label}>
               Time of day (optional)
             </label>
             <select
-              id="local-visit-time"
+              id={`${id}-visit-time`}
               name="visitTime"
               defaultValue={values.visitTime ?? ''}
               className={styles.input}
@@ -117,25 +121,25 @@ export function LocalHelpForm({ kind, productHandle }: Props) {
           <TextField
             label="Product(s) you're looking at (optional)"
             name="products"
-            defaultValue={values.products}
+            defaultValue={values.products ?? products}
           />
         </>
       )}
       <div className={styles.field}>
-        <label htmlFor="local-message" className={styles.label}>
+        <label htmlFor={`${id}-message`} className={styles.label}>
           {kind === 'installer' ? 'About your project (optional)' : 'Anything else? (optional)'}
         </label>
         <textarea
-          id="local-message"
+          id={`${id}-message`}
           name="message"
           rows={4}
           maxLength={3000}
           defaultValue={values.message}
           className={styles.input}
           aria-invalid={errors.message ? true : undefined}
-          aria-describedby={errors.message ? 'local-message-error' : undefined}
+          aria-describedby={errors.message ? `${id}-message-error` : undefined}
         />
-        <Problem id="local-message-error" message={errors.message} />
+        <Problem id={`${id}-message-error`} message={errors.message} />
       </div>
       <input
         type="text"
@@ -151,11 +155,11 @@ export function LocalHelpForm({ kind, productHandle }: Props) {
             type="checkbox"
             name="consent"
             aria-invalid={errors.consent ? true : undefined}
-            aria-describedby={errors.consent ? 'local-consent-error' : undefined}
+            aria-describedby={errors.consent ? `${id}-consent-error` : undefined}
           />
           I&apos;m happy to be contacted about this request.
         </label>
-        <Problem id="local-consent-error" message={errors.consent} />
+        <Problem id={`${id}-consent-error`} message={errors.consent} />
       </div>
       <p role="alert" className={styles.error} hidden={!state.message}>
         {state.message}
