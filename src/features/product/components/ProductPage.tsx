@@ -12,6 +12,8 @@ import type { SalesProfile } from '@/lib/sold-as';
 import type { ProductContent, ProductPhoto } from '../content';
 import type { PackPricing } from '../pricing';
 import type { OptionGroup } from '../selection';
+import { toSearchRecord } from '@/features/search';
+import { ColourSwitch } from './ColourSwitch';
 import { OptionPicker } from './OptionPicker';
 import { PriceSummary } from './PriceSummary';
 import { ProductFacts } from './ProductFacts';
@@ -71,6 +73,15 @@ export function ProductPage({
   colourPaths,
 }: ProductPageProps) {
   const range = breadcrumbs.length > 2 ? breadcrumbs[1]?.name : null;
+  // On a colour's own page the colours show as photo swatches instead of plain buttons.
+  const swatches =
+    colour && colourPaths
+      ? toSearchRecord(product).colours.flatMap(({ name, image }) =>
+          colourPaths[name] ? [{ name, image, href: colourPaths[name] }] : [],
+        )
+      : [];
+  const pickers =
+    swatches.length > 0 ? options.filter((group) => group.title !== 'Colour') : options;
   const colourWords = colour
     ? content.colours.find((entry) => entry.colour.toLowerCase() === colour.toLowerCase())
     : undefined;
@@ -117,8 +128,11 @@ export function ProductPage({
               ) : (
                 <PriceSummary pricing={pricing} stock={stock} unit={profile.unit.one} />
               )}
-              {options.length > 0 && (
-                <OptionPicker groups={options} path={path} colourPaths={colourPaths} />
+              {swatches.length > 0 && (
+                <ColourSwitch colours={swatches} current={colour ?? undefined} />
+              )}
+              {pickers.length > 0 && (
+                <OptionPicker groups={pickers} path={path} colourPaths={colourPaths} />
               )}
               {children}
               <ProductSamples offers={samples} />

@@ -4,6 +4,8 @@ import { ProductGrid } from '@/features/catalogue';
 import { PageBreadcrumbs } from '@/features/layout';
 import { toSearchRecord } from '@/features/search';
 import type { ProductView } from '../view.server';
+import { colourPath } from '@/lib/product-colours';
+import { ColourSwitch } from './ColourSwitch';
 import { ProductIntro } from './ProductIntro';
 import { ProductPhotos } from './ProductPhotos';
 import styles from './ProductPage.module.css';
@@ -37,8 +39,15 @@ export function ColourChoicesPage({ view, offers, resources }: Props) {
             sizes={sizes}
             tags={[`${record.colours.length} colours`]}
           />
+          <ColourSwitch
+            colours={record.colours.map(({ name, image }) => ({
+              name,
+              image,
+              href: colourPath(product.handle, name),
+            }))}
+          />
           <p>
-            <a href="#colours" className="button">
+            <a href="#colours" className="button-secondary">
               View all colours
             </a>
           </p>
