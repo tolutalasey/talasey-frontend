@@ -39,14 +39,17 @@ export interface HeroScene {
   href: string;
 }
 
+// Always the first scene, even when the homepage's photos are edited in /content.
+export const builderScene: HeroScene = {
+  photo: heroPhoto,
+  topic: 'Pergola Builder',
+  title: 'Try our Pergola Builder',
+  href: '/pergolas/#build-your-own',
+};
+
 // The hero photo changes every six seconds; each scene has a tab that links to its range.
 export const heroScenes: HeroScene[] = [
-  {
-    photo: heroPhoto,
-    topic: 'Pergola Builder',
-    title: 'Try our Pergola Builder',
-    href: '/pergolas/#build-your-own',
-  },
+  builderScene,
   {
     photo: photo(
       'project-patio',

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import NextLink from 'next/link';
 import { MotionToggle } from '@/ui/MotionToggle/MotionToggle';
-import { heroScenes } from '../brand';
+import { builderScene, heroScenes } from '../brand';
 import type { HomeContent } from '../content';
 import styles from './HomeHero.module.css';
 
@@ -12,7 +12,8 @@ interface Props {
 
 export function HomeHero({ content, rangeNames }: Props) {
   const [primary, secondary] = content.heroActions;
-  const scenes = content.heroScenes.length > 0 ? content.heroScenes : heroScenes;
+  const chosen = content.heroScenes.length > 0 ? content.heroScenes : heroScenes;
+  const scenes = [builderScene, ...chosen.filter((scene) => scene.href !== builderScene.href)];
   return (
     <section className={styles.hero} aria-labelledby="home-title" data-motion="">
       <div className={styles.frame}>
