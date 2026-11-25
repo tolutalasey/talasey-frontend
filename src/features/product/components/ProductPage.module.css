@@ -448,6 +448,10 @@
   outline-offset: 2px;
 }
 
+.offlineSize {
+  margin: 0;
+}
+
 .offlineChoice {
   padding: var(--space-3);
   border-radius: var(--radius-card);

@@ -127,7 +127,8 @@ export function ProductPage({
                 handle={product.handle}
                 path={path}
                 hasSamples={samples.length > 0}
-                without={product.sellOnline ? null : product.offlineAction}
+                without={product.sellOnline ? null : 'stockist'}
+                onlyStockist={!product.sellOnline}
               />
               {enquiryOnly ? (
                 <p className={styles.subtitle}>

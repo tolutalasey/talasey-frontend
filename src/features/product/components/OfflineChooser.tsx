@@ -1,25 +1,12 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
-import type { OfflineAction as Action } from '@/api-client';
 import styles from './ProductPage.module.css';
 
-export const OFFLINE_ACTIONS: Record<Action, { heading: string; text: string; label: string }> = {
-  stockist: {
-    heading: 'Buy from a stockist',
-    text: "Choose what you'd like, then tell us where you are and we'll email you the stockists nearest to you.",
-    label: 'Find a stockist',
-  },
-  installer: {
-    heading: 'Supplied and fitted by an installer',
-    text: "Choose what you'd like, then tell us about your project and we'll put you in touch with an approved installer.",
-    label: 'Find an installer',
-  },
-  showroom: {
-    heading: 'See it in our showroom',
-    text: "Choose what you'd like to see, then tell us when you'd like to visit and we'll confirm.",
-    label: 'Book a showroom visit',
-  },
+const WORDING = {
+  heading: 'Buy from a stockist',
+  text: "Choose what you'd like, then tell us where you are and we'll email you the stockists nearest to you.",
+  label: 'Find a stockist',
 };
 
 export interface OfflineColour {
@@ -29,7 +16,6 @@ export interface OfflineColour {
 }
 
 interface Props {
-  action: Action;
   phone: string;
   // The stockist (or installer, or showroom) form, shown once the shopper asks.
   form: ReactNode;
@@ -39,12 +25,14 @@ interface Props {
   spec: string;
   // For products with a colour choosing on the page itself, as when buying.
   colours?: { label: string; options: OfflineColour[] } | null;
+  // The one size a product comes in, when it has no size to choose.
+  size?: string | null;
 }
 
 // For a product that isn't sold online: the same choices as buying, then the stockist (or
 // installer, or showroom) form, which sends what the shopper chose with their details.
-export function OfflineChooser({ action, phone, form, formId, spec, colours }: Props) {
-  const { heading, text, label } = OFFLINE_ACTIONS[action];
+export function OfflineChooser({ phone, form, formId, spec, colours, size }: Props) {
+  const { heading, text, label } = WORDING;
   const [colour, setColour] = useState<string | null>(null);
   const [asking, setAsking] = useState(false);
   const chosen = colour ? `${spec}, ${colours?.label ?? 'colour'}: ${colour}` : spec;
@@ -72,6 +60,11 @@ export function OfflineChooser({ action, phone, form, formId, spec, colours }: P
             ))}
           </div>
         </fieldset>
+      )}
+      {size && (
+        <p className={styles.offlineSize}>
+          Size: <strong>{size}</strong>
+        </p>
       )}
       {asking ? (
         <>

@@ -52,13 +52,19 @@ type Query = Record<string, string | string[] | undefined>;
 
 // The product and the options chosen on its page, for a stockist enquiry. The colour is already in
 // a colour page's title.
-const specOf = (title: string, options: Record<string, string> = {}) =>
+const specOf = (title: string, options: Record<string, string>, size: string | null) =>
   [
     title,
     ...Object.entries(options)
       .filter(([name]) => name !== COLOUR_OPTION)
       .map(([name, value]) => `${name}: ${value}`),
+    ...(size && !options.Size ? [`Size: ${size}`] : []),
   ].join(', ');
+
+// A product sold in one size names it in its words, such as "600x600mm slabs".
+const SIZE_IN_WORDS = /\b\d{2,4}\s?[x×]\s?\d{2,4}(?:\s?[x×]\s?\d{1,4})?\s?mm\b/i;
+const sizeInWords = (...texts: (string | null | undefined)[]) =>
+  texts.map((text) => text?.match(SIZE_IN_WORDS)?.[0]).find(Boolean) ?? null;
 
 const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value);
 
@@ -160,6 +166,7 @@ export async function ProductRoute({
   const actions = (
     <ProductActions title={product.title} handle={product.handle} path={path} hasSamples={false} />
   );
+  const oneSize = sizeInWords(view.content.description, product.description, product.subtitle);
   const outOfStock = Boolean(variant?.priceIncVat) && stock.level === 'out-of-stock';
 
   return (
@@ -225,10 +232,10 @@ export async function ProductRoute({
           <PergolaAddOnLinks pages={await getPergolaPagesUsing(skus)} />
         ) : !product.sellOnline ? (
           <OfflineAction
-            action={product.offlineAction}
             phone={settings.contactPhone}
             handle={product.handle}
-            spec={specOf(product.title, variant?.options)}
+            spec={specOf(product.title, variant?.options ?? {}, oneSize)}
+            size={variant?.options.Size ? null : oneSize}
             colours={colours && { label: colours.label, options: colours.options }}
           />
         ) : product.madeToMeasure && product.measurements && product.variants[0] ? (

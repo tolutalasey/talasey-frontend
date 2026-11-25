@@ -10,6 +10,8 @@ interface Props {
   hasSamples: boolean;
   // Left out when the page already leads with it, such as a product sold only through stockists.
   without?: LocalHelpKind | null;
+  // A product not sold online points shoppers to stockists only, never to an installer.
+  onlyStockist?: boolean;
 }
 
 const LOCAL: { kind: LocalHelpKind; label: string }[] = [
@@ -19,7 +21,14 @@ const LOCAL: { kind: LocalHelpKind; label: string }[] = [
 
 // The row of buttons every product page has, like the current site: sample, share, stockist and
 // installer.
-export function ProductActions({ title, handle, path, hasSamples, without = null }: Props) {
+export function ProductActions({
+  title,
+  handle,
+  path,
+  hasSamples,
+  without = null,
+  onlyStockist = false,
+}: Props) {
   return (
     <ul className={styles.actions} aria-label="More ways to buy">
       {hasSamples && (
@@ -32,16 +41,18 @@ export function ProductActions({ title, handle, path, hasSamples, without = null
       <li>
         <ShareButton title={title} path={path} className={styles.action} />
       </li>
-      {LOCAL.filter(({ kind }) => kind !== without).map(({ kind, label }) => (
-        <li key={kind}>
-          <NextLink
-            href={`${LOCAL_HELP[kind].path}?product=${encodeURIComponent(handle)}`}
-            className={styles.action}
-          >
-            {label}
-          </NextLink>
-        </li>
-      ))}
+      {LOCAL.filter(({ kind }) => kind !== without && !(onlyStockist && kind === 'installer')).map(
+        ({ kind, label }) => (
+          <li key={kind}>
+            <NextLink
+              href={`${LOCAL_HELP[kind].path}?product=${encodeURIComponent(handle)}`}
+              className={styles.action}
+            >
+              {label}
+            </NextLink>
+          </li>
+        ),
+      )}
     </ul>
   );
 }
