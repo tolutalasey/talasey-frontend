@@ -448,6 +448,12 @@
   outline-offset: 2px;
 }
 
+.offlineChoice {
+  padding: var(--space-3);
+  border-radius: var(--radius-card);
+  background: var(--color-stone);
+}
+
 .offlineActions {
   display: flex;
   flex-wrap: wrap;

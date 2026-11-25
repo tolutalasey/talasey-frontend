@@ -12,8 +12,6 @@ import styles from './ContactForm.module.css';
 interface Props {
   kind: LocalHelpKind;
   productHandle: string | null;
-  // What the shopper chose on the product page, such as "Sofia porcelain paving, Grey, 600 x 600".
-  spec?: string;
 }
 
 function Problem({ id, message }: { id: string; message?: string }) {
@@ -24,7 +22,7 @@ function Problem({ id, message }: { id: string; message?: string }) {
   ) : null;
 }
 
-export function LocalHelpForm({ kind, productHandle, spec }: Props) {
+export function LocalHelpForm({ kind, productHandle }: Props) {
   const [state, action, pending] = useActionState<LocalHelpState, FormData>(
     requestLocalHelp.bind(null, kind, productHandle),
     {},
@@ -51,14 +49,6 @@ export function LocalHelpForm({ kind, productHandle, spec }: Props) {
       validationBehavior="aria"
       className={styles.form}
     >
-      {spec && kind !== 'installer' && (
-        <>
-          <p className={styles.spec}>
-            You chose: <strong>{spec}</strong>
-          </p>
-          <input type="hidden" name="products" value={spec} />
-        </>
-      )}
       <TextField
         label="Full name"
         name="name"
@@ -127,7 +117,7 @@ export function LocalHelpForm({ kind, productHandle, spec }: Props) {
           <TextField
             label="Product(s) you're looking at (optional)"
             name="products"
-            defaultValue={values.products ?? spec}
+            defaultValue={values.products}
           />
         </>
       )}
