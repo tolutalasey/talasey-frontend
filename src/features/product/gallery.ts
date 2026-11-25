@@ -36,3 +36,11 @@ export function photosFor(
     : [];
   return [...lead, ...ranked];
 }
+
+// A photo of one colour, for its swatch: the content team's photos tagged with that colour.
+export function colourPhoto(photos: ProductPhoto[], colour: string): string | null {
+  const wanted = colour.toLowerCase();
+  const shown = (photo: ProductPhoto) =>
+    photo.colour ?? (photo.shows?.option === 'Colour' ? photo.shows.value : null);
+  return photos.find((photo) => shown(photo)?.toLowerCase() === wanted)?.src ?? null;
+}

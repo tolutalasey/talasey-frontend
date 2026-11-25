@@ -5,6 +5,7 @@ import { PageBreadcrumbs } from '@/features/layout';
 import { toSearchRecord } from '@/features/search';
 import type { ProductView } from '../view.server';
 import { colourPath } from '@/lib/product-colours';
+import { colourPhoto } from '../gallery';
 import { ColourSwitch } from './ColourSwitch';
 import { ProductIntro } from './ProductIntro';
 import { ProductPhotos } from './ProductPhotos';
@@ -42,7 +43,7 @@ export function ColourChoicesPage({ view, offers, resources }: Props) {
           <ColourSwitch
             colours={record.colours.map(({ name, image }) => ({
               name,
-              image,
+              image: image ?? colourPhoto(view.content.photos, name),
               href: colourPath(product.handle, name),
             }))}
           />

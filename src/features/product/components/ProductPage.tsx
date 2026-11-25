@@ -13,6 +13,7 @@ import type { ProductContent, ProductPhoto } from '../content';
 import type { PackPricing } from '../pricing';
 import type { OptionGroup } from '../selection';
 import { toSearchRecord } from '@/features/search';
+import { colourPhoto } from '../gallery';
 import { ColourSwitch } from './ColourSwitch';
 import { OptionPicker } from './OptionPicker';
 import { PriceSummary } from './PriceSummary';
@@ -77,7 +78,9 @@ export function ProductPage({
   const swatches =
     colour && colourPaths
       ? toSearchRecord(product).colours.flatMap(({ name, image }) =>
-          colourPaths[name] ? [{ name, image, href: colourPaths[name] }] : [],
+          colourPaths[name]
+            ? [{ name, image: image ?? colourPhoto(content.photos, name), href: colourPaths[name] }]
+            : [],
         )
       : [];
   const pickers =
