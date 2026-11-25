@@ -1,4 +1,5 @@
 import type { ProductVariant } from '@/api-client';
+import { currentSiteColourPhoto } from '@/lib/current-site/photos';
 import type { ProductPhoto } from './content';
 
 export interface PhotoChoice {
@@ -37,10 +38,14 @@ export function photosFor(
   return [...lead, ...ranked];
 }
 
-// A photo of one colour, for its swatch: the content team's photos tagged with that colour.
-export function colourPhoto(photos: ProductPhoto[], colour: string): string | null {
+// A photo of one colour, for its swatch: the content team's photos tagged with that colour, or
+// else that colour's photo on the current site.
+export function colourPhoto(photos: ProductPhoto[], handle: string, colour: string): string | null {
   const wanted = colour.toLowerCase();
   const shown = (photo: ProductPhoto) =>
     photo.colour ?? (photo.shows?.option === 'Colour' ? photo.shows.value : null);
-  return photos.find((photo) => shown(photo)?.toLowerCase() === wanted)?.src ?? null;
+  return (
+    photos.find((photo) => shown(photo)?.toLowerCase() === wanted)?.src ??
+    currentSiteColourPhoto(handle, colour)
+  );
 }

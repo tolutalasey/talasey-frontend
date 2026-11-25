@@ -34,3 +34,10 @@ export function withCurrentSitePhotos(product: Product): Product {
   if (images.length === 0) return product;
   return { ...product, images, thumbnail: product.thumbnail ?? images[0]?.url ?? null };
 }
+
+// The current site's photo of one colour of a product, for a colour swatch.
+export function currentSiteColourPhoto(handle: string, colour: string): string | null {
+  const [match] = matchCurrentSite(handle, [colour], pages).byColour;
+  const file = match?.page.list[0]?.[0];
+  return file ? `${UPLOADS}${file}` : null;
+}

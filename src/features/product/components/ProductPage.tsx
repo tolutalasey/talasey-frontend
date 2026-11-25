@@ -79,7 +79,13 @@ export function ProductPage({
     colour && colourPaths
       ? toSearchRecord(product).colours.flatMap(({ name, image }) =>
           colourPaths[name]
-            ? [{ name, image: image ?? colourPhoto(content.photos, name), href: colourPaths[name] }]
+            ? [
+                {
+                  name,
+                  image: image ?? colourPhoto(content.photos, product.handle, name),
+                  href: colourPaths[name],
+                },
+              ]
             : [],
         )
       : [];

@@ -43,7 +43,7 @@ export function ColourChoicesPage({ view, offers, resources }: Props) {
           <ColourSwitch
             colours={record.colours.map(({ name, image }) => ({
               name,
-              image: image ?? colourPhoto(view.content.photos, name),
+              image: image ?? colourPhoto(view.content.photos, product.handle, name),
               href: colourPath(product.handle, name),
             }))}
           />
