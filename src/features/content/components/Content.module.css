@@ -322,6 +322,18 @@
   scale: 1.03;
 }
 
+.photoPlaceholder {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-2);
+  aspect-ratio: 4 / 3;
+  border-radius: 4px;
+  background: var(--color-stone);
+  color: var(--color-ink-muted);
+  font-size: 0.875rem;
+}
+
 .galleryOpen {
   display: block;
   width: 100%;

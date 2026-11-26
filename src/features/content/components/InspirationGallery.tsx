@@ -26,6 +26,27 @@ const hrefFor = (filters: InspirationFilters, id: string, slug: string | undefin
 const inCategory = (item: Inspiration, category: GalleryCategory) =>
   item.categories.some((name) => name.toLowerCase() === category.name.toLowerCase());
 
+const PLACEHOLDERS = 4;
+
+function PhotosComing() {
+  return (
+    <ul className={styles.gallery} aria-label="Photos coming soon">
+      {Array.from({ length: PLACEHOLDERS }, (_, at) => (
+        <li key={at}>
+          <div className={styles.photoPlaceholder}>
+            <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" />
+              <circle cx="9" cy="10" r="1.5" fill="currentColor" />
+              <path d="M4 17l5-5 4 4 3-3 4 4" fill="none" stroke="currentColor" />
+            </svg>
+            <span>Photo coming soon</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function Section({ category, items }: { category: GalleryCategory; items: GalleryPhoto[] }) {
   return (
     <section className={styles.gallerySection} aria-labelledby={`gallery-${category.slug}`}>
@@ -34,7 +55,7 @@ function Section({ category, items }: { category: GalleryCategory; items: Galler
       {items.length > 0 ? (
         <InspirationGrid items={items} />
       ) : (
-        <p className={styles.note}>Photos for this section are on their way.</p>
+        <PhotosComing />
       )}
     </section>
   );
