@@ -128,7 +128,7 @@ export async function ProductRoute({
     getProductResources(view.product.handle),
     getPergolaForProduct(skus),
     query.buy === 'boards' ? null : getFenceForProduct(view.product.handle),
-    getInspirationFor(view.product.title),
+    getInspirationFor(view.product.handle),
   ]);
   const colourNames = pergola || fence ? [] : pageColours(view.product.options);
 

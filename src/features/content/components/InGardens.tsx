@@ -1,10 +1,10 @@
 import NextLink from 'next/link';
-import type { Inspiration } from '../schemas';
+import type { GalleryPhoto } from '../views.server';
 import { InspirationGrid } from './InspirationGrid';
 import styles from './Content.module.css';
 
 // On a product page: photos from the gallery that show this product in a finished garden.
-export function InGardens({ items }: { items: Inspiration[] }) {
+export function InGardens({ items }: { items: GalleryPhoto[] }) {
   if (items.length === 0) return null;
   return (
     <section className={`container ${styles.inGardens}`} aria-labelledby="in-gardens-title">

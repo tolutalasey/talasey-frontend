@@ -4,16 +4,14 @@ import Image from 'next/image';
 import NextLink from 'next/link';
 import { useState } from 'react';
 import { ZoomViewer } from '@/ui/Gallery/ZoomViewer';
-import type { Inspiration } from '../schemas';
+import type { GalleryPhoto } from '../views.server';
 import styles from './Content.module.css';
 
-const captionOf = (item: Inspiration) => (item.town ? `${item.title}, ${item.town}` : item.title);
+const captionOf = (item: GalleryPhoto) => (item.town ? `${item.title}, ${item.town}` : item.title);
 
-const productHref = (name: string) => `/search/?q=${encodeURIComponent(name)}`;
-
-// The gallery's photos. Click one to see it full size and step through the rest; each card names
-// the products in the photo, linked to the shop.
-export function InspirationGrid({ items }: { items: Inspiration[] }) {
+// The gallery's photos. Click one to see it full size and step through the rest. Under each, the
+// products in it link to the shop; the photo's own label stays off the page for now.
+export function InspirationGrid({ items }: { items: GalleryPhoto[] }) {
   const [index, setIndex] = useState(0);
   const [viewing, setViewing] = useState(false);
   const images = items.map((item) => ({
@@ -39,20 +37,17 @@ export function InspirationGrid({ items }: { items: Inspiration[] }) {
               >
                 <Image {...item.photo} sizes="(min-width: 64rem) 33vw, 100vw" />
               </button>
-              <figcaption>
-                {captionOf(item)}
-                {item.products.length > 0 && (
-                  <span className={styles.galleryProducts}>
-                    Products:{' '}
-                    {item.products.map((name, at) => (
-                      <span key={name}>
-                        {at > 0 && ', '}
-                        <NextLink href={productHref(name)}>{name}</NextLink>
-                      </span>
-                    ))}
-                  </span>
-                )}
-              </figcaption>
+              {item.productLinks.length > 0 && (
+                <figcaption className={styles.galleryProducts}>
+                  Products:{' '}
+                  {item.productLinks.map((product, at) => (
+                    <span key={product.href}>
+                      {at > 0 && ', '}
+                      <NextLink href={product.href}>{product.title}</NextLink>
+                    </span>
+                  ))}
+                </figcaption>
+              )}
             </figure>
           </li>
         ))}

@@ -2,11 +2,13 @@ import NextLink from 'next/link';
 import { PageBreadcrumbs } from '@/features/layout';
 import type { InspirationFacet, InspirationFilters } from '../inspiration';
 import type { Inspiration } from '../schemas';
+import type { GalleryPhoto } from '../views.server';
+import { GALLERY_CATEGORIES, type GalleryCategory } from '../gallery-categories';
 import { InspirationGrid } from './InspirationGrid';
 import styles from './Content.module.css';
 
 interface InspirationGalleryProps {
-  shown: Inspiration[];
+  shown: GalleryPhoto[];
   facets: InspirationFacet[];
   filters: InspirationFilters;
 }
@@ -21,7 +23,35 @@ const hrefFor = (filters: InspirationFilters, id: string, slug: string | undefin
   return search ? `/inspiration/?${search}` : '/inspiration/';
 };
 
+const inCategory = (item: Inspiration, category: GalleryCategory) =>
+  item.categories.some((name) => name.toLowerCase() === category.name.toLowerCase());
+
+function Section({ category, items }: { category: GalleryCategory; items: GalleryPhoto[] }) {
+  return (
+    <section className={styles.gallerySection} aria-labelledby={`gallery-${category.slug}`}>
+      <h2 id={`gallery-${category.slug}`}>{category.name}</h2>
+      <p className={styles.intro}>{category.intro}</p>
+      {items.length > 0 ? (
+        <InspirationGrid items={items} />
+      ) : (
+        <p className={styles.note}>Photos for this section are on their way.</p>
+      )}
+    </section>
+  );
+}
+
+// The gallery in Amy's sections: tabs for each, then every section with its words and photos,
+// or just the one chosen. Photos and their sections are set in /content (Inspiration).
 export function InspirationGallery({ shown, facets, filters }: InspirationGalleryProps) {
+  const chosen = GALLERY_CATEGORIES.find((category) => category.slug === filters.category);
+  const otherFacets = facets.filter((facet) => facet.id !== 'category');
+  const sections = (chosen ? [chosen] : GALLERY_CATEGORIES).map((category) => ({
+    category,
+    items: shown.filter((item) => inCategory(item, category)),
+  }));
+  const unsorted = chosen
+    ? []
+    : shown.filter((item) => !GALLERY_CATEGORIES.some((category) => inCategory(item, category)));
   return (
     <article className={`container ${styles.page}`}>
       <PageBreadcrumbs
@@ -36,9 +66,33 @@ export function InspirationGallery({ shown, facets, filters }: InspirationGaller
           Real gardens laid with our products, photographed by our customers and installers.
         </p>
       </header>
-      {facets.length > 0 && (
+      <nav aria-label="Gallery sections" className={styles.galleryTabs}>
+        <ul>
+          <li>
+            <NextLink
+              href={hrefFor(filters, 'category', undefined)}
+              aria-current={chosen ? undefined : 'true'}
+              scroll={false}
+            >
+              All
+            </NextLink>
+          </li>
+          {GALLERY_CATEGORIES.map((category) => (
+            <li key={category.slug}>
+              <NextLink
+                href={hrefFor(filters, 'category', category.slug)}
+                aria-current={category === chosen ? 'true' : undefined}
+                scroll={false}
+              >
+                {category.name}
+              </NextLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      {otherFacets.length > 0 && (
         <nav aria-label="Filter the gallery" className={styles.filters}>
-          {facets.map((facet) => (
+          {otherFacets.map((facet) => (
             <div key={facet.id} className={styles.filterGroup}>
               <p id={`filter-${facet.id}`}>{facet.label}</p>
               <ul aria-labelledby={`filter-${facet.id}`}>
@@ -58,13 +112,25 @@ export function InspirationGallery({ shown, facets, filters }: InspirationGaller
           ))}
         </nav>
       )}
-      {shown.length === 0 ? (
+      {shown.length === 0 && !chosen ? (
         <p className={styles.note}>
           We&rsquo;re gathering photos of finished gardens. If you&rsquo;ve used our products,{' '}
           <NextLink href="/contact/?topic=photos">send us yours</NextLink>.
         </p>
       ) : (
-        <InspirationGrid items={shown} />
+        <>
+          {sections
+            .filter(({ items }) => chosen || items.length > 0)
+            .map(({ category, items }) => (
+              <Section key={category.slug} category={category} items={items} />
+            ))}
+          {unsorted.length > 0 && (
+            <section className={styles.gallerySection} aria-labelledby="gallery-more">
+              <h2 id="gallery-more">More gardens</h2>
+              <InspirationGrid items={unsorted} />
+            </section>
+          )}
+        </>
       )}
     </article>
   );
