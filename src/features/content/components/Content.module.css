@@ -306,10 +306,16 @@
   background: var(--color-white);
 }
 
+.gallery figure {
+  margin: 0;
+}
+
 .gallery img {
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
   border-radius: 4px;
   transition: scale 0.8s var(--motion-ease);
 }
