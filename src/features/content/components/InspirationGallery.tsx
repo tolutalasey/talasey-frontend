@@ -112,25 +112,14 @@ export function InspirationGallery({ shown, facets, filters }: InspirationGaller
           ))}
         </nav>
       )}
-      {shown.length === 0 && !chosen ? (
-        <p className={styles.note}>
-          We&rsquo;re gathering photos of finished gardens. If you&rsquo;ve used our products,{' '}
-          <NextLink href="/contact/?topic=photos">send us yours</NextLink>.
-        </p>
-      ) : (
-        <>
-          {sections
-            .filter(({ items }) => chosen || items.length > 0)
-            .map(({ category, items }) => (
-              <Section key={category.slug} category={category} items={items} />
-            ))}
-          {unsorted.length > 0 && (
-            <section className={styles.gallerySection} aria-labelledby="gallery-more">
-              <h2 id="gallery-more">More gardens</h2>
-              <InspirationGrid items={unsorted} />
-            </section>
-          )}
-        </>
+      {sections.map(({ category, items }) => (
+        <Section key={category.slug} category={category} items={items} />
+      ))}
+      {unsorted.length > 0 && (
+        <section className={styles.gallerySection} aria-labelledby="gallery-more">
+          <h2 id="gallery-more">More gardens</h2>
+          <InspirationGrid items={unsorted} />
+        </section>
       )}
     </article>
   );
