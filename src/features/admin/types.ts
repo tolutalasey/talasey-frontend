@@ -22,13 +22,29 @@ export type SkuProblem = Json<
 export type AuditEntry = Json<paths['/admin/audit']['get']['responses'][200]>[number];
 export type StaffAccount = Json<paths['/admin/users']['get']['responses'][200]>[number];
 
+// Plain names, with the code from the product template spec in brackets so both still read.
 export const PAGE_TYPES = [
-  { value: '1A', label: '1A: every colour and size is its own option' },
-  { value: '1B', label: '1B: options for size and finish, colour from a colour set' },
-  { value: '2', label: '2: made to measure' },
-  { value: '3', label: '3: enquiry only' },
-  { value: '4', label: '4: build your own' },
+  {
+    value: '1A',
+    name: 'Standard (1A)',
+    label: 'Standard (1A): every colour and size is its own option',
+  },
+  {
+    value: '1B',
+    name: 'Colour choice (1B)',
+    label: 'Colour choice (1B): sizes and finishes, with the colour from a colour set',
+  },
+  { value: '2', name: 'Made to measure (2)', label: 'Made to measure (2): priced from the size' },
+  {
+    value: '3',
+    name: 'Enquiry only (3)',
+    label: 'Enquiry only (3): no price, asks for a site survey',
+  },
+  { value: '4', name: 'Pergola builder (4)', label: 'Pergola builder (4): built on the page' },
 ];
+
+export const pageTypeName = (value: string | null) =>
+  PAGE_TYPES.find((type) => type.value === value)?.name ?? 'Not set up';
 
 export const OFFLINE_ACTIONS = [
   { value: 'stockist', label: 'Find a stockist' },

@@ -21,6 +21,7 @@ import { NEW_OPTION_ROWS, photoShowsChoices, photoShowsValue } from '../product-
 import {
   OFFLINE_ACTIONS,
   PAGE_TYPES,
+  pageTypeName,
   STOCK_MODES,
   type AdminProduct,
   type Category,
@@ -266,7 +267,7 @@ export function ProductEditor({ product, categories, colourSets }: Props) {
             </div>
             <div className={styles.wide}>
               <SelectField
-                label="Colour set (page type 1B)"
+                label="Colour set (Colour choice, 1B)"
                 name="colourSetId"
                 defaultValue={product.colourSetId ?? ''}
                 emptyLabel="No colour choice"
@@ -340,7 +341,7 @@ export function ProductEditor({ product, categories, colourSets }: Props) {
             </div>
             <div>
               <dt>Page type</dt>
-              <dd>{product.pageType ?? 'Not set up'}</dd>
+              <dd>{pageTypeName(product.pageType)}</dd>
             </div>
           </dl>
         </section>

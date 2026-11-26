@@ -12,7 +12,7 @@ import {
   staffStyles as styles,
 } from '@/features/staff';
 import { deleteProduct } from '../actions';
-import type { ProductSummary } from '../types';
+import { pageTypeName, type ProductSummary } from '../types';
 
 export type ProductView = 'all' | 'live' | 'hidden' | 'unpriced';
 
@@ -107,8 +107,7 @@ export function ProductList({ products, view, search, page: pageParam }: Props) 
                 </NextLink>
                 <span className={styles.listSub}>
                   {product.variantCount} {product.variantCount === 1 ? 'option' : 'options'}
-                  {product.pageType ? ` · Page type ${product.pageType}` : ' · Not set up'} ·
-                  Updated {updated(product.updatedAt)}
+                  {` · ${pageTypeName(product.pageType)}`} · Updated {updated(product.updatedAt)}
                 </span>
               </span>
               <span className={styles.listEnd}>

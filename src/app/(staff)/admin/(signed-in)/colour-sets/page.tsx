@@ -16,7 +16,7 @@ export default async function ColourSets({ searchParams }: Props) {
     <>
       <PageHeader
         title="Colour sets"
-        description="The colours shoppers choose from on 1B products. One set can serve many products."
+        description="The colours shoppers choose from on Colour choice (1B) products. One set can serve many products."
       />
       <Notice message={message} error={error} />
       <ColourSetList sets={sets} />

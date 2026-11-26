@@ -64,7 +64,7 @@ const SHORTCUTS: {
   {
     href: '/admin/colour-sets/',
     title: 'Colour sets',
-    text: 'The colours offered on 1B products.',
+    text: 'The colours offered on Colour choice (1B) products.',
     permission: 'catalogue',
     icon: <SwatchIcon />,
   },
