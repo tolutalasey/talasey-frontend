@@ -40,3 +40,5 @@ export const GALLERY_CATEGORIES = [
 ].map((category) => ({ ...category, slug: slugify(category.name) }));
 
 export type GalleryCategory = (typeof GALLERY_CATEGORIES)[number];
+
+export const [FIRST_GALLERY_CATEGORY] = GALLERY_CATEGORIES as [GalleryCategory, ...GalleryCategory[]];
