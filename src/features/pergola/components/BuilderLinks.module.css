@@ -33,29 +33,6 @@
   margin: 0 0 var(--space-6);
 }
 
-.linkDesigns {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
-  gap: var(--space-2);
-  margin-top: var(--space-4);
-}
-
-.linkDesigns a {
-  display: grid;
-  justify-items: center;
-  gap: 0.125rem;
-  min-height: 3.25rem;
-  padding: var(--space-2) var(--space-4);
-  text-align: center;
-  line-height: 1.2;
-}
-
-.linkDesigns small {
-  font-size: 0.75rem;
-  font-weight: var(--font-weight-regular);
-  opacity: 0.8;
-}
-
 .links p {
   margin: 0;
   color: var(--color-ink-muted);

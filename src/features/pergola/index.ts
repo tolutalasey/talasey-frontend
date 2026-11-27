@@ -1,4 +1,4 @@
-export { designFrom, PergolaProduct, type Design } from './components/PergolaProduct';
+export { PergolaProduct } from './components/PergolaProduct';
 export { BuilderLinks } from './components/BuilderLinks';
 export { PergolaAddOnLinks } from './components/PergolaAddOnLinks';
 export {

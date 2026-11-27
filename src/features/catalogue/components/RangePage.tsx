@@ -227,6 +227,7 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
                     ? {
                         after: ordered.exact,
                         content: <h3 className={styles.restHeading}>{restHeading}</h3>,
+                        full: true,
                       }
                     : offersSamples(range.slug)
                       ? { after: 4, content: <SamplesCard /> }

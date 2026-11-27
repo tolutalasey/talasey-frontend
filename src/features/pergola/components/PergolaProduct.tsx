@@ -1,38 +1,18 @@
-import NextLink from 'next/link';
 import type { ReactNode } from 'react';
 import type { PergolaContent } from '../content';
 import type { Build, Catalogue } from '../rules';
-import { AmyBuilder } from './AmyBuilder';
 import type { OtherBuilder } from './BiggerSize';
 import { PergolaDetails } from './PergolaDetails';
 import { PhotoBuilder } from './PhotoBuilder';
 import { formatPrice } from '@/lib/format';
-import { ToluBuilder } from './ToluBuilder';
 import styles from './PergolaProduct.module.css';
-
-export type Design = 'photos' | 'amy' | 'tolu';
-
-export const DESIGNS: { id: Design; label: string; short: string; detail: string }[] = [
-  { id: 'photos', label: 'Design C', short: 'With photos', detail: 'Studio photos, step by step, and spin it in 3D' },
-  { id: 'amy', label: 'Design A', short: 'Step by step', detail: "Step by step, from Amy's spec" },
-  { id: 'tolu', label: 'Design B', short: 'In 3D', detail: "In 3D, from Tolu's first version" },
-];
-
-export const designHref = (path: string, design: Design) =>
-  design === 'photos' ? path : `${path}?design=${design}`;
-
-export const designFrom = (asked: unknown): Design =>
-  asked === 'amy' || asked === 'tolu' ? asked : 'photos';
 
 interface Props {
   builder: PergolaContent;
   catalogue: Catalogue;
   others: OtherBuilder[];
-  design: Design;
-  path: string;
   title: string;
   subtitle: string | null;
-  photos: ReactNode;
   // Sample, share, stockist and installer buttons, as on every product page.
   actions?: ReactNode;
   start?: Partial<Build>;
@@ -53,11 +33,8 @@ export function PergolaProduct({
   builder,
   catalogue,
   others,
-  design,
-  path,
   title,
   subtitle,
-  photos,
   actions,
   start,
 }: Props) {
@@ -73,50 +50,18 @@ export function PergolaProduct({
           <small>inc. VAT, before sides and extras</small>
         </p>
       )}
-      <nav className={styles.designs} aria-label="Builder design">
-        {DESIGNS.map((option) => (
-          <NextLink
-            key={option.id}
-            href={designHref(path, option.id)}
-            aria-current={option.id === design ? 'page' : undefined}
-            scroll={false}
-          >
-            <strong>{option.label}</strong>
-            <small>{option.detail}</small>
-          </NextLink>
-        ))}
-      </nav>
       {actions}
     </header>
   );
   return (
     <div className={styles.product}>
-      {design === 'photos' ? (
-        <PhotoBuilder
-          rules={builder}
-          catalogue={catalogue}
-          others={others}
-          start={start}
-          head={head}
-        />
-      ) : design === 'tolu' ? (
-        <ToluBuilder
-          rules={builder}
-          catalogue={catalogue}
-          others={others}
-          start={start}
-          head={head}
-        />
-      ) : (
-        <AmyBuilder
-          rules={builder}
-          catalogue={catalogue}
-          others={others}
-          start={start}
-          head={head}
-          photos={photos}
-        />
-      )}
+      <PhotoBuilder
+        rules={builder}
+        catalogue={catalogue}
+        others={others}
+        start={start}
+        head={head}
+      />
       <PergolaDetails builder={builder} />
     </div>
   );

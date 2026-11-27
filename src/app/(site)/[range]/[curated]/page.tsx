@@ -19,12 +19,11 @@ type Props = PageProps<'/[range]/[curated]'>;
 
 // /pergolas/<builder>/ was a builder page of its own; each builder now sits on its pergola's
 // product page, so old links go there.
-async function moveToProduct({ params, searchParams }: Props) {
+async function moveToProduct({ params }: Props) {
   const { range, curated } = await params;
   const page = range === PERGOLA_RANGE ? await getPergolaPage(curated) : null;
   if (!page) return;
-  const { design } = await searchParams;
-  permanentRedirect(design === 'tolu' ? `${page.path}?design=tolu` : page.path);
+  permanentRedirect(page.path);
 }
 
 async function load({ params, searchParams }: Props) {

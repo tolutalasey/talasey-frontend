@@ -12,8 +12,9 @@ interface ProductGridProps {
   label: string;
   // How many cards at the top load their photo straight away.
   eager?: number;
-  // A wide card placed after this many products, such as the free samples offer.
-  insert?: { after: number; content: ReactNode };
+  // A wide card placed after this many products, such as the free samples offer; full takes a
+  // whole row, as a heading does.
+  insert?: { after: number; content: ReactNode; full?: boolean };
   // On a range page: each card has View product, Order sample and Share buttons.
   // With split, each colour is its own card, as on a product's colours page.
   byColour?: { offers: SampleOffer[]; split?: boolean };
@@ -71,7 +72,7 @@ export function ProductGrid({
     cards.splice(
       insert.after,
       0,
-      <li key="insert" className={styles.wide}>
+      <li key="insert" className={insert.full ? styles.full : styles.wide}>
         {insert.content}
       </li>,
     );
