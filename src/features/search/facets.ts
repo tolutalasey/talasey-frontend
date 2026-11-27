@@ -1,4 +1,5 @@
 import type { SearchRecord } from './record';
+import { colourFamily } from './colour-families';
 import { slugify } from './text';
 
 export interface PriceBand {
@@ -68,11 +69,17 @@ const kindsOf = (record: SearchRecord) =>
   KINDS.filter(({ words }) => words.test(record.title)).map(({ kind }) => kind);
 
 // PRD section 6 asks for colour, finish, size, thickness, slip rating, price per m², use and
-// stock. Thickness, slip rating, use and coverage aren't in the product data yet, so those
+// stock. Range and brand names are left out, as Amy asked: filters stay generic. Thickness, slip rating, use and coverage aren't in the product data yet, so those
 // facets wait for it; a facet with no values is never shown.
 export const FACETS: Facet[] = [
   { id: 'type', label: 'Type', valuesOf: kindsOf },
-  { id: 'colour', label: 'Colour', options: ['Colour'], valuesOf: fromOptions('Colour') },
+  {
+    id: 'colour',
+    label: 'Colour',
+    valuesOf: (record) => [
+      ...new Set(fromOptions('Colour')(record).flatMap((colour) => colourFamily(colour) ?? [])),
+    ],
+  },
   { id: 'finish', label: 'Finish', options: ['Finish'], valuesOf: fromOptions('Finish') },
   {
     id: 'size',
@@ -80,7 +87,6 @@ export const FACETS: Facet[] = [
     options: ['Size', 'Diameter', 'Length'],
     valuesOf: fromOptions('Size', 'Diameter', 'Length'),
   },
-  { id: 'brand', label: 'Brand', valuesOf: (record) => (record.brand ? [record.brand] : []) },
   { id: 'price', label: 'Price', valuesOf: priceBandOf },
   {
     id: 'stock',

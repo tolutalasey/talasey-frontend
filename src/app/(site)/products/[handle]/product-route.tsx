@@ -1,6 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
-import { getProductRow, getRanges, rangePath, RelatedProducts } from '@/features/catalogue';
+import {
+  getProductRow,
+  getRanges,
+  rangePath,
+  RelatedProducts,
+  type Range,
+} from '@/features/catalogue';
 import { AddToBasket, MadeToMeasure } from '@/features/checkout';
 import { getInspirationFor, InGardens } from '@/features/content';
 import { SiteSurvey } from '@/features/contact';
@@ -87,18 +93,56 @@ export async function productRouteMetadata(
   });
 }
 
-// Up to four other products from the product's own category, and the range page they belong to.
-async function relatedTo(product: { handle: string; categories: { handle: string }[] }) {
+const RELATED_COUNT = 4;
+
+const holds = (range: Range, product: { title: string; categories: { handle: string }[] }) =>
+  Boolean(
+    range.scope.categories?.some((handle) =>
+      product.categories.some((category) => category.handle === handle),
+    ) ||
+    range.scope.titleIncludes?.some((text) =>
+      product.title.toLowerCase().includes(text.toLowerCase()),
+    ),
+  );
+
+// "You may also need": products from the ranges this product's range points to, such as jointing
+// and sealers for paving; otherwise up to four others from its own category.
+async function relatedTo(product: {
+  handle: string;
+  title: string;
+  categories: { handle: string }[];
+}) {
   const category = product.categories.at(-1)?.handle;
+  const ranges = await getRanges();
+  const own = ranges.filter((range) => holds(range, product));
+  const wanted = [...new Set(own.flatMap((range) => range.alsoNeed ?? []))]
+    .map((slug) => ranges.find((range) => range.slug === slug))
+    .filter((range): range is Range => Boolean(range));
+  const range = category
+    ? ranges.find((candidate) => candidate.scope.categories?.includes(category))
+    : undefined;
+  const more = range && { href: rangePath(range), label: `Shop all ${range.name.toLowerCase()}` };
+
+  if (wanted.length > 0) {
+    const rows = await Promise.all(
+      wanted.map((target) => getProductRow({ scope: target.scope, pageSize: RELATED_COUNT })),
+    );
+    const mixed = rows
+      .flatMap((row, at) => row.map((hit, place) => ({ hit, order: place * rows.length + at })))
+      .sort((a, b) => a.order - b.order)
+      .map(({ hit }) => hit)
+      .filter((hit) => hit.handle !== product.handle);
+    const [first] = wanted;
+    return {
+      products: mixed.slice(0, RELATED_COUNT),
+      range: first && { href: rangePath(first), label: `Shop all ${first.name.toLowerCase()}` },
+    };
+  }
   if (!category) return { products: [] };
-  const [hits, ranges] = await Promise.all([
-    getProductRow({ scope: { categories: [category] }, pageSize: 5 }),
-    getRanges(),
-  ]);
-  const range = ranges.find((candidate) => candidate.scope.categories?.includes(category));
+  const hits = await getProductRow({ scope: { categories: [category] }, pageSize: 5 });
   return {
-    products: hits.filter((hit) => hit.handle !== product.handle).slice(0, 4),
-    range: range && { href: rangePath(range), label: `Shop all ${range.name.toLowerCase()}` },
+    products: hits.filter((hit) => hit.handle !== product.handle).slice(0, RELATED_COUNT),
+    range: more,
   };
 }
 

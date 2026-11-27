@@ -54,6 +54,8 @@ export const rangeSchema = z.object({
     .nullish(),
   // The main button at the top of the page, such as the pergola builder.
   headerAction: z.object({ label: z.string().min(1), href: z.string().min(1) }).nullish(),
+  // Other ranges whose products show under "You may also need" on this range's product pages.
+  alsoNeed: z.array(slug).nullish(),
   gallery: z.array(galleryItem).default([]),
   scope: z.object({
     categories: z.array(z.string()).optional(),
@@ -106,6 +108,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Porcelain paving',
     intro:
       'Porcelain paving is hard-wearing, easy to clean and keeps its colour, which makes it a good choice for patios, paths and garden steps.',
+    alsoNeed: ['paving-jointing', 'cleaners-and-sealers'],
     gallery: [],
     scope: { titleIncludes: ['porcelain paving'] },
     buyingGuide: [
@@ -127,6 +130,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Natural stone paving',
     intro:
       'Indian sandstone, limestone, granite and slate paving for patios and paths, each slab with its own natural variation in colour.',
+    alsoNeed: ['paving-jointing', 'cleaners-and-sealers'],
     gallery: [],
     scope: { titleIncludes: ['sandstone', 'limestone', 'granite', 'slate'] },
     buyingGuide: [],
@@ -145,6 +149,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Composite decking',
     intro:
       'Composite decking boards, frames and fixings for a deck that does not need staining or oiling each year.',
+    alsoNeed: ['decking-installation'],
     gallery: [],
     scope: {
       categories: [
@@ -168,6 +173,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Composite cladding',
     intro:
       'Composite cladding boards, trims and clips for garden rooms, sheds and walls, in finishes that need no painting.',
+    alsoNeed: ['decking-installation'],
     gallery: [],
     scope: { categories: ['landscaping-materials-cladding'] },
     buyingGuide: [],
@@ -529,6 +535,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Garden paving',
     intro:
       'Natural stone and porcelain paving for patios, paths and steps, with everything needed to lay it.',
+    alsoNeed: ['paving-jointing', 'cleaners-and-sealers'],
     gallery: [],
     scope: { titleIncludes: ['paving'] },
     buyingGuide: [],
@@ -635,6 +642,7 @@ export const fallbackRanges: Range[] = [
     name: 'Walling & cladding',
     h1: 'Walling and cladding',
     intro: 'Composite and porcelain cladding and stone walling for garden walls and buildings.',
+    alsoNeed: ['cleaners-and-sealers'],
     gallery: [],
     scope: {
       categories: [
@@ -679,6 +687,7 @@ export const fallbackRanges: Range[] = [
     name: 'Porcelain cladding',
     h1: 'Porcelain cladding',
     intro: 'Porcelain cladding for garden walls and buildings.',
+    alsoNeed: ['cleaners-and-sealers'],
     gallery: [],
     scope: { categories: ['landscaping-materials-porcelain-cladding'] },
     buyingGuide: [],
@@ -696,6 +705,7 @@ export const fallbackRanges: Range[] = [
     name: 'Stone walling',
     h1: 'Stone walling',
     intro: 'Natural stone walling for garden walls and raised beds.',
+    alsoNeed: ['cleaners-and-sealers'],
     gallery: [],
     scope: { categories: ['landscaping-materials-stone-walling'] },
     buyingGuide: [],

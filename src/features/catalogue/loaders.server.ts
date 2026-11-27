@@ -133,6 +133,7 @@ function withCodeSettings(range: Range): Range {
     restHeading: range.restHeading ?? code.restHeading,
     headerAction: range.headerAction ?? code.headerAction,
     bespoke: range.bespoke ?? code.bespoke,
+    alsoNeed: range.alsoNeed?.length ? range.alsoNeed : code.alsoNeed,
     curated: [...range.curated, ...code.curated.filter(({ slug }) => !stored.has(slug))],
     scope: {
       ...range.scope,
