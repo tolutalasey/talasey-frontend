@@ -64,6 +64,14 @@ const KINDS: { kind: string; words: RegExp }[] = [
   { kind: 'Steel fire pits', words: /\b(sphere|steel)\b.*\bfire pit\b/i },
   { kind: 'Fire pit accessories', words: /\b(liner|deflector)\b/i },
   { kind: 'Lighting kits', words: /\b(kit|starter)\b/i },
+  { kind: 'Jointing', words: /\bjointing compound\b/i },
+  {
+    kind: 'Risers',
+    words:
+      /\b(risers?|adjustable rise|top plate|aluminium profile|edge plate|slope corrector|rivets)\b/i,
+  },
+  { kind: 'Priming & bonding', words: /\b(primer|priming|slurry|bonding)\b/i },
+  { kind: 'Tools', words: /\b(holesaw|tools?|trowel|spacers|cutter|blade)\b/i },
   {
     kind: 'Artificial grass',
     words: /^(?!.*\b(adhesive|tape|pins|membrane|cleanser|cleaner)\b).*\bartificial grass\b/i,

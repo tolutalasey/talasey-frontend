@@ -121,7 +121,8 @@ export async function getRanges(): Promise<Range[]> {
 const unique = (values: string[]) => (values.length > 0 ? [...new Set(values)] : undefined);
 
 // The admin edits a range's words and photos; how its cards look and lead, and its sub-pages,
-// still come from the code unless the admin has set them. Its categories add to the admin's.
+// still come from the code unless the admin has set them. Its categories and name words add to
+// the admin's.
 function withCodeSettings(range: Range): Range {
   const code = fallbackRanges.find(({ slug }) => slug === range.slug);
   if (!code) return range;
@@ -138,6 +139,10 @@ function withCodeSettings(range: Range): Range {
     scope: {
       ...range.scope,
       categories: unique([...(range.scope.categories ?? []), ...(code.scope.categories ?? [])]),
+      titleIncludes: unique([
+        ...(range.scope.titleIncludes ?? []),
+        ...(code.scope.titleIncludes ?? []),
+      ]),
     },
   };
 }

@@ -516,13 +516,52 @@ export const fallbackRanges: Range[] = [
     name: 'Paving installation',
     h1: 'Paving supports and installation',
     intro:
-      'Adjustable paving risers, top plates, profiles and tools for laying porcelain on roofs, balconies and raised terraces.',
+      'Jointing, priming and bonding, adjustable risers and tools: everything for laying porcelain and natural stone paving.',
     cardPhotos: 'contain',
     gallery: [],
-    scope: { categories: ['landscaping-materials-paving-installation'] },
+    scope: {
+      categories: ['landscaping-materials-paving-installation'],
+      titleIncludes: ['jointing compound', 'primer', 'priming', 'slurry', 'bonding'],
+    },
     buyingGuide: [],
     faqs: [],
-    curated: [],
+    curated: [
+      kindPage(
+        'jointing',
+        'Jointing',
+        'Brush-in and fine finish jointing compound for porcelain and natural stone patios.',
+        {
+          title: 'Paving jointing compound | Talasey',
+          description:
+            'Brush-in and fine finish paving jointing compound for porcelain and natural stone patios, delivered across the UK.',
+        },
+      ),
+      kindPage(
+        'risers',
+        'Risers',
+        'Adjustable risers, top plates and profiles for raised porcelain terraces, roofs and balconies.',
+        {
+          title: 'Adjustable paving risers and top plates | Talasey',
+          description:
+            'Adjustable paving risers, top plates, aluminium profiles and fittings for raised porcelain terraces, roofs and balconies.',
+        },
+      ),
+      kindPage(
+        'priming-bonding',
+        'Priming & bonding',
+        'Priming slurry and bonding products to fix paving slabs to their mortar bed.',
+        {
+          title: 'Paving primer and bonding slurry | Talasey',
+          description:
+            'Paving primer and bonding slurry that fix porcelain and natural stone slabs firmly to their mortar bed.',
+        },
+      ),
+      kindPage('tools', 'Tools', 'Tools and spacers for cutting, drilling and laying paving.', {
+        title: 'Paving tools and tile spacers | Talasey',
+        description:
+          'Paving tools, holesaws and tile spacers for cutting, drilling and laying porcelain and natural stone paving.',
+      }),
+    ],
     seo: {
       title: 'Adjustable paving risers and supports | Talasey',
       description:
