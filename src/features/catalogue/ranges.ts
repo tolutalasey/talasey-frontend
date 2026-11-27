@@ -667,13 +667,23 @@ export const fallbackRanges: Range[] = [
         },
       ),
       kindPage(
-        'cladding',
-        'Cladding',
-        'Composite and porcelain cladding for garden rooms, walls and features.',
+        'porcelain-cladding',
+        'Porcelain cladding',
+        'Porcelain cladding for garden walls, raised beds and outdoor features.',
         {
-          title: 'Composite and porcelain cladding | Talasey',
+          title: 'Porcelain wall cladding for gardens | Talasey',
           description:
-            'Composite and porcelain cladding boards and trims for garden rooms, walls and outdoor features.',
+            'Porcelain cladding panels for garden walls, raised beds and outdoor features: hard-wearing and easy to keep clean.',
+        },
+      ),
+      kindPage(
+        'composite-cladding',
+        'Composite cladding',
+        'Composite shadow gap cladding for garden rooms, fences and walls.',
+        {
+          title: 'Composite cladding boards and trims | Talasey',
+          description:
+            'Composite shadow gap cladding boards and trims for garden rooms, fences and walls, in colours that last.',
         },
       ),
     ],
@@ -747,7 +757,38 @@ export const fallbackRanges: Range[] = [
     scope: { categories: ['landscaping-materials-artificial-grass'] },
     buyingGuide: [],
     faqs: [samplesFaq],
-    curated: [],
+    curated: [
+      kindPage(
+        'artificial-grass',
+        'Artificial grass',
+        'Luxigraze artificial grass in a range of pile heights, from hard-wearing to super soft.',
+        {
+          title: 'Luxigraze artificial grass rolls | Talasey',
+          description:
+            'Luxigraze artificial grass for lawns, play areas and terraces, in pile heights from hard-wearing to super soft.',
+        },
+      ),
+      kindPage(
+        'artificial-grass-cleaners',
+        'Artificial grass cleaners',
+        'Cleaners that lift dirt, moss and pet mess and keep artificial grass fresh.',
+        {
+          title: 'Artificial grass cleaners | Talasey',
+          description:
+            'Artificial grass cleanser and spot cleaner that remove dirt, moss, algae and pet mess and leave a fresh cut-grass smell.',
+        },
+      ),
+      kindPage(
+        'artificial-grass-installation',
+        'Artificial grass installation',
+        'Jointing tape, adhesive, weed membrane and pins for laying artificial grass.',
+        {
+          title: 'Artificial grass installation supplies | Talasey',
+          description:
+            'Jointing tape, adhesive, weed membrane and U pins for laying artificial grass with secure joins and edges.',
+        },
+      ),
+    ],
     seo: {
       title: 'Artificial grass for gardens | Talasey',
       description:

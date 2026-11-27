@@ -53,7 +53,8 @@ const KINDS: { kind: string; words: RegExp }[] = [
     words: /\b(sandstone|limestone|granite|slate|basalt|yorkstone|natural stone)\b/i,
   },
   { kind: 'Walling', words: /\b(walling|copings?)\b/i },
-  { kind: 'Cladding', words: /\bcladding\b/i },
+  { kind: 'Porcelain cladding', words: /\bporcelain\b.*\bcladding\b/i },
+  { kind: 'Composite cladding', words: /^(?!.*\bporcelain\b).*\bcladding\b/i },
   { kind: 'Cleaners', words: /\b(cleaners?|cleanser|remover|eraser|green[- ]off)\b/i },
   { kind: 'Sealers', words: /\b(sealers?|protector|back to black)\b/i },
   { kind: 'Fencing', words: /\b(fenc(e|ing)|trellis)\b/i },
@@ -63,6 +64,15 @@ const KINDS: { kind: string; words: RegExp }[] = [
   { kind: 'Steel fire pits', words: /\b(sphere|steel)\b.*\bfire pit\b/i },
   { kind: 'Fire pit accessories', words: /\b(liner|deflector)\b/i },
   { kind: 'Lighting kits', words: /\b(kit|starter)\b/i },
+  {
+    kind: 'Artificial grass',
+    words: /^(?!.*\b(adhesive|tape|pins|membrane|cleanser|cleaner)\b).*\bartificial grass\b/i,
+  },
+  { kind: 'Artificial grass cleaners', words: /\bartificial grass\b.*\b(cleanser|cleaner)\b/i },
+  {
+    kind: 'Artificial grass installation',
+    words: /\bartificial grass\b.*\b(adhesive|tape|pins|membrane)\b/i,
+  },
 ];
 
 const kindsOf = (record: SearchRecord) =>
