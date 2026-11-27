@@ -19,6 +19,8 @@ export interface SearchRecord {
   availability: Availability[];
   thumbnail: string | null;
   updatedAt: string | null;
+  // Lower first when sorted by Recommended.
+  position: number;
   // One entry per colour for a product sold in several, so listings can show each colour.
   colours: ColourRecord[];
 }
@@ -77,6 +79,7 @@ export function toSearchRecord(product: Product): SearchRecord {
     availability: availabilityOf(product),
     thumbnail: product.thumbnail,
     updatedAt: product.updatedAt,
+    position: product.position,
     colours: coloursOf(product),
   };
 }

@@ -151,6 +151,7 @@ export function productFromForm(
       pageType: (text(form, 'pageType') as ProductPageType | null) ?? null,
       stockMode: (text(form, 'stockMode') as StockMode | null) ?? current.stockMode,
       sellOnline: form.get('sellOnline') === 'on',
+      position: whole(form, 'position') ?? 0,
       offlineAction: (text(form, 'offlineAction') as OfflineAction | null) ?? current.offlineAction,
       leadTimeMinDays: minDays,
       leadTimeMaxDays: maxDays,

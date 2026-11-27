@@ -12,6 +12,7 @@ const product = (prices: (number | null)[]): Product => ({
   madeToMeasure: false,
   measurements: null,
   sellOnline: true,
+  position: 0,
   offlineAction: 'stockist',
   pageType: null,
   updatedAt: null,

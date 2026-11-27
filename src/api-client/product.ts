@@ -73,6 +73,8 @@ export interface Product {
   // Off: shown but not sold online; offlineAction says what the page offers instead.
   sellOnline: boolean;
   offlineAction: OfflineAction;
+  // Lower first when sorted by Recommended.
+  position: number;
   // 4 means the product is bought through a builder, like the pergolas.
   pageType: string | null;
   updatedAt: string | null;

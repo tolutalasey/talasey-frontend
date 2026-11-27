@@ -2826,6 +2826,8 @@ export interface operations {
                         pageType: "2" | "3" | "4" | "1A" | "1B" | null;
                         madeToMeasure: boolean;
                         sellOnline: boolean;
+                        /** @description Lower first when sorted by Recommended */
+                        position: number;
                         /** @enum {string} */
                         offlineAction: "stockist" | "installer" | "showroom";
                         /** @description The sizes and choices a made-to-measure product asks for; the price formula stays private */
@@ -2931,6 +2933,8 @@ export interface operations {
                         pageType: "2" | "3" | "4" | "1A" | "1B" | null;
                         madeToMeasure: boolean;
                         sellOnline: boolean;
+                        /** @description Lower first when sorted by Recommended */
+                        position: number;
                         /** @enum {string} */
                         offlineAction: "stockist" | "installer" | "showroom";
                         /** @description The sizes and choices a made-to-measure product asks for; the price formula stays private */
@@ -3192,6 +3196,8 @@ export interface operations {
                         colourLabel: string | null;
                         /** @default true */
                         sellOnline: boolean;
+                        /** @default 0 */
+                        position: number;
                         /**
                          * @default stockist
                          * @enum {string}
@@ -3320,6 +3326,8 @@ export interface operations {
                         colourLabel: string | null;
                         /** @default true */
                         sellOnline: boolean;
+                        /** @default 0 */
+                        position: number;
                         /**
                          * @default stockist
                          * @enum {string}
@@ -3443,6 +3451,8 @@ export interface operations {
                     colourLabel: string | null;
                     /** @default true */
                     sellOnline?: boolean;
+                    /** @default 0 */
+                    position?: number;
                     /**
                      * @default stockist
                      * @enum {string}
@@ -3531,6 +3541,8 @@ export interface operations {
                         colourLabel: string | null;
                         /** @default true */
                         sellOnline: boolean;
+                        /** @default 0 */
+                        position: number;
                         /**
                          * @default stockist
                          * @enum {string}

@@ -21,6 +21,7 @@ export function toProduct(product: StoreProduct): Product {
     madeToMeasure: product.madeToMeasure,
     measurements: product.measurements,
     sellOnline: product.sellOnline,
+    position: product.position,
     offlineAction: product.offlineAction,
     pageType: product.pageType,
     updatedAt: product.updatedAt,

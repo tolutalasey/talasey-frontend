@@ -191,7 +191,10 @@ export class LocalProductSearch implements ProductSearch {
   // Every query word must match; when nothing matches them all, any word will do.
   private rank(entries: IndexedRecord[], queryWords: string[]) {
     if (queryWords.length === 0) {
-      return { ranked: entries.map((entry) => entry.record), partialMatch: false };
+      const ranked = entries
+        .map((entry) => entry.record)
+        .sort((a, b) => a.position - b.position || a.title.localeCompare(b.title));
+      return { ranked, partialMatch: false };
     }
     const rows = entries.map((entry) => ({
       entry,
@@ -213,7 +216,12 @@ export class LocalProductSearch implements ProductSearch {
     const matched = partialMatch ? scored.filter(({ scores }) => scores.some((s) => s > 0)) : all;
     const ranked = matched
       .map(({ entry, scores }) => ({ entry, total: scores.reduce((sum, s) => sum + s, 0) }))
-      .sort((a, b) => b.total - a.total || a.entry.title.localeCompare(b.entry.title))
+      .sort(
+        (a, b) =>
+          b.total - a.total ||
+          a.entry.record.position - b.entry.record.position ||
+          a.entry.title.localeCompare(b.entry.title),
+      )
       .map(({ entry }) => entry.record);
     return { ranked, partialMatch };
   }

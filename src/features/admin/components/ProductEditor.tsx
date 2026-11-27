@@ -258,6 +258,15 @@ export function ProductEditor({ product, categories, colourSets }: Props) {
               </Checkbox>
             </div>
             <div className={styles.wide}>
+              <TextField
+                label="Position in listings"
+                name="position"
+                defaultValue={product.position.toString()}
+                inputMode="numeric"
+                description="Lower numbers show first when shoppers sort by Recommended. Leave at 0 to keep name order"
+              />
+            </div>
+            <div className={styles.wide}>
               <SelectField
                 label="When it isn't sold online, the page offers"
                 name="offlineAction"

@@ -56,15 +56,23 @@ export async function getProductResources(handle: string) {
 }
 
 // A video with documents and other videos for the same product ranges.
+type Linked = { ranges: DocumentRange[]; products: string[] };
+
+// Entries about the same products as the video; only when the video names no products does a
+// shared range count, so a paving video never pulls in documents for a different paving.
+const relatedTo = (video: Linked) => (entry: Linked) =>
+  video.products.length > 0
+    ? entry.products.some((product) => video.products.includes(product))
+    : entry.ranges.some((range) => video.ranges.includes(range));
+
 export async function getVideoView(slug: string) {
   const [videos, documents] = await Promise.all([getVideos(), getHubDocuments()]);
   const video = videos.find((entry) => entry.slug === slug);
   if (!video) return null;
-  const shares = (entry: { ranges: DocumentRange[] }) =>
-    entry.ranges.some((range) => video.ranges.includes(range));
+  const related = relatedTo(video);
   return {
     video,
-    documents: documents.filter(shares).slice(0, 4),
-    more: videos.filter((entry) => entry !== video && shares(entry)).slice(0, 4),
+    documents: documents.filter(related).slice(0, 4),
+    more: videos.filter((entry) => entry !== video && related(entry)).slice(0, 4),
   };
 }

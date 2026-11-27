@@ -71,6 +71,7 @@ const toRecord = (hit: AlgoliaHit): SearchRecord => ({
   availability: hit.availability,
   thumbnail: hit.thumbnail,
   updatedAt: null,
+  position: 0,
   colours: [],
 });
 
