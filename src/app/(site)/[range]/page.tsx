@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
 import {
+  getProductRow,
   getRange,
   getRangeListing,
   getRanges,
@@ -63,9 +64,16 @@ const PIONEER_RANGE = 'pioneer-decking';
 async function leadFor(slug: string, sections: string[] | null | undefined) {
   if (sections?.length) {
     const ranges = await getRanges();
+    const shown = sections.flatMap((section) => ranges.filter((range) => range.slug === section));
+    const firsts = await Promise.all(
+      shown.map((range) => getProductRow({ scope: range.scope, pageSize: 1 })),
+    );
     return (
       <RangeSections
-        ranges={sections.flatMap((section) => ranges.filter((range) => range.slug === section))}
+        sections={shown.map((range, at) => ({
+          range,
+          productPhoto: firsts[at]?.[0]?.thumbnail,
+        }))}
       />
     );
   }

@@ -1,17 +1,27 @@
 import Image from 'next/image';
 import NextLink from 'next/link';
-import { rangePhoto } from '../range-photos';
+import { ownRangePhoto, rangePhoto } from '../range-photos';
 import { rangePath, type Range } from '../ranges';
 import styles from './Listing.module.css';
 
 // A landing page's own ranges, each a card through to its page, as on Fencing, Gates &
 // Balustrades.
-export function RangeSections({ ranges }: { ranges: Range[] }) {
-  if (ranges.length === 0) return null;
+export interface RangeSection {
+  range: Range;
+  // A photo of one of its products, for ranges with no photo of their own.
+  productPhoto?: string | null;
+}
+
+export function RangeSections({ sections }: { sections: RangeSection[] }) {
+  if (sections.length === 0) return null;
   return (
     <ul className={styles.sections}>
-      {ranges.map((range) => {
-        const photo = range.photo ?? rangePhoto(range.slug);
+      {sections.map(({ range, productPhoto }) => {
+        const photo =
+          ownRangePhoto(range.slug) ??
+          (productPhoto ? { src: productPhoto, width: 1200, height: 900 } : null) ??
+          range.photo ??
+          rangePhoto(range.slug);
         return (
           <li key={range.slug} className={`frame ${styles.section}`}>
             <Image

@@ -43,6 +43,8 @@ const PHOTOS: Record<string, RangePhoto> = {
   'paving-installation': range('paving-installation', 1, 1600, 1241),
 };
 
+export const ownRangePhoto = (slug: string): RangePhoto | null => PHOTOS[slug] ?? null;
+
 export const rangePhoto = (slug: string): RangePhoto =>
   PHOTOS[slug] ?? brand('samples-mixed', 1600, 1200);
 
