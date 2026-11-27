@@ -7,7 +7,7 @@ import {
   RelatedProducts,
   type Range,
 } from '@/features/catalogue';
-import { AddToBasket, MadeToMeasure } from '@/features/checkout';
+import { AddToBasket, CoverageCalculator, MadeToMeasure } from '@/features/checkout';
 import { getInspirationFor, InGardens } from '@/features/content';
 import { SiteSurvey } from '@/features/contact';
 import { getSiteSettings } from '@/features/layout';
@@ -282,6 +282,19 @@ export async function ProductRoute({
             spec={spec}
             size={variant?.options.Size ? null : oneSize}
             colours={colours && { label: colours.label, options: colours.options }}
+            unit={view.profile.unit}
+            calculator={
+              variant?.coverageM2 ? (
+                <CoverageCalculator
+                  profile={view.profile}
+                  coverageM2={variant.coverageM2}
+                  packPricePence={null}
+                  extras={[]}
+                  defaultQuantity="1"
+                  defaultArea={areaFrom(query.area)?.toString() ?? ''}
+                />
+              ) : undefined
+            }
           />
         ) : product.madeToMeasure && product.measurements && product.variants[0] ? (
           <MadeToMeasure

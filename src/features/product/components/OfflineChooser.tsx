@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { Modal } from '@/ui/Modal/Modal';
 import styles from './ProductPage.module.css';
 
@@ -28,18 +28,51 @@ interface Props {
   colours?: { label: string; options: OfflineColour[] } | null;
   // The one size a product comes in, when it has no size to choose.
   size?: string | null;
+  // The same calculator as buying, for products sold by the area they cover.
+  calculator?: ReactNode;
+  // What one of the product is called, like pack or board.
+  unit?: { one: string; many: string };
+}
+
+const valueOf = (area: HTMLElement | null, name: string) =>
+  area?.querySelector<HTMLInputElement>(`input[name="${name}"]`)?.value.trim() ?? '';
+
+// "3 packs for 12 m²" from the quantity and calculator on the page.
+function amountFrom(area: HTMLElement | null, unit: { one: string; many: string }) {
+  const quantity = Number(valueOf(area, 'quantity'));
+  const covers = Number(valueOf(area, 'area'));
+  if (!(quantity > 0)) return null;
+  const count = `${quantity} ${quantity === 1 ? unit.one : unit.many}`;
+  return covers > 0 ? `${count} for ${covers} m²` : count;
 }
 
 // For a product that isn't sold online: the same choices as buying, then Find a stockist opens
 // the stockist form over the page, which sends what the shopper chose with their details.
-export function OfflineChooser({ phone, form, formId, spec, colours, size }: Props) {
+export function OfflineChooser({
+  phone,
+  form,
+  formId,
+  spec,
+  colours,
+  size,
+  calculator,
+  unit = { one: 'item', many: 'items' },
+}: Props) {
   const { heading, text, label } = WORDING;
+  const choices = useRef<HTMLDivElement>(null);
   const [colour, setColour] = useState<string | null>(null);
+  const [amount, setAmount] = useState<string | null>(null);
   const [asking, setAsking] = useState(false);
-  const chosen = colour ? `${spec}, ${colours?.label ?? 'colour'}: ${colour}` : spec;
+  const chosen = [
+    spec,
+    colour && `${colours?.label ?? 'colour'}: ${colour}`,
+    amount && `quantity: ${amount}`,
+  ]
+    .filter(Boolean)
+    .join(', ');
 
   return (
-    <div className={styles.offline}>
+    <div className={styles.offline} ref={choices}>
       <h2>{heading}</h2>
       <p>{text}</p>
       {colours && colours.options.length > 0 && (
@@ -67,8 +100,21 @@ export function OfflineChooser({ phone, form, formId, spec, colours, size }: Pro
           Size: <strong>{size}</strong>
         </p>
       )}
+      {calculator ?? (
+        <label className={styles.offlineQuantity}>
+          Quantity
+          <input type="number" name="quantity" min={1} inputMode="numeric" defaultValue={1} />
+        </label>
+      )}
       <p className={styles.offlineActions}>
-        <button type="button" className="button" onClick={() => setAsking(true)}>
+        <button
+          type="button"
+          className="button"
+          onClick={() => {
+            setAmount(amountFrom(choices.current, unit));
+            setAsking(true);
+          }}
+        >
           {label}
         </button>
         <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="button-secondary">

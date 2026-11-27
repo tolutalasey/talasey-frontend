@@ -21,4 +21,5 @@ export {
   removeSampleFromBasket,
 } from './actions';
 export { MadeToMeasure } from './components/MadeToMeasure';
+export { CoverageCalculator } from './components/CoverageCalculator';
 export { buyAgainFeedback } from './basket-again';

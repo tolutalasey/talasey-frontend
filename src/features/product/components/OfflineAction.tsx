@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { LocalHelpForm } from '@/features/contact';
 import { OfflineChooser, type OfflineColour } from './OfflineChooser';
 
@@ -9,6 +10,10 @@ interface Props {
   spec: string;
   colours?: { label: string; options: OfflineColour[] } | null;
   size?: string | null;
+  // The same calculator as buying, for products sold by the area they cover.
+  calculator?: ReactNode;
+  // What one of the product is called, like pack or board.
+  unit?: { one: string; many: string };
 }
 
 // For a product that isn't sold online: the choices and the stockist form, which sends the choice.
