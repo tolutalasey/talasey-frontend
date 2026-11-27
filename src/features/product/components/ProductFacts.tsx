@@ -143,10 +143,15 @@ function sectionsOf({ product, variant, brand, content, colour }: ProductFactsPr
       id: 'downloads',
       title: 'Downloads',
       body: (
-        <ul>
+        <ul className={styles.downloads}>
           {content.documents.map((document) => (
             <li key={document.url}>
-              <a href={document.url}>{document.title}</a>
+              <a href={document.url} className={styles.download} target="_blank" rel="noreferrer">
+                <span className={styles.downloadCover} aria-hidden="true">
+                  PDF
+                </span>
+                <span>{document.title}</span>
+              </a>
             </li>
           ))}
         </ul>
