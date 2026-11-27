@@ -79,7 +79,7 @@ const KINDS: { kind: string; words: RegExp }[] = [
   { kind: 'Artificial grass cleaners', words: /\bartificial grass\b.*\b(cleanser|cleaner)\b/i },
   {
     kind: 'Artificial grass installation',
-    words: /\bartificial grass\b.*\b(adhesive|tape|pins|membrane)\b/i,
+    words: /\bartificial grass\b.*\b(adhesive|tape|pins|membrane)\b|\bweed membrane\b/i,
   },
 ];
 
