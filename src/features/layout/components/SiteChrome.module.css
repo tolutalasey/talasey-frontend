@@ -513,6 +513,7 @@
 .footerColumns address {
   margin: 0 0 var(--space-2);
   color: var(--color-stone-muted);
+  font-size: 0.875rem;
   font-style: normal;
   white-space: pre-line;
 }
@@ -520,8 +521,9 @@
 .footerColumns a {
   display: inline-flex;
   align-items: center;
-  min-height: 2.25rem;
+  min-height: 2rem;
   color: var(--color-stone);
+  font-size: 0.875rem;
   text-decoration: none;
 }
 
@@ -647,6 +649,16 @@
   }
 
   .footerInner {
-    padding: var(--space-16) var(--space-12) 2.5rem;
+    padding: var(--space-12) var(--space-12) var(--space-8);
+  }
+
+  .footerColumns {
+    grid-template-columns: repeat(5, auto);
+    justify-content: space-between;
+  }
+
+  .footerColumns a,
+  .footerColumns h2 {
+    white-space: nowrap;
   }
 }
