@@ -1,6 +1,7 @@
 import { PageBreadcrumbs } from '@/features/layout';
 import { videoEmbed, videoPath } from '../paths';
 import type { HubDocument, Video } from '../schemas';
+import { VideoPlayer } from '@/ui/VideoPlayer/VideoPlayer';
 import { DocumentCard } from './DocumentCard';
 import styles from './KnowledgeHub.module.css';
 import { VideoCard } from './VideoCard';
@@ -26,15 +27,7 @@ export function VideoPage({ video, documents, more }: Props) {
         <h1>{video.title}</h1>
         {video.summary && <p className={styles.intro}>{video.summary}</p>}
       </header>
-      <div className={styles.player}>
-        <iframe
-          src={videoEmbed(video)}
-          title={video.title}
-          loading="lazy"
-          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-          allowFullScreen
-        />
-      </div>
+      <VideoPlayer youtube={video.youtube} title={video.title} />
       {documents.length > 0 && (
         <section className={styles.panel} aria-labelledby="documents-title">
           <h2 id="documents-title">Documents for the same products</h2>

@@ -9,6 +9,7 @@ import { formatPrice } from '@/lib/format';
 import { JsonLd } from '@/lib/JsonLd';
 import { listingTarget } from '@/lib/listing-href';
 import { collectionPageJsonLd } from '@/lib/seo';
+import { VideoPlayer, youtubeId } from '@/ui/VideoPlayer/VideoPlayer';
 import { productPath } from '@/lib/urls/keyword-map';
 import { leadOrder } from '../lead-order';
 import { curatedTargets } from '../listing-urls';
@@ -78,6 +79,7 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
     ...(curated ? [{ name: curated.name, path: curatedPath(range, curated) }] : []),
   ];
   const price = priceLine(listing);
+  const video = youtubeId(range.video);
   const filtered = hasFilters(current.filters) || (params.sort ?? 'relevance') !== 'relevance';
   const ordered = leadOrder(result.hits, filtered ? [] : range.leadWith);
   const restHeading = range.restHeading && ordered.exact > 0 ? range.restHeading : null;
@@ -137,6 +139,7 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
           )}
         </div>
       </header>
+      {video && <VideoPlayer youtube={video} title={range.h1} />}
       {lead}
       {listing.stocked.length > 0 && (
         <nav aria-label={`More ${range.name.toLowerCase()}`} className={styles.curated}>

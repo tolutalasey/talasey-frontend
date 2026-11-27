@@ -54,6 +54,8 @@ export const rangeSchema = z.object({
     .nullish(),
   // The main button at the top of the page, such as the pergola builder.
   headerAction: z.object({ label: z.string().min(1), href: z.string().min(1) }).nullish(),
+  // A YouTube video shown under the page's introduction.
+  video: z.string().nullish(),
   // Other ranges whose products show under "You may also need" on this range's product pages.
   alsoNeed: z.array(slug).nullish(),
   gallery: z.array(galleryItem).default([]),
