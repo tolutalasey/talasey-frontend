@@ -72,9 +72,7 @@ export function OfflineChooser({
     .join(', ');
 
   return (
-    <div className={styles.offline} ref={choices}>
-      <h2>{heading}</h2>
-      <p>{text}</p>
+    <div className={styles.offlineChooser} ref={choices}>
       {colours && colours.options.length > 0 && (
         <fieldset className={styles.offlineColours}>
           <legend>{colours.label.charAt(0).toUpperCase() + colours.label.slice(1)}</legend>
@@ -106,21 +104,25 @@ export function OfflineChooser({
           <input type="number" name="quantity" min={1} inputMode="numeric" defaultValue={1} />
         </label>
       )}
-      <p className={styles.offlineActions}>
-        <button
-          type="button"
-          className="button"
-          onClick={() => {
-            setAmount(amountFrom(choices.current, unit));
-            setAsking(true);
-          }}
-        >
-          {label}
-        </button>
-        <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="button-secondary">
-          Call {phone}
-        </a>
-      </p>
+      <div className={styles.offline}>
+        <h2>{heading}</h2>
+        <p>{text}</p>
+        <p className={styles.offlineActions}>
+          <button
+            type="button"
+            className="button"
+            onClick={() => {
+              setAmount(amountFrom(choices.current, unit));
+              setAsking(true);
+            }}
+          >
+            {label}
+          </button>
+          <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="button-secondary">
+            Call {phone}
+          </a>
+        </p>
+      </div>
       <Modal title={heading} isOpen={asking} onOpenChange={setAsking}>
         <p className={styles.offlineChoice}>
           You chose: <strong>{chosen}</strong>

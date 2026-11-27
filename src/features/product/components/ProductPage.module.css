@@ -485,6 +485,11 @@
   outline-offset: 2px;
 }
 
+.offlineChooser {
+  display: grid;
+  gap: var(--space-4);
+}
+
 .offlineSize {
   margin: 0;
 }
