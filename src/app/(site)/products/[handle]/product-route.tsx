@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { notFound, permanentRedirect } from 'next/navigation';
+import { notFound, permanentRedirect, redirect } from 'next/navigation';
 import {
   getProductRow,
   getRanges,
@@ -12,7 +12,6 @@ import { getInspirationFor, InGardens } from '@/features/content';
 import { SiteSurvey } from '@/features/contact';
 import { getSiteSettings } from '@/features/layout';
 import {
-  ColourChoicesPage,
   getProduct,
   getProductView,
   leadTimeText,
@@ -41,7 +40,7 @@ import {
 import { FenceProduct, getFenceForProduct } from '@/features/fencing';
 import { getProductResources, ProductResources } from '@/features/knowledge-hub';
 import { pageMetadata } from '@/lib/seo';
-import { getSampleOffers, offerFor } from '@/features/samples';
+import { offerFor } from '@/features/samples';
 import {
   COLOUR_OPTION,
   colourFromSlug,
@@ -176,23 +175,17 @@ export async function ProductRoute({
   ]);
   const colourNames = pergola || fence ? [] : pageColours(view.product.options);
 
-  // A product in several colours: its own page lists the colours, and each colour has a page.
+  // A product in several colours is one page per colour, picked on the page; its own address
+  // opens the colour asked for, or the first, so there is no separate page listing the colours.
   if (colourNames.length > 0 && !colour) {
     const asked = colourFromSlug(view.product.options, first(query.colour) ?? '');
-    if (asked) {
-      const { colour: _colour, ...rest } = query;
-      const others = new URLSearchParams(
-        Object.entries(rest).flatMap(([key, value]) => (value ? [[key, String(value)]] : [])),
-      ).toString();
-      permanentRedirect(`${colourPath(handle, asked)}${others ? `?${others}` : ''}`);
-    }
-    return (
-      <ColourChoicesPage
-        view={view}
-        offers={await getSampleOffers()}
-        resources={<ProductResources {...resources} />}
-      />
-    );
+    const { colour: _colour, ...rest } = query;
+    const others = new URLSearchParams(
+      Object.entries(rest).flatMap(([key, value]) => (value ? [[key, String(value)]] : [])),
+    ).toString();
+    const target = `${colourPath(handle, asked ?? colourNames[0] ?? '')}${others ? `?${others}` : ''}`;
+    if (asked) permanentRedirect(target);
+    redirect(target);
   }
 
   const product = colour
@@ -200,7 +193,7 @@ export async function ProductRoute({
     : view.product;
   const path = colour ? colourPath(handle, colour) : view.path;
   const breadcrumbs = colour
-    ? [...view.breadcrumbs, { name: product.title, path }]
+    ? [...view.breadcrumbs.slice(0, -1), { name: product.title, path }]
     : view.breadcrumbs;
   const colourSample = colour ? offerFor(view.samples, handle, colour) : null;
   const samples = colour ? (colourSample ? [colourSample] : []) : view.samples;

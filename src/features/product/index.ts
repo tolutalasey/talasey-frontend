@@ -1,4 +1,3 @@
-export { ColourChoicesPage } from './components/ColourChoicesPage';
 export { ProductPage } from './components/ProductPage';
 export { StockAlertForm } from './components/StockAlertForm';
 export { OfflineAction } from './components/OfflineAction';
