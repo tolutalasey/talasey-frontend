@@ -9,9 +9,15 @@ export interface OldProductPage {
   documents: { title: string; url: string }[];
 }
 
+const titleKey = (title: string) => title.trim().toLowerCase().replace(/\s+/g, ' ');
+
+// The same document is often attached to each colour's old page under its own address.
 const uniqueDocuments = (documents: OldProductPage['documents']) =>
   documents.filter(
-    (document, index) => documents.findIndex((other) => other.url === document.url) === index,
+    (document, index) =>
+      documents.findIndex(
+        (other) => other.url === document.url || titleKey(other.title) === titleKey(document.title),
+      ) === index,
   );
 
 // The current site's words for a product: its own page, or for a product sold in several colours,

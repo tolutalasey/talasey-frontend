@@ -61,7 +61,7 @@ export const rangeSchema = z.object({
   // Ranges this page introduces, each a card through to its own page.
   sections: z.array(slug).nullish(),
   // Other ranges whose products show under "You may also need" on this range's product pages.
-  alsoNeed: z.array(slug).nullish(),
+  alsoNeed: z.array(z.string().regex(/^[a-z0-9-]+(?:\/[a-z0-9-]+)?$/)).nullish(),
   gallery: z.array(galleryItem).default([]),
   scope: z.object({
     categories: z.array(z.string()).optional(),
@@ -114,7 +114,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Porcelain paving',
     intro:
       'Porcelain paving is hard-wearing, easy to clean and keeps its colour, which makes it a good choice for patios, paths and garden steps.',
-    alsoNeed: ['paving-jointing', 'cleaners-and-sealers'],
+    alsoNeed: ['paving-installation/jointing', 'cleaners-and-sealers'],
     gallery: [],
     scope: { titleIncludes: ['porcelain paving'] },
     buyingGuide: [
@@ -136,7 +136,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Natural stone paving',
     intro:
       'Indian sandstone, limestone, granite and slate paving for patios and paths, each slab with its own natural variation in colour.',
-    alsoNeed: ['paving-jointing', 'cleaners-and-sealers'],
+    alsoNeed: ['paving-installation/jointing', 'cleaners-and-sealers'],
     gallery: [],
     scope: { titleIncludes: ['sandstone', 'limestone', 'granite', 'slate'] },
     buyingGuide: [],
@@ -600,7 +600,7 @@ export const fallbackRanges: Range[] = [
     h1: 'Garden paving',
     intro:
       'Natural stone and porcelain paving for patios, paths and steps, with everything needed to lay it.',
-    alsoNeed: ['paving-jointing', 'cleaners-and-sealers'],
+    alsoNeed: ['paving-installation/jointing', 'cleaners-and-sealers'],
     gallery: [],
     scope: { titleIncludes: ['paving'] },
     buyingGuide: [],

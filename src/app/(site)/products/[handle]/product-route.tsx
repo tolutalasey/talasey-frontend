@@ -3,6 +3,7 @@ import { notFound, permanentRedirect, redirect } from 'next/navigation';
 import {
   getProductRow,
   getRanges,
+  curatedPath,
   rangePath,
   RelatedProducts,
   type Range,
@@ -113,9 +114,23 @@ async function relatedTo(product: {
   const category = product.categories.at(-1)?.handle;
   const ranges = await getRanges();
   const own = ranges.filter((range) => holds(range, product));
-  const wanted = [...new Set(own.flatMap((range) => range.alsoNeed ?? []))]
-    .map((slug) => ranges.find((range) => range.slug === slug))
-    .filter((range): range is Range => Boolean(range));
+  // Each entry is a range, or one of its filtered pages, like paving-installation/jointing.
+  const wanted = [...new Set(own.flatMap((range) => range.alsoNeed ?? []))].flatMap((entry) => {
+    const [slug, pageSlug] = entry.split('/');
+    const target = ranges.find((range) => range.slug === slug);
+    const page = pageSlug
+      ? target?.curated.find((curated) => curated.slug === pageSlug)
+      : undefined;
+    if (!target || (pageSlug && !page)) return [];
+    return [
+      {
+        scope: target.scope,
+        filters: page?.filters ?? {},
+        href: page ? curatedPath(target, page) : rangePath(target),
+        name: page?.name ?? target.name,
+      },
+    ];
+  });
   const range = category
     ? ranges.find((candidate) => candidate.scope.categories?.includes(category))
     : undefined;
@@ -123,7 +138,9 @@ async function relatedTo(product: {
 
   if (wanted.length > 0) {
     const rows = await Promise.all(
-      wanted.map((target) => getProductRow({ scope: target.scope, pageSize: RELATED_COUNT })),
+      wanted.map((target) =>
+        getProductRow({ scope: target.scope, filters: target.filters, pageSize: RELATED_COUNT }),
+      ),
     );
     const mixed = rows
       .flatMap((row, at) => row.map((hit, place) => ({ hit, order: place * rows.length + at })))
@@ -133,7 +150,7 @@ async function relatedTo(product: {
     const [first] = wanted;
     return {
       products: mixed.slice(0, RELATED_COUNT),
-      range: first && { href: rangePath(first), label: `Shop all ${first.name.toLowerCase()}` },
+      range: first && { href: first.href, label: `Shop all ${first.name.toLowerCase()}` },
     };
   }
   if (!category) return { products: [] };
