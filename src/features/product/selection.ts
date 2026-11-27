@@ -78,26 +78,38 @@ export interface OptionGroup {
   choices: OptionChoice[];
 }
 
+// With a colour chosen, a size or finish that colour never comes in isn't offered at all.
+const madeIn = (product: Product, colour: string | undefined, title: string, value: string) =>
+  !colour ||
+  title === COLOUR ||
+  product.variants.some(
+    (variant) => variant.options[COLOUR] === colour && variant.options[title] === value,
+  );
+
+
 export function optionGroups(product: Product, selection: Selection): OptionGroup[] {
+  const colour = selection.options[COLOUR];
   return product.options.map((option) => ({
     title: option.title,
     current: selection.options[option.title] ?? null,
-    choices: option.values.map((value) => {
-      const wanted = { ...selection.options, [option.title]: value };
-      const params = Object.fromEntries(
-        Object.entries(wanted).map(([title, chosen]) => [optionParam(title), slugify(chosen)]),
-      );
-      if (selection.colourParam) params.colour = selection.colourParam;
-      return {
-        value,
-        params,
-        current: selection.options[option.title] === value,
-        available: product.variants.some(
-          (variant) =>
-            isAvailable(variant) &&
-            Object.entries(wanted).every(([title, chosen]) => variant.options[title] === chosen),
-        ),
-      };
-    }),
+    choices: option.values
+      .filter((value) => madeIn(product, colour, option.title, value))
+      .map((value) => {
+        const wanted = { ...selection.options, [option.title]: value };
+        const params = Object.fromEntries(
+          Object.entries(wanted).map(([title, chosen]) => [optionParam(title), slugify(chosen)]),
+        );
+        if (selection.colourParam) params.colour = selection.colourParam;
+        return {
+          value,
+          params,
+          current: selection.options[option.title] === value,
+          available: product.variants.some(
+            (variant) =>
+              isAvailable(variant) &&
+              Object.entries(wanted).every(([title, chosen]) => variant.options[title] === chosen),
+          ),
+        };
+      }),
   }));
 }
