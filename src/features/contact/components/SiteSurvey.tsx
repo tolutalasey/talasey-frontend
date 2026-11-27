@@ -36,7 +36,7 @@ function Problem({ id, message }: { id: string; message?: string }) {
 
 function SurveyForm({ productHandle, productTitle, sizes }: Props) {
   const [state, action, pending] = useActionState<SurveyState, FormData>(
-    requestSiteSurvey.bind(null, productHandle),
+    requestSiteSurvey.bind(null, productHandle, productTitle),
     {},
   );
   const errors = state.fieldErrors ?? {};

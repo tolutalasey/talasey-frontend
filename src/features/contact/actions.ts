@@ -51,8 +51,10 @@ const text = (form: FormData, name: string) => String(form.get(name) ?? '').trim
 
 // A site survey request for an enquiry-only product. The product name is taken from the page's
 // own handle, never typed, so every request is tied to the right product.
+// For a product, or, with no product, for a range such as Garden rooms, sent as the topic.
 export async function requestSiteSurvey(
   productHandle: string,
+  productTitle: string,
   _state: SurveyState,
   form: FormData,
 ): Promise<SurveyState> {
@@ -81,7 +83,8 @@ export async function requestSiteSurvey(
   ]);
   const payload = new FormData();
   payload.set('kind', 'site-survey');
-  payload.set('productHandle', productHandle);
+  if (productHandle) payload.set('productHandle', productHandle);
+  else payload.set('topic', productTitle);
   payload.set('name', parsed.data.name);
   payload.set('email', parsed.data.email);
   payload.set('phone', parsed.data.phone);

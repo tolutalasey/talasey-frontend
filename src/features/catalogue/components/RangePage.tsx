@@ -2,7 +2,7 @@ import Image from 'next/image';
 import NextLink from 'next/link';
 import type { ReactNode } from 'react';
 import type { SampleOffer } from '@/api-client';
-import { DetailsForm } from '@/features/contact';
+import { DetailsForm, SiteSurvey } from '@/features/contact';
 import { PageBreadcrumbs } from '@/features/layout';
 import { hasFilters, withoutFilter, type FacetCount, type ListingParams } from '@/features/search';
 import { formatPrice } from '@/lib/format';
@@ -181,7 +181,7 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
         <RangeGallery
           name={range.name}
           items={gallery}
-          withEnquiry
+          withEnquiry={!range.enquiry}
           samples={offersSamples(range.slug)}
         />
       ) : (
@@ -272,7 +272,19 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
             ))}
           </div>
         )}
-        <DetailsForm id="contact" />
+        {range.enquiry === 'site-survey' ? (
+          <div className={styles.bespoke}>
+            <p className="eyebrow">Made to order</p>
+            <p>
+              Every {range.name.toLowerCase().replace(/s$/, '')} is designed and built to your
+              space. Book a free site survey and we&rsquo;ll visit, measure up and talk through the
+              options with you.
+            </p>
+            <SiteSurvey productHandle="" productTitle={range.name} sizes={[]} />
+          </div>
+        ) : (
+          <DetailsForm id="contact" />
+        )}
       </section>
       <JsonLd
         data={collectionPageJsonLd(

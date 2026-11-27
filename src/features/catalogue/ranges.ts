@@ -56,6 +56,8 @@ export const rangeSchema = z.object({
   headerAction: z.object({ label: z.string().min(1), href: z.string().min(1) }).nullish(),
   // A YouTube video shown under the page's introduction.
   video: z.string().nullish(),
+  // Made to order: the page asks for a free site survey instead of a plain message.
+  enquiry: z.enum(['site-survey']).nullish(),
   // Ranges this page introduces, each a card through to its own page.
   sections: z.array(slug).nullish(),
   // Other ranges whose products show under "You may also need" on this range's product pages.
@@ -268,6 +270,7 @@ export const fallbackRanges: Range[] = [
     name: 'Garden rooms',
     h1: 'Garden rooms',
     intro: 'Garden rooms and garden offices, with the cladding, lighting and base to go with them.',
+    enquiry: 'site-survey',
     gallery: [],
     scope: { titleIncludes: ['garden room'] },
     buyingGuide: [],
