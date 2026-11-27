@@ -53,17 +53,6 @@ export const LOCAL_HELP_CONTENT: Partial<Record<LocalHelpKind, LocalHelpContent>
         eyebrow: 'Coverage by region',
         heading: 'A merchant within reach, wherever you build',
         text: 'From the Highlands to Cornwall, our partner network covers every postcode in mainland UK with extended cover in Ireland and the islands.',
-        counts: [
-          { label: 'Scotland', count: 24 },
-          { label: 'North East', count: 16 },
-          { label: 'North West', count: 27 },
-          { label: 'Yorkshire', count: 22 },
-          { label: 'Midlands', count: 31 },
-          { label: 'East of England', count: 16 },
-          { label: 'Greater London', count: 29 },
-          { label: 'South East', count: 26 },
-          { label: 'South West', count: 19 },
-        ],
         action: { label: 'Order your samples now', href: '/samples/' },
       },
       {
