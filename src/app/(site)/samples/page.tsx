@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getBasket } from '@/features/checkout';
 import { PageBreadcrumbs } from '@/features/layout';
-import { getSampleOffers, SamplesPage } from '@/features/samples';
+import { getSampleOffers, parseSampleFilters, SamplesPage } from '@/features/samples';
 import { readFeedback } from '@/lib/form-feedback.server';
 import { pageMetadata } from '@/lib/seo';
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
   path: '/samples/',
 });
 
-export default async function Samples() {
+export default async function Samples({ searchParams }: PageProps<'/samples'>) {
   const [offers, basket, feedback] = await Promise.all([
     getSampleOffers(),
     getBasket(),
@@ -31,7 +31,12 @@ export default async function Samples() {
           ]}
         />
       </div>
-      <SamplesPage offers={offers} chosen={basket?.samples ?? []} feedback={feedback.samples} />
+      <SamplesPage
+        offers={offers}
+        chosen={basket?.samples ?? []}
+        feedback={feedback.samples}
+        filters={parseSampleFilters(await searchParams)}
+      />
     </>
   );
 }

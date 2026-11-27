@@ -1,4 +1,5 @@
 export { SearchLauncher } from './components/SearchLauncher';
+export { colourFamily } from './colour-families';
 export { FACETS, PRICE_BANDS } from './facets';
 export {
   hasFilters,

@@ -6,7 +6,8 @@ import type { FormState } from '@/lib/form-feedback';
 import { formatPrice } from '@/lib/format';
 import { standInPhoto } from '@/lib/stand-in-photo';
 import { VisuallyHidden } from '@/ui/VisuallyHidden/VisuallyHidden';
-import { FREE_SAMPLES, MAX_SAMPLES } from '../samples';
+import { filterSamples, sampleFilterOptions, type SampleFilters } from '../sample-filters';
+import { FREE_SAMPLES, MAX_SAMPLES, SAMPLES_PATH } from '../samples';
 import { SampleServiceInfo } from './SampleServiceInfo';
 import styles from './Samples.module.css';
 
@@ -14,6 +15,35 @@ interface Props {
   offers: SampleOffer[];
   chosen: BasketSample[];
   feedback?: FormState;
+  filters?: SampleFilters;
+}
+
+// Material, colour and finish, as plain selects in a form, so filtering works without JavaScript.
+function SampleFilterForm({ offers, filters }: { offers: SampleOffer[]; filters: SampleFilters }) {
+  const options = sampleFilterOptions(offers);
+  if (options.length === 0) return null;
+  const applied = Object.values(filters).some(Boolean);
+  return (
+    <form action={SAMPLES_PATH} method="get" className={styles.filters}>
+      {options.map((filter) => (
+        <label key={filter.id} className={styles.filter}>
+          {filter.label}
+          <select name={filter.id} defaultValue={filters[filter.id] ?? ''}>
+            <option value="">Any</option>
+            {filter.values.map((value) => (
+              <option key={value} value={value}>
+                {value}
+              </option>
+            ))}
+          </select>
+        </label>
+      ))}
+      <button type="submit" className={styles.secondary}>
+        Show samples
+      </button>
+      {applied && <NextLink href={SAMPLES_PATH}>Clear</NextLink>}
+    </form>
+  );
 }
 
 const nameOf = (offer: { productTitle: string; label: string }) =>
@@ -24,7 +54,8 @@ const photoOf = (offer: SampleOffer) =>
 
 // Samples go in the bag with everything else: plain HTML forms, so the page works the same with
 // or without JavaScript.
-export function SamplesPage({ offers, chosen, feedback }: Props) {
+export function SamplesPage({ offers, chosen, feedback, filters = {} }: Props) {
+  const shown = filterSamples(offers, filters);
   const chosenIds = new Set(chosen.map((sample) => sample.offerId));
   const full = chosen.length >= MAX_SAMPLES;
   const free = Math.max(0, FREE_SAMPLES - chosen.length);
@@ -56,6 +87,7 @@ export function SamplesPage({ offers, chosen, feedback }: Props) {
       <div className={styles.layout}>
         <section className={styles.offers} aria-labelledby="offers-title">
           <h2 id="offers-title">Choose your samples</h2>
+          <SampleFilterForm offers={offers} filters={filters} />
           {feedback?.message && (
             <p role="alert" className={styles.error}>
               {feedback.message}
@@ -65,9 +97,13 @@ export function SamplesPage({ offers, chosen, feedback }: Props) {
             <p className={`frame ${styles.empty}`}>
               Samples are being set up. Call us and we will post the ones you need.
             </p>
+          ) : shown.length === 0 ? (
+            <p className={`frame ${styles.empty}`}>
+              No samples match these choices. <NextLink href={SAMPLES_PATH}>Show them all</NextLink>
+            </p>
           ) : (
             <ul className={styles.grid}>
-              {offers.map((offer) => {
+              {shown.map((offer) => {
                 const added = chosenIds.has(offer.id);
                 return (
                   <li key={offer.id} className={styles.card} data-added={added || undefined}>
