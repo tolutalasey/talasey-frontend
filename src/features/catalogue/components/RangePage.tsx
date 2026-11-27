@@ -9,6 +9,7 @@ import { formatPrice } from '@/lib/format';
 import { JsonLd } from '@/lib/JsonLd';
 import { listingTarget } from '@/lib/listing-href';
 import { collectionPageJsonLd } from '@/lib/seo';
+import { ProductCard } from '@/ui/ProductCard/ProductCard';
 import { VideoPlayer, youtubeId } from '@/ui/VideoPlayer/VideoPlayer';
 import { productPath } from '@/lib/urls/keyword-map';
 import { leadOrder } from '../lead-order';
@@ -88,6 +89,19 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
   const photo = range.photo ?? { ...rangePhoto(range.slug), alt: '' };
   const gallery = (range.gallery.length > 0 ? range.gallery : rangeGallery(range.slug)).filter(
     (item) => item.photo.src !== photo.src,
+  );
+  // A made-to-order piece sits with the products as one more card, through to how it works.
+  const bespokePhoto = gallery[0]?.photo ?? photo;
+  const bespokeCard = range.bespoke && (
+    <ProductCard
+      href="#made-to-order"
+      name={range.bespoke.heading}
+      image={{ ...bespokePhoto, alt: bespokePhoto.alt || range.bespoke.heading }}
+      price="Made to order"
+      priceNote="to your design"
+      badge="Custom"
+      fit={range.cardPhotos}
+    />
   );
 
   return (
@@ -207,6 +221,7 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
                 eager={4}
                 byColour={{ offers: samples }}
                 fit={range.cardPhotos}
+                last={bespokeCard}
                 insert={
                   restHeading
                     ? {
@@ -229,7 +244,11 @@ export function RangePage({ range, curated, listing, params, lead, samples = [] 
       )}
 
       {range.bespoke && (
-        <section className={`frame ${styles.bespokeCard}`} aria-labelledby="bespoke-title">
+        <section
+          id="made-to-order"
+          className={`frame ${styles.bespokeCard}`}
+          aria-labelledby="bespoke-title"
+        >
           <p className="eyebrow">Made to order</p>
           <h2 id="bespoke-title">{range.bespoke.heading}</h2>
           <p>{range.bespoke.text}</p>

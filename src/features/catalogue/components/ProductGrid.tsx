@@ -21,6 +21,8 @@ interface ProductGridProps {
   fill?: boolean;
   // How photos sit in the cards: packshots look best whole.
   fit?: 'cover' | 'contain';
+  // One more card after the products, such as a made-to-order piece.
+  last?: ReactNode;
 }
 
 function CardActions({ card, offers }: { card: ListingCard; offers: SampleOffer[] }) {
@@ -43,6 +45,7 @@ export function ProductGrid({
   byColour,
   fill = false,
   fit = 'cover',
+  last,
 }: ProductGridProps) {
   const cards = byColour
     ? products.flatMap(byColour.split ? colourCards : listingCard).map((card, index) => (
@@ -76,6 +79,7 @@ export function ProductGrid({
   return (
     <ul className={`${styles.grid} ${fill ? styles.fill : ''}`} aria-label={label}>
       {cards}
+      {last && <li>{last}</li>}
     </ul>
   );
 }
