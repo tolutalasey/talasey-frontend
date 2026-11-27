@@ -8,7 +8,8 @@ import styles from './Listing.module.css';
 // Balustrades.
 export interface RangeSection {
   range: Range;
-  // A photo of one of its products, for ranges with no photo of their own.
+  // A photo of one of its products, for ranges with no photo of their own; failing that, the
+  // first photo from its page on the current site.
   productPhoto?: string | null;
 }
 
@@ -20,6 +21,7 @@ export function RangeSections({ sections }: { sections: RangeSection[] }) {
         const photo =
           ownRangePhoto(range.slug) ??
           (productPhoto ? { src: productPhoto, width: 1200, height: 900 } : null) ??
+          range.slides?.[0] ??
           range.photo ??
           rangePhoto(range.slug);
         return (
