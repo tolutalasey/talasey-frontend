@@ -41,7 +41,7 @@ export function PergolaProduct({
   const from = lowestPrice(builder, catalogue);
   const head = (
     <header className={styles.head}>
-      <p className="eyebrow">{builder.range} pergola</p>
+      <p className="eyebrow">{builder.range} Pergola</p>
       <h1>{title}</h1>
       {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
       {from !== null && (

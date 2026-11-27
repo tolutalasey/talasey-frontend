@@ -9,7 +9,7 @@ export function PergolaAddOnLinks({ pages }: { pages: PergolaPage[] }) {
       {pages.length > 0 ? (
         pages.map(({ builder, path }) => (
           <NextLink key={builder.slug} href={path} className="button">
-            Build your {builder.range} pergola
+            Build your {builder.range} Pergola
           </NextLink>
         ))
       ) : (

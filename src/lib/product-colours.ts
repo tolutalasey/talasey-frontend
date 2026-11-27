@@ -22,10 +22,15 @@ export const colourFromSlug = (options: Option[], slug: string) =>
 
 // "Anno Lite porcelain paving" in Buff reads "Anno Lite Buff porcelain paving": the colour goes
 // before the first lower-case word, as the current site names them.
+// The words that say what a product is, so the colour goes in front of them:
+// "Anno Lite Porcelain Paving" in Pearl is "Anno Lite Pearl Porcelain Paving".
+const KIND_WORDS =
+  /^(shadow|traditional|porcelain|sandstone|limestone|granite|slate|basalt|natural|paving|composite|decking|cladding|fencing|fence|planter|pergola|screen|edging|walling|copings?|kerbs?|setts|block|artificial|jointing)$/i;
+
 export function colourTitle(title: string, colour: string): string {
   if (title.toLowerCase().includes(colour.toLowerCase())) return title;
   const words = title.split(' ');
-  const at = words.findIndex((word, index) => index > 0 && /^[a-z]/.test(word));
+  const at = words.findIndex((word, index) => index > 0 && KIND_WORDS.test(word));
   return at < 0
     ? `${title} ${colour}`
     : [...words.slice(0, at), colour, ...words.slice(at)].join(' ');

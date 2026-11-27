@@ -9,7 +9,7 @@ export async function getBuilders(): Promise<Builder[]> {
   const [pergolas, fences] = await Promise.all([getPergolaPages(), getFenceBuilders()]);
   return [
     ...pergolas.map(({ builder, path }) => ({
-      name: `${builder.range} pergola builder`,
+      name: `${builder.range} Pergola builder`,
       summary: 'Pick the size, sides and extras, and see the price as you go.',
       path,
       image: rangePhoto(PERGOLA_RANGE).src,

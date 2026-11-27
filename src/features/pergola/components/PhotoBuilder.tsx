@@ -205,7 +205,7 @@ export function PhotoBuilder({ rules, catalogue, others, start, head }: Props) {
       <>
         <Photo
           src={src}
-          alt={`${rules.range} pergola, ${label}`}
+          alt={`${rules.range} Pergola, ${label}`}
           sizes="(min-width: 64rem) 60vw, 100vw"
           eager
         />
@@ -426,7 +426,7 @@ export function PhotoBuilder({ rules, catalogue, others, start, head }: Props) {
   const overviewStep = (
     <>
       <h3 className={styles.label}>
-        Your {rules.range} pergola · {size?.label} · {fixingLabel}
+        Your {rules.range} Pergola · {size?.label} · {fixingLabel}
       </h3>
       <ul className={styles.lines}>
         {summary.lines.map((line) => {

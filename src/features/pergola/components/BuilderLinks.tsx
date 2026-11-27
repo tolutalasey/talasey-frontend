@@ -15,13 +15,13 @@ export function BuilderLinks({ pages }: { pages: PergolaPage[] }) {
       <ul>
         {pages.map(({ builder, path }) => (
           <li key={builder.slug} className="frame">
-            <h3>{builder.range} pergola</h3>
+            <h3>{builder.range} Pergola</h3>
             <p>
               {builder.roof}. {builder.sizes.map((size) => size.label).join(', ')}.
             </p>
             <p>
               <NextLink href={path} className="button">
-                Build your {builder.range} pergola
+                Build your {builder.range} Pergola
               </NextLink>
             </p>
           </li>
