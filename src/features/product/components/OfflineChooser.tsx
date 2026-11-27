@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, type ReactNode } from 'react';
+import { packsFor } from '@/lib/coverage';
 import { Modal } from '@/ui/Modal/Modal';
 import styles from './ProductPage.module.css';
 
@@ -37,10 +38,18 @@ interface Props {
 const valueOf = (area: HTMLElement | null, name: string) =>
   area?.querySelector<HTMLInputElement>(`input[name="${name}"]`)?.value.trim() ?? '';
 
-// "3 packs for 12 m²" from the quantity and calculator on the page.
+// "3 packs for 12 m²": the quantity entered, or the packs the calculator worked out for the area.
 function amountFrom(area: HTMLElement | null, unit: { one: string; many: string }) {
-  const quantity = Number(valueOf(area, 'quantity'));
   const covers = Number(valueOf(area, 'area'));
+  const coverage = Number(valueOf(area, 'coverage'));
+  const wastage = Number(
+    area?.querySelector<HTMLInputElement>('input[name="wastage"]:checked')?.value ??
+      valueOf(area, 'wastage'),
+  );
+  const quantity =
+    covers > 0 && coverage > 0
+      ? packsFor(covers, coverage, wastage)
+      : Number(valueOf(area, 'quantity'));
   if (!(quantity > 0)) return null;
   const count = `${quantity} ${quantity === 1 ? unit.one : unit.many}`;
   return covers > 0 ? `${count} for ${covers} m²` : count;
