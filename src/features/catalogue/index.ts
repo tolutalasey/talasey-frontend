@@ -1,4 +1,5 @@
 export { RangePage } from './components/RangePage';
+export { RangeSections } from './components/RangeSections';
 export { PioneerStory } from './components/PioneerStory';
 export { SearchPage } from './components/SearchPage';
 export { ProductGrid } from './components/ProductGrid';

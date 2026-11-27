@@ -31,7 +31,7 @@ export const defaultNavigation: Navigation = {
         },
         {
           label: 'Fencing, Gates & Balustrades',
-          href: '/composite-fencing/',
+          href: '/fencing-gates-balustrades/',
           links: [
             at('Composite gates', '/composite-gates/'),
             at('Composite fencing', '/composite-fencing/'),

@@ -3,12 +3,14 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import {
   getRange,
   getRangeListing,
+  getRanges,
   hasListingParams,
   listingCanonical,
   listingRedirect,
   PioneerStory,
   RangePage,
   rangePhoto,
+  RangeSections,
 } from '@/features/catalogue';
 import { FENCING_RANGE, FenceBuilderLinks, getFenceBuilders } from '@/features/fencing';
 import { BuilderLinks, getPergolaPages, PERGOLA_RANGE } from '@/features/pergola';
@@ -56,8 +58,17 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
 const PIONEER_RANGE = 'pioneer-decking';
 
-// Shown above a range's products: the kit builders it is bought through, or a range's own story.
-async function builderLinksFor(slug: string) {
+// Shown above a range's products: the ranges a landing page introduces, the kit builders it is
+// bought through, or a range's own story.
+async function leadFor(slug: string, sections: string[] | null | undefined) {
+  if (sections?.length) {
+    const ranges = await getRanges();
+    return (
+      <RangeSections
+        ranges={sections.flatMap((section) => ranges.filter((range) => range.slug === section))}
+      />
+    );
+  }
   if (slug === PERGOLA_RANGE) {
     const pages = await getPergolaPages();
     return pages.length > 0 && <BuilderLinks pages={pages} />;
@@ -78,7 +89,7 @@ export default async function Range(props: Props) {
       range={range}
       listing={listing}
       params={parseListingParams(query)}
-      lead={await builderLinksFor(range.slug)}
+      lead={await leadFor(range.slug, range.sections)}
       samples={await getSampleOffers()}
     />
   );

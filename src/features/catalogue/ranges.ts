@@ -56,6 +56,8 @@ export const rangeSchema = z.object({
   headerAction: z.object({ label: z.string().min(1), href: z.string().min(1) }).nullish(),
   // A YouTube video shown under the page's introduction.
   video: z.string().nullish(),
+  // Ranges this page introduces, each a card through to its own page.
+  sections: z.array(slug).nullish(),
   // Other ranges whose products show under "You may also need" on this range's product pages.
   alsoNeed: z.array(slug).nullish(),
   gallery: z.array(galleryItem).default([]),
@@ -566,6 +568,25 @@ export const fallbackRanges: Range[] = [
       title: 'Adjustable paving risers and supports | Talasey',
       description:
         'Adjustable paving risers, top plates, aluminium profiles and tools for raised porcelain terraces, roofs and balconies.',
+    },
+  },
+  {
+    slug: 'fencing-gates-balustrades',
+    kind: 'category',
+    name: 'Fencing, gates & balustrades',
+    h1: 'Fencing, gates and balustrades',
+    intro:
+      'Composite fencing, matching gates and glass and aluminium balustrades: everything to finish the edges of your garden.',
+    sections: ['composite-fencing', 'composite-gates', 'balustrades'],
+    gallery: [],
+    scope: { categories: ['landscaping-materials-fencing-gates-balustrades'] },
+    buyingGuide: [],
+    faqs: [],
+    curated: [],
+    seo: {
+      title: 'Garden fencing, gates and balustrades | Talasey',
+      description:
+        'Composite fencing, matching garden gates and balustrades from Talasey, with a fence kit builder to work out every piece.',
     },
   },
   // Ranges on the current site's menu with no products online yet; they invite an enquiry.
